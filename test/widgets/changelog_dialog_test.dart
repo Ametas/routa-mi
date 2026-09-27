@@ -1,3 +1,4 @@
+import 'package:fl_clash/common/app_changelog.dart';
 import 'package:fl_clash/widgets/changelog_dialog.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -41,7 +42,8 @@ void main() {
     );
 
     expect(find.text('更新日志'), findsOneWidget);
-    expect(find.text('v2.0.7'), findsOneWidget);
+    // The newest release is always the first card in view.
+    expect(find.text(appChangelogEntries.first.version), findsOneWidget);
     expect(find.text('确定'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
