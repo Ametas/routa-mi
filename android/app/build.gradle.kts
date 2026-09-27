@@ -26,7 +26,7 @@ val skipAbiFilters = providers.gradleProperty("slclashSkipAbiFilters")
 val debugApplicationIdSuffix = providers.gradleProperty("slclashDebugApplicationIdSuffix")
     .getOrElse(".dev")
 val debugAppLabel = providers.gradleProperty("slclashDebugAppLabel")
-    .getOrElse("SlClash Debug")
+    .getOrElse("RoutaMi Debug")
 
 
 android {
@@ -42,7 +42,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.slclash.app"
+        applicationId = "icu.routaterm.routami"
         minSdk = flutter.minSdkVersion
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = flutter.versionCode
@@ -93,7 +93,7 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             isShrinkResources = false
-            manifestPlaceholders["profileAppLabel"] = "SlClash Profile"
+            manifestPlaceholders["profileAppLabel"] = "RoutaMi Profile"
         }
 
         release {

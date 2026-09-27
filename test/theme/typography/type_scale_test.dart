@@ -88,7 +88,9 @@ void main() {
       (
         SlclashTypeScale.dashboardLatencyValue,
         12,
-        1.3333,
+        // Upstream 027f90f5 moved the latency height override into the
+        // type scale as `height: 0` without updating this frozen table.
+        0,
         FontWeight.w500,
         null,
       ),

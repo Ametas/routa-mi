@@ -1,0 +1,198 @@
+name: Release
+
+# Signed release APK + GitHub Release for tags vX.Y.Z (or vX.Y.Z-suffix,
+# which is published as a prerelease). See docs/RELEASE.md.
+on:
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: CI gate
+    uses: ./.github/workflows/ci.yml
+    # The gate's debug APK uses ANDROID_DEBUG_KEYSTORE_BASE64 like any CI run.
+    secrets: inherit
+
+  release:
+    name: Signed release APK
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Resolve version
+        id: vars
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="$GITHUB_REF_NAME"
+          if ! [[ "$TAG" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::Tag must look like v1.2.3 or v1.2.3-rc.1, got '$TAG'"
+            exit 1
+          fi
+          # Only tag commits that are already on main.
+          git fetch --quiet origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::Tag $TAG ($GITHUB_SHA) is not on main"
+            exit 1
+          fi
+          PRERELEASE=false
+          [ -n "${BASH_REMATCH[2]}" ] && PRERELEASE=true
+          {
+            echo "tag=$TAG"
+            echo "version_name=${TAG#v}"
+            # Monotonic across releases; fits Android's versionCode limit
+            # (2100000000) until 2036.
+            echo "build_number=$(date -u +%s)"
+            echo "prerelease=$PRERELEASE"
+            echo "apk_name=RoutaMi-${TAG}-arm64-v8a.apk"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Set up toolchain
+        uses: ./.github/actions/setup-toolchain
+
+      - name: Prepare signing
+        shell: bash
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name is not set (see docs/RELEASE.md)"
+              exit 1
+            fi
+          done
+          umask 077
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
+          # android/app/build.gradle.kts reads these keys; without all of
+          # them it silently falls back to debug signing, which the verify
+          # step below rejects.
+          {
+            echo "sdk.dir=$ANDROID_HOME"
+            echo "storePassword=$ANDROID_KEYSTORE_PASSWORD"
+            echo "keyAlias=$ANDROID_KEY_ALIAS"
+            echo "keyPassword=$ANDROID_KEY_PASSWORD"
+          } > android/local.properties
+          keytool -list -keystore android/app/keystore.jks \
+            -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Release builds always compile the core from source (no cache) so the
+      # shipped libclash.so is traceable to this commit.
+      - name: Build Go core
+        id: core
+        uses: ./.github/actions/build-go-core
+        with:
+          use-cache: "false"
+
+      - name: Build release APK
+        run: |
+          flutter build apk --release --split-per-abi --target-platform android-arm64 \
+            --android-project-arg=slclashSkipAbiFilters=true \
+            --android-project-arg=slclashSkipGoCoreBuild=true \
+            --build-name "${{ steps.vars.outputs.version_name }}" \
+            --build-number "${{ steps.vars.outputs.build_number }}" \
+            --dart-define=APP_ENV=stable \
+            ${{ steps.core.outputs.dart-defines }}
+
+      - name: Verify APK
+        id: verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="build/app/outputs/flutter-apk/app-arm64-v8a-release.apk"
+          APK="dist/${{ steps.vars.outputs.apk_name }}"
+          if [ ! -f "$SRC" ]; then
+            echo "::error::Expected APK not found: $SRC"
+            find build/app/outputs -type f || true
+            exit 1
+          fi
+          mkdir -p dist
+          cp "$SRC" "$APK"
+
+          BUILD_TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
+          PACKAGE="$("$BUILD_TOOLS/aapt2" dump packagename "$APK")"
+          echo "packageName: $PACKAGE"
+          if [ "$PACKAGE" != "icu.routaterm.routami" ]; then
+            echo "::error::Unexpected packageName $PACKAGE (debug-signing fallback?)"
+            exit 1
+          fi
+
+          CERTS="$("$BUILD_TOOLS/apksigner" verify --print-certs "$APK")"
+          if grep -q "CN=Android Debug" <<<"$CERTS"; then
+            echo "::error::APK is signed with the debug key"
+            exit 1
+          fi
+          CERT_SHA256="$(grep -m1 'certificate SHA-256 digest' <<<"$CERTS" | awk '{print $NF}')"
+          APK_SHA256="$(sha256sum "$APK" | awk '{print $1}')"
+          printf '%s  %s\n' "$APK_SHA256" "$(basename "$APK")" > "$APK.sha256"
+          echo "cert_sha256=$CERT_SHA256" >> "$GITHUB_OUTPUT"
+          echo "apk_sha256=$APK_SHA256" >> "$GITHUB_OUTPUT"
+          {
+            echo "### APK"
+            echo "- \`$(basename "$APK")\` SHA-256: \`$APK_SHA256\`"
+            echo "- Signing certificate SHA-256: \`$CERT_SHA256\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove signing material
+        if: always()
+        run: rm -f android/app/keystore.jks android/local.properties
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.vars.outputs.apk_name }}
+          path: |
+            dist/${{ steps.vars.outputs.apk_name }}
+            dist/${{ steps.vars.outputs.apk_name }}.sha256
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.vars.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::error::Release $TAG already exists; refusing to overwrite"
+            exit 1
+          fi
+          NOTES="$RUNNER_TEMP/notes.md"
+          cat > "$NOTES" <<EOF
+          RoutaMi ${{ steps.vars.outputs.version_name }} — Android arm64-v8a.
+
+          - Mihomo core: ${{ steps.core.outputs.mihomo-version }} (${{ steps.core.outputs.mihomo-commit }}), released ${{ steps.core.outputs.mihomo-release-date }}
+          - libclash.so SHA-256: \`${{ steps.core.outputs.core-sha256 }}\`
+          - APK SHA-256: \`${{ steps.verify.outputs.apk_sha256 }}\`
+          - Signing certificate SHA-256: \`${{ steps.verify.outputs.cert_sha256 }}\`
+          EOF
+          PRERELEASE_FLAG=()
+          [ "${{ steps.vars.outputs.prerelease }}" = "true" ] && PRERELEASE_FLAG=(--prerelease)
+          gh release create "$TAG" \
+            "dist/${{ steps.vars.outputs.apk_name }}" \
+            "dist/${{ steps.vars.outputs.apk_name }}.sha256" \
+            --verify-tag \
+            --title "RoutaMi ${{ steps.vars.outputs.version_name }}" \
+            --notes-file "$NOTES" \
+            "${PRERELEASE_FLAG[@]}"

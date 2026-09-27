@@ -131,7 +131,8 @@
       "fdfe:dcba:9876::1/126"
     ],
     "file-descriptor": 0,
-    "recvmsgx": true
+    "recvmsgx": true,
+    "processors-per-channel": 1
   },
   "tuic-server": {
     "enable": false,
