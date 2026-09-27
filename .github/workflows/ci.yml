@@ -1,0 +1,137 @@
+name: CI
+
+# Every branch push runs CI, so pull requests from branches of this repo get
+# their checks from the push run on the head commit (usable as required
+# status checks). There is deliberately no pull_request trigger: it would
+# duplicate every run for same-repo PRs. Tags are handled by release.yml.
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+  # release.yml runs the same gate before building a signed release.
+  workflow_call:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests (flutter + go)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up toolchain
+        uses: ./.github/actions/setup-toolchain
+        with:
+          android: "false"
+
+      - name: Verify core updater contract
+        run: bash scripts/test_mihomo_core_relationship_contract.sh
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Apply Mihomo patches
+        run: bash plugins/setup/buildkit/run_build_tool.sh patch-mihomo
+
+      - name: Flutter analyze
+        run: flutter analyze --no-fatal-infos
+
+      # Must run before the Go tests: test/mihomo/* writes the processed
+      # runtime fixtures (build/mihomo-runtime-fixtures) that
+      # core/configfixture feeds into the bundled Mihomo parser.
+      - name: Flutter test
+        run: flutter test
+
+      - name: Verify Go modules are tidy
+        working-directory: core
+        run: |
+          go mod tidy
+          git diff --exit-code go.mod go.sum
+
+      # The root package's cgo files are the Android bridge; CGO_ENABLED=0
+      # selects the host-testable build of it.
+      - name: Go test (core)
+        working-directory: core
+        env:
+          CGO_ENABLED: "0"
+        run: go test -tags=with_gvisor,cmfa ./...
+
+      - name: Go test (patched Mihomo statistic)
+        working-directory: core/Clash.Meta
+        run: go test ./tunnel/statistic
+
+  debug-apk:
+    name: Debug APK (arm64-v8a)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up toolchain
+        uses: ./.github/actions/setup-toolchain
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Go core
+        id: core
+        uses: ./.github/actions/build-go-core
+
+      - name: Build debug APK
+        run: |
+          flutter build apk --debug --target-platform android-arm64 \
+            --android-project-arg=slclashSkipGoCoreBuild=true \
+            ${{ steps.core.outputs.dart-defines }}
+
+      - name: Rename APK
+        id: apk
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="build/app/outputs/flutter-apk/app-debug.apk"
+          NAME="RoutaMi-debug-${GITHUB_SHA::8}-arm64-v8a.apk"
+          if [ ! -f "$SRC" ]; then
+            echo "::error::Expected APK not found: $SRC"
+            find build/app/outputs -type f || true
+            exit 1
+          fi
+          mkdir -p dist
+          cp "$SRC" "dist/$NAME"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Verify APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="dist/${{ steps.apk.outputs.name }}"
+          AAPT2="$(ls "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -1)"
+          PACKAGE="$("$AAPT2" dump packagename "$APK")"
+          echo "packageName: $PACKAGE"
+          test "$PACKAGE" = "icu.routaterm.routami.dev"
+          unzip -l "$APK" | grep -q 'lib/arm64-v8a/libclash.so'
+          if unzip -l "$APK" | grep -Eq 'lib/(armeabi-v7a|x86|x86_64)/'; then
+            echo "::error::APK contains non-arm64 native libraries"
+            exit 1
+          fi
+          ls -lh "$APK"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.apk.outputs.name }}
+          path: dist/${{ steps.apk.outputs.name }}
+          retention-days: 14
+          if-no-files-found: error

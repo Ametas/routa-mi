@@ -1,0 +1,104 @@
+name: Build RoutaMi Go core
+description: >
+  Applies core/patches/mihomo/*.patch and builds libclash.so for
+  android arm64-v8a, then resolves core metadata for --dart-define.
+  Requires setup-toolchain (with android) to have run first.
+
+inputs:
+  use-cache:
+    description: Reuse a cached libclash.so keyed by the core sources (release builds pass "false")
+    required: false
+    default: "true"
+
+outputs:
+  core-sha256:
+    value: ${{ steps.meta.outputs.core_sha256 }}
+  mihomo-version:
+    value: ${{ steps.meta.outputs.mihomo_version }}
+  mihomo-commit:
+    value: ${{ steps.meta.outputs.mihomo_commit }}
+  mihomo-release-date:
+    value: ${{ steps.meta.outputs.mihomo_release_date }}
+  core-build-time:
+    value: ${{ steps.meta.outputs.core_build_time }}
+  dart-defines:
+    description: Ready-to-use --dart-define flags carrying the core metadata
+    value: ${{ steps.meta.outputs.dart_defines }}
+
+runs:
+  using: composite
+  steps:
+    - name: Fetch Mihomo tags
+      shell: bash
+      run: git -C core/Clash.Meta fetch --quiet --tags --force origin
+
+    - name: Resolve Go core cache key
+      id: key
+      shell: bash
+      run: |
+        set -euo pipefail
+        echo "mihomo_sha=$(git -C core/Clash.Meta rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        git ls-files -z core plugins/setup/buildkit ':!core/Clash.Meta' \
+          | xargs -0 sha256sum | sha256sum \
+          | awk '{print "local_sha="$1}' >> "$GITHUB_OUTPUT"
+        echo "go=$(go env GOVERSION)" >> "$GITHUB_OUTPUT"
+
+    - name: Restore Go core artifact
+      if: inputs.use-cache == 'true'
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          libclash/android/arm64-v8a/libclash.so
+          libclash/android/includes/arm64-v8a
+          android/core/src/main/jniLibs/arm64-v8a/libclash.so
+          android/core/src/main/cpp/includes/arm64-v8a
+        key: gocore-v1-${{ runner.os }}-${{ steps.key.outputs.go }}-ndk-r28c-${{ steps.key.outputs.local_sha }}-${{ steps.key.outputs.mihomo_sha }}
+
+    - name: Build Go core
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        PROJECT_DIR: ${{ github.workspace }}
+      run: bash plugins/setup/buildkit/run_build_tool.sh android --arch arm64
+
+    - name: Resolve core metadata
+      id: meta
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+        CORE_LIB="libclash/android/arm64-v8a/libclash.so"
+        for f in "$CORE_LIB" android/core/src/main/jniLibs/arm64-v8a/libclash.so; do
+          if [ ! -f "$f" ]; then
+            echo "::error::Expected core library not found: $f"
+            exit 1
+          fi
+        done
+
+        CORE_SHA256="$(sha256sum "$CORE_LIB" | awk '{print $1}')"
+        MIHOMO_VERSION="$(git -C core/Clash.Meta describe --tags --abbrev=0 2>/dev/null || true)"
+        MIHOMO_COMMIT="$(git -C core/Clash.Meta rev-parse --short=12 HEAD)"
+        CORE_BUILD_TIME="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+        if [ -z "$MIHOMO_VERSION" ]; then
+          echo "::error::Could not resolve Mihomo version from the submodule tags"
+          exit 1
+        fi
+        MIHOMO_RELEASE_DATE="$(gh api "repos/MetaCubeX/mihomo/releases/tags/$MIHOMO_VERSION" --jq '.published_at' 2>/dev/null || true)"
+        MIHOMO_RELEASE_DATE="${MIHOMO_RELEASE_DATE:-$CORE_BUILD_TIME}"
+
+        {
+          echo "core_sha256=$CORE_SHA256"
+          echo "mihomo_version=$MIHOMO_VERSION"
+          echo "mihomo_commit=$MIHOMO_COMMIT"
+          echo "mihomo_release_date=$MIHOMO_RELEASE_DATE"
+          echo "core_build_time=$CORE_BUILD_TIME"
+          echo "dart_defines=--dart-define=CORE_SHA256=$CORE_SHA256 --dart-define=MIHOMO_VERSION=$MIHOMO_VERSION --dart-define=MIHOMO_COMMIT=$MIHOMO_COMMIT --dart-define=MIHOMO_RELEASE_DATE=$MIHOMO_RELEASE_DATE --dart-define=CORE_BUILD_TIME=$CORE_BUILD_TIME"
+        } >> "$GITHUB_OUTPUT"
+
+        {
+          echo "### Core"
+          echo "- Mihomo: $MIHOMO_VERSION ($MIHOMO_COMMIT), released $MIHOMO_RELEASE_DATE"
+          echo "- libclash.so SHA-256: \`$CORE_SHA256\`"
+        } >> "$GITHUB_STEP_SUMMARY"

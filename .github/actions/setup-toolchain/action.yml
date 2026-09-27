@@ -1,0 +1,63 @@
+name: Set up RoutaMi toolchain
+description: >
+  JDK, Flutter, Go and (optionally) the Android NDK at the versions RoutaMi
+  builds with, plus Gradle/pub/Go caches. Keep versions in sync with
+  scripts/cloud-setup.sh.
+
+inputs:
+  android:
+    description: Also install the Android NDK and restore the Gradle cache
+    required: false
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: "21"
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: stable
+        flutter-version: 3.41.9
+        # Caches both the SDK and ~/.pub-cache (key includes pubspec.lock).
+        cache: true
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: "1.24.13"
+        cache-dependency-path: core/go.sum
+
+    - name: Pin Go toolchain
+      shell: bash
+      run: echo "GOTOOLCHAIN=local" >> "$GITHUB_ENV"
+
+    - name: Set up Android NDK
+      if: inputs.android == 'true'
+      id: ndk
+      uses: nttld/setup-ndk@v1
+      with:
+        ndk-version: r28c
+        add-to-path: true
+        link-to-sdk: true
+
+    - name: Export ANDROID_NDK
+      if: inputs.android == 'true'
+      shell: bash
+      run: echo "ANDROID_NDK=${{ steps.ndk.outputs.ndk-path }}" >> "$GITHUB_ENV"
+
+    - name: Cache Gradle
+      if: inputs.android == 'true'
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/**/gradle-wrapper.properties', 'android/gradle/**/*.toml', 'android/gradle.properties') }}
+        restore-keys: |
+          gradle-${{ runner.os }}-
