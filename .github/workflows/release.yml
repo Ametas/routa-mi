@@ -17,6 +17,8 @@ jobs:
   ci:
     name: CI gate
     uses: ./.github/workflows/ci.yml
+    # The gate's debug APK uses ANDROID_DEBUG_KEYSTORE_BASE64 like any CI run.
+    secrets: inherit
 
   release:
     name: Signed release APK

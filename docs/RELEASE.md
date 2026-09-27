@@ -111,5 +111,53 @@ git push origin v0.1.0
 - После публикации сверьте «Signing certificate SHA-256» в описании
   релиза с отпечатком из шага 1.
 
+## 5. Постоянный debug-ключ для CI
+
+Без него каждый runner генерирует свой случайный debug-ключ, и новый debug
+APK из CI не встаёт поверх предыдущего («приложение не установлено»,
+конфликт подписи). CI (`ci.yml`, job «Debug APK») берёт ключ из секрета
+`ANDROID_DEBUG_KEYSTORE_BASE64` и кладёт его в
+`~/.android/debug.keystore` — это стандартное место, откуда Android Gradle
+Plugin берёт debug-подпись, поэтому Gradle-файлы не менялись.
+
+Debug-ключ — **отдельный** от release-ключа (release-ключ для debug-сборок
+не использовать никогда). Параметры фиксированы стандартом AGP: пароль
+хранилища и ключа `android`, alias `androiddebugkey`.
+
+1. Создать ключ (один раз):
+   ```bash
+   keytool -genkeypair -v \
+     -keystore routami-debug.keystore -storetype PKCS12 \
+     -storepass android -keypass android -alias androiddebugkey \
+     -keyalg RSA -keysize 2048 -validity 10000 \
+     -dname "CN=Android Debug,O=Android,C=US"
+   ```
+   `CN=Android Debug` оставьте как есть: по нему `release.yml` отличает
+   случайно подписанный debug-ключом релиз и отказывается его публиковать.
+2. Завести секрет:
+   ```bash
+   base64 -w0 routami-debug.keystore | gh secret set ANDROID_DEBUG_KEYSTORE_BASE64 -R Ametas/routa-mi
+   ```
+3. (Необязательно) зафиксировать отпечаток, чтобы CI падал при подписи
+   другим ключом:
+   ```bash
+   keytool -list -v -keystore routami-debug.keystore -storepass android -alias androiddebugkey \
+     | grep 'SHA256:' | awk '{print $2}' | tr -d ':' | tr 'A-F' 'a-f'
+   gh variable set ANDROID_DEBUG_CERT_SHA256 -R Ametas/routa-mi --body <отпечаток>
+   ```
+   Отпечаток каждой сборки выводится в Summary запуска CI.
+4. Для локальных debug-сборок тем же ключом:
+   `cp routami-debug.keystore ~/.android/debug.keystore` (сохраните старый,
+   если он вам нужен).
+5. Резервная копия — желательна (одна копия в менеджере паролей): потеря
+   debug-ключа означает лишь одну переустановку debug-сборки
+   (`icu.routaterm.routami.dev`) с потерей её данных.
+
+Если секрет не задан (например, в форке), CI собирает APK со случайным
+ключом и пишет предупреждение.
+
+Debug-сборка (`icu.routaterm.routami.dev`) и релиз
+(`icu.routaterm.routami`) — разные приложения и ставятся рядом.
+
 Перед первым публичным релизом закройте пункты с пометкой
 «обязательно до первого публичного релиза» в `docs/BACKLOG.md`.
