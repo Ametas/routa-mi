@@ -1,28 +1,117 @@
 name: Release
 
-# Signed release APK + GitHub Release for tags vX.Y.Z (or vX.Y.Z-suffix,
-# which is published as a prerelease). See docs/RELEASE.md.
+# Signed release APK + GitHub Release for vX.Y.Z (or vX.Y.Z-suffix, published
+# as a prerelease). Two ways to start it (see docs/RELEASE.md):
+#   - push a tag v* that points at a commit on main;
+#   - Actions → Release → Run workflow on main with a new tag name: the tag
+#     is created on that main commit only after the APK is built and
+#     verified, so a failed run leaves nothing behind.
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "New tag to release from main, e.g. v0.1.0 or v0.1.0-rc.1"
+        required: true
+        type: string
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
 
 permissions:
   contents: read
 
 jobs:
+  prepare:
+    name: Validate tag and secrets
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      tag: ${{ steps.vars.outputs.tag }}
+      sha: ${{ steps.vars.outputs.sha }}
+      create_tag: ${{ steps.vars.outputs.create_tag }}
+      version_name: ${{ steps.vars.outputs.version_name }}
+      prerelease: ${{ steps.vars.outputs.prerelease }}
+      apk_name: ${{ steps.vars.outputs.apk_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve version
+        id: vars
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            TAG="$INPUT_TAG"
+            CREATE_TAG=true
+            if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+              echo "::error::Run this workflow on main (got $GITHUB_REF)"
+              exit 1
+            fi
+            if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+              echo "::error::Tag $TAG already exists"
+              exit 1
+            fi
+          else
+            TAG="$GITHUB_REF_NAME"
+            CREATE_TAG=false
+          fi
+          if ! [[ "$TAG" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::Tag must look like v1.2.3 or v1.2.3-rc.1, got '$TAG'"
+            exit 1
+          fi
+          PRERELEASE=false
+          [ -n "${BASH_REMATCH[2]}" ] && PRERELEASE=true
+          # Only release commits that are already on main.
+          git fetch --quiet origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::$TAG ($GITHUB_SHA) is not on main"
+            exit 1
+          fi
+          {
+            echo "tag=$TAG"
+            echo "sha=$GITHUB_SHA"
+            echo "create_tag=$CREATE_TAG"
+            echo "version_name=${TAG#v}"
+            echo "prerelease=$PRERELEASE"
+            echo "apk_name=RoutaMi-${TAG}-arm64-v8a.apk"
+          } >> "$GITHUB_OUTPUT"
+
+      # Fail in seconds instead of after the CI gate when signing is not set up.
+      - name: Check signing secrets
+        env:
+          HAS_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+          HAS_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD != '' }}
+          HAS_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS != '' }}
+          HAS_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD != '' }}
+        run: |
+          missing=()
+          [ "$HAS_KEYSTORE" = "true" ] || missing+=(ANDROID_KEYSTORE_BASE64)
+          [ "$HAS_STORE_PASSWORD" = "true" ] || missing+=(ANDROID_KEYSTORE_PASSWORD)
+          [ "$HAS_KEY_ALIAS" = "true" ] || missing+=(ANDROID_KEY_ALIAS)
+          [ "$HAS_KEY_PASSWORD" = "true" ] || missing+=(ANDROID_KEY_PASSWORD)
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Signing secrets are not set: ${missing[*]} (see docs/RELEASE.md)"
+            exit 1
+          fi
+
   ci:
     name: CI gate
+    needs: prepare
     uses: ./.github/workflows/ci.yml
     # The gate's debug APK uses ANDROID_DEBUG_KEYSTORE_BASE64 like any CI run.
     secrets: inherit
 
   release:
     name: Signed release APK
-    needs: ci
+    needs: [prepare, ci]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
@@ -31,35 +120,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ needs.prepare.outputs.sha }}
           submodules: recursive
           fetch-depth: 0
 
       - name: Resolve version
         id: vars
-        shell: bash
         run: |
           set -euo pipefail
-          TAG="$GITHUB_REF_NAME"
-          if ! [[ "$TAG" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)(-[0-9A-Za-z.]+)?$ ]]; then
-            echo "::error::Tag must look like v1.2.3 or v1.2.3-rc.1, got '$TAG'"
-            exit 1
-          fi
-          # Only tag commits that are already on main.
-          git fetch --quiet origin main
-          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
-            echo "::error::Tag $TAG ($GITHUB_SHA) is not on main"
-            exit 1
-          fi
-          PRERELEASE=false
-          [ -n "${BASH_REMATCH[2]}" ] && PRERELEASE=true
           {
-            echo "tag=$TAG"
-            echo "version_name=${TAG#v}"
+            echo "tag=${{ needs.prepare.outputs.tag }}"
+            echo "version_name=${{ needs.prepare.outputs.version_name }}"
             # Monotonic across releases; fits Android's versionCode limit
             # (2100000000) until 2036.
             echo "build_number=$(date -u +%s)"
-            echo "prerelease=$PRERELEASE"
-            echo "apk_name=RoutaMi-${TAG}-arm64-v8a.apk"
+            echo "prerelease=${{ needs.prepare.outputs.prerelease }}"
+            echo "apk_name=${{ needs.prepare.outputs.apk_name }}"
           } >> "$GITHUB_OUTPUT"
 
       - name: Set up toolchain
@@ -172,11 +248,20 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.vars.outputs.tag }}
+          CREATE_TAG: ${{ needs.prepare.outputs.create_tag }}
         run: |
           set -euo pipefail
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "::error::Release $TAG already exists; refusing to overwrite"
             exit 1
+          fi
+          if [ "$CREATE_TAG" = "true" ]; then
+            # Manual run: tag the built commit now. A push made with
+            # GITHUB_TOKEN does not re-trigger this workflow.
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$TAG" -m "RoutaMi $TAG" "${{ needs.prepare.outputs.sha }}"
+            git push origin "refs/tags/$TAG"
           fi
           NOTES="$RUNNER_TEMP/notes.md"
           cat > "$NOTES" <<EOF

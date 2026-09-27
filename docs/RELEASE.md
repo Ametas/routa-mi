@@ -1,9 +1,11 @@
 # Выпуск релиза RoutaMi
 
-Релиз собирает `.github/workflows/release.yml` при push тега `vX.Y.Z`
-(или `vX.Y.Z-rc.N` — тогда это prerelease). Workflow:
+Релиз собирает `.github/workflows/release.yml` для тега `vX.Y.Z`
+(или `vX.Y.Z-rc.N` — тогда это prerelease). Запускается push тега или
+вручную (Actions → Release → Run workflow, см. раздел 4). Workflow:
 
-1. проверяет, что тег стоит на коммите из `main`;
+1. проверяет тег, что коммит есть в `main`, и что секреты подписи заданы
+   (без них падает за секунды);
 2. прогоняет весь CI (`ci.yml`: тесты + debug APK);
 3. собирает Go-ядро с нуля (без кэша) и release APK arm64-v8a;
 4. подписывает его ключом из секретов, проверяет `packageName`
@@ -98,16 +100,28 @@ rm keystore.b64
 
 ## 4. Выпустить релиз
 
+**Вариант A — вручную из GitHub** (можно с телефона; так же релиз
+запускает Claude Code через API): Actions → **Release** → **Run workflow**
+→ Branch: `main` → tag: `v0.1.0` (или `v0.1.0-rc.1` для prerelease) →
+Run workflow. Тег создаётся на текущем коммите `main` только после того,
+как APK собран и проверен; упавший запуск ничего не оставляет — просто
+запустите снова.
+
+**Вариант B — push тега:**
+
 ```bash
 git switch main && git pull
 git tag -a v0.1.0 -m "RoutaMi v0.1.0"
 git push origin v0.1.0
 ```
 
+Не создавайте тег через «Draft a new release» в интерфейсе GitHub: Release
+тогда уже существует, и workflow откажется его перезаписывать.
+
 - `versionName` = тег без `v`, `versionCode` = unix-время сборки (растёт
   монотонно). Поле `version:` в `pubspec.yaml` для релизов не используется.
 - Workflow откажется перезаписывать уже существующий Release. Чтобы
-  пересобрать — удалите Release и тег, затем создайте тег заново.
+  пересобрать — удалите Release и тег, затем запустите снова.
 - После публикации сверьте «Signing certificate SHA-256» в описании
   релиза с отпечатком из шага 1.
 

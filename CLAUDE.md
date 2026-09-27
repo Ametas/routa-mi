@@ -62,7 +62,8 @@ flutter build apk --debug --target-platform android-arm64 \
 ## CI
 
 - `ci.yml` — каждый push в любую ветку: тесты + debug APK (артефакт).
-- `release.yml` — тег `vX.Y.Z` на коммите из `main`: CI, подпись, GitHub Release.
+- `release.yml` — тег `vX.Y.Z` на коммите из `main` или ручной запуск на
+  `main` с полем tag (тег создаётся после сборки): CI, подпись, GitHub Release.
 - `mihomo-core-update.yml` — еженедельно: PR с новым релизом MetaCubeX.
 
 Источник истины — CI. Подробности релиза: `docs/RELEASE.md`. Бэклог:
