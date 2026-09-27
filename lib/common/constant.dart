@@ -9,11 +9,11 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/material.dart';
 
-const appName = 'SlClash';
+const appName = 'RoutaMi';
 const appHelperService = 'FlClashHelperService';
 const browserUa =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-const packageName = 'com.slclash.app';
+const packageName = 'icu.routaterm.routami';
 const methodChannelPrefix = 'com.follow.clash';
 const helperPort = 47890;
 const maxTextScale = 1.2;
@@ -51,7 +51,7 @@ const localhost = '127.0.0.1';
 const clashConfigKey = 'clash_config';
 const configKey = 'config';
 const double dialogCommonWidth = 300;
-const repository = 'songzhengpei/Slclash';
+const repository = 'Ametas/routa-mi';
 const defaultExternalController = '127.0.0.1:9090';
 const maxMobileWidth = 600;
 const maxLaptopWidth = 840;
