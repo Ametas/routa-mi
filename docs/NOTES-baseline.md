@@ -97,3 +97,33 @@ git apply --check -v proxy-only-traffic.patch
 - Тестовые фикстуры и `tools/perf` — оставить как есть.
 
 Отдельно: апдейтер скачивает APK сначала через сторонний зеркальный прокси `gh-proxy.com`, сверяя SHA-256 из GitHub API — кандидат в бэклог.
+
+## 7. Результаты шага 1 (2026-09-27)
+
+- **Go.** `core/` с mihomo v1.19.31 проходит `go mod tidy` и тесты и на Go
+  1.24.0, и на 1.24.13 (результат `tidy` одинаковый, повышать `go` в
+  `go.mod` не нужно). В CI и `cloud-setup.sh` используется **1.24.13** —
+  последний патч ветки 1.24 (исправления безопасности), `GOTOOLCHAIN=local`.
+- **Go-тесты на хосте.** Корневой пакет `core` с `CGO_ENABLED=1` — это
+  Android-мост, на Linux не собирается (`undefined: protect` и т. п.). С
+  `CGO_ENABLED=0 -tags=with_gvisor,cmfa` собирается `main.go` (`!cgo`), и
+  `go test ./...` проходит целиком. `core/configfixture` зависит от
+  `build/mihomo-runtime-fixtures`, которые генерирует `flutter test` —
+  поэтому в CI Go-тесты идут после Flutter.
+- **v1.19.31 и контракт RawConfig.** `TestRawConfigE2EFixtures` упал на
+  новом непубличном поле `tun.processors-per-channel` (по умолчанию 1,
+  апстрим `92433dba` «reduce gVisor memory usage»). Изменение аддитивное;
+  поле добавлено в три фикстуры `rawconfig.json`. Патч не менялся.
+- **Flutter-тесты.** Полный `flutter test`: 1083 прошли, 2 падали — и на
+  чистом SlClash v2.2.3 тоже (их CI гоняет лишь подмножество). Оба теста
+  устарели относительно кода и исправлены (см. `UPSTREAM.md`). `flutter
+  analyze`: 0 ошибок/предупреждений, 87 info (как у SlClash).
+- **pubspec.lock.** `flutter pub get` на 3.41.9 откатывает `meta`,
+  `test`, `test_api`, `test_core` (lock SlClash сделан более новым Flutter).
+  CI SlClash собирал ровно так же; lock не коммитим.
+- **Сборка в песочнице возможна.** `scripts/cloud-setup.sh` ставит всё
+  за ~2,5 мин; debug APK собран локально (111 МБ, `icu.routaterm.routami.dev`,
+  только arm64-v8a, `libclash.so` внутри). Maven Central режет общий IP
+  песочницы (HTTP 429), поэтому скрипт добавляет в `~/.gradle/init.d`
+  зеркало Maven Central от Google — только для песочницы. Источник истины
+  по-прежнему CI.
