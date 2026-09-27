@@ -6,6 +6,13 @@ name: Mihomo Core Update
 # and opens a pull request into main (a draft one when validation fails, so
 # the patch/fixtures can be fixed on that branch). It never pushes to main.
 #
+# Pushes made with GITHUB_TOKEN do not trigger other workflows, so the bot
+# branch would get no ci.yml checks and could not pass branch protection.
+# The branch is therefore pushed and the PR opened with, in order of
+# preference: a GitHub App token (vars.CORE_UPDATE_APP_ID +
+# secrets.CORE_UPDATE_APP_PRIVATE_KEY), a fine-grained PAT
+# (secrets.CORE_UPDATE_TOKEN), or GITHUB_TOKEN as a fallback. See docs/CI.md.
+#
 # The `case "$REL" in` block below is parsed by
 # scripts/test_mihomo_core_relationship_contract.sh; keep its arm layout.
 on:
@@ -33,12 +40,37 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
+      - name: Mint GitHub App token
+        id: app-token
+        if: vars.CORE_UPDATE_APP_ID != ''
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.CORE_UPDATE_APP_ID }}
+          private-key: ${{ secrets.CORE_UPDATE_APP_PRIVATE_KEY }}
+
+      - name: Report push token
+        id: token
+        env:
+          HAS_APP: ${{ steps.app-token.outputs.token != '' }}
+          HAS_PAT: ${{ secrets.CORE_UPDATE_TOKEN != '' }}
+        run: |
+          if [ "$HAS_APP" = "true" ]; then
+            echo "source=app" >> "$GITHUB_OUTPUT"
+          elif [ "$HAS_PAT" = "true" ]; then
+            echo "source=pat" >> "$GITHUB_OUTPUT"
+          else
+            echo "source=github_token" >> "$GITHUB_OUTPUT"
+            echo "::warning::Neither a GitHub App nor CORE_UPDATE_TOKEN is configured; the bot PR will get no CI checks (see docs/CI.md)."
+          fi
+
       - name: Checkout main
         uses: actions/checkout@v4
         with:
           ref: main
           submodules: recursive
           fetch-depth: 0
+          # Persisted for the branch push below.
+          token: ${{ steps.app-token.outputs.token || secrets.CORE_UPDATE_TOKEN || github.token }}
 
       - name: Verify updater relationship contract
         run: bash scripts/test_mihomo_core_relationship_contract.sh
@@ -91,11 +123,19 @@ jobs:
         id: update
         env:
           TAG: ${{ steps.rel.outputs.latest_stable_tag }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
         run: |
           set -euo pipefail
           BRANCH="bot/mihomo-core-$TAG"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$APP_SLUG" ]; then
+            BOT_ID="$(gh api "/users/${APP_SLUG}%5Bbot%5D" --jq .id)"
+            git config user.name "${APP_SLUG}[bot]"
+            git config user.email "${BOT_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          fi
           git switch -c "$BRANCH"
 
           git -C core/Clash.Meta checkout -q "refs/tags/$TAG"
@@ -137,6 +177,7 @@ jobs:
           NEW_SHA: ${{ steps.update.outputs.new_sha }}
           TAG: ${{ steps.rel.outputs.latest_stable_tag }}
           OUTCOME: ${{ steps.validate.outcome }}
+          TOKEN_SOURCE: ${{ steps.token.outputs.source }}
         run: |
           set -euo pipefail
           M="git -C core/Clash.Meta"
@@ -186,7 +227,11 @@ jobs:
             echo ""
             echo "</details>"
             echo ""
-            echo "Перед мёрджем: обновить UPSTREAM.md (раздел «Ядро»). CI на PR, открытых через GITHUB_TOKEN, не запускается сам — проверка выше выполнена этим workflow."
+            echo "Перед мёрджем: обновить UPSTREAM.md (раздел «Ядро»)."
+            if [ "$TOKEN_SOURCE" = "github_token" ]; then
+              echo ""
+              echo "⚠ PR открыт через GITHUB_TOKEN: ci.yml на эту ветку не запустится, обязательные проверки не появятся. Настройте токен по docs/CI.md или запустите CI вручную (Actions → CI → Run workflow)."
+            fi
           } > "$REPORT"
           cat "$REPORT" >> "$GITHUB_STEP_SUMMARY"
           echo "file=$REPORT" >> "$GITHUB_OUTPUT"
@@ -194,7 +239,7 @@ jobs:
       - name: Push branch and open pull request
         if: steps.decision.outputs.action == 'upgrade_stable' && inputs.dry_run != true
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.CORE_UPDATE_TOKEN || github.token }}
           BRANCH: ${{ steps.update.outputs.branch }}
           TAG: ${{ steps.rel.outputs.latest_stable_tag }}
           OUTCOME: ${{ steps.validate.outcome }}
@@ -230,4 +275,5 @@ jobs:
             echo "- Current: ${{ steps.rel.outputs.current_sha }} (${{ steps.rel.outputs.nearest_release_tag }})"
             echo "- Latest stable: ${{ steps.rel.outputs.latest_stable_tag }} (${{ steps.rel.outputs.latest_stable_sha }})"
             echo "- Relationship: $REL → action: $ACTION"
+            echo "- Push token: ${{ steps.token.outputs.source }}"
           } >> "$GITHUB_STEP_SUMMARY"
