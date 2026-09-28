@@ -134,7 +134,7 @@ class _ProxiesListViewState extends State<ProxiesListView> {
       return SizedBox(
         key: ValueKey(group.name),
         height: listHeaderHeight,
-        child: ListHeader(
+        child: ProxyGroupHeader(
           key: ValueKey('proxy-header-${group.name}'),
           labelPlaybackCoordinator: _labelPlaybackCoordinator,
           playbackOrder: groupIndex,
@@ -184,7 +184,7 @@ class _ProxiesListViewState extends State<ProxiesListView> {
     final isExpand = currentUnfoldSet.contains(groupName);
     return SizedBox(
       height: listHeaderHeight,
-      child: ListHeader(
+      child: ProxyGroupHeader(
         labelPlaybackCoordinator: _labelPlaybackCoordinator,
         playbackOrder: playbackOrder,
         enterAnimated: false,
@@ -491,7 +491,7 @@ class _ProxiesListViewState extends State<ProxiesListView> {
   }
 }
 
-class ListHeader extends StatefulWidget {
+class ProxyGroupHeader extends StatefulWidget {
   final Group group;
 
   final Function(String groupName) onChange;
@@ -504,7 +504,7 @@ class ListHeader extends StatefulWidget {
   final int playbackOrder;
   final ProxyLabelPlaybackCoordinator labelPlaybackCoordinator;
 
-  const ListHeader({
+  const ProxyGroupHeader({
     super.key,
     this.enterAnimated = true,
     this.rowPosition = ProxyListRowPosition.single,
@@ -518,10 +518,10 @@ class ListHeader extends StatefulWidget {
   });
 
   @override
-  State<ListHeader> createState() => _ListHeaderState();
+  State<ProxyGroupHeader> createState() => _ProxyGroupHeaderState();
 }
 
-class _ListHeaderState extends State<ListHeader> {
+class _ProxyGroupHeaderState extends State<ProxyGroupHeader> {
   var isLock = false;
 
   String get icon => widget.group.icon;
