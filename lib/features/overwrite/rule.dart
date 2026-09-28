@@ -352,43 +352,15 @@ class _AddOrEditRuleDialogState extends State<AddOrEditRuleDialog> {
                     Wrap(
                       spacing: 8,
                       children: [
-                        CommonCard(
-                          radius: 8,
-                          isSelected: _src,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: SurgeSpace.s,
-                              vertical: SurgeSpace.s,
-                            ),
-                            child: Text(
-                              appLocalizations.sourceIp,
-                              style: context.textTheme.bodyMedium,
-                            ),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _src = !_src;
-                            });
-                          },
+                        _RuleOptionToggle(
+                          label: appLocalizations.sourceIp,
+                          selected: _src,
+                          onTap: () => setState(() => _src = !_src),
                         ),
-                        CommonCard(
-                          radius: 8,
-                          isSelected: _noResolve,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: SurgeSpace.s,
-                              vertical: SurgeSpace.s,
-                            ),
-                            child: Text(
-                              appLocalizations.noResolve,
-                              style: context.textTheme.bodyMedium,
-                            ),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _noResolve = !_noResolve;
-                            });
-                          },
+                        _RuleOptionToggle(
+                          label: appLocalizations.noResolve,
+                          selected: _noResolve,
+                          onTap: () => setState(() => _noResolve = !_noResolve),
                         ),
                       ],
                     ),
@@ -407,6 +379,34 @@ class _AddOrEditRuleDialogState extends State<AddOrEditRuleDialog> {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Toggle for a rule parameter (source IP, no-resolve).
+class _RuleOptionToggle extends StatelessWidget {
+  const _RuleOptionToggle({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final surge = SurgeTheme.of(context);
+    return SurgeActionCard(
+      selected: selected,
+      borderRadius: surge.radii.compact,
+      padding: const EdgeInsets.all(SurgeSpace.s),
+      onTap: onTap,
+      child: Text(
+        label,
+        style: context.typography.body.copyWith(color: surge.textPrimary),
       ),
     );
   }
