@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:fl_clash/theme/ui_scale.dart';
 import 'package:flutter/material.dart';
 
 /// The three density modes used by every dashboard surface.
@@ -74,7 +75,7 @@ class DashboardResponsiveLayout {
     required this.requiresReflow,
   });
 
-  static const double referenceViewportWidth = 384;
+  static const double referenceViewportWidth = UiScale.referenceExtent;
   static const double referenceViewportHeight = 853.3333333333334;
   static const double compactBreakpoint = 360;
   static const double wideBreakpoint = 600;
@@ -202,8 +203,7 @@ class DashboardResponsiveLayout {
         : isCompact
         ? DashboardDensity.compact
         : DashboardDensity.regular;
-    final widthRatio = viewportWidth / referenceViewportWidth;
-    final geometryScale = widthRatio.clamp(0.86, 1.07).toDouble();
+    final geometryScale = UiScale.viewport(viewportWidth);
     final pageHorizontalPadding = isWide ? 32.0 : 18 * geometryScale;
     final contentWidth = math
         .min(
