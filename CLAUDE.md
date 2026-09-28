@@ -40,7 +40,9 @@ RoutaMi — Android-клиент (arm64-v8a) на ядре mihomo, жёстки�
    радиусы — `surge.radii`, цвета — `SurgeTheme`/`colorScheme`,
    прозрачность — шкала `SurgeAlpha` или семантика `SurgeOpacity`,
    тени — уровни `SurgeShadows`, анимации — роли `SurgeMotion` на шкале
-   `SurgeDuration` (таймауты и интервалы логики — не токены), масштаб под экран — `UiScale` (`lib/theme/ui_scale.dart`).
+   `SurgeDuration` (таймауты и интервалы логики — не токены), масштаб под экран — `UiScale` (`lib/theme/ui_scale.dart`),
+   Material-темы компонентов — `lib/theme/surge_theme_data.dart` (не
+   задавайте голым виджетам то, что уже даёт тема).
    Новые литералы ловит `test/design/design_token_ratchet_test.dart`;
    убрали литералы — обновите базовую линию:
    `UPDATE_DESIGN_BASELINE=1 flutter test test/design/design_token_ratchet_test.dart`.

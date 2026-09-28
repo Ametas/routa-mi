@@ -906,12 +906,7 @@ class _SurgeSelectableListTile extends StatelessWidget {
                 titleAlignment: ListTileTitleAlignment.center,
               ),
               if (showDivider)
-                Divider(
-                  height: 0,
-                  indent: 14,
-                  endIndent: 14,
-                  color: surge.separator,
-                ),
+                const Divider(height: 0, indent: 14, endIndent: 14),
             ],
           ),
         ),

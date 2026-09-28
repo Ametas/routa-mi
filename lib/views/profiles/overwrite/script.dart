@@ -87,9 +87,9 @@ class ScriptContent extends ConsumerWidget {
                         },
                       ),
                       if (index != scripts.length - 1)
-                        Divider(height: 1, indent: 48, color: surge.separator),
+                        const Divider(height: 1, indent: 48),
                     ],
-                  Divider(height: 1, color: surge.separator),
+                  const Divider(height: 1),
                   _ConfigureScriptButton(
                     label: appLocalizations.goToConfigureScript,
                     onPressed: () {

@@ -14,6 +14,7 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/theme/app_color_source.dart';
 import 'package:fl_clash/theme/static_theme.dart';
+import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/changelog_dialog.dart';
@@ -90,82 +91,6 @@ class ApplicationState extends ConsumerState<Application> {
     );
   }
 
-  NavigationBarThemeData _getNavigationBarTheme(
-    SurgeTheme surge,
-    SurgeTypography typography,
-  ) {
-    return NavigationBarThemeData(
-      backgroundColor: surge.card,
-      indicatorColor: surge.selectedFill,
-      labelTextStyle: WidgetStateProperty.resolveWith((states) {
-        final selected = states.contains(WidgetState.selected);
-        return typography.navigationLabel.copyWith(
-          color: selected ? surge.primary : surge.textSecondary,
-        );
-      }),
-      iconTheme: WidgetStateProperty.resolveWith((states) {
-        final selected = states.contains(WidgetState.selected);
-        return IconThemeData(
-          color: selected ? surge.primary : surge.textSecondary,
-          size: 22,
-        );
-      }),
-    );
-  }
-
-  SwitchThemeData _getSwitchTheme(SurgeTheme surge) {
-    return SwitchThemeData(
-      thumbColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return surge.textSecondary.withValues(alpha: SurgeAlpha.a48);
-        }
-        if (states.contains(WidgetState.selected)) {
-          return surge.semantic.state.onToggleActive;
-        }
-        return surge.elevatedCard;
-      }),
-      trackColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return surge.textSecondary.withValues(alpha: SurgeAlpha.a12);
-        }
-        if (states.contains(WidgetState.selected)) {
-          return surge.semantic.state.toggleActive;
-        }
-        return surge.fill;
-      }),
-      trackOutlineColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return Colors.transparent;
-        }
-        return surge.separator;
-      }),
-    );
-  }
-
-  RadioThemeData _getRadioTheme(SurgeTheme surge) {
-    return RadioThemeData(
-      fillColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return surge.primary;
-        }
-        return surge.textSecondary.withValues(alpha: SurgeAlpha.a82);
-      }),
-    );
-  }
-
-  CheckboxThemeData _getCheckboxTheme(SurgeTheme surge) {
-    return CheckboxThemeData(
-      fillColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return surge.primary;
-        }
-        return Colors.transparent;
-      }),
-      checkColor: WidgetStateProperty.all(surge.onPrimary),
-      side: BorderSide(color: surge.separator, width: 1.2),
-    );
-  }
-
   ThemeData _buildTheme({
     required Brightness brightness,
     required ThemeProps themeProps,
@@ -186,30 +111,12 @@ class ApplicationState extends ConsumerState<Application> {
       themeProps: themeProps,
       colorScheme: colorScheme,
     );
-    return ThemeData(
-      useMaterial3: true,
-      pageTransitionsTheme: _pageTransitionsTheme,
-      textTheme: textTheme,
-      extensions: [surge, typography],
-      scaffoldBackgroundColor: surge.background,
-      canvasColor: surge.background,
-      appBarTheme: AppBarTheme(
-        backgroundColor: surge.background,
-        surfaceTintColor: Colors.transparent,
-        foregroundColor: surge.textPrimary,
-        elevation: 0,
-        shadowColor: Colors.transparent,
-        iconTheme: IconThemeData(color: surge.textPrimary),
-        actionsIconTheme: IconThemeData(color: surge.textPrimary),
-        titleTextStyle: typography.appBarTitle.copyWith(
-          color: surge.textPrimary,
-        ),
-      ),
-      navigationBarTheme: _getNavigationBarTheme(surge, typography),
-      switchTheme: _getSwitchTheme(surge),
-      radioTheme: _getRadioTheme(surge),
-      checkboxTheme: _getCheckboxTheme(surge),
+    return buildSurgeThemeData(
       colorScheme: colorScheme,
+      textTheme: textTheme,
+      surge: surge,
+      typography: typography,
+      pageTransitionsTheme: _pageTransitionsTheme,
     );
   }
 

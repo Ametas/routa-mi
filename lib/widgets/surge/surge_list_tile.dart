@@ -134,11 +134,7 @@ class SurgeListTile extends StatelessWidget {
                 left: leading == null ? 16 : 49,
                 right: 0,
                 bottom: 0,
-                child: Divider(
-                  height: 0,
-                  thickness: surge.spacing.hairline,
-                  color: surge.separator,
-                ),
+                child: Divider(height: 0, thickness: surge.spacing.hairline),
               ),
           ],
         ),

@@ -592,9 +592,11 @@ void main() {
       ).readAsStringSync();
       expect(providers, contains('surfaceColor: surge.background'));
 
-      final application = File('lib/application.dart').readAsStringSync();
-      expect(application, contains('semantic.state.toggleActive'));
-      expect(application, contains('semantic.state.onToggleActive'));
+      final themeData = File(
+        'lib/theme/surge_theme_data.dart',
+      ).readAsStringSync();
+      expect(themeData, contains('semantic.state.toggleActive'));
+      expect(themeData, contains('semantic.state.onToggleActive'));
 
       expect(dashboard, contains('semantic.state.heroStart'));
       expect(dashboard, contains('semantic.state.heroPause'));
