@@ -1,7 +1,7 @@
 import 'package:fl_clash/common/icons.dart';
 import 'package:fl_clash/common/context.dart';
-import 'package:fl_clash/theme/typography/typography_context.dart';
 import 'package:fl_clash/widgets/surge/surge_motion.dart';
+import 'package:fl_clash/widgets/surge/surge_theme_extension.dart';
 import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -75,13 +75,9 @@ class InitErrorScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(SurgeSpace.m),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.grey[900]
-                      : Colors.grey[200],
+                  color: SurgeTheme.of(context).fill,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: Colors.grey.withValues(alpha: SurgeAlpha.a48),
-                  ),
+                  border: Border.all(color: SurgeTheme.of(context).separator),
                 ),
                 child: SelectableText(
                   stack.toString(),

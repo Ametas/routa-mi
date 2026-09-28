@@ -125,10 +125,7 @@ class _AccentSwatch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
-    final onColor =
-        ThemeData.estimateBrightnessForColor(color) == Brightness.dark
-        ? Colors.white
-        : Colors.black;
+    final onColor = SurgePalette.contentOn(color);
     return SurgePressable(
       onTap: onTap,
       onLongPress: onLongPress,

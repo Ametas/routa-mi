@@ -8,17 +8,8 @@
   "lib/common/function.dart": {
     "duration": 1
   },
-  "lib/common/navigator.dart": {
-    "color": 1
-  },
   "lib/common/render.dart": {
     "duration": 1
-  },
-  "lib/common/utils.dart": {
-    "color": 3
-  },
-  "lib/features/overwrite/rule.dart": {
-    "color": 2
   },
   "lib/manager/status_manager.dart": {
     "radius": 1
@@ -32,20 +23,10 @@
   "lib/pages/error.dart": {
     "spacing": 2,
     "gap": 1,
-    "radius": 2,
-    "color": 3
-  },
-  "lib/pages/scan.dart": {
-    "color": 12
+    "radius": 2
   },
   "lib/providers/action.dart": {
     "radius": 1
-  },
-  "lib/providers/state.dart": {
-    "color": 2
-  },
-  "lib/state.dart": {
-    "color": 3
   },
   "lib/views/about.dart": {
     "spacing": 1,
@@ -58,8 +39,7 @@
   },
   "lib/views/backup_and_restore.dart": {
     "spacing": 1,
-    "gap": 1,
-    "color": 1
+    "gap": 1
   },
   "lib/views/config/general.dart": {
     "gap": 1
@@ -70,14 +50,10 @@
   "lib/views/connection/item.dart": {
     "gap": 1
   },
-  "lib/views/dashboard/widgets/network_overview_card.dart": {
-    "color": 1
-  },
   "lib/views/dashboard/widgets/surge_dashboard_hero.dart": {
     "spacing": 1,
     "gap": 2,
-    "radius": 2,
-    "color": 15
+    "radius": 2
   },
   "lib/views/profiles/edit.dart": {
     "spacing": 1,
@@ -89,8 +65,7 @@
     "radius": 3
   },
   "lib/views/profiles/overwrite/custom/groups.dart": {
-    "radius": 1,
-    "color": 1
+    "radius": 1
   },
   "lib/views/profiles/overwrite/custom/icon.dart": {
     "gap": 1
@@ -117,8 +92,7 @@
     "gap": 1
   },
   "lib/views/theme_accent.dart": {
-    "gap": 1,
-    "color": 4
+    "gap": 1
   },
   "lib/views/tools.dart": {
     "spacing": 1
@@ -148,15 +122,12 @@
   },
   "lib/widgets/sheet.dart": {
     "spacing": 2,
-    "radius": 2,
-    "color": 1
+    "radius": 2
   },
   "lib/widgets/side_sheet.dart": {
-    "radius": 1,
-    "color": 1
+    "radius": 1
   },
   "lib/widgets/surge/surge_bottom_nav.dart": {
-    "radius": 4,
-    "color": 2
+    "radius": 4
   }
 }

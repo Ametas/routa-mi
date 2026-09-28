@@ -5,6 +5,7 @@ import 'package:fl_clash/common/icons.dart';
 import 'package:fl_clash/providers/action.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/activate_box.dart';
+import 'package:fl_clash/widgets/surge/surge_theme_extension.dart';
 import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -87,7 +88,7 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
             leading: IconButton(
               style: IconButton.styleFrom(
                 iconSize: SurgeIconSize.hero,
-                foregroundColor: Colors.white,
+                foregroundColor: SurgePalette.onFill,
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -99,20 +100,24 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
                 valueListenable: controller,
                 builder: (context, state, _) {
                   var icon = const Icon(SurgeIcons.flashOff);
-                  var backgroundColor = Colors.black12;
+                  var backgroundColor = SurgePalette.scrim.withValues(
+                    alpha: SurgeAlpha.a12,
+                  );
                   switch (state.torchState) {
                     case TorchState.off:
                       icon = const Icon(SurgeIcons.flashOff);
-                      backgroundColor = Colors.black12;
+                      backgroundColor = SurgePalette.scrim.withValues(
+                        alpha: SurgeAlpha.a12,
+                      );
                     case TorchState.on:
                       icon = const Icon(SurgeIcons.flashOn);
-                      backgroundColor = Colors.orange;
+                      backgroundColor = SurgeTheme.of(context).orange;
                     case TorchState.unavailable:
                       icon = const Icon(SurgeIcons.flashOff);
                       backgroundColor = Colors.transparent;
                     case TorchState.auto:
                       icon = const Icon(SurgeIcons.flashAuto);
-                      backgroundColor = Colors.orange;
+                      backgroundColor = SurgeTheme.of(context).orange;
                   }
                   return Container(
                     margin: const EdgeInsets.symmetric(
@@ -121,10 +126,10 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
                     child: ActivateBox(
                       active: state.torchState != TorchState.unavailable,
                       child: IconButton(
-                        color: Colors.white,
+                        color: SurgePalette.onFill,
                         icon: icon,
                         style: IconButton.styleFrom(
-                          foregroundColor: Colors.white,
+                          foregroundColor: SurgePalette.onFill,
                           backgroundColor: backgroundColor,
                         ),
                         onPressed: () => controller.toggleTorch(),
@@ -139,10 +144,10 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
             margin: const EdgeInsets.only(bottom: SurgeSpace.xxxl),
             alignment: Alignment.bottomCenter,
             child: IconButton(
-              color: Colors.white,
+              color: SurgePalette.onFill,
               style: IconButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.grey,
+                foregroundColor: SurgePalette.onFill,
+                backgroundColor: SurgeTheme.of(context).inactive,
               ),
               padding: const EdgeInsets.all(SurgeSpace.l),
               iconSize: SurgeIconSize.hero,
@@ -189,7 +194,7 @@ class ScannerOverlay extends CustomPainter {
       );
 
     final backgroundPaint = Paint()
-      ..color = Colors.black.withValues(alpha: SurgeAlpha.a48)
+      ..color = SurgePalette.scrim.withValues(alpha: SurgeAlpha.a48)
       ..style = PaintingStyle.fill
       ..blendMode = BlendMode.dstOut;
 
@@ -200,7 +205,7 @@ class ScannerOverlay extends CustomPainter {
     );
 
     final borderPaint = Paint()
-      ..color = Colors.white
+      ..color = SurgePalette.onFill
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4.0;
 

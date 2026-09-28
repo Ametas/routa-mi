@@ -35,7 +35,7 @@ final _categories = <String, RegExp>{
     r'SizedBox\(\s*(?:width|height):\s*(?:[1-9]\d*(?:\.\d+)?|0\.\d+)\b',
   ),
   'radius': RegExp(r'Radius\.circular\(\s*\d'),
-  'color': RegExp(r'Color\(0x|Colors\.(?!transparent\b)[a-z]\w*'),
+  'color': RegExp(r'Color\(0x|(?<![\w.])Colors\.(?!transparent\b)[a-z]\w*'),
   'alpha': RegExp(
     r'with(?:Values\(\s*alpha:|Opacity\(|Alpha\()(?:[^,()]*?[?:])?\s*\d',
   ),
@@ -162,6 +162,8 @@ void main() {
     expect(count('color', 'Colors.white'), 1);
     expect(count('color', 'Colors.transparent'), 0);
     expect(count('color', 'Color(0xFF000000)'), 1);
+    expect(count('color', 'state.primaryColors.contains(c)'), 0);
+    expect(count('color', 'SurgePalette.onFill'), 0);
     expect(count('alpha', 'c.withValues(alpha: 0.4)'), 1);
     expect(count('alpha', 'c.withValues(alpha: opacity.muted)'), 0);
     expect(count('alpha', 'c.withValues(alpha: on ? 0.2 : SurgeAlpha.a12)'), 1);

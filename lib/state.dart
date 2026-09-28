@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:animations/animations.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:fl_clash/theme/app_color_source.dart';
 import 'package:fl_clash/widgets/dialog.dart';
 import 'package:fl_clash/widgets/input.dart';
 import 'package:fl_clash/widgets/list.dart';
@@ -71,11 +72,12 @@ class GlobalState {
   }
 
   Future<void> _initDynamicColor() async {
-    accentColor = const Color(0xFF0A84FF);
+    accentColor = const Color(defaultAccentColor);
     try {
       corePalette = await DynamicColorPlugin.getCorePalette();
       accentColor =
-          await DynamicColorPlugin.getAccentColor() ?? const Color(0xFF0A84FF);
+          await DynamicColorPlugin.getAccentColor() ??
+          const Color(defaultAccentColor);
     } catch (_) {}
   }
 
@@ -293,7 +295,7 @@ class GlobalState {
       useRootNavigator: false,
       context: context ?? globalState.navigatorKey.currentContext!,
       configuration: FadeScaleTransitionConfiguration(
-        barrierColor: Colors.black.withValues(
+        barrierColor: SurgePalette.scrim.withValues(
           alpha: SurgeMotion.modalBarrierOpacity,
         ),
         barrierDismissible: dismissible ?? true,

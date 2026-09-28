@@ -1,5 +1,5 @@
-import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/widgets/surge/soft_os_metrics.dart';
+import 'package:fl_clash/widgets/surge/surge_latency.dart';
 import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:fl_clash/widgets/surge/surge_pressable.dart';
 import 'package:fl_clash/widgets/surge/surge_theme_extension.dart';
@@ -107,7 +107,7 @@ class SurgeDelayPill extends StatelessWidget {
       border = surge.separator.withValues(alpha: SurgeAlpha.a38);
       foreground = surge.textSecondary.withValues(alpha: SurgeAlpha.a82);
     } else if (isSuccess) {
-      final delayColor = utils.getDelayColor(delay) ?? surge.green;
+      final delayColor = surge.latencyColor(delay) ?? surge.green;
       background = delayColor.withValues(alpha: SurgeAlpha.a08);
       border = delayColor.withValues(alpha: SurgeAlpha.a16);
       foreground = delayColor.withValues(alpha: SurgeAlpha.a92);

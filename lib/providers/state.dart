@@ -6,6 +6,7 @@ import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/theme/app_color_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -478,8 +479,8 @@ ColorScheme genColorScheme(
     }
   } else {
     seedColor = brightness == Brightness.dark
-        ? const Color(0xFF4DA3FF)
-        : const Color(0xFF0A84FF);
+        ? const Color(defaultAccentColorDark)
+        : const Color(defaultAccentColor);
     schemeVariant = DynamicSchemeVariant.content;
   }
 

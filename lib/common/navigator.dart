@@ -243,7 +243,7 @@ class _CommonPageTransitionState extends State<CommonPageTransition> {
           DecorationTween(
             begin: const _CommonEdgeShadowDecoration(),
             end: const _CommonEdgeShadowDecoration(<Color>[
-              Color(0x04000000),
+              SurgePalette.routeEdgeShadow,
               Colors.transparent,
             ]),
           ),

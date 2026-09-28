@@ -146,10 +146,10 @@ class SurgeBottomNav extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
                                           colors: [
-                                            Colors.white.withValues(
+                                            SurgePalette.highlight.withValues(
                                               alpha: SurgeAlpha.a16,
                                             ),
-                                            Colors.white.withValues(
+                                            SurgePalette.highlight.withValues(
                                               alpha: SurgeAlpha.none,
                                             ),
                                           ],

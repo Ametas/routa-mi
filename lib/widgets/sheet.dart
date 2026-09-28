@@ -68,7 +68,7 @@ Future<T?> showSheet<T>({
         );
       },
       backgroundColor: props.backgroundColor,
-      barrierColor: Colors.black.withValues(
+      barrierColor: SurgePalette.scrim.withValues(
         alpha: SurgeMotion.modalBarrierOpacity,
       ),
       sheetAnimationStyle: const AnimationStyle(
