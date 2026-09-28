@@ -5,6 +5,7 @@ import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'surge_motion.dart';
+import 'surge_shadows.dart';
 import 'surge_theme_extension.dart';
 
 class SurgeBottomNavLayout {
@@ -75,10 +76,10 @@ class SurgeBottomNav extends StatelessWidget {
     final isDark =
         ThemeData.estimateBrightnessForColor(navSurface) == Brightness.dark;
     final selectedSurface = Color.alphaBlend(
-      surge.textPrimary.withValues(alpha: 0.065),
+      surge.textPrimary.withValues(alpha: SurgeAlpha.a08),
       navSurface,
     );
-    final selectedBorder = surge.textPrimary.withValues(alpha: 0.10);
+    final selectedBorder = surge.textPrimary.withValues(alpha: SurgeAlpha.a12);
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
@@ -99,18 +100,7 @@ class SurgeBottomNav extends StatelessWidget {
                 color: surge.separator,
                 width: surge.spacing.hairline,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: surge.shadow.withValues(alpha: 0.14),
-                  blurRadius: 4,
-                  offset: const Offset(0, 1),
-                ),
-                BoxShadow(
-                  color: surge.shadow.withValues(alpha: 0.06),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+              boxShadow: SurgeShadows.bar(surge),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(26),
@@ -157,9 +147,11 @@ class SurgeBottomNav extends StatelessWidget {
                                         gradient: LinearGradient(
                                           colors: [
                                             Colors.white.withValues(
-                                              alpha: 0.14,
+                                              alpha: SurgeAlpha.a16,
                                             ),
-                                            Colors.white.withValues(alpha: 0.0),
+                                            Colors.white.withValues(
+                                              alpha: SurgeAlpha.none,
+                                            ),
                                           ],
                                         ),
                                       ),

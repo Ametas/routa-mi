@@ -234,7 +234,7 @@ class LogItem extends StatelessWidget {
                 SelectableText(
                   log.payload,
                   style: context.typography.techLabel.copyWith(
-                    color: surge.textPrimary.withValues(alpha: 0.9),
+                    color: surge.textPrimary.withValues(alpha: SurgeAlpha.a92),
                   ),
                 ),
                 const SizedBox(height: SurgeSpace.m),
@@ -253,12 +253,12 @@ class LogItem extends StatelessWidget {
                           vertical: SurgeSpace.xs,
                         ),
                         decoration: BoxDecoration(
-                          color: levelColor.withValues(alpha: 0.075),
+                          color: levelColor.withValues(alpha: SurgeAlpha.a08),
                           borderRadius: BorderRadius.circular(
                             surge.radii.chart,
                           ),
                           border: Border.all(
-                            color: levelColor.withValues(alpha: 0.14),
+                            color: levelColor.withValues(alpha: SurgeAlpha.a16),
                             width: surge.spacing.hairline,
                           ),
                         ),
@@ -274,7 +274,9 @@ class LogItem extends StatelessWidget {
                     Text(
                       log.dateTime,
                       style: context.typography.techLabel.copyWith(
-                        color: surge.textSecondary.withValues(alpha: 0.62),
+                        color: surge.textSecondary.withValues(
+                          alpha: SurgeAlpha.a62,
+                        ),
                       ),
                     ),
                   ],
@@ -315,7 +317,7 @@ class _LogsListDivider extends StatelessWidget {
     return Divider(
       height: 0,
       thickness: surge.spacing.hairline,
-      color: surge.separator.withValues(alpha: 0.56),
+      color: surge.separator.withValues(alpha: SurgeAlpha.a62),
     );
   }
 }

@@ -243,10 +243,10 @@ class _TrackerChainPill extends StatelessWidget {
           height: 28,
           padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
           decoration: BoxDecoration(
-            color: surge.textSecondary.withValues(alpha: 0.055),
+            color: surge.textSecondary.withValues(alpha: SurgeAlpha.a04),
             borderRadius: BorderRadius.circular(surge.radii.smallCard),
             border: Border.all(
-              color: surge.separator.withValues(alpha: 0.35),
+              color: surge.separator.withValues(alpha: SurgeAlpha.a38),
               width: surge.spacing.hairline,
             ),
           ),
@@ -256,7 +256,7 @@ class _TrackerChainPill extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: context.typography.techLabel.copyWith(
-                color: surge.textPrimary.withValues(alpha: 0.72),
+                color: surge.textPrimary.withValues(alpha: SurgeAlpha.a72),
               ),
             ),
           ),

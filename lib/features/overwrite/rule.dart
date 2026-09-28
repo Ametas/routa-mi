@@ -277,7 +277,7 @@ class _AddOrEditRuleDialogState extends State<AddOrEditRuleDialog> {
             enabledBorder: inputBorder,
             focusedBorder: inputBorder.copyWith(
               borderSide: BorderSide(
-                color: surge.primary.withValues(alpha: 0.42),
+                color: surge.primary.withValues(alpha: SurgeAlpha.a38),
                 width: 1.2,
               ),
             ),

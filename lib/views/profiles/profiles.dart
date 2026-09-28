@@ -735,7 +735,7 @@ class _ProfileSettingOption extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     final foreground = enabled
         ? surge.textSecondary
-        : surge.textSecondary.withValues(alpha: 0.4);
+        : surge.textSecondary.withValues(alpha: SurgeAlpha.a38);
 
     return Material(
       color: Colors.transparent,
@@ -753,7 +753,7 @@ class _ProfileSettingOption extends StatelessWidget {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: foreground.withValues(alpha: 0.08),
+                    color: foreground.withValues(alpha: SurgeAlpha.a08),
                     borderRadius: BorderRadius.circular(surge.radii.input),
                   ),
                   child: Icon(
@@ -775,7 +775,9 @@ class _ProfileSettingOption extends StatelessWidget {
                       style: context.typography.rowTitle.copyWith(
                         color: enabled
                             ? surge.textPrimary
-                            : surge.textSecondary.withValues(alpha: 0.4),
+                            : surge.textSecondary.withValues(
+                                alpha: SurgeAlpha.a38,
+                              ),
                       ),
                     ),
                     if (subtitle != null) ...[
@@ -795,7 +797,7 @@ class _ProfileSettingOption extends StatelessWidget {
               if (enabled)
                 Icon(
                   SurgeIcons.chevronRight,
-                  color: surge.textSecondary.withValues(alpha: 0.75),
+                  color: surge.textSecondary.withValues(alpha: SurgeAlpha.a72),
                   size: SurgeIconSize.regular,
                 ),
             ],
@@ -843,7 +845,7 @@ class _ProfileSortOption extends StatelessWidget {
               index: index,
               child: Icon(
                 SurgeIcons.dragHandle,
-                color: surge.textSecondary.withValues(alpha: 0.8),
+                color: surge.textSecondary.withValues(alpha: SurgeAlpha.a82),
               ),
             ),
           ],
@@ -970,7 +972,7 @@ class _CurrentProfileSummaryState extends State<_CurrentProfileSummary> {
                     Divider(
                       height: 1,
                       thickness: surge.spacing.hairline,
-                      color: surge.separator.withValues(alpha: 0.62),
+                      color: surge.separator.withValues(alpha: SurgeAlpha.a62),
                     ),
                   ],
                 ),
@@ -984,7 +986,7 @@ class _CurrentProfileSummaryState extends State<_CurrentProfileSummary> {
                 child: Divider(
                   height: 1,
                   thickness: surge.spacing.hairline,
-                  color: surge.separator.withValues(alpha: 0.62),
+                  color: surge.separator.withValues(alpha: SurgeAlpha.a62),
                 ),
               ),
               _CurrentProfileExpandButton(
@@ -1029,7 +1031,7 @@ class _CurrentProfileDetails extends StatelessWidget {
         Icon(
           SurgeIcons.schedule,
           size: SurgeIconSize.inline,
-          color: surge.textSecondary.withValues(alpha: 0.82),
+          color: surge.textSecondary.withValues(alpha: SurgeAlpha.a82),
         ),
         const SizedBox(width: SurgeSpace.s),
         LastUpdateTimeText(
@@ -1101,7 +1103,7 @@ class _CurrentProfileStatusPill extends ConsumerWidget {
               dimension: 11,
               child: CircularProgressIndicator(
                 strokeWidth: 1.5,
-                color: color.withValues(alpha: 0.86),
+                color: color.withValues(alpha: SurgeAlpha.a82),
               ),
             ),
             const SizedBox(width: SurgeSpace.s),
@@ -1111,7 +1113,7 @@ class _CurrentProfileStatusPill extends ConsumerWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: context.typography.pillLabel.copyWith(
-              color: color.withValues(alpha: 0.96),
+              color: color.withValues(alpha: SurgeAlpha.full),
             ),
           ),
         ],
@@ -1314,10 +1316,10 @@ class _ProfileProxyTestAllButtonState
           height: 24,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: surge.textSecondary.withValues(alpha: 0.08),
+            color: surge.textSecondary.withValues(alpha: SurgeAlpha.a08),
             borderRadius: BorderRadius.circular(surge.radii.menuRow),
             border: Border.all(
-              color: surge.separator.withValues(alpha: 0.55),
+              color: surge.separator.withValues(alpha: SurgeAlpha.a62),
               width: 0.5,
             ),
           ),
@@ -1884,13 +1886,7 @@ class ProfileItem extends StatelessWidget {
                       color: surge.primary,
                       shape: BoxShape.circle,
                       border: Border.all(color: surge.card, width: 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: surge.shadow,
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                      boxShadow: SurgeShadows.ambient(surge),
                     ),
                   ),
                 ),
@@ -1994,7 +1990,9 @@ class _ProfileActionMenu extends StatelessWidget {
       shadow: true,
       padding: const EdgeInsets.symmetric(vertical: SurgeSpace.s),
       borderRadius: 14,
-      border: Border.all(color: surge.separator.withValues(alpha: 0.7)),
+      border: Border.all(
+        color: surge.separator.withValues(alpha: SurgeAlpha.a72),
+      ),
       child: IntrinsicWidth(
         child: ConstrainedBox(
           constraints: const BoxConstraints(minWidth: 188),
@@ -2022,8 +2020,8 @@ class _ProfileActionMenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
     final color = danger
-        ? surge.red.withValues(alpha: 0.88)
-        : surge.textPrimary.withValues(alpha: 0.72);
+        ? surge.red.withValues(alpha: SurgeAlpha.a92)
+        : surge.textPrimary.withValues(alpha: SurgeAlpha.a72);
     return InkWell(
       onTap: () {
         Navigator.of(context).pop();
@@ -2041,8 +2039,8 @@ class _ProfileActionMenuItem extends StatelessWidget {
               height: 30,
               decoration: BoxDecoration(
                 color: danger
-                    ? surge.red.withValues(alpha: 0.075)
-                    : surge.textSecondary.withValues(alpha: 0.055),
+                    ? surge.red.withValues(alpha: SurgeAlpha.a08)
+                    : surge.textSecondary.withValues(alpha: SurgeAlpha.a04),
                 borderRadius: BorderRadius.circular(surge.radii.button),
               ),
               child: Icon(icon, size: SurgeIconSize.inline, color: color),
@@ -2136,7 +2134,7 @@ class _ProfileTypeLabel extends StatelessWidget {
         maxLines: 1,
         textScaler: TextScaler.noScaling,
         style: SlclashTypeScale.profileTypeLabel.copyWith(
-          color: color.withValues(alpha: 0.92),
+          color: color.withValues(alpha: SurgeAlpha.a92),
         ),
       ),
     );
@@ -2186,10 +2184,10 @@ class SoftOsUsageBar extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     final progress = value.clamp(0.0, 1.0);
     final color = progress >= 0.95
-        ? surge.red.withValues(alpha: 0.82)
+        ? surge.red.withValues(alpha: SurgeAlpha.a82)
         : progress >= 0.8
-        ? surge.orange.withValues(alpha: 0.78)
-        : surge.primary.withValues(alpha: 0.72);
+        ? surge.orange.withValues(alpha: SurgeAlpha.a82)
+        : surge.primary.withValues(alpha: SurgeAlpha.a72);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(2.5),
@@ -2197,7 +2195,7 @@ class SoftOsUsageBar extends StatelessWidget {
         minHeight: 5,
         value: progress,
         color: color,
-        backgroundColor: surge.textSecondary.withValues(alpha: 0.08),
+        backgroundColor: surge.textSecondary.withValues(alpha: SurgeAlpha.a08),
       ),
     );
   }
@@ -2298,7 +2296,7 @@ class _ProfilePill extends StatelessWidget {
     final metrics = SoftOsMetrics.of(context);
     const backgroundAlpha = 0.055;
     const borderAlpha = 0.38;
-    final textColor = surge.textPrimary.withValues(alpha: 0.68);
+    final textColor = surge.textPrimary.withValues(alpha: SurgeAlpha.a72);
     final height = metrics.value(surge.controls.statusPillHeight);
     return Container(
       height: height,

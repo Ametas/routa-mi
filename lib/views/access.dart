@@ -461,10 +461,10 @@ class _SelectedPill extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final surfaceColor = Color.alphaBlend(
-      surge.primary.withValues(alpha: isDark ? 0.22 : 0.12),
+      surge.primary.withValues(alpha: isDark ? SurgeAlpha.a24 : SurgeAlpha.a12),
       surge.card,
     );
-    final borderColor = surge.primary.withValues(alpha: isDark ? 0.34 : 0.22);
+    final borderColor = surge.primary.withValues(alpha: isDark ? SurgeAlpha.a38 : SurgeAlpha.a24);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.s, vertical: SurgeSpace.xs),
       decoration: BoxDecoration(

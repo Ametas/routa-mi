@@ -3,46 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 extension ColorExtension on Color {
-  Color get opacity80 {
-    return withAlpha(204);
-  }
-
-  Color get opacity60 {
-    return withAlpha(153);
-  }
-
-  Color get opacity50 {
-    return withAlpha(128);
-  }
-
-  Color get opacity38 {
-    return withAlpha(97);
-  }
-
-  Color get opacity30 {
-    return withAlpha(77);
-  }
-
-  Color get opacity12 {
-    return withAlpha(31);
-  }
-
-  Color get opacity15 {
-    return withAlpha(38);
-  }
-
-  Color get opacity10 {
-    return withAlpha(26);
-  }
-
-  Color get opacity3 {
-    return withAlpha(8);
-  }
-
-  Color get opacity0 {
-    return withAlpha(0);
-  }
-
   int get value32bit {
     return _floatToInt8(a) << 24 |
         _floatToInt8(r) << 16 |

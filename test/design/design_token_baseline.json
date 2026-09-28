@@ -1,10 +1,6 @@
 {
-  "lib/application.dart": {
-    "alpha": 3
-  },
   "lib/common/color.dart": {
-    "color": 8,
-    "alpha": 10
+    "color": 8
   },
   "lib/common/constant.dart": {
     "duration": 5
@@ -45,8 +41,7 @@
     "duration": 1
   },
   "lib/features/overwrite/rule.dart": {
-    "color": 2,
-    "alpha": 1
+    "color": 2
   },
   "lib/manager/android_manager.dart": {
     "duration": 1
@@ -117,12 +112,10 @@
   "lib/views/backup_and_restore.dart": {
     "spacing": 1,
     "gap": 1,
-    "color": 1,
-    "alpha": 14
+    "color": 1
   },
   "lib/views/config/general.dart": {
-    "gap": 1,
-    "alpha": 1
+    "gap": 1
   },
   "lib/views/config/scripts.dart": {
     "spacing": 1
@@ -131,34 +124,21 @@
     "duration": 1
   },
   "lib/views/connection/item.dart": {
-    "gap": 1,
-    "alpha": 3
+    "gap": 1
   },
   "lib/views/dashboard/widgets/memory_info.dart": {
     "duration": 1
   },
-  "lib/views/dashboard/widgets/network_detection.dart": {
-    "alpha": 1
-  },
   "lib/views/dashboard/widgets/network_overview_card.dart": {
     "color": 1,
-    "alpha": 3,
     "duration": 2
-  },
-  "lib/views/dashboard/widgets/network_speed.dart": {
-    "alpha": 1
   },
   "lib/views/dashboard/widgets/surge_dashboard_hero.dart": {
     "spacing": 1,
     "gap": 2,
     "radius": 2,
     "color": 15,
-    "alpha": 13,
-    "shadow": 2,
     "duration": 1
-  },
-  "lib/views/logs.dart": {
-    "alpha": 5
   },
   "lib/views/profiles/edit.dart": {
     "spacing": 1,
@@ -168,7 +148,6 @@
     "spacing": 3,
     "gap": 6,
     "radius": 3,
-    "alpha": 8,
     "duration": 1
   },
   "lib/views/profiles/overwrite/custom/groups.dart": {
@@ -181,33 +160,13 @@
   "lib/views/profiles/overwrite/custom/rules.dart": {
     "radius": 1
   },
-  "lib/views/profiles/overwrite/custom/widgets.dart": {
-    "alpha": 3
-  },
-  "lib/views/profiles/overwrite/script.dart": {
-    "alpha": 1
-  },
   "lib/views/profiles/profiles.dart": {
     "spacing": 3,
     "gap": 2,
-    "radius": 1,
-    "alpha": 23,
-    "shadow": 1
-  },
-  "lib/views/proxies/card.dart": {
-    "alpha": 1
-  },
-  "lib/views/proxies/empty.dart": {
-    "alpha": 2
+    "radius": 1
   },
   "lib/views/proxies/list.dart": {
-    "spacing": 1,
-    "alpha": 7,
-    "shadow": 1
-  },
-  "lib/views/proxies/providers.dart": {
-    "alpha": 6,
-    "shadow": 1
+    "spacing": 1
   },
   "lib/views/proxies/proxies.dart": {
     "duration": 1
@@ -217,13 +176,11 @@
     "duration": 4
   },
   "lib/views/resources.dart": {
-    "spacing": 2,
-    "alpha": 11
+    "spacing": 2
   },
   "lib/views/theme.dart": {
     "spacing": 1,
-    "gap": 1,
-    "alpha": 11
+    "gap": 1
   },
   "lib/views/theme_accent.dart": {
     "gap": 1,
@@ -232,29 +189,22 @@
   "lib/views/tools.dart": {
     "spacing": 1
   },
-  "lib/widgets/app_bar/sl_app_bar_buttons.dart": {
-    "alpha": 1
-  },
   "lib/widgets/effect.dart": {
     "duration": 1
   },
   "lib/widgets/input.dart": {
     "spacing": 2,
-    "gap": 2,
-    "alpha": 12
+    "gap": 2
   },
   "lib/widgets/list.dart": {
     "spacing": 1,
-    "radius": 3,
-    "alpha": 8,
-    "shadow": 1
+    "radius": 3
   },
   "lib/widgets/loading.dart": {
     "duration": 2
   },
   "lib/widgets/null_status.dart": {
-    "radius": 1,
-    "alpha": 2
+    "radius": 1
   },
   "lib/widgets/open_container.dart": {
     "duration": 1
@@ -264,8 +214,6 @@
   },
   "lib/widgets/popup.dart": {
     "spacing": 1,
-    "alpha": 5,
-    "shadow": 1,
     "duration": 1
   },
   "lib/widgets/scroll.dart": {
@@ -283,44 +231,8 @@
     "radius": 1,
     "color": 1
   },
-  "lib/widgets/surge/soft_os_control_dock.dart": {
-    "alpha": 2,
-    "shadow": 3
-  },
-  "lib/widgets/surge/soft_os_select_pill.dart": {
-    "alpha": 2,
-    "shadow": 1
-  },
-  "lib/widgets/surge/surge_action_card.dart": {
-    "alpha": 4
-  },
   "lib/widgets/surge/surge_bottom_nav.dart": {
     "radius": 4,
-    "color": 2,
-    "alpha": 6,
-    "shadow": 2
-  },
-  "lib/widgets/surge/surge_card.dart": {
-    "alpha": 1,
-    "shadow": 1
-  },
-  "lib/widgets/surge/surge_delay_pill.dart": {
-    "alpha": 12
-  },
-  "lib/widgets/surge/surge_list_tile.dart": {
-    "alpha": 2
-  },
-  "lib/widgets/surge/surge_segmented_control.dart": {
-    "alpha": 2
-  },
-  "lib/widgets/surge/surge_select_indicator.dart": {
-    "alpha": 2
-  },
-  "lib/widgets/surge/surge_selectable_row.dart": {
-    "alpha": 2,
-    "shadow": 1
-  },
-  "lib/widgets/surge/surge_status_button.dart": {
-    "alpha": 2
+    "color": 2
   }
 }

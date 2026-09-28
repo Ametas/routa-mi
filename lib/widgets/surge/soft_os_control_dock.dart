@@ -42,7 +42,9 @@ Color _softOsActionSurface(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
   if (SoftOsAppBarActionTemplate.active(context)) {
     return Color.alphaBlend(
-      surge.textPrimary.withValues(alpha: isDark ? 0.10 : 0.025),
+      surge.textPrimary.withValues(
+        alpha: isDark ? SurgeAlpha.a12 : SurgeAlpha.a04,
+      ),
       surge.background,
     );
   }
@@ -84,32 +86,13 @@ Color _softOsActionForeground(BuildContext context, bool enabled) {
 
 List<BoxShadow> _softOsActionShadows(BuildContext context) {
   final surge = SurgeTheme.of(context);
-  final isDark = Theme.of(context).brightness == Brightness.dark;
   if (SoftOsAppBarActionTemplate.active(context)) {
-    return [
-      BoxShadow(
-        color: surge.shadow.withValues(alpha: 0.08),
-        blurRadius: 3,
-        offset: const Offset(0, 0.5),
-      ),
-      BoxShadow(
-        color: surge.shadow.withValues(alpha: 0.035),
-        blurRadius: 6,
-        offset: const Offset(0, 2),
-      ),
-    ];
+    return SurgeShadows.hairline(surge);
   }
-  return [
-    BoxShadow(
-      color: surge.shadow.withValues(
-        alpha: isDark
-            ? surge.opacity.actionShadowDark
-            : surge.opacity.actionShadowLight,
-      ),
-      blurRadius: surge.controls.actionShadowBlur,
-      offset: Offset(0, surge.controls.actionShadowOffsetY),
-    ),
-  ];
+  return SurgeShadows.action(
+    surge,
+    isDark: Theme.of(context).brightness == Brightness.dark,
+  );
 }
 
 /// A standalone circular icon button following the Soft OS visual language.

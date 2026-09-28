@@ -3,6 +3,7 @@ import 'package:fl_clash/widgets/surge/soft_os_metrics.dart';
 import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:fl_clash/widgets/surge/surge_pressable.dart';
 import 'package:fl_clash/widgets/surge/surge_theme_extension.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 enum SurgeMetricState { idle, loading, value, error }
@@ -98,22 +99,22 @@ class SurgeDelayPill extends StatelessWidget {
     final Color foreground;
 
     if (isUntested) {
-      background = surge.textSecondary.withValues(alpha: 0.052);
-      border = surge.separator.withValues(alpha: 0.42);
-      foreground = surge.textPrimary.withValues(alpha: 0.72);
+      background = surge.textSecondary.withValues(alpha: SurgeAlpha.a04);
+      border = surge.separator.withValues(alpha: SurgeAlpha.a38);
+      foreground = surge.textPrimary.withValues(alpha: SurgeAlpha.a72);
     } else if (isTesting) {
-      background = surge.textSecondary.withValues(alpha: 0.052);
-      border = surge.separator.withValues(alpha: 0.42);
-      foreground = surge.textSecondary.withValues(alpha: 0.85);
+      background = surge.textSecondary.withValues(alpha: SurgeAlpha.a04);
+      border = surge.separator.withValues(alpha: SurgeAlpha.a38);
+      foreground = surge.textSecondary.withValues(alpha: SurgeAlpha.a82);
     } else if (isSuccess) {
       final delayColor = utils.getDelayColor(delay) ?? surge.green;
-      background = delayColor.withValues(alpha: 0.085);
-      border = delayColor.withValues(alpha: 0.14);
-      foreground = delayColor.withValues(alpha: 0.92);
+      background = delayColor.withValues(alpha: SurgeAlpha.a08);
+      border = delayColor.withValues(alpha: SurgeAlpha.a16);
+      foreground = delayColor.withValues(alpha: SurgeAlpha.a92);
     } else if (isTimeout) {
-      background = surge.red.withValues(alpha: 0.085);
-      border = surge.red.withValues(alpha: 0.14);
-      foreground = surge.red.withValues(alpha: 0.92);
+      background = surge.red.withValues(alpha: SurgeAlpha.a08);
+      border = surge.red.withValues(alpha: SurgeAlpha.a16);
+      foreground = surge.red.withValues(alpha: SurgeAlpha.a92);
     } else {
       background = surge.fill;
       border = surge.separator;

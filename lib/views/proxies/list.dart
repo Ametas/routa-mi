@@ -564,7 +564,9 @@ class _ListHeaderState extends State<ListHeader> {
                     padding: const EdgeInsets.all(SurgeSpace.xs),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(surge.radii.input),
-                      color: surge.textSecondary.withValues(alpha: 0.08),
+                      color: surge.textSecondary.withValues(
+                        alpha: SurgeAlpha.a08,
+                      ),
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: IconTheme.merge(
@@ -611,18 +613,18 @@ class _ListHeaderState extends State<ListHeader> {
     );
     final border = Border(
       left: BorderSide(
-        color: surge.separator.withValues(alpha: 0.78),
+        color: surge.separator.withValues(alpha: SurgeAlpha.a82),
         width: 0.5,
       ),
       right: BorderSide(
-        color: surge.separator.withValues(alpha: 0.78),
+        color: surge.separator.withValues(alpha: SurgeAlpha.a82),
         width: 0.5,
       ),
       top:
           widget.rowPosition == ProxyListRowPosition.first ||
               widget.rowPosition == ProxyListRowPosition.single
           ? BorderSide(
-              color: surge.separator.withValues(alpha: 0.78),
+              color: surge.separator.withValues(alpha: SurgeAlpha.a82),
               width: 0.5,
             )
           : BorderSide.none,
@@ -630,7 +632,7 @@ class _ListHeaderState extends State<ListHeader> {
           widget.rowPosition == ProxyListRowPosition.last ||
               widget.rowPosition == ProxyListRowPosition.single
           ? BorderSide(
-              color: surge.separator.withValues(alpha: 0.78),
+              color: surge.separator.withValues(alpha: SurgeAlpha.a82),
               width: 0.5,
             )
           : BorderSide.none,
@@ -648,13 +650,7 @@ class _ListHeaderState extends State<ListHeader> {
           boxShadow:
               widget.rowPosition == ProxyListRowPosition.first ||
                   widget.rowPosition == ProxyListRowPosition.single
-              ? [
-                  BoxShadow(
-                    color: surge.shadow.withValues(alpha: 0.10),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
+              ? SurgeShadows.raised(surge)
               : null,
         ),
         child: SurgePressable(
@@ -756,7 +752,8 @@ class _ListHeaderState extends State<ListHeader> {
                                                       .copyWith(
                                                         color: surge.textPrimary
                                                             .withValues(
-                                                              alpha: 0.78,
+                                                              alpha: SurgeAlpha
+                                                                  .a82,
                                                             ),
                                                       ),
                                                 ),

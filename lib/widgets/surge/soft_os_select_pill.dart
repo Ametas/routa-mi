@@ -7,6 +7,7 @@ import 'soft_os_metrics.dart';
 import 'surge_motion.dart';
 import 'surge_pressable.dart';
 import 'surge_select_indicator.dart';
+import 'surge_shadows.dart';
 import 'surge_theme_extension.dart';
 
 @immutable
@@ -177,13 +178,7 @@ class _SoftOsSelectPopup<T> extends StatelessWidget {
           color: surge.elevatedCard,
           borderRadius: BorderRadius.circular(surge.radii.card),
           border: Border.all(color: surge.separator),
-          boxShadow: [
-            BoxShadow(
-              color: surge.shadow.withValues(alpha: 0.16),
-              blurRadius: 18,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          boxShadow: SurgeShadows.floating(surge),
         ),
         child: Material(
           type: MaterialType.transparency,
@@ -197,7 +192,7 @@ class _SoftOsSelectPopup<T> extends StatelessWidget {
                 height: 1,
                 indent: 14,
                 endIndent: 14,
-                color: surge.separator.withValues(alpha: 0.58),
+                color: surge.separator.withValues(alpha: SurgeAlpha.a62),
               ),
               itemBuilder: (context, index) {
                 final item = items[index];

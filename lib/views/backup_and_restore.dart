@@ -554,12 +554,12 @@ class _WebDAVFileItem extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 64),
         decoration: BoxDecoration(
           color: selected
-              ? surge.primary.withValues(alpha: 0.10)
-              : surge.fill.withValues(alpha: 0.62),
+              ? surge.primary.withValues(alpha: SurgeAlpha.a12)
+              : surge.fill.withValues(alpha: SurgeAlpha.a62),
           borderRadius: BorderRadius.circular(surge.radii.list),
           border: Border.all(
             color: selected
-                ? surge.primary.withValues(alpha: 0.28)
+                ? surge.primary.withValues(alpha: SurgeAlpha.a24)
                 : surge.separator,
             width: surge.spacing.hairline,
           ),
@@ -596,10 +596,10 @@ class _WebDAVFileItem extends StatelessWidget {
                   vertical: SurgeSpace.xs,
                 ),
                 decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.10),
+                  color: color.withValues(alpha: SurgeAlpha.a12),
                   borderRadius: BorderRadius.circular(surge.radii.button),
                   border: Border.all(
-                    color: color.withValues(alpha: 0.20),
+                    color: color.withValues(alpha: SurgeAlpha.a24),
                     width: 0.5,
                   ),
                 ),
@@ -638,7 +638,7 @@ class _BackupPillButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         foregroundColor: surge.textPrimary,
-        backgroundColor: surge.textSecondary.withValues(alpha: 0.08),
+        backgroundColor: surge.textSecondary.withValues(alpha: SurgeAlpha.a08),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(surge.radii.button),
         ),
@@ -843,7 +843,7 @@ class _SoftOsBackupDialog extends StatelessWidget {
                 ),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: surge.fill.withValues(alpha: 0.72),
+                  color: surge.fill.withValues(alpha: SurgeAlpha.a72),
                   borderRadius: BorderRadius.circular(surge.radii.card),
                   border: Border.all(
                     color: surge.separator,
@@ -908,18 +908,18 @@ class _SoftOsDialogAction extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     final enabled = onPressed != null;
     final background = destructive
-        ? surge.red.withValues(alpha: 0.10)
+        ? surge.red.withValues(alpha: SurgeAlpha.a12)
         : primary
         ? enabled
               ? surge.primary
-              : surge.primary.withValues(alpha: 0.14)
+              : surge.primary.withValues(alpha: SurgeAlpha.a16)
         : surge.fill;
     final foreground = destructive
         ? surge.red
         : primary
         ? enabled
               ? surge.onPrimary
-              : surge.textSecondary.withValues(alpha: 0.72)
+              : surge.textSecondary.withValues(alpha: SurgeAlpha.a72)
         : surge.textPrimary;
     return Semantics(
       button: true,
@@ -939,7 +939,7 @@ class _SoftOsDialogAction extends StatelessWidget {
                 ? BorderSide.none
                 : BorderSide(
                     color: destructive
-                        ? surge.red.withValues(alpha: 0.18)
+                        ? surge.red.withValues(alpha: SurgeAlpha.a16)
                         : surge.separator,
                     width: surge.spacing.hairline,
                   ),
@@ -996,12 +996,12 @@ class _SoftOsRestoreStrategyDialogState
                 padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
                 decoration: BoxDecoration(
                   color: strategy == selected
-                      ? surge.primary.withValues(alpha: 0.10)
-                      : surge.fill.withValues(alpha: 0.62),
+                      ? surge.primary.withValues(alpha: SurgeAlpha.a12)
+                      : surge.fill.withValues(alpha: SurgeAlpha.a62),
                   borderRadius: BorderRadius.circular(surge.radii.list),
                   border: Border.all(
                     color: strategy == selected
-                        ? surge.primary.withValues(alpha: 0.24)
+                        ? surge.primary.withValues(alpha: SurgeAlpha.a24)
                         : surge.separator,
                     width: surge.spacing.hairline,
                   ),

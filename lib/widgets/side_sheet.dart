@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:fl_clash/common/color.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -544,10 +543,10 @@ class ModalSideSheetRoute<T> extends PopupRoute<T> {
   @override
   Widget buildModalBarrier() {
     if (barrierColor.a != 0 && !offstage) {
-      assert(barrierColor != barrierColor.opacity0);
+      assert(barrierColor != barrierColor.withValues(alpha: SurgeAlpha.none));
       final Animation<Color?> color = animation!.drive(
         ColorTween(
-          begin: barrierColor.opacity0,
+          begin: barrierColor.withValues(alpha: SurgeAlpha.none),
           end: barrierColor,
         ).chain(CurveTween(curve: barrierCurve)),
       );

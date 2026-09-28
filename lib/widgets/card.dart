@@ -115,8 +115,8 @@ class CommonCard extends StatelessWidget {
         return BorderSide(color: colorScheme.error);
       }
       final hoverColor = isSelected
-          ? colorScheme.error.opacity80
-          : colorScheme.error.opacity38;
+          ? colorScheme.error.withValues(alpha: SurgeAlpha.a82)
+          : colorScheme.error.withValues(alpha: SurgeAlpha.a38);
       if (states.contains(WidgetState.hovered) ||
           states.contains(WidgetState.focused) ||
           states.contains(WidgetState.pressed)) {
@@ -124,8 +124,8 @@ class CommonCard extends StatelessWidget {
       }
       return BorderSide(
         color: isSelected
-            ? colorScheme.error.opacity60
-            : colorScheme.error.opacity30,
+            ? colorScheme.error.withValues(alpha: SurgeAlpha.a62)
+            : colorScheme.error.withValues(alpha: SurgeAlpha.a24),
       );
     }
     if (type == CommonCardType.filled) {
@@ -133,7 +133,7 @@ class CommonCard extends StatelessWidget {
     }
     final hoverColor = isSelected
         ? colorScheme.outlineVariant
-        : colorScheme.outline.opacity60;
+        : colorScheme.outline.withValues(alpha: SurgeAlpha.a62);
     if (states.contains(WidgetState.hovered) ||
         states.contains(WidgetState.focused) ||
         states.contains(WidgetState.pressed)) {
@@ -151,12 +151,12 @@ class CommonCard extends StatelessWidget {
     // if (isError) {
     //   if (type == CommonCardType.filled) {
     //     return isSelected
-    //         ? colorScheme.errorContainer.opacity80
+    //         ? colorScheme.errorContainer.withValues(alpha: SurgeAlpha.a82)
     //         : colorScheme.errorContainer;
     //   }
     //   return isSelected
-    //       ? colorScheme.errorContainer.opacity60
-    //       : colorScheme.errorContainer.opacity12;
+    //       ? colorScheme.errorContainer.withValues(alpha: SurgeAlpha.a62)
+    //       : colorScheme.errorContainer.withValues(alpha: SurgeAlpha.a12);
     // }
     if (type == CommonCardType.filled) {
       if (isSelected) {

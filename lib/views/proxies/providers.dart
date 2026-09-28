@@ -225,18 +225,18 @@ class ProviderItem extends StatelessWidget {
     );
     final border = Border(
       left: BorderSide(
-        color: surge.separator.withValues(alpha: 0.78),
+        color: surge.separator.withValues(alpha: SurgeAlpha.a82),
         width: 0.5,
       ),
       right: BorderSide(
-        color: surge.separator.withValues(alpha: 0.78),
+        color: surge.separator.withValues(alpha: SurgeAlpha.a82),
         width: 0.5,
       ),
       top:
           rowPosition == ProxyListRowPosition.first ||
               rowPosition == ProxyListRowPosition.single
           ? BorderSide(
-              color: surge.separator.withValues(alpha: 0.78),
+              color: surge.separator.withValues(alpha: SurgeAlpha.a82),
               width: 0.5,
             )
           : BorderSide.none,
@@ -244,7 +244,7 @@ class ProviderItem extends StatelessWidget {
           rowPosition == ProxyListRowPosition.last ||
               rowPosition == ProxyListRowPosition.single
           ? BorderSide(
-              color: surge.separator.withValues(alpha: 0.78),
+              color: surge.separator.withValues(alpha: SurgeAlpha.a82),
               width: 0.5,
             )
           : BorderSide.none,
@@ -262,13 +262,7 @@ class ProviderItem extends StatelessWidget {
           boxShadow:
               rowPosition == ProxyListRowPosition.first ||
                   rowPosition == ProxyListRowPosition.single
-              ? [
-                  BoxShadow(
-                    color: surge.shadow.withValues(alpha: 0.10),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
+              ? SurgeShadows.raised(surge)
               : null,
         ),
         child: Stack(
@@ -339,7 +333,7 @@ class ProviderItem extends StatelessWidget {
                 child: Divider(
                   height: 0,
                   thickness: 0.5,
-                  color: surge.separator.withValues(alpha: 0.55),
+                  color: surge.separator.withValues(alpha: SurgeAlpha.a62),
                 ),
               ),
           ],

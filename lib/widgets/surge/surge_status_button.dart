@@ -59,9 +59,11 @@ class SurgeStatusButton extends StatelessWidget {
       onPressed: loading ? null : onPressed,
       style: FilledButton.styleFrom(
         backgroundColor: background,
-        disabledBackgroundColor: background.withValues(alpha: 0.55),
+        disabledBackgroundColor: background.withValues(alpha: SurgeAlpha.a62),
         foregroundColor: surge.onPrimary,
-        disabledForegroundColor: surge.onPrimary.withValues(alpha: 0.8),
+        disabledForegroundColor: surge.onPrimary.withValues(
+          alpha: SurgeAlpha.a82,
+        ),
         minimumSize: Size(
           resolveSize(minWidth ?? (compact ? 0 : 96)),
           effectiveHeight,
