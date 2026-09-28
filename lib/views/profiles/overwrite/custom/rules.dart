@@ -196,8 +196,8 @@ class _CustomRulesViewState extends ConsumerState<CustomRulesView>
                 scrollController: _scrollController,
                 buildDefaultDragHandles: false,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+                  horizontal: SurgeSpace.l,
+                  vertical: SurgeSpace.m,
                 ).copyWith(bottom: 24),
                 itemBuilder: (_, index) {
                   final rule = rules[index];
@@ -544,7 +544,7 @@ class _AddOrEditRuleViewState extends ConsumerState<_AddOrEditRuleView> {
                   ),
                 ),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: SurgeSpace.xs),
               Icon(SurgeIcons.forward, color: foregroundColor),
             ],
           ),
@@ -653,7 +653,7 @@ class _AddOrEditRuleViewState extends ConsumerState<_AddOrEditRuleView> {
         child: ListView(
           shrinkWrap: true,
           padding: const EdgeInsets.symmetric(
-            horizontal: 16,
+            horizontal: SurgeSpace.l,
           ).copyWith(bottom: 20, top: context.sheetTopPadding),
           children: [
             generateSectionV3(
@@ -725,7 +725,7 @@ class _RuleTypeSelectedView extends ConsumerWidget {
         height: height,
         child: ListView.builder(
           padding: const EdgeInsets.symmetric(
-            horizontal: 16,
+            horizontal: SurgeSpace.l,
           ).copyWith(bottom: 20, top: context.sheetTopPadding),
           itemCount: RuleAction.values.length,
           itemBuilder: (_, index) {
@@ -813,7 +813,7 @@ class _RuleTargetSelectedView extends ConsumerWidget {
               child: SizedBox(height: context.sheetTopPadding),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverToBoxAdapter(
                 child: InfoHeader(
                   info: Info(label: appLocalizations.basicStrategy),
@@ -821,7 +821,7 @@ class _RuleTargetSelectedView extends ConsumerWidget {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverList.builder(
                 itemBuilder: (_, index) {
                   final target = RuleTarget.values[index];
@@ -842,7 +842,7 @@ class _RuleTargetSelectedView extends ConsumerWidget {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverToBoxAdapter(
                 child: InfoHeader(
                   info: Info(label: appLocalizations.ruleTarget),
@@ -850,7 +850,7 @@ class _RuleTargetSelectedView extends ConsumerWidget {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverList.builder(
                 itemBuilder: (_, index) {
                   final proxyGroup = proxyGroups[index];
@@ -869,13 +869,13 @@ class _RuleTargetSelectedView extends ConsumerWidget {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverToBoxAdapter(
                 child: InfoHeader(info: Info(label: appLocalizations.proxies)),
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverList.builder(
                 itemBuilder: (_, index) {
                   final proxy = proxies[index];
@@ -893,7 +893,7 @@ class _RuleTargetSelectedView extends ConsumerWidget {
                 itemCount: proxies.length,
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.l)),
           ],
         ),
       ),
@@ -947,7 +947,7 @@ class _RuleProviderSelectedView extends ConsumerWidget {
             ? NullStatus(label: appLocalizations.proxyProvidersEmpty)
             : ListView.builder(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
+                  horizontal: SurgeSpace.l,
                 ).copyWith(bottom: 20, top: context.sheetTopPadding),
                 itemCount: ruleProviders.length,
                 itemBuilder: (_, index) {
@@ -1020,7 +1020,7 @@ class _SubRuleSelectedView extends ConsumerWidget {
             ? NullStatus(label: appLocalizations.subRuleEmpty)
             : ListView.builder(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
+                  horizontal: SurgeSpace.l,
                 ).copyWith(bottom: 20, top: context.sheetTopPadding),
                 itemCount: subRules.length,
                 itemBuilder: (_, index) {

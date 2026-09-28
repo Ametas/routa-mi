@@ -1205,7 +1205,7 @@ class PlatformLatencyPanel extends StatelessWidget {
     // Refreshing is indicated by the bar, not a different text compositing
     // path. Keep glyph rendering stable while the route lookup completes.
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
+      padding: const EdgeInsets.symmetric(vertical: SurgeSpace.xxs),
       child: Text(
         _valueLabel(result),
         maxLines: 1,

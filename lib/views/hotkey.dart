@@ -7,6 +7,7 @@ import 'package:fl_clash/widgets/card.dart';
 import 'package:fl_clash/widgets/dialog.dart';
 import 'package:fl_clash/widgets/list.dart';
 import 'package:fl_clash/widgets/scaffold.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -293,7 +294,7 @@ class _HotKeyRecorderState extends ConsumerState<HotKeyRecorder> {
             },
             child: Text(appLocalizations.remove),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: SurgeSpace.s),
           TextButton(
             onPressed: () {
               _handleConfirm();
@@ -344,7 +345,7 @@ class KeyboardKeyBox extends StatelessWidget {
     return CommonCard(
       type: CommonCardType.filled,
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(SurgeSpace.m),
         child: Text(keyboardKey.label, style: context.typography.controlLabel),
       ),
       onPressed: () {},

@@ -41,12 +41,15 @@ class ProxiesEmptyState extends StatelessWidget {
     return Align(
       alignment: const Alignment(0, -0.18),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SurgeSpace.xxl,
+          vertical: SurgeSpace.xxxl,
+        ),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 320),
           child: SurgeCard(
             shadow: false,
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(SurgeSpace.xl),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,7 +88,7 @@ class ProxiesEmptyState extends StatelessWidget {
                               ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: SurgeSpace.l),
                     Expanded(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -101,7 +104,7 @@ class ProxiesEmptyState extends StatelessWidget {
                           ),
                           if (description != null &&
                               description!.isNotEmpty) ...[
-                            const SizedBox(height: 4),
+                            const SizedBox(height: SurgeSpace.xs),
                             Text(
                               description!,
                               maxLines: 2,
@@ -119,7 +122,7 @@ class ProxiesEmptyState extends StatelessWidget {
                 if (kind != ProxiesEmptyStateKind.loading &&
                     actionLabel != null &&
                     onAction != null) ...[
-                  const SizedBox(height: 16),
+                  const SizedBox(height: SurgeSpace.l),
                   Align(
                     alignment: Alignment.centerRight,
                     child: SurgeStatusButton(

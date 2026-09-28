@@ -2,6 +2,7 @@ import 'package:fl_clash/common/icons.dart';
 import 'package:fl_clash/common/color.dart';
 import 'package:fl_clash/common/context.dart';
 import 'package:fl_clash/theme/typography/typography_context.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,8 +31,12 @@ class InitErrorScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(SurgeIcons.warning, color: colorScheme.error, size: 32),
-                  const SizedBox(width: 12),
+                  Icon(
+                    SurgeIcons.warning,
+                    color: colorScheme.error,
+                    size: SurgeIconSize.hero,
+                  ),
+                  const SizedBox(width: SurgeSpace.m),
                   Expanded(
                     child: Text(
                       context.appLocalizations.initFailedDescription,
@@ -40,14 +45,14 @@ class InitErrorScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: SurgeSpace.xxl),
               _buildSectionLabel(
                 context,
                 context.appLocalizations.errorDetails,
               ),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(SurgeSpace.m),
                 decoration: BoxDecoration(
                   color: colorScheme.errorContainer.opacity50,
                   borderRadius: BorderRadius.circular(8),
@@ -60,11 +65,11 @@ class InitErrorScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: SurgeSpace.xxl),
               _buildSectionLabel(context, context.appLocalizations.stackTrace),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(SurgeSpace.m),
                 decoration: BoxDecoration(
                   color: Theme.of(context).brightness == Brightness.dark
                       ? Colors.grey[900]

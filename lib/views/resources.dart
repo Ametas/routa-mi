@@ -310,8 +310,8 @@ class _ResourcesViewState extends ConsumerState<ResourcesView> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 5,
+                  horizontal: SurgeSpace.l,
+                  vertical: SurgeSpace.xs,
                 ),
                 child: _ResourceListSurface(
                   child: Column(
@@ -347,7 +347,12 @@ class _ResourceStatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+      padding: const EdgeInsets.fromLTRB(
+        SurgeSpace.l,
+        SurgeSpace.m,
+        SurgeSpace.l,
+        SurgeSpace.s,
+      ),
       child: SurgeCard(
         shadow: false,
         padding: EdgeInsets.zero,
@@ -356,7 +361,10 @@ class _ResourceStatusCard extends StatelessWidget {
           semanticLabel:
               context.appLocalizations.openResourceAutoUpdateSettings,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: SurgeSpace.l,
+              vertical: SurgeSpace.m,
+            ),
             child: Row(
               children: [
                 Container(
@@ -370,11 +378,11 @@ class _ResourceStatusCard extends StatelessWidget {
                     mode == _ResourceAutoUpdateMode.off
                         ? SurgeIcons.pause
                         : SurgeIcons.update,
-                    size: 15,
+                    size: SurgeIconSize.inline,
                     color: surge.textPrimary.withValues(alpha: 0.72),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: SurgeSpace.m),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -389,7 +397,7 @@ class _ResourceStatusCard extends StatelessWidget {
                         ),
                       ),
                       if (mode != _ResourceAutoUpdateMode.off) ...[
-                        const SizedBox(height: 4),
+                        const SizedBox(height: SurgeSpace.xs),
                         Text(
                           mode.subtitle(context),
                           maxLines: 1,
@@ -402,10 +410,10 @@ class _ResourceStatusCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: SurgeSpace.s),
                 Icon(
                   SurgeIcons.chevronRight,
-                  size: 22,
+                  size: SurgeIconSize.navigation,
                   color: surge.textSecondary.withValues(alpha: 0.7),
                 ),
               ],
@@ -492,7 +500,12 @@ class _ResourceItemCard extends ConsumerWidget {
     return Stack(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(14, 13, 10, 13),
+          padding: const EdgeInsets.fromLTRB(
+            SurgeSpace.l,
+            SurgeSpace.m,
+            SurgeSpace.m,
+            SurgeSpace.m,
+          ),
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 58),
             child: Row(
@@ -511,11 +524,11 @@ class _ResourceItemCard extends ConsumerWidget {
                   ),
                   child: Icon(
                     item.icon,
-                    size: 17,
+                    size: SurgeIconSize.compact,
                     color: surge.textPrimary.withValues(alpha: 0.72),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: SurgeSpace.m),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -535,7 +548,7 @@ class _ResourceItemCard extends ConsumerWidget {
                                     color: surge.textPrimary,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(height: SurgeSpace.xs),
                                 FutureBuilder<FileInfo>(
                                   future: _getGeoFileLastModified(
                                     item.fileName,
@@ -556,7 +569,7 @@ class _ResourceItemCard extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: SurgeSpace.s),
                           SoftOsControlDock(
                             height: 34,
                             tapHeight: 44,
@@ -577,7 +590,7 @@ class _ResourceItemCard extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: SurgeSpace.s),
                       Text(
                         url,
                         style: context.typography.supporting.copyWith(
@@ -638,7 +651,12 @@ class _ResourceAutoUpdateSheetState extends State<_ResourceAutoUpdateSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+            padding: const EdgeInsets.fromLTRB(
+              SurgeSpace.xs,
+              0,
+              SurgeSpace.xs,
+              SurgeSpace.s,
+            ),
             child: Text(
               context.appLocalizations.updateFrequency,
               style: context.typography.rowTitle.copyWith(
@@ -652,7 +670,7 @@ class _ResourceAutoUpdateSheetState extends State<_ResourceAutoUpdateSheet> {
               color: surge.textSecondary,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: SurgeSpace.s),
           SurgeCard(
             padding: EdgeInsets.zero,
             borderRadius: 18,
@@ -707,7 +725,10 @@ class _ResourceSheetOption extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+          padding: const EdgeInsets.symmetric(
+            horizontal: SurgeSpace.l,
+            vertical: SurgeSpace.m,
+          ),
           child: Row(
             children: [
               Container(
@@ -723,9 +744,13 @@ class _ResourceSheetOption extends StatelessWidget {
                     width: surge.spacing.hairline,
                   ),
                 ),
-                child: Icon(icon, size: 15, color: foreground),
+                child: Icon(
+                  icon,
+                  size: SurgeIconSize.inline,
+                  color: foreground,
+                ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: SurgeSpace.m),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -738,7 +763,7 @@ class _ResourceSheetOption extends StatelessWidget {
                         color: surge.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: SurgeSpace.xs),
                     Text(
                       subtitle,
                       maxLines: 2,
@@ -750,11 +775,11 @@ class _ResourceSheetOption extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: SurgeSpace.m),
               SurgeSelectIndicator(
                 selected: selected,
                 size: 18,
-                iconSize: 12,
+                iconSize: SurgeIconSize.micro,
                 showCheck: false,
               ),
             ],

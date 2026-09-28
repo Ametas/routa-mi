@@ -1,3 +1,4 @@
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'surge_pressable.dart';
@@ -22,7 +23,7 @@ class SurgeSelectableRow extends StatelessWidget {
     this.showBorder = false,
     this.showShadow = false,
     this.showDivider = false,
-    this.dividerInsets = const EdgeInsets.symmetric(horizontal: 16),
+    this.dividerInsets = const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
     this.selectedIndicatorLeft = 14,
     this.selectedIndicatorHeight = 28,
     this.selectedIndicatorWidth = 3,

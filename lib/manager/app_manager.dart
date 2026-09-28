@@ -5,6 +5,7 @@ import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -321,8 +322,8 @@ class AppSidebarContainer extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (system.isMacOS) const SizedBox(height: 22),
-                const SizedBox(height: 10),
+                if (system.isMacOS) const SizedBox(height: SurgeSpace.xxl),
+                const SizedBox(height: SurgeSpace.m),
                 Expanded(
                   child: ScrollConfiguration(
                     behavior: HiddenBarScrollBehavior(),
@@ -364,7 +365,7 @@ class AppSidebarContainer extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: SurgeSpace.l),
                 IconButton(
                   onPressed: () {
                     ref
@@ -379,7 +380,7 @@ class AppSidebarContainer extends ConsumerWidget {
                     color: context.colorScheme.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: SurgeSpace.l),
               ],
             ),
           ),

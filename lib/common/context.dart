@@ -5,6 +5,7 @@ import 'package:fl_clash/models/state.dart';
 import 'package:fl_clash/widgets/inherited.dart';
 import 'package:fl_clash/widgets/scaffold.dart';
 import 'package:fl_clash/widgets/sheet.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 extension BuildContextExtension on BuildContext {
@@ -41,7 +42,11 @@ extension BuildContextExtension on BuildContext {
     final width = viewWidth;
     EdgeInsets margin;
     if (width < 600) {
-      margin = const EdgeInsets.only(bottom: 16, right: 16, left: 16);
+      margin = const EdgeInsets.only(
+        bottom: SurgeSpace.l,
+        right: SurgeSpace.l,
+        left: SurgeSpace.l,
+      );
     } else {
       margin = EdgeInsets.only(bottom: 16, left: 16, right: width - 316);
     }

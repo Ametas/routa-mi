@@ -609,10 +609,10 @@ class _PortDialogState extends ConsumerState<_PortDialog> {
                   height: 28,
                   child: OutlinedButton.icon(
                     onPressed: _handleReset,
-                    icon: const Icon(SurgeIcons.replay, size: 15),
+                    icon: const Icon(SurgeIcons.replay, size: SurgeIconSize.inline),
                     label: Text(appLocalizations.reset),
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
                       minimumSize: const Size(0, 28),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       visualDensity: VisualDensity.compact,

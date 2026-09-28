@@ -40,8 +40,12 @@ class InfoHeader extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (info.iconData != null) ...[
-                  Icon(info.iconData, color: surge.textSecondary, size: 18),
-                  const SizedBox(width: 8),
+                  Icon(
+                    info.iconData,
+                    color: surge.textSecondary,
+                    size: SurgeIconSize.compact,
+                  ),
+                  const SizedBox(width: SurgeSpace.s),
                 ],
                 Expanded(
                   child: TooltipText(
@@ -58,7 +62,7 @@ class InfoHeader extends StatelessWidget {
             ),
           ),
           if (actions.isNotEmpty) ...[
-            const SizedBox(width: 12),
+            const SizedBox(width: SurgeSpace.m),
             IconTheme.merge(
               data: IconThemeData(color: surge.primary, size: 20),
               child: Row(
@@ -227,7 +231,7 @@ class CommonCard extends StatelessWidget {
                   RoundedSuperellipseBorder(
                     borderRadius: BorderRadius.circular(radius ?? 14),
                   ),
-              iconSize: 20,
+              iconSize: SurgeIconSize.regular,
               iconColor: _buildIconColor(context),
               foregroundColor: _buildForegroundColor(context),
               side: BorderSide.none,
@@ -254,7 +258,7 @@ class CommonCard extends StatelessWidget {
                   RoundedSuperellipseBorder(
                     borderRadius: BorderRadius.circular(radius ?? 14),
                   ),
-              iconSize: 20,
+              iconSize: SurgeIconSize.regular,
               iconColor: _buildIconColor(context),
               backgroundColor: _buildBackgroundColor(context),
               foregroundColor: _buildForegroundColor(context),

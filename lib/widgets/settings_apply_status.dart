@@ -88,7 +88,12 @@ class SettingsApplyFailureDialog extends StatelessWidget {
         InputDecorator(
           decoration: surgeInputDecoration(
             context,
-            contentPadding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+            contentPadding: const EdgeInsets.fromLTRB(
+              SurgeSpace.l,
+              SurgeSpace.l,
+              SurgeSpace.l,
+              SurgeSpace.l,
+            ),
           ),
           child: Text(message, style: context.typography.body),
         ),

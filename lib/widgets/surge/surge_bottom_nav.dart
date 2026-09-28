@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/icons.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'surge_motion.dart';
@@ -116,7 +117,7 @@ class SurgeBottomNav extends StatelessWidget {
               child: SizedBox(
                 height: SurgeBottomNavLayout.height,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final itemWidth = constraints.maxWidth / items.length;
@@ -224,7 +225,7 @@ class _SurgeBottomNavTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(iconData, color: color, size: SurgeIconSize.navigation),
-              const SizedBox(height: 5),
+              const SizedBox(height: SurgeSpace.xs),
               Text(
                 item.label,
                 maxLines: 2,

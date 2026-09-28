@@ -573,11 +573,11 @@ class _ProfileMediaCheckViewState extends ConsumerState<ProfileMediaCheckView> {
                       },
                 onSummaryFilterChanged: _checking ? null : _changeFilter,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: SurgeSpace.m),
               if (_loading)
                 const Center(
                   child: Padding(
-                    padding: EdgeInsets.all(28),
+                    padding: EdgeInsets.all(SurgeSpace.xxxl),
                     child: CircularProgressIndicator(),
                   ),
                 )
@@ -670,7 +670,12 @@ class _MediaCheckControlCard extends StatelessWidget {
     return SurgeCard(
       shadow: true,
       backgroundColor: surge.elevatedCard,
-      padding: const EdgeInsets.fromLTRB(14, 13, 14, 13),
+      padding: const EdgeInsets.fromLTRB(
+        SurgeSpace.l,
+        SurgeSpace.m,
+        SurgeSpace.l,
+        SurgeSpace.m,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -690,11 +695,11 @@ class _MediaCheckControlCard extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Icon(
                     SurgeIcons.mediaCheck,
-                    size: 16,
+                    size: SurgeIconSize.inline,
                     color: surge.primary.withValues(alpha: 0.82),
                   ),
                 ),
-                const SizedBox(width: 9),
+                const SizedBox(width: SurgeSpace.s),
                 Expanded(
                   child: Text(
                     context.appLocalizations.nodeCheckup,
@@ -705,7 +710,7 @@ class _MediaCheckControlCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: SurgeSpace.m),
                 _MediaCheckRunButton(
                   checking: checking,
                   onTap: loading || targetCount == 0
@@ -717,7 +722,7 @@ class _MediaCheckControlCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: SurgeSpace.s),
           Row(
             children: [
               Expanded(
@@ -729,7 +734,7 @@ class _MediaCheckControlCard extends StatelessWidget {
                   onChanged: onProfileChanged,
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: SurgeSpace.s),
               Expanded(
                 flex: 9,
                 child: _ModeDropdown(
@@ -740,18 +745,18 @@ class _MediaCheckControlCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 9),
+          const SizedBox(height: SurgeSpace.s),
           Divider(height: 1, color: surge.separator),
-          const SizedBox(height: 8),
+          const SizedBox(height: SurgeSpace.s),
           _ControlMetricsLine(
             targetCount: targetCount,
             cachedCount: cachedCount,
             concurrency: concurrency,
             runningCount: runningCount,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: SurgeSpace.s),
           Divider(height: 1, color: surge.separator),
-          const SizedBox(height: 4),
+          const SizedBox(height: SurgeSpace.xs),
           Row(
             children: [
               Expanded(
@@ -774,7 +779,7 @@ class _MediaCheckControlCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: SurgeSpace.s),
                       Text(
                         checking
                             ? '${(progress * 100).clamp(0, 100).round()}%'
@@ -789,7 +794,7 @@ class _MediaCheckControlCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: SurgeSpace.m),
               SizedBox(
                 width: 96,
                 height: 32,
@@ -809,7 +814,7 @@ class _MediaCheckControlCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: SurgeSpace.xs),
           Divider(height: 1, color: surge.separator),
           _ObservationControl(
             observing: observing,
@@ -819,7 +824,7 @@ class _MediaCheckControlCard extends StatelessWidget {
             onIntervalTap: onObserveIntervalTap,
           ),
           Divider(height: 1, color: surge.separator),
-          const SizedBox(height: 10),
+          const SizedBox(height: SurgeSpace.m),
           _MediaCheckInlineStats(
             filter: filter,
             summary: summary,
@@ -858,7 +863,7 @@ class _ObservationControl extends StatelessWidget {
             size: SurgeIconSize.compact,
             color: surge.green,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: SurgeSpace.m),
           Expanded(
             child: Text(
               context.appLocalizations.healthMonitoring,
@@ -873,7 +878,7 @@ class _ObservationControl extends StatelessWidget {
             onPressed: enabled ? onIntervalTap : null,
             style: TextButton.styleFrom(
               minimumSize: const Size(48, 32),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               foregroundColor: surge.green,
             ),
@@ -884,7 +889,7 @@ class _ObservationControl extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: SurgeSpace.xs),
           SurgeSwitch(value: observing, onChanged: enabled ? onChanged : null),
         ],
       ),
@@ -1015,7 +1020,7 @@ class _ControlMetricText extends StatelessWidget {
             color: surge.textSecondary,
           ),
         ),
-        const SizedBox(width: 6),
+        const SizedBox(width: SurgeSpace.s),
         Text(
           value,
           maxLines: 1,
@@ -1101,14 +1106,14 @@ class _InlineFilterMetric extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(surge.radii.input),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2),
+          padding: const EdgeInsets.symmetric(vertical: SurgeSpace.xxs),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Icon(filter.icon, size: 14, color: color),
-                  const SizedBox(width: 5),
+                  Icon(filter.icon, size: SurgeIconSize.inline, color: color),
+                  const SizedBox(width: SurgeSpace.xs),
                   Expanded(
                     child: Text(
                       filter.label(context),
@@ -1121,7 +1126,7 @@ class _InlineFilterMetric extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: SurgeSpace.xs),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -1182,7 +1187,12 @@ class _MediaCheckResultList extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 1, 10, 1),
+            padding: const EdgeInsets.fromLTRB(
+              SurgeSpace.l,
+              1,
+              SurgeSpace.m,
+              1,
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -1200,9 +1210,9 @@ class _MediaCheckResultList extends StatelessWidget {
                   onPressed: cached ? onClear : null,
                   visualSize: 30,
                   tapSize: 40,
-                  iconSize: 15,
+                  iconSize: SurgeIconSize.inline,
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: SurgeSpace.xs),
                 Text(
                   cacheText,
                   style: context.typography.supporting.copyWith(
@@ -1264,7 +1274,12 @@ class _MediaCheckResultCard extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     final result = row.result;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      padding: const EdgeInsets.fromLTRB(
+        SurgeSpace.m,
+        SurgeSpace.m,
+        SurgeSpace.m,
+        SurgeSpace.m,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1281,7 +1296,7 @@ class _MediaCheckResultCard extends StatelessWidget {
                 ),
               ),
               if (row.target.profile.realLabel.isNotEmpty) ...[
-                const SizedBox(width: 12),
+                const SizedBox(width: SurgeSpace.m),
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 136),
                   child: Text(
@@ -1296,10 +1311,10 @@ class _MediaCheckResultCard extends StatelessWidget {
                 ),
               ],
               if (row.expired) ...[
-                const SizedBox(width: 6),
+                const SizedBox(width: SurgeSpace.s),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 5,
+                    horizontal: SurgeSpace.xs,
                     vertical: 1,
                   ),
                   decoration: BoxDecoration(
@@ -1316,7 +1331,7 @@ class _MediaCheckResultCard extends StatelessWidget {
               ],
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: SurgeSpace.s),
           if (row.running && result == null)
             _PendingResultLine(filter: filter)
           else if (result != null)
@@ -1366,15 +1381,15 @@ class _SingleResultLine extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     return Container(
       height: 38,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(surge.radii.metric),
       ),
       child: Row(
         children: [
-          Icon(icon, color: color, size: 15),
-          const SizedBox(width: 8),
+          Icon(icon, color: color, size: SurgeIconSize.inline),
+          const SizedBox(width: SurgeSpace.s),
           Expanded(
             child: Text(
               label,
@@ -1411,7 +1426,7 @@ class _HealthResultLine extends StatelessWidget {
     final color = result.https.statusColor(surge);
     return Container(
       height: 38,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(surge.radii.metric),
@@ -1419,7 +1434,7 @@ class _HealthResultLine extends StatelessWidget {
       child: Row(
         children: [
           Icon(SurgeIcons.health, color: color, size: SurgeIconSize.inline),
-          const SizedBox(width: 8),
+          const SizedBox(width: SurgeSpace.s),
           Expanded(
             child: Row(
               children: [
@@ -1433,7 +1448,7 @@ class _HealthResultLine extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: SurgeSpace.s),
                 Text(
                   health.localizedLabel(context.appLocalizations),
                   maxLines: 1,
@@ -1461,7 +1476,7 @@ class _PendingResultLine extends StatelessWidget {
     final color = filter.color(surge);
     return Container(
       height: 34,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
       decoration: BoxDecoration(
         color: surge.fill,
         borderRadius: BorderRadius.circular(surge.radii.metric),
@@ -1472,7 +1487,7 @@ class _PendingResultLine extends StatelessWidget {
             dimension: 16,
             child: CircularProgressIndicator(strokeWidth: 2, color: color),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: SurgeSpace.s),
           Expanded(
             child: Text(
               context.appLocalizations.checking,
@@ -1515,7 +1530,12 @@ class _MediaCheckEmptyResultCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 13, 14, 11),
+            padding: const EdgeInsets.fromLTRB(
+              SurgeSpace.l,
+              SurgeSpace.m,
+              SurgeSpace.l,
+              SurgeSpace.m,
+            ),
             child: Text(
               title,
               style: context.typography.cardTitle.copyWith(
@@ -1525,7 +1545,10 @@ class _MediaCheckEmptyResultCard extends StatelessWidget {
           ),
           Divider(height: 1, color: surge.separator),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 14),
+            padding: const EdgeInsets.symmetric(
+              vertical: SurgeSpace.xxxl,
+              horizontal: SurgeSpace.l,
+            ),
             child: Text(
               message,
               textAlign: TextAlign.center,

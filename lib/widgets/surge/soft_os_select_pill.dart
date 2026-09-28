@@ -1,5 +1,6 @@
 import 'package:fl_clash/common/icons.dart';
 import 'package:fl_clash/widgets/popup.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'soft_os_metrics.dart';
@@ -190,7 +191,7 @@ class _SoftOsSelectPopup<T> extends StatelessWidget {
             borderRadius: BorderRadius.circular(surge.radii.card),
             child: ListView.separated(
               shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(vertical: 6),
+              padding: const EdgeInsets.symmetric(vertical: SurgeSpace.s),
               itemCount: items.length,
               separatorBuilder: (_, _) => Divider(
                 height: 1,
@@ -243,7 +244,7 @@ class _SoftOsSelectPopup<T> extends StatelessWidget {
                                   ),
                                 ),
                                 if (item.subtitle case final subtitle?) ...[
-                                  const SizedBox(height: 2),
+                                  const SizedBox(height: SurgeSpace.xxs),
                                   Text(
                                     subtitle,
                                     maxLines: 2,

@@ -98,7 +98,7 @@ class _StandardContentState extends ConsumerState<StandardContent> {
       },
       child: SliverMainAxisGroup(
         slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+          const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.xxl)),
           SliverToBoxAdapter(
             child: OverwriteSectionHeader(
               label: appLocalizations.addedRules,
@@ -108,7 +108,7 @@ class _StandardContentState extends ConsumerState<StandardContent> {
                     icon: SurgeIcons.delete,
                     onPressed: _handleDelete,
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: SurgeSpace.xs),
                 ],
                 selectedRules.isNotEmpty
                     ? SoftOsActionTextButton(
@@ -124,16 +124,16 @@ class _StandardContentState extends ConsumerState<StandardContent> {
               ],
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 8)),
+          const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.s)),
           if (addedRules.isEmpty)
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
                 child: SurgeCard(
                   shadow: false,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 18,
+                    horizontal: SurgeSpace.l,
+                    vertical: SurgeSpace.xl,
                   ),
                   child: Row(
                     children: [
@@ -141,7 +141,7 @@ class _StandardContentState extends ConsumerState<StandardContent> {
                         SurgeIcons.rule,
                         color: SurgeTheme.of(context).textSecondary,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: SurgeSpace.m),
                       Expanded(
                         child: Text(
                           appLocalizations.nullTip(appLocalizations.rule),
@@ -168,7 +168,9 @@ class _StandardContentState extends ConsumerState<StandardContent> {
                     child: ItemPositionProvider(
                       position: position,
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: SurgeSpace.l,
+                        ),
                         child: RuleItem(
                           hasMatch: true,
                           isEditing: selectedRules.isNotEmpty,
@@ -197,17 +199,17 @@ class _StandardContentState extends ConsumerState<StandardContent> {
               );
             },
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.l)),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               child: SurgeActionCard(
                 onTap: _handleToEditGlobalAddedRules,
                 variant: SurgeActionCardVariant.plain,
                 borderRadius: SurgeTheme.of(context).radii.list,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 14,
+                  horizontal: SurgeSpace.l,
+                  vertical: SurgeSpace.l,
                 ),
                 child: Row(
                   children: [
@@ -215,7 +217,7 @@ class _StandardContentState extends ConsumerState<StandardContent> {
                       SurgeIcons.rule,
                       color: SurgeTheme.of(context).primary,
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: SurgeSpace.m),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,7 +228,7 @@ class _StandardContentState extends ConsumerState<StandardContent> {
                             overflow: TextOverflow.ellipsis,
                             style: context.typography.rowTitle,
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: SurgeSpace.xxs),
                           Text(
                             appLocalizations.addedRules,
                             style: context.typography.supporting.copyWith(
@@ -236,7 +238,7 @@ class _StandardContentState extends ConsumerState<StandardContent> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: SurgeSpace.m),
                     Icon(
                       SurgeIcons.forward,
                       color: SurgeTheme.of(context).textSecondary,
@@ -279,7 +281,7 @@ class _EditGlobalAddedRules extends ConsumerWidget {
               illustration: const RuleEmptyIllustration(),
             )
           : ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(SurgeSpace.l),
               itemExtent: ruleItemHeight,
               itemBuilder: (context, index) {
                 final rule = rules[index];

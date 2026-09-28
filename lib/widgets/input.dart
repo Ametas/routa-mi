@@ -74,7 +74,7 @@ InputDecoration surgeInputDecoration(
     isDense: true,
     contentPadding:
         contentPadding ??
-        const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        const EdgeInsets.symmetric(horizontal: SurgeSpace.xl, vertical: SurgeSpace.l),
     hintText: hintText ?? (useFloatingLabel ? null : labelText),
     labelText: useFloatingLabel ? labelText : null,
     hintStyle: hintStyle,
@@ -126,7 +126,7 @@ class SurgeDialogActionButton extends StatelessWidget {
           style: FilledButton.styleFrom(
             elevation: 0,
             minimumSize: const Size.fromHeight(45),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
             backgroundColor: background,
             foregroundColor: foreground,
             disabledBackgroundColor: background,
@@ -162,7 +162,7 @@ class SurgeDialogActionRow extends StatelessWidget {
     return Row(
       children: [
         SurgeDialogActionButton(label: cancelLabel, onPressed: onCancel),
-        const SizedBox(width: 14),
+        const SizedBox(width: SurgeSpace.l),
         SurgeDialogActionButton(
           label: submitLabel,
           onPressed: onSubmit,
@@ -196,7 +196,7 @@ class SurgeField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 2, bottom: 7),
+          padding: const EdgeInsets.only(left: SurgeSpace.xxs, bottom: SurgeSpace.s),
           child: Text(
             label,
             style: context.typography.controlLabel.copyWith(color: labelColor),
@@ -204,9 +204,9 @@ class SurgeField extends StatelessWidget {
         ),
         child,
         if (helperText != null) ...[
-          const SizedBox(height: 7),
+          const SizedBox(height: SurgeSpace.s),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
+            padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xxs),
             child: Text(
               helperText!,
               style: context.typography.supporting.copyWith(
@@ -258,7 +258,7 @@ class SurgeToggleFieldRow extends StatelessWidget {
         child: AnimatedContainer(
           duration: SurgeMotion.state,
           curve: SurgeMotion.stateCurve,
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xl, vertical: SurgeSpace.m),
           decoration: BoxDecoration(
             color: fillColor,
             borderRadius: radius,
@@ -278,7 +278,7 @@ class SurgeToggleFieldRow extends StatelessWidget {
                       ),
                     ),
                     if (subtitle != null) ...[
-                      const SizedBox(height: 3),
+                      const SizedBox(height: SurgeSpace.xs),
                       Text(
                         subtitle!,
                         maxLines: 2,
@@ -291,7 +291,7 @@ class SurgeToggleFieldRow extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: SurgeSpace.m),
               SurgeSwitch(value: value, onChanged: onChanged),
             ],
           ),
@@ -368,8 +368,8 @@ class SurgeInlineTextFormField extends StatelessWidget {
             focusedBorder: focusedBorder,
             isDense: true,
             contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 8,
+              horizontal: SurgeSpace.m,
+              vertical: SurgeSpace.s,
             ),
             hintText: hintText,
             hintStyle: context.typography.body.copyWith(
@@ -400,7 +400,7 @@ class OptionsDialog<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return CommonDialog(
       title: title,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.s, vertical: SurgeSpace.l),
       child: RadioGroup(
         onChanged: (value) {
           Navigator.of(context).pop(value);

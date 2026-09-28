@@ -233,7 +233,7 @@ class _SurgeDashboardHeroState extends ConsumerState<SurgeDashboardHero>
     );
     final currentProfile = ref.watch(currentProfileProvider);
     final profileLabel =
-        currentProfile?.realLabel.takeFirstValid(['SlClash']) ?? 'SlClash';
+        currentProfile?.realLabel.takeFirstValid([appName]) ?? appName;
     final statusLabel = isSmartPaused
         ? appLocalizations.smartStopped
         : isStart
@@ -783,7 +783,7 @@ class _HeroActionButton extends StatelessWidget {
                       ),
                       // Animated dots during loading
                       if (loading) ...[
-                        const SizedBox(width: 2),
+                        const SizedBox(width: SurgeSpace.xxs),
                         _LoadingDots(controller: sheenController),
                       ],
                     ],
@@ -971,13 +971,16 @@ class _SubscriptionSelectorBar extends ConsumerWidget {
           title: context.appLocalizations.selectProfile,
           appBarActions: const [],
           body: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: SurgeSpace.xl,
+              vertical: SurgeSpace.m,
+            ),
             itemCount: profiles.length,
             itemBuilder: (context, index) {
               final profile = profiles[index];
               final isSelected = profile.id == currentProfileId;
               return Padding(
-                padding: const EdgeInsets.only(bottom: 6),
+                padding: const EdgeInsets.only(bottom: SurgeSpace.s),
                 child: SurgeSelectableRow(
                   selected: isSelected,
                   onTap: () {
@@ -999,8 +1002,8 @@ class _SubscriptionSelectorBar extends ConsumerWidget {
                   unselectedBorderWidth: surge.spacing.hairline,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
+                      horizontal: SurgeSpace.m,
+                      vertical: SurgeSpace.m,
                     ),
                     child: Row(
                       children: [
@@ -1012,7 +1015,7 @@ class _SubscriptionSelectorBar extends ConsumerWidget {
                               color: surge.semantic.connected,
                               shape: BoxShape.circle,
                             ),
-                            margin: const EdgeInsets.only(right: 8),
+                            margin: const EdgeInsets.only(right: SurgeSpace.s),
                           ),
                         ],
                         Expanded(
@@ -1034,10 +1037,10 @@ class _SubscriptionSelectorBar extends ConsumerWidget {
                           ),
                         ),
                         if (isSelected) ...[
-                          const SizedBox(width: 8),
+                          const SizedBox(width: SurgeSpace.s),
                           Icon(
                             SurgeIcons.success,
-                            size: 18,
+                            size: SurgeIconSize.compact,
                             color: surge.primary,
                           ),
                         ],
@@ -1341,13 +1344,16 @@ class _HeroProxySelectorBar extends ConsumerWidget {
             title: sheetContext.appLocalizations.proxyGroup,
             appBarActions: const [],
             body: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: const EdgeInsets.symmetric(
+                horizontal: SurgeSpace.xl,
+                vertical: SurgeSpace.m,
+              ),
               itemCount: groups.length,
               itemBuilder: (context, index) {
                 final group = groups[index];
                 final isSelected = group.name == selectedGroupName;
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
+                  padding: const EdgeInsets.only(bottom: SurgeSpace.s),
                   child: SurgeSelectableRow(
                     selected: isSelected,
                     onTap: () {
@@ -1365,8 +1371,8 @@ class _HeroProxySelectorBar extends ConsumerWidget {
                     unselectedBorderWidth: surge.spacing.hairline,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
+                        horizontal: SurgeSpace.m,
+                        vertical: SurgeSpace.m,
                       ),
                       child: Row(
                         children: [
@@ -1378,7 +1384,9 @@ class _HeroProxySelectorBar extends ConsumerWidget {
                                 color: surge.semantic.connected,
                                 shape: BoxShape.circle,
                               ),
-                              margin: const EdgeInsets.only(right: 8),
+                              margin: const EdgeInsets.only(
+                                right: SurgeSpace.s,
+                              ),
                             ),
                           ],
                           Expanded(
@@ -1398,10 +1406,10 @@ class _HeroProxySelectorBar extends ConsumerWidget {
                             ),
                           ),
                           if (isSelected) ...[
-                            const SizedBox(width: 8),
+                            const SizedBox(width: SurgeSpace.s),
                             Icon(
                               SurgeIcons.success,
-                              size: 18,
+                              size: SurgeIconSize.compact,
                               color: surge.primary,
                             ),
                           ],
@@ -1517,7 +1525,7 @@ class _NodeSelectionSheetState extends ConsumerState<_NodeSelectionSheet> {
           Container(
             width: 28,
             height: 4,
-            margin: const EdgeInsets.only(top: 6),
+            margin: const EdgeInsets.only(top: SurgeSpace.s),
             decoration: ShapeDecoration(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
               shape: RoundedSuperellipseBorder(
@@ -1529,7 +1537,7 @@ class _NodeSelectionSheetState extends ConsumerState<_NodeSelectionSheet> {
           SizedBox(
             height: 48,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.s),
               child: Row(
                 children: [
                   SoftOsActionButton(
@@ -1548,15 +1556,18 @@ class _NodeSelectionSheetState extends ConsumerState<_NodeSelectionSheet> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 48),
+                  const SizedBox(width: SurgeSpace.huge),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: SurgeSpace.s),
           // Search field with embedded action buttons
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            padding: const EdgeInsets.symmetric(
+              horizontal: SurgeSpace.xl,
+              vertical: SurgeSpace.s,
+            ),
             child: TextField(
               controller: _searchController,
               onChanged: (value) => setState(() => _searchQuery = value),
@@ -1569,16 +1580,16 @@ class _NodeSelectionSheetState extends ConsumerState<_NodeSelectionSheet> {
                 prefixIcon: Icon(
                   SurgeIcons.search,
                   color: surge.textSecondary,
-                  size: 20,
+                  size: SurgeIconSize.regular,
                 ),
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       visualDensity: VisualDensity.compact,
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(SurgeSpace.xs),
                       onPressed: _scrollToSelected,
-                      iconSize: 20,
+                      iconSize: SurgeIconSize.regular,
                       icon: Icon(
                         SurgeIcons.selector,
                         color: surge.textSecondary,
@@ -1586,9 +1597,9 @@ class _NodeSelectionSheetState extends ConsumerState<_NodeSelectionSheet> {
                     ),
                     IconButton(
                       visualDensity: VisualDensity.compact,
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(SurgeSpace.xs),
                       onPressed: _isDelayTesting ? null : _delayTest,
-                      iconSize: 20,
+                      iconSize: SurgeIconSize.regular,
                       icon: _isDelayTesting
                           ? SizedBox(
                               width: 16,
@@ -1609,8 +1620,8 @@ class _NodeSelectionSheetState extends ConsumerState<_NodeSelectionSheet> {
                 filled: true,
                 fillColor: surge.fill,
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
+                  horizontal: SurgeSpace.m,
+                  vertical: SurgeSpace.s,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(surge.radii.input),
@@ -1639,8 +1650,8 @@ class _NodeSelectionSheetState extends ConsumerState<_NodeSelectionSheet> {
                 : ListView.builder(
                     controller: _scrollController,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 8,
+                      horizontal: SurgeSpace.xl,
+                      vertical: SurgeSpace.s,
                     ),
                     itemCount: filteredProxies.length,
                     itemBuilder: (context, index) {
@@ -1702,7 +1713,7 @@ class _NodeCard extends ConsumerWidget {
         : 'Timeout';
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.only(bottom: SurgeSpace.s),
       child: SurgeSelectableRow(
         selected: isSelected,
         onTap: onTap,
@@ -1717,7 +1728,10 @@ class _NodeCard extends ConsumerWidget {
         unselectedBorderWidth: surge.spacing.hairline,
         child: SizedBox(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.symmetric(
+              horizontal: SurgeSpace.m,
+              vertical: SurgeSpace.m,
+            ),
             child: Row(
               children: [
                 if (isSelected) ...[
@@ -1728,7 +1742,7 @@ class _NodeCard extends ConsumerWidget {
                       color: surge.semantic.connected,
                       shape: BoxShape.circle,
                     ),
-                    margin: const EdgeInsets.only(right: 8),
+                    margin: const EdgeInsets.only(right: SurgeSpace.s),
                   ),
                 ],
                 Expanded(
@@ -1742,11 +1756,11 @@ class _NodeCard extends ConsumerWidget {
                   ),
                 ),
                 if (delayLabel.isNotEmpty) ...[
-                  const SizedBox(width: 8),
+                  const SizedBox(width: SurgeSpace.s),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 6,
+                      horizontal: SurgeSpace.s,
+                      vertical: SurgeSpace.s,
                     ),
                     decoration: BoxDecoration(
                       color: delayColor.withValues(alpha: 0.1),
@@ -1761,7 +1775,7 @@ class _NodeCard extends ConsumerWidget {
                   ),
                 ],
                 if (isSelected) ...[
-                  const SizedBox(width: 8),
+                  const SizedBox(width: SurgeSpace.s),
                   Icon(
                     SurgeIcons.success,
                     size: SurgeIconSize.compact,

@@ -185,8 +185,8 @@ class _QuickOptionCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: surge.primary, size: 20),
-              const SizedBox(width: 8),
+              Icon(icon, color: surge.primary, size: SurgeIconSize.regular),
+              const SizedBox(width: SurgeSpace.s),
               Expanded(
                 child: Text(
                   title,
@@ -210,7 +210,7 @@ class _QuickOptionCard extends StatelessWidget {
                   color: surge.textSecondary,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: SurgeSpace.m),
               child,
             ],
           ),

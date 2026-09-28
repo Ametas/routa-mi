@@ -23,7 +23,7 @@ class NullStatus extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           illustration,
-          const SizedBox(height: 16),
+          const SizedBox(height: SurgeSpace.l),
           Text(
             label,
             textAlign: TextAlign.center,
@@ -97,7 +97,7 @@ class _SoftOsEmptyIllustration extends StatelessWidget {
     return Container(
       width: 184,
       height: 184,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(SurgeSpace.m),
       decoration: BoxDecoration(
         color: surge.card.withValues(alpha: isDark ? 0.58 : 0.72),
         borderRadius: BorderRadius.circular(46),

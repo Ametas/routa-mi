@@ -312,12 +312,14 @@ class _BackupAndRestoreState extends ConsumerState<BackupAndRestore>
                     ),
                   ),
                   subtitle: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: SurgeSpace.xs,
+                    ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(appLocalizations.connectivity),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: SurgeSpace.s),
                         ValueListenableBuilder(
                           valueListenable: _isCompleter,
                           builder: (_, isCompleter, _) {
@@ -460,7 +462,7 @@ class _WebDAVFileList extends StatelessWidget {
       physics: const ClampingScrollPhysics(),
       padding: EdgeInsets.zero,
       itemCount: files.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 8),
+      separatorBuilder: (_, _) => const SizedBox(height: SurgeSpace.s),
       itemBuilder: (_, index) => _WebDAVFileItem(
         entry: files[index],
         selected: selected == files[index].name,
@@ -563,7 +565,10 @@ class _WebDAVFileItem extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: SurgeSpace.l,
+            vertical: SurgeSpace.m,
+          ),
           child: Row(
             children: [
               Expanded(
@@ -576,7 +581,7 @@ class _WebDAVFileItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: context.typography.rowTitle,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: SurgeSpace.xs),
                     Text(
                       '$dateStr  ·  $sizeStr',
                       style: context.typography.supporting,
@@ -584,11 +589,11 @@ class _WebDAVFileItem extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: SurgeSpace.m),
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
+                  horizontal: SurgeSpace.m,
+                  vertical: SurgeSpace.xs,
                 ),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.10),
@@ -603,7 +608,7 @@ class _WebDAVFileItem extends StatelessWidget {
                   style: context.typography.badgeLabel.copyWith(color: color),
                 ),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: SurgeSpace.xs),
               Icon(
                 selected ? SurgeIcons.confirm : SurgeIcons.chevronRight,
                 size: SurgeIconSize.compact,
@@ -630,7 +635,7 @@ class _BackupPillButton extends StatelessWidget {
       onPressed: onPressed,
       style: TextButton.styleFrom(
         minimumSize: const Size(0, 32),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         foregroundColor: surge.textPrimary,
         backgroundColor: surge.textSecondary.withValues(alpha: 0.08),
@@ -815,19 +820,26 @@ class _SoftOsBackupDialog extends StatelessWidget {
     return CommonDialog(
       title: title,
       overrideScroll: true,
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
+      padding: const EdgeInsets.fromLTRB(
+        SurgeSpace.xl,
+        SurgeSpace.s,
+        SurgeSpace.xl,
+        SurgeSpace.xl,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (message != null && message!.isNotEmpty)
             Padding(
-              padding: EdgeInsets.only(bottom: child == null ? 0 : 18),
+              padding: EdgeInsets.only(
+                bottom: child == null ? 0 : SurgeSpace.xl,
+              ),
               child: Container(
                 constraints: const BoxConstraints(minHeight: 56),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
+                  horizontal: SurgeSpace.l,
+                  vertical: SurgeSpace.l,
                 ),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
@@ -856,12 +868,12 @@ class _SoftOsBackupDialog extends StatelessWidget {
                     : SingleChildScrollView(child: child),
               ),
             ),
-          const SizedBox(height: 20),
+          const SizedBox(height: SurgeSpace.xl),
           if (actions.length == 2)
             Row(
               children: [
                 Expanded(child: actions.first),
-                const SizedBox(width: 14),
+                const SizedBox(width: SurgeSpace.l),
                 Expanded(child: actions.last),
               ],
             )
@@ -916,7 +928,7 @@ class _SoftOsDialogAction extends StatelessWidget {
         onPressed: onPressed,
         style: TextButton.styleFrom(
           minimumSize: const Size.fromHeight(45),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
           foregroundColor: foreground,
           backgroundColor: background,
           disabledForegroundColor: foreground,
@@ -981,7 +993,7 @@ class _SoftOsRestoreStrategyDialogState
               borderRadius: BorderRadius.circular(surge.radii.list),
               child: Container(
                 constraints: const BoxConstraints(minHeight: 52),
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
                 decoration: BoxDecoration(
                   color: strategy == selected
                       ? surge.primary.withValues(alpha: 0.10)
@@ -1013,7 +1025,7 @@ class _SoftOsRestoreStrategyDialogState
               ),
             ),
             if (strategy != RestoreStrategy.values.last)
-              const SizedBox(height: 8),
+              const SizedBox(height: SurgeSpace.s),
           ],
         ],
       ),

@@ -195,7 +195,7 @@ class CommonScaffoldState extends State<CommonScaffold> {
       required VoidCallback? onPressed,
     }) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xs),
         child: SlAppBarIconButton(
           icon: icon,
           tooltip: tooltip,
@@ -403,8 +403,8 @@ class CommonScaffoldState extends State<CommonScaffold> {
               }
               return Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
+                  horizontal: SurgeSpace.l,
+                  vertical: SurgeSpace.l,
                 ),
                 child: Wrap(
                   runSpacing: 8,

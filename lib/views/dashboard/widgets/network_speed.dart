@@ -59,7 +59,7 @@ class _NetworkSpeedState extends State<NetworkSpeed> {
                 },
               ),
               child: Padding(
-                padding: const EdgeInsets.only(top: 0, bottom: 5),
+                padding: const EdgeInsets.only(top: 0, bottom: SurgeSpace.xs),
                 child: LineChart(
                   gradient: true,
                   color: surge.primary.withValues(alpha: 0.88),

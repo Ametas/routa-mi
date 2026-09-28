@@ -194,9 +194,9 @@ class _IconEditViewState extends ConsumerState<IconEditView>
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: SurgeSpace.l),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
                   child: SizedBox(
                     height: dimension,
                     child: Row(
@@ -225,7 +225,7 @@ class _IconEditViewState extends ConsumerState<IconEditView>
                                                   context,
                                                 ).radii.list,
                                                 padding: const EdgeInsets.all(
-                                                  8,
+                                                  SurgeSpace.s,
                                                 ),
                                                 child: CommonImage(
                                                   isSvg:
@@ -248,8 +248,8 @@ class _IconEditViewState extends ConsumerState<IconEditView>
                             variant: SurgeActionCardVariant.filled,
                             borderRadius: SurgeTheme.of(context).radii.list,
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
+                              horizontal: SurgeSpace.m,
+                              vertical: SurgeSpace.s,
                             ),
                             child: SizedBox(
                               height: dimension - 16,
@@ -271,7 +271,9 @@ class _IconEditViewState extends ConsumerState<IconEditView>
                 ),
                 if (records.isNotEmpty) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SurgeSpace.l,
+                    ),
                     child: InfoHeader(
                       info: Info(label: appLocalizations.iconRecords),
                     ),
@@ -279,7 +281,9 @@ class _IconEditViewState extends ConsumerState<IconEditView>
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SurgeSpace.l,
+                      ),
                       itemBuilder: (context, index) {
                         final record = records[index];
                         return _buildItem(
@@ -301,7 +305,7 @@ class _IconEditViewState extends ConsumerState<IconEditView>
                   Expanded(
                     child: NullStatus(label: appLocalizations.noRecords),
                   ),
-                const SizedBox(height: 20),
+                const SizedBox(height: SurgeSpace.xl),
               ],
             );
           },

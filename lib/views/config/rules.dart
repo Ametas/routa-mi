@@ -110,8 +110,8 @@ class _AddedRulesViewState extends ConsumerState<AddedRulesView> {
                 )
               : ReorderableList(
                   padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 16,
+                    vertical: SurgeSpace.l,
+                    horizontal: SurgeSpace.l,
                   ),
                   itemBuilder: (context, index) {
                     final rule = rules[index];

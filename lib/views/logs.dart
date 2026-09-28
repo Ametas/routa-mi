@@ -152,9 +152,9 @@ class _LogsViewState extends ConsumerState<LogsView> {
           }
           return Padding(
             padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 8,
+              left: SurgeSpace.l,
+              right: SurgeSpace.l,
+              top: SurgeSpace.s,
               bottom: _surfaceBottomPadding,
             ),
             child: _LogsListSurface(
@@ -222,7 +222,12 @@ class LogItem extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 11, 14, 11),
+            padding: const EdgeInsets.fromLTRB(
+              SurgeSpace.l,
+              SurgeSpace.m,
+              SurgeSpace.l,
+              SurgeSpace.m,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -232,7 +237,7 @@ class LogItem extends StatelessWidget {
                     color: surge.textPrimary.withValues(alpha: 0.9),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: SurgeSpace.m),
                 Row(
                   children: [
                     SurgePressable(
@@ -244,8 +249,8 @@ class LogItem extends StatelessWidget {
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 7,
-                          vertical: 3,
+                          horizontal: SurgeSpace.s,
+                          vertical: SurgeSpace.xs,
                         ),
                         decoration: BoxDecoration(
                           color: levelColor.withValues(alpha: 0.075),

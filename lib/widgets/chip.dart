@@ -1,4 +1,5 @@
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 class CommonChip extends StatelessWidget {
@@ -22,7 +23,10 @@ class CommonChip extends StatelessWidget {
     if (type == ChipType.delete) {
       return Chip(
         avatar: avatar,
-        labelPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+        labelPadding: const EdgeInsets.symmetric(
+          vertical: 0,
+          horizontal: SurgeSpace.xs,
+        ),
         clipBehavior: Clip.antiAlias,
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         onDeleted: onPressed ?? () {},
@@ -34,7 +38,10 @@ class CommonChip extends StatelessWidget {
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       avatar: avatar,
       clipBehavior: Clip.antiAlias,
-      labelPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+      labelPadding: const EdgeInsets.symmetric(
+        vertical: 0,
+        horizontal: SurgeSpace.xs,
+      ),
       onPressed: onPressed ?? () {},
       labelStyle: labelStyle,
       label: Text(label),

@@ -7,11 +7,10 @@
     "alpha": 10
   },
   "lib/common/constant.dart": {
-    "spacing": 2,
     "duration": 5
   },
   "lib/common/context.dart": {
-    "spacing": 2,
+    "spacing": 1,
     "duration": 1
   },
   "lib/common/function.dart": {
@@ -46,25 +45,19 @@
     "duration": 1
   },
   "lib/features/overwrite/rule.dart": {
-    "spacing": 2,
-    "gap": 4,
     "color": 2,
-    "alpha": 1,
-    "iconSize": 1
+    "alpha": 1
   },
   "lib/manager/android_manager.dart": {
     "duration": 1
   },
   "lib/manager/app_manager.dart": {
-    "gap": 4,
     "duration": 1
   },
   "lib/manager/core_manager.dart": {
     "duration": 2
   },
   "lib/manager/status_manager.dart": {
-    "spacing": 2,
-    "gap": 1,
     "radius": 1
   },
   "lib/manager/theme_manager.dart": {
@@ -74,29 +67,21 @@
     "duration": 1
   },
   "lib/pages/editor.dart": {
-    "spacing": 7,
-    "gap": 5,
-    "iconSize": 1
+    "gap": 1
   },
   "lib/pages/error.dart": {
-    "spacing": 4,
-    "gap": 4,
+    "spacing": 2,
+    "gap": 1,
     "radius": 2,
     "color": 3,
-    "duration": 1,
-    "iconSize": 1
+    "duration": 1
   },
   "lib/pages/scan.dart": {
-    "spacing": 3,
-    "color": 12,
-    "iconSize": 2
+    "color": 12
   },
   "lib/providers/action.dart": {
-    "spacing": 4,
-    "gap": 10,
     "radius": 1,
-    "duration": 10,
-    "iconSize": 3
+    "duration": 10
   },
   "lib/providers/app.dart": {
     "duration": 5
@@ -117,202 +102,110 @@
     "duration": 1
   },
   "lib/state.dart": {
-    "spacing": 3,
     "color": 3
   },
   "lib/views/about.dart": {
-    "spacing": 3,
-    "gap": 9,
-    "duration": 1,
-    "iconSize": 2
+    "spacing": 1,
+    "gap": 1,
+    "duration": 1
   },
   "lib/views/access.dart": {
-    "spacing": 6,
-    "gap": 3,
+    "spacing": 1,
+    "gap": 1,
     "radius": 2
   },
   "lib/views/backup_and_restore.dart": {
-    "spacing": 10,
-    "gap": 9,
+    "spacing": 1,
+    "gap": 1,
     "color": 1,
     "alpha": 14
   },
   "lib/views/config/general.dart": {
-    "spacing": 1,
     "gap": 1,
-    "alpha": 1,
-    "iconSize": 1
-  },
-  "lib/views/config/rules.dart": {
-    "spacing": 1
+    "alpha": 1
   },
   "lib/views/config/scripts.dart": {
     "spacing": 1
   },
   "lib/views/connection/connections.dart": {
-    "spacing": 1,
-    "duration": 1,
-    "iconSize": 1
+    "duration": 1
   },
   "lib/views/connection/item.dart": {
-    "spacing": 5,
-    "gap": 5,
+    "gap": 1,
     "alpha": 3
   },
-  "lib/views/connection/requests.dart": {
-    "spacing": 1
-  },
   "lib/views/dashboard/widgets/memory_info.dart": {
-    "gap": 2,
     "duration": 1
   },
   "lib/views/dashboard/widgets/network_detection.dart": {
-    "gap": 2,
-    "alpha": 1,
-    "iconSize": 1
+    "alpha": 1
   },
   "lib/views/dashboard/widgets/network_overview_card.dart": {
-    "spacing": 1,
     "color": 1,
     "alpha": 3,
     "duration": 2
   },
   "lib/views/dashboard/widgets/network_speed.dart": {
-    "spacing": 1,
     "alpha": 1
   },
-  "lib/views/dashboard/widgets/outbound_mode.dart": {
-    "spacing": 1,
-    "gap": 1
-  },
-  "lib/views/dashboard/widgets/quick_options.dart": {
-    "gap": 2,
-    "iconSize": 1
-  },
-  "lib/views/dashboard/widgets/surge_dashboard_card.dart": {
-    "spacing": 1,
-    "gap": 4,
-    "iconSize": 1
-  },
   "lib/views/dashboard/widgets/surge_dashboard_hero.dart": {
-    "spacing": 20,
-    "gap": 9,
+    "spacing": 1,
+    "gap": 2,
     "radius": 2,
     "color": 15,
     "alpha": 13,
     "shadow": 2,
-    "duration": 1,
-    "iconSize": 5
-  },
-  "lib/views/dashboard/widgets/traffic_usage.dart": {
-    "gap": 6,
-    "iconSize": 1
-  },
-  "lib/views/developer.dart": {
-    "spacing": 1,
-    "gap": 1
-  },
-  "lib/views/hotkey.dart": {
-    "spacing": 1,
-    "gap": 1
+    "duration": 1
   },
   "lib/views/logs.dart": {
-    "spacing": 3,
-    "gap": 1,
     "alpha": 5
   },
   "lib/views/profiles/edit.dart": {
-    "spacing": 3,
-    "gap": 5,
-    "iconSize": 1
+    "spacing": 1,
+    "gap": 1
   },
   "lib/views/profiles/media_check.dart": {
-    "spacing": 13,
-    "gap": 32,
+    "spacing": 3,
+    "gap": 6,
     "radius": 3,
     "alpha": 8,
-    "duration": 1,
-    "iconSize": 4
-  },
-  "lib/views/profiles/overwrite/custom/custom.dart": {
-    "spacing": 4,
-    "gap": 5,
-    "iconSize": 2
+    "duration": 1
   },
   "lib/views/profiles/overwrite/custom/groups.dart": {
-    "spacing": 4,
     "radius": 1,
-    "color": 1,
-    "iconSize": 1
+    "color": 1
   },
   "lib/views/profiles/overwrite/custom/icon.dart": {
-    "spacing": 5,
-    "gap": 3
-  },
-  "lib/views/profiles/overwrite/custom/proxies.dart": {
-    "spacing": 8,
-    "gap": 5,
-    "iconSize": 1
-  },
-  "lib/views/profiles/overwrite/custom/proxy_providers.dart": {
-    "spacing": 6,
-    "gap": 2,
-    "iconSize": 1
+    "gap": 1
   },
   "lib/views/profiles/overwrite/custom/rules.dart": {
-    "spacing": 11,
-    "gap": 2,
     "radius": 1
   },
   "lib/views/profiles/overwrite/custom/widgets.dart": {
-    "spacing": 4,
-    "gap": 4,
-    "alpha": 3,
-    "iconSize": 1
-  },
-  "lib/views/profiles/overwrite/overwrite.dart": {
-    "spacing": 2,
-    "gap": 2
+    "alpha": 3
   },
   "lib/views/profiles/overwrite/script.dart": {
-    "spacing": 4,
-    "gap": 6,
-    "alpha": 1,
-    "iconSize": 1
-  },
-  "lib/views/profiles/overwrite/standard.dart": {
-    "spacing": 6,
-    "gap": 8
+    "alpha": 1
   },
   "lib/views/profiles/profiles.dart": {
-    "spacing": 29,
-    "gap": 30,
+    "spacing": 3,
+    "gap": 2,
     "radius": 1,
     "alpha": 23,
-    "shadow": 1,
-    "iconSize": 10
+    "shadow": 1
   },
   "lib/views/proxies/card.dart": {
-    "spacing": 3,
-    "gap": 3,
-    "alpha": 1,
-    "iconSize": 1
+    "alpha": 1
   },
   "lib/views/proxies/empty.dart": {
-    "spacing": 2,
-    "gap": 3,
     "alpha": 2
   },
   "lib/views/proxies/list.dart": {
-    "spacing": 6,
-    "gap": 2,
+    "spacing": 1,
     "alpha": 7,
-    "shadow": 1,
-    "iconSize": 3
+    "shadow": 1
   },
   "lib/views/proxies/providers.dart": {
-    "spacing": 3,
-    "gap": 4,
     "alpha": 6,
     "shadow": 1
   },
@@ -323,59 +216,35 @@
     "color": 4,
     "duration": 4
   },
-  "lib/views/proxies/setting.dart": {
-    "spacing": 3,
-    "gap": 2,
-    "iconSize": 2
-  },
   "lib/views/resources.dart": {
-    "spacing": 8,
-    "gap": 11,
-    "alpha": 11,
-    "iconSize": 5
+    "spacing": 2,
+    "alpha": 11
   },
   "lib/views/theme.dart": {
-    "spacing": 8,
-    "gap": 4,
-    "alpha": 11,
-    "iconSize": 1
+    "spacing": 1,
+    "gap": 1,
+    "alpha": 11
   },
   "lib/views/theme_accent.dart": {
-    "gap": 4,
-    "color": 4,
-    "iconSize": 2
+    "gap": 1,
+    "color": 4
   },
   "lib/views/tools.dart": {
     "spacing": 1
   },
-  "lib/widgets/app_bar/sl_app_bar.dart": {
-    "gap": 2
-  },
   "lib/widgets/app_bar/sl_app_bar_buttons.dart": {
     "alpha": 1
-  },
-  "lib/widgets/card.dart": {
-    "gap": 2,
-    "iconSize": 3
-  },
-  "lib/widgets/changelog_dialog.dart": {
-    "spacing": 2,
-    "gap": 5
-  },
-  "lib/widgets/chip.dart": {
-    "spacing": 2
   },
   "lib/widgets/effect.dart": {
     "duration": 1
   },
   "lib/widgets/input.dart": {
-    "spacing": 9,
-    "gap": 6,
+    "spacing": 2,
+    "gap": 2,
     "alpha": 12
   },
   "lib/widgets/list.dart": {
-    "spacing": 13,
-    "gap": 4,
+    "spacing": 1,
     "radius": 3,
     "alpha": 8,
     "shadow": 1
@@ -384,8 +253,6 @@
     "duration": 2
   },
   "lib/widgets/null_status.dart": {
-    "spacing": 1,
-    "gap": 1,
     "radius": 1,
     "alpha": 2
   },
@@ -396,30 +263,19 @@
     "color": 6
   },
   "lib/widgets/popup.dart": {
-    "spacing": 3,
-    "gap": 1,
+    "spacing": 1,
     "alpha": 5,
     "shadow": 1,
-    "duration": 1,
-    "iconSize": 2
-  },
-  "lib/widgets/scaffold.dart": {
-    "spacing": 2
+    "duration": 1
   },
   "lib/widgets/scroll.dart": {
     "radius": 1
   },
   "lib/widgets/setting.dart": {
-    "spacing": 2,
-    "gap": 1,
-    "iconSize": 1
-  },
-  "lib/widgets/settings_apply_status.dart": {
     "spacing": 1
   },
   "lib/widgets/sheet.dart": {
-    "spacing": 7,
-    "gap": 1,
+    "spacing": 2,
     "radius": 2,
     "color": 1
   },
@@ -427,16 +283,11 @@
     "radius": 1,
     "color": 1
   },
-  "lib/widgets/subscription_info_view.dart": {
-    "gap": 2
-  },
   "lib/widgets/surge/soft_os_control_dock.dart": {
     "alpha": 2,
     "shadow": 3
   },
   "lib/widgets/surge/soft_os_select_pill.dart": {
-    "spacing": 1,
-    "gap": 1,
     "alpha": 2,
     "shadow": 1
   },
@@ -444,8 +295,6 @@
     "alpha": 4
   },
   "lib/widgets/surge/surge_bottom_nav.dart": {
-    "spacing": 1,
-    "gap": 1,
     "radius": 4,
     "color": 2,
     "alpha": 6,
@@ -459,35 +308,19 @@
     "alpha": 12
   },
   "lib/widgets/surge/surge_list_tile.dart": {
-    "spacing": 3,
-    "gap": 4,
-    "alpha": 2,
-    "iconSize": 1
-  },
-  "lib/widgets/surge/surge_section.dart": {
-    "spacing": 2,
-    "gap": 1
+    "alpha": 2
   },
   "lib/widgets/surge/surge_segmented_control.dart": {
-    "spacing": 2,
-    "gap": 1,
-    "alpha": 2,
-    "iconSize": 1
+    "alpha": 2
   },
   "lib/widgets/surge/surge_select_indicator.dart": {
     "alpha": 2
   },
   "lib/widgets/surge/surge_selectable_row.dart": {
-    "spacing": 1,
     "alpha": 2,
     "shadow": 1
   },
   "lib/widgets/surge/surge_status_button.dart": {
-    "gap": 1,
     "alpha": 2
-  },
-  "lib/widgets/theme.dart": {
-    "spacing": 3,
-    "iconSize": 1
   }
 }
