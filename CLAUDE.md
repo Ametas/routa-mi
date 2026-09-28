@@ -15,6 +15,10 @@ RoutaMi — Android-клиент (arm64-v8a) на ядре mihomo, жёстки�
    `lib/common/constant.dart`, `lib/models/*`, `android/**/build.gradle.kts`)
    меняем минимально: точка подключения в одну-две строки, логика — в своём
    файле. Иначе ломается `git cherry-pick` из апстрима.
+   Это касается функциональной логики. **Интерфейс из SlClash не
+   переносим** — у RoutaMi свой дизайн, поэтому экраны (`lib/views`,
+   `lib/pages`), виджеты (`lib/widgets`) и тему (`lib/theme`) меняем
+   свободно. Правила дизайн-системы — `docs/design/design-system-audit.md`.
 2. **Не переименовывать** Dart-пакет `fl_clash`, пути импортов, имена файлов,
    Kotlin-пакеты `com.follow.clash.*`, `namespace` Android (`com.slclash.app`),
    Gradle-свойства `slclash*`. Бренд меняется только в видимых строках.

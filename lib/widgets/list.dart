@@ -8,7 +8,6 @@ import 'package:fl_clash/widgets/inherited.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'card.dart';
 import 'input.dart';
 import 'open_container.dart';
 import 'scaffold.dart';
@@ -53,14 +52,6 @@ class OpenDelegate<T> extends Delegate {
     this.forceFull = true,
     this.onChanged,
   });
-}
-
-class NextDelegate extends Delegate {
-  final Widget widget;
-  final double? maxWidth;
-  final bool blur;
-
-  const NextDelegate({required this.widget, this.maxWidth, this.blur = true});
 }
 
 class OptionsDelegate<T> extends Delegate {
@@ -143,25 +134,6 @@ class ListItem<T> extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
     this.trailing,
     required OpenDelegate this.delegate,
-    this.horizontalTitleGap,
-    this.dense,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
-    this.color,
-    this.minTileHeight,
-    this.visualDensity,
-    this.minVerticalPadding = 12,
-    this.tileTitleAlignment = ListTileTitleAlignment.center,
-  }) : onTap = null;
-
-  const ListItem.next({
-    super.key,
-    required this.title,
-    this.subtitle,
-    this.leading,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    this.trailing,
-    required NextDelegate this.delegate,
     this.horizontalTitleGap,
     this.dense,
     this.titleTextStyle,
@@ -332,25 +304,6 @@ class ListItem<T> extends StatelessWidget {
         onClosed: onChanged,
         openBuilder: (_, action) {
           return child;
-        },
-      );
-    }
-    if (delegate is NextDelegate) {
-      final nextDelegate = delegate as NextDelegate;
-      final child = nextDelegate.widget;
-
-      return _buildListTile(
-        onTap: () {
-          showExtend(
-            context,
-            props: ExtendProps(
-              blur: nextDelegate.blur,
-              maxWidth: nextDelegate.maxWidth,
-            ),
-            builder: (_) {
-              return child;
-            },
-          );
         },
       );
     }
@@ -766,21 +719,6 @@ Widget generateSectionV3({
   );
 }
 
-List<Widget> generateInfoSection({
-  required Info info,
-  required Iterable<Widget> items,
-  List<Widget>? actions,
-  bool separated = true,
-}) {
-  final genItems = separated
-      ? items.separated(const Divider(height: 0))
-      : items;
-  return [
-    if (items.isNotEmpty) InfoHeader(info: info, actions: actions),
-    ...genItems,
-  ];
-}
-
 Widget generateListView(List<Widget> items) {
   return Builder(
     builder: (context) {
@@ -797,56 +735,6 @@ Widget generateListView(List<Widget> items) {
       );
     },
   );
-}
-
-class CommonSelectedListItem extends StatelessWidget {
-  final bool isSelected;
-  final bool isEditing;
-  final Widget title;
-  final VoidCallback onSelected;
-  final VoidCallback onPressed;
-
-  const CommonSelectedListItem({
-    super.key,
-    required this.isSelected,
-    required this.onSelected,
-    this.isEditing = false,
-    required this.title,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-      child: _SurgeSelectableListTile(
-        title: title,
-        isSelected: isSelected,
-        borderRadius: BorderRadius.circular(18),
-        minTileHeight: 32 + globalState.measure.bodyMediumHeight,
-        minVerticalPadding: 12,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-        onPressed: () {
-          if (isEditing) {
-            onSelected();
-            return;
-          }
-          onPressed();
-        },
-        trailing: SizedBox(
-          width: 24,
-          height: 24,
-          child: CommonCheckBox(
-            value: isSelected,
-            isCircle: true,
-            onChanged: (_) {
-              onSelected();
-            },
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class DecorationListItem extends StatelessWidget {

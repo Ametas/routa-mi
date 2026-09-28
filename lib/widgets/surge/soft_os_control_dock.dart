@@ -1,5 +1,4 @@
 import 'package:fl_clash/widgets/surge/surge.dart';
-import 'package:fl_clash/widgets/popup.dart';
 import 'package:flutter/material.dart';
 
 /// Applies the dedicated top app-bar capsule treatment without changing the
@@ -428,33 +427,6 @@ class SoftOsActionDockButton extends StatelessWidget {
   }
 }
 
-/// A thin divider for [SoftOsActionDock].
-class SoftOsActionDivider extends StatelessWidget {
-  const SoftOsActionDivider({super.key, this.height, this.alpha = 0.28});
-
-  final double? height;
-  final double alpha;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final metrics = SoftOsMetrics.of(context);
-    return SizedBox(
-      height: metrics.tap(surge.controls.actionTapExtent),
-      child: Center(
-        child: SizedBox(
-          height: metrics.value(height ?? surge.controls.actionDividerHeight),
-          child: VerticalDivider(
-            width: 1,
-            thickness: surge.spacing.hairline,
-            color: surge.textPrimary.withValues(alpha: alpha),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 /// AppBar-level text action matching [SoftOsActionButton].
 class SoftOsActionTextButton extends StatelessWidget {
   const SoftOsActionTextButton({
@@ -560,66 +532,6 @@ class SoftOsActionTextButton extends StatelessWidget {
   }
 }
 
-/// A text segment inside [SoftOsActionDock].
-class SoftOsActionDockTextButton extends StatelessWidget {
-  const SoftOsActionDockTextButton({
-    super.key,
-    required this.label,
-    required this.onPressed,
-    this.tooltip,
-    this.compact = false,
-  });
-
-  final String label;
-  final VoidCallback? onPressed;
-  final String? tooltip;
-  final bool compact;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final metrics = SoftOsMetrics.of(context);
-    final enabled = onPressed != null;
-    final foreground = _softOsActionForeground(context, enabled);
-    final minWidth = metrics.value(
-      compact
-          ? surge.controls.compactTextActionMinWidth
-          : surge.controls.textActionMinWidth,
-    );
-    final horizontalPadding = metrics.value(
-      surge.controls.compactTextActionHorizontalPadding,
-    );
-
-    Widget result = Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onPressed,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: minWidth),
-          child: SizedBox(
-            height: metrics.tap(surge.controls.actionTapExtent),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              child: Center(child: _SoftOsActionText(label: label)),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    if (tooltip != null && tooltip!.isNotEmpty) {
-      result = Tooltip(message: tooltip!, child: result);
-    }
-    return IconTheme.merge(
-      data: IconThemeData(color: foreground),
-      child: DefaultTextStyle.merge(
-        style: context.typography.controlLabel.copyWith(color: foreground),
-        child: result,
-      ),
-    );
-  }
-}
-
 /// Compact status/action capsule used inside Soft OS cards and lists.
 class SoftOsStatusPill extends StatelessWidget {
   const SoftOsStatusPill({
@@ -706,50 +618,6 @@ class SoftOsStatusPill extends StatelessWidget {
           child: child,
         ),
       ),
-    );
-  }
-}
-
-/// A stable popup entry point rendered with the AppBar Soft OS action style.
-class SoftOsPopupActionButton extends StatelessWidget {
-  const SoftOsPopupActionButton({
-    super.key,
-    required this.popup,
-    this.inDock = false,
-    this.compact = false,
-    this.tooltip,
-    this.offset = Offset.zero,
-  });
-
-  final Widget popup;
-  final bool inDock;
-  final bool compact;
-  final String? tooltip;
-  final Offset offset;
-
-  @override
-  Widget build(BuildContext context) {
-    return CommonPopupBox(
-      popup: popup,
-      targetBuilder: (open) {
-        void handleOpen() {
-          open(offset: offset);
-        }
-
-        return inDock
-            ? SoftOsActionDockButton(
-                icon: SurgeIcons.more,
-                onPressed: handleOpen,
-                tooltip: tooltip,
-                compact: compact,
-              )
-            : SoftOsActionButton(
-                icon: SurgeIcons.more,
-                onPressed: handleOpen,
-                tooltip: tooltip,
-                compact: compact,
-              );
-      },
     );
   }
 }

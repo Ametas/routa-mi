@@ -50,27 +50,3 @@ class CommonDialog extends ConsumerWidget {
     );
   }
 }
-
-class CommonModal extends ConsumerWidget {
-  final Widget? child;
-
-  const CommonModal({super.key, this.child});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final size = ref.watch(viewSizeProvider);
-    final surge = SurgeTheme.of(context);
-    return Center(
-      child: Container(
-        width: size.width * 0.85,
-        height: size.height * 0.85,
-        decoration: BoxDecoration(
-          color: surge.card,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: child,
-      ),
-    );
-  }
-}

@@ -1,18 +1,16 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:math';
-import 'dart:ui' as ui;
-
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/config.dart';
-import 'package:fl_clash/state.dart';
+import 'package:fl_clash/theme/app_color_source.dart';
+import 'package:fl_clash/theme/static_theme.dart';
+import 'package:fl_clash/views/theme_accent.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class ThemeModeItem {
   final ThemeMode themeMode;
@@ -72,57 +70,6 @@ class ThemeView extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class ItemCard extends StatelessWidget {
-  final Widget child;
-  final Info info;
-  final List<Widget> actions;
-
-  const ItemCard({
-    super.key,
-    required this.info,
-    required this.child,
-    this.actions = const [],
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: surge.spacing.pagePadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 4, bottom: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    info.label,
-                    style: context.typography.supporting.copyWith(
-                      color: surge.textSecondary,
-                    ),
-                  ),
-                ),
-                if (actions.isNotEmpty) ...[
-                  const SizedBox(width: 8),
-                  Row(mainAxisSize: MainAxisSize.min, children: actions),
-                ],
-              ],
-            ),
-          ),
-          SurgeCard(
-            borderRadius: surge.radii.list,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shadow: false,
-            child: child,
-          ),
-        ],
       ),
     );
   }
@@ -294,8 +241,9 @@ class _SurgeSegmentedButton<T> extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(surge.radii.segmentedIndicator),
-        child: SizedBox(
+        child: Container(
           height: 40,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -306,13 +254,19 @@ class _SurgeSegmentedButton<T> extends StatelessWidget {
                 color: selected ? surge.primary : surge.textSecondary,
               ),
               const SizedBox(width: 6),
-              AnimatedDefaultTextStyle(
-                duration: SurgeMotion.state,
-                curve: SurgeMotion.stateCurve,
-                style: context.typography.controlLabel.copyWith(
-                  color: selected ? surge.textPrimary : surge.textSecondary,
+              Flexible(
+                child: AnimatedDefaultTextStyle(
+                  duration: SurgeMotion.state,
+                  curve: SurgeMotion.stateCurve,
+                  style: context.typography.controlLabel.copyWith(
+                    color: selected ? surge.textPrimary : surge.textSecondary,
+                  ),
+                  child: Text(
+                    item.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-                child: Text(item.label),
               ),
             ],
           ),
@@ -322,7 +276,8 @@ class _SurgeSegmentedButton<T> extends StatelessWidget {
   }
 }
 
-enum _StaticThemePreset { blueWhite, grayBlack }
+/// Choice shown when Material You is off: a curated preset or own accent.
+enum _StaticChoice { blueWhite, grayBlack, accent }
 
 class _DynamicColorItem extends ConsumerWidget {
   const _DynamicColorItem();
@@ -332,11 +287,12 @@ class _DynamicColorItem extends ConsumerWidget {
     final surge = SurgeTheme.of(context);
     final theme = ref.watch(themeSettingProvider);
     final dynamicColor = theme.dynamicColor;
-    final isLegacyGray =
-        !dynamicColor && theme.primaryColor == legacyGraySeedColor;
-    final staticPreset = isLegacyGray
-        ? _StaticThemePreset.grayBlack
-        : _StaticThemePreset.blueWhite;
+    final colorSource = theme.colorSource;
+    final staticChoice = colorSource == AppColorSource.accent
+        ? _StaticChoice.accent
+        : theme.staticPreset == StaticThemePreset.grayBlack
+        ? _StaticChoice.grayBlack
+        : _StaticChoice.blueWhite;
     final schemeVariant = normalizeDynamicSchemeVariant(theme.schemeVariant);
 
     return Column(
@@ -352,9 +308,13 @@ class _DynamicColorItem extends ConsumerWidget {
                 ? context.appLocalizations.followMaterialYou(
                     _schemeVariantLabel(context, schemeVariant),
                   )
-                : isLegacyGray
-                ? context.appLocalizations.darkMonochromeStyle
-                : context.appLocalizations.blueWhiteMonochromeStyle,
+                : switch (staticChoice) {
+                    _StaticChoice.grayBlack =>
+                      context.appLocalizations.darkMonochromeStyle,
+                    _StaticChoice.blueWhite =>
+                      context.appLocalizations.blueWhiteMonochromeStyle,
+                    _StaticChoice.accent => context.appLocalizations.custom,
+                  },
             style: context.typography.supporting.copyWith(
               color: surge.textSecondary,
             ),
@@ -412,36 +372,57 @@ class _DynamicColorItem extends ConsumerWidget {
                         );
                   },
                 )
-              : _SurgeSegmentedControl<_StaticThemePreset>(
-                  value: staticPreset,
-                  items: [
-                    _SegmentedItem(
-                      value: _StaticThemePreset.blueWhite,
-                      iconData: SurgeIcons.water,
-                      label: context.appLocalizations.blueWhiteMonochrome,
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _SurgeSegmentedControl<_StaticChoice>(
+                      value: staticChoice,
+                      items: [
+                        _SegmentedItem(
+                          value: _StaticChoice.blueWhite,
+                          iconData: SurgeIcons.water,
+                          label: context.appLocalizations.blueWhiteMonochrome,
+                        ),
+                        _SegmentedItem(
+                          value: _StaticChoice.grayBlack,
+                          iconData: SurgeIcons.contrast,
+                          label: context.appLocalizations.darkMonochrome,
+                        ),
+                        _SegmentedItem(
+                          value: _StaticChoice.accent,
+                          iconData: SurgeIcons.colorize,
+                          label: context.appLocalizations.custom,
+                        ),
+                      ],
+                      onChanged: (value) {
+                        ref
+                            .read(themeSettingProvider.notifier)
+                            .update(
+                              (state) => switch (value) {
+                                _StaticChoice.blueWhite => state.copyWith(
+                                  dynamicColor: false,
+                                  primaryColor: null,
+                                ),
+                                _StaticChoice.grayBlack => state.copyWith(
+                                  dynamicColor: false,
+                                  primaryColor: legacyGraySeedColor,
+                                ),
+                                _StaticChoice.accent => state.copyWith(
+                                  dynamicColor: false,
+                                  primaryColor:
+                                      state.colorSource == AppColorSource.accent
+                                      ? state.primaryColor
+                                      : state.accentPalette.first,
+                                ),
+                              },
+                            );
+                      },
                     ),
-                    _SegmentedItem(
-                      value: _StaticThemePreset.grayBlack,
-                      iconData: SurgeIcons.contrast,
-                      label: context.appLocalizations.darkMonochrome,
-                    ),
+                    if (staticChoice == _StaticChoice.accent) ...[
+                      const SizedBox(height: 16),
+                      const ThemeAccentPicker(),
+                    ],
                   ],
-                  onChanged: (value) {
-                    ref
-                        .read(themeSettingProvider.notifier)
-                        .update(
-                          (state) => switch (value) {
-                            _StaticThemePreset.blueWhite => state.copyWith(
-                              dynamicColor: false,
-                              primaryColor: null,
-                            ),
-                            _StaticThemePreset.grayBlack => state.copyWith(
-                              dynamicColor: false,
-                              primaryColor: legacyGraySeedColor,
-                            ),
-                          },
-                        );
-                  },
                 ),
         ),
       ],
@@ -459,270 +440,6 @@ String _schemeVariantLabel(
     DynamicSchemeVariant.content => context.appLocalizations.contentColor,
     _ => context.appLocalizations.monochrome,
   };
-}
-
-class _PrimaryColorItem extends ConsumerStatefulWidget {
-  const _PrimaryColorItem();
-
-  @override
-  ConsumerState<_PrimaryColorItem> createState() => _PrimaryColorItemState();
-}
-
-class _PrimaryColorItemState extends ConsumerState<_PrimaryColorItem> {
-  int? _removablePrimaryColor;
-
-  int _calcColumns(double maxWidth) {
-    return max((maxWidth / 96).ceil(), 3);
-  }
-
-  Future<void> _handleReset() async {
-    final res = await globalState.showMessage(
-      message: TextSpan(text: context.appLocalizations.resetTip),
-    );
-    if (res != true) {
-      return;
-    }
-    ref.read(themeSettingProvider.notifier).update((state) {
-      return state.copyWith(
-        primaryColors: defaultPrimaryColors,
-        primaryColor: defaultPrimaryColor,
-        schemeVariant: defaultDynamicSchemeVariant,
-      );
-    });
-  }
-
-  Future<void> _handleDel() async {
-    final appLocalizations = context.appLocalizations;
-    if (_removablePrimaryColor == null) {
-      return;
-    }
-    final res = await globalState.showMessage(
-      message: TextSpan(
-        text: appLocalizations.deleteTip(appLocalizations.colorSchemes),
-      ),
-    );
-    if (res != true) {
-      return;
-    }
-    ref.read(themeSettingProvider.notifier).update((state) {
-      final newPrimaryColors = List<int>.from(state.primaryColors)
-        ..remove(_removablePrimaryColor);
-      int? newPrimaryColor = state.primaryColor;
-      if (state.primaryColor == _removablePrimaryColor) {
-        if (newPrimaryColors.contains(defaultPrimaryColor)) {
-          newPrimaryColor = defaultPrimaryColor;
-        } else {
-          newPrimaryColor = null;
-        }
-      }
-      return state.copyWith(
-        primaryColors: newPrimaryColors,
-        primaryColor: newPrimaryColor,
-      );
-    });
-    setState(() {
-      _removablePrimaryColor = null;
-    });
-  }
-
-  Future<void> _handleAdd() async {
-    final appLocalizations = context.appLocalizations;
-    final res = await globalState.showCommonDialog<int>(
-      child: const _PaletteDialog(),
-    );
-    if (res == null) {
-      return;
-    }
-    final isExists = ref.read(
-      themeSettingProvider.select((state) => state.primaryColors.contains(res)),
-    );
-    if (isExists && mounted) {
-      context.showNotifier(
-        appLocalizations.existsTip(appLocalizations.colorSchemes),
-      );
-      return;
-    }
-    ref.read(themeSettingProvider.notifier).update((state) {
-      return state.copyWith(
-        primaryColors: List.from(state.primaryColors)..add(res),
-      );
-    });
-  }
-
-  Future<void> _handleChangeSchemeVariant() async {
-    final schemeVariant = ref.read(
-      themeSettingProvider.select((state) => state.schemeVariant),
-    );
-    final value = await globalState.showCommonDialog<DynamicSchemeVariant>(
-      child: OptionsDialog<DynamicSchemeVariant>(
-        title: context.appLocalizations.colorSchemes,
-        options: DynamicSchemeVariant.values,
-        textBuilder: (item) => Intl.message('${item.name}Scheme'),
-        value: schemeVariant,
-      ),
-    );
-    if (value == null) {
-      return;
-    }
-    ref.read(themeSettingProvider.notifier).update((state) {
-      return state.copyWith(schemeVariant: value);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocalizations = context.appLocalizations;
-    final vm4 = ref.watch(
-      themeSettingProvider.select(
-        (state) => VM4(
-          state.primaryColor,
-          state.primaryColors,
-          state.schemeVariant,
-          state.primaryColor == defaultPrimaryColor &&
-              intListEquality.equals(
-                state.primaryColors,
-                defaultPrimaryColors,
-              ) &&
-              state.schemeVariant == defaultDynamicSchemeVariant,
-        ),
-      ),
-    );
-    final primaryColor = vm4.a;
-    final primaryColors = [null, ...vm4.b];
-    final schemeVariant = vm4.c;
-    final isEquals = vm4.d;
-
-    return SliverToBoxAdapter(
-      child: CommonPopScope(
-        onPop: (context) {
-          if (_removablePrimaryColor != null) {
-            setState(() {
-              _removablePrimaryColor = null;
-            });
-            return false;
-          }
-          return true;
-        },
-        child: ItemCard(
-          info: Info(
-            label: appLocalizations.themeColor,
-            iconData: SurgeIcons.appearance,
-          ),
-          actions: genActions([
-            if (_removablePrimaryColor == null)
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  visualDensity: VisualDensity.compact,
-                ),
-                onPressed: _handleChangeSchemeVariant,
-                child: Text(Intl.message('${schemeVariant.name}Scheme')),
-              ),
-            if (_removablePrimaryColor != null)
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  visualDensity: VisualDensity.compact,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _removablePrimaryColor = null;
-                  });
-                },
-                child: Text(appLocalizations.cancel),
-              ),
-            if (_removablePrimaryColor == null && !isEquals)
-              IconButton.filledTonal(
-                iconSize: 20,
-                padding: const EdgeInsets.all(4),
-                visualDensity: VisualDensity.compact,
-                onPressed: _handleReset,
-                icon: const Icon(SurgeIcons.replay),
-              ),
-          ], space: 8),
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: LayoutBuilder(
-              builder: (_, constraints) {
-                final columns = _calcColumns(constraints.maxWidth);
-                final itemWidth =
-                    (constraints.maxWidth - (columns - 1) * 16) / columns;
-                return Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  children: [
-                    for (final color in primaryColors)
-                      Container(
-                        clipBehavior: Clip.none,
-                        width: itemWidth,
-                        height: itemWidth,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          clipBehavior: Clip.none,
-                          children: [
-                            EffectGestureDetector(
-                              child: ColorSchemeBox(
-                                isSelected: color == primaryColor,
-                                primaryColor: color != null
-                                    ? Color(color)
-                                    : null,
-                                onPressed: () {
-                                  setState(() {
-                                    _removablePrimaryColor = null;
-                                  });
-                                  ref
-                                      .read(themeSettingProvider.notifier)
-                                      .update(
-                                        (state) =>
-                                            state.copyWith(primaryColor: color),
-                                      );
-                                },
-                              ),
-                              onLongPress: () {
-                                setState(() {
-                                  _removablePrimaryColor = color;
-                                });
-                              },
-                            ),
-                            if (_removablePrimaryColor != null &&
-                                _removablePrimaryColor == color)
-                              Container(
-                                color: Colors.white.opacity0,
-                                padding: const EdgeInsets.all(8),
-                                child: IconButton.filledTonal(
-                                  onPressed: _handleDel,
-                                  padding: const EdgeInsets.all(12),
-                                  iconSize: 30,
-                                  icon: Icon(
-                                    color: context.colorScheme.primary,
-                                    SurgeIcons.delete,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    if (_removablePrimaryColor == null)
-                      Container(
-                        width: itemWidth,
-                        height: itemWidth,
-                        padding: const EdgeInsets.all(4),
-                        child: IconButton.filledTonal(
-                          onPressed: _handleAdd,
-                          iconSize: 32,
-                          icon: Icon(
-                            color: context.colorScheme.primary,
-                            SurgeIcons.add,
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _TextScaleFactorItem extends ConsumerWidget {
@@ -815,62 +532,6 @@ class _TextScaleFactorItem extends ConsumerWidget {
 
 TextStyle? _themePageTitleStyle(BuildContext context, SurgeTheme surge) {
   return context.typography.body.copyWith(color: surge.textPrimary);
-}
-
-class _PaletteDialog extends StatefulWidget {
-  const _PaletteDialog();
-
-  @override
-  State<_PaletteDialog> createState() => _PaletteDialogState();
-}
-
-class _PaletteDialogState extends State<_PaletteDialog> {
-  final _controller = ValueNotifier<ui.Color>(Colors.transparent);
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocalizations = context.appLocalizations;
-    return CommonDialog(
-      title: appLocalizations.palette,
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(appLocalizations.cancel),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(_controller.value.toARGB32());
-          },
-          child: Text(appLocalizations.confirm),
-        ),
-      ],
-      child: Column(
-        children: [
-          const SizedBox(height: 8),
-          SizedBox(
-            width: 250,
-            height: 250,
-            child: Palette(controller: _controller),
-          ),
-          const SizedBox(height: 24),
-          ValueListenableBuilder(
-            valueListenable: _controller,
-            builder: (_, color, _) {
-              return PrimaryColorBox(
-                primaryColor: color,
-                child: FilledButton(
-                  onPressed: () {},
-                  child: Text(_controller.value.hex),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _SliderDefaultsM3 extends SliderThemeData {
