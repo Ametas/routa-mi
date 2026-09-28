@@ -2,7 +2,6 @@ import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
-import 'package:fl_clash/views/theme.dart';
 import 'package:fl_clash/widgets/dialog.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:flutter/material.dart';
