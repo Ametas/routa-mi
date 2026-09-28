@@ -493,7 +493,9 @@ class ModalSideSheetRoute<T> extends PopupRoute<T> {
   final String? barrierLabel;
 
   @override
-  Color get barrierColor => modalBarrierColor ?? Colors.black54;
+  Color get barrierColor =>
+      modalBarrierColor ??
+      SurgePalette.scrim.withValues(alpha: SurgeMotion.modalBarrierOpacity);
 
   AnimationController? _animationController;
 

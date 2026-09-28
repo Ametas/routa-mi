@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/dav_client.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -338,9 +337,7 @@ class _BackupAndRestoreState extends ConsumerState<BackupAndRestore>
                                           shape: BoxShape.circle,
                                           color: !isCompleter
                                               ? context.colorScheme.error
-                                              : Colors.green.harmonizeWith(
-                                                  context.colorScheme.primary,
-                                                ),
+                                              : SurgeTheme.of(context).green,
                                         ),
                                         width: 12,
                                         height: 12,

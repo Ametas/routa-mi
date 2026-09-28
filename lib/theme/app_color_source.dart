@@ -20,6 +20,9 @@ const accentSchemeVariant = DynamicSchemeVariant.fidelity;
 /// gray/black preset (see `defaultThemeProps`).
 const defaultAccentColor = 0xFF0A84FF;
 
+/// Seed for the dark scheme when no accent is chosen.
+const defaultAccentColorDark = 0xFF4DA3FF;
+
 extension ThemePropsColorSource on ThemeProps {
   AppColorSource get colorSource {
     if (dynamicColor) {

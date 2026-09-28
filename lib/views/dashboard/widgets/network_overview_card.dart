@@ -1175,11 +1175,7 @@ class PlatformLatencyPanel extends StatelessWidget {
 
   Color _trackColor(NetworkDiagnosticTargetState? result) {
     final flow = _flowColor(result);
-    return Color.lerp(
-      flow,
-      Colors.black,
-      0.76,
-    )!.withValues(alpha: SurgeAlpha.a62);
+    return SurgePalette.shade(flow, 0.76).withValues(alpha: SurgeAlpha.a62);
   }
 
   double _barWidth(NetworkDiagnosticTargetState? result) {

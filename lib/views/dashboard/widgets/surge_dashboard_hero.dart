@@ -477,7 +477,7 @@ class _HeroModeCardSurface extends StatelessWidget {
     final activeFill = isSmartPaused
         ? surge.semantic.paused
         : surge.semantic.dashboardDynamicActive;
-    const foregroundColor = Colors.white;
+    const foregroundColor = SurgePalette.onFill;
     final secondaryAlpha = lerpDouble(
       0.82,
       useDynamicSurface ? 0.92 : 0.82,
@@ -506,10 +506,7 @@ class _HeroModeCardSurface extends StatelessWidget {
             color: fillColor,
             gradient: !useDynamicSurface && progress > 0.001
                 ? LinearGradient(
-                    colors: [
-                      fillColor,
-                      Color.lerp(fillColor, Colors.black, 0.16)!,
-                    ],
+                    colors: [fillColor, SurgePalette.shade(fillColor, 0.16)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   )
@@ -524,12 +521,12 @@ class _HeroModeCardSurface extends StatelessWidget {
             width: layout.geometry(38),
             height: layout.geometry(38),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: SurgeAlpha.a16),
+              color: SurgePalette.onFill.withValues(alpha: SurgeAlpha.a16),
               borderRadius: BorderRadius.circular(layout.geometry(16)),
             ),
             child: Icon(
               SurgeIcons.outboundMode,
-              color: Colors.white,
+              color: SurgePalette.onFill,
               size: layout.geometry(21),
             ),
           );
@@ -735,7 +732,7 @@ class _HeroActionButton extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [baseColor, Color.lerp(baseColor, Colors.black, 0.16)!],
+          colors: [baseColor, SurgePalette.shade(baseColor, 0.16)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -815,9 +812,9 @@ class _ActionButtonSheen extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.white.withValues(alpha: SurgeAlpha.none),
-                      Colors.white.withValues(alpha: SurgeAlpha.a16),
-                      Colors.white.withValues(alpha: SurgeAlpha.none),
+                      SurgePalette.highlight.withValues(alpha: SurgeAlpha.none),
+                      SurgePalette.highlight.withValues(alpha: SurgeAlpha.a16),
+                      SurgePalette.highlight.withValues(alpha: SurgeAlpha.none),
                     ],
                   ),
                 ),
@@ -872,7 +869,7 @@ class _Dot extends StatelessWidget {
       height: 3,
       margin: const EdgeInsets.symmetric(horizontal: 1.5),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: opacity.clamp(0.0, 1.0)),
+        color: SurgePalette.onFill.withValues(alpha: opacity.clamp(0.0, 1.0)),
         shape: BoxShape.circle,
       ),
     );
@@ -1076,14 +1073,14 @@ class _StatusPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pillAlpha = onBlue && dynamicColor ? 0.24 : 0.18;
-    final background = Colors.white.withValues(alpha: pillAlpha);
+    final pillAlpha = onBlue && dynamicColor ? SurgeAlpha.a24 : SurgeAlpha.a16;
+    final background = SurgePalette.onFill.withValues(alpha: pillAlpha);
     final borderColor = onBlue
-        ? Colors.white.withValues(
+        ? SurgePalette.onFill.withValues(
             alpha: dynamicColor ? SurgeAlpha.a24 : SurgeAlpha.a16,
           )
-        : Colors.white.withValues(alpha: SurgeAlpha.a16);
-    const textColor = Colors.white;
+        : SurgePalette.onFill.withValues(alpha: SurgeAlpha.a16);
+    const textColor = SurgePalette.onFill;
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: layout.geometry(12),
@@ -1186,9 +1183,7 @@ class _PillStatusLightState extends State<_PillStatusLight>
     if (widget.connecting || widget.active) {
       return surge.semantic.statusLightActive;
     }
-    return widget.onBlue
-        ? Colors.white.withValues(alpha: SurgeAlpha.a72)
-        : Colors.white.withValues(alpha: SurgeAlpha.a72);
+    return SurgePalette.onFill.withValues(alpha: SurgeAlpha.a72);
   }
 
   @override
@@ -1698,7 +1693,7 @@ class _NodeCard extends ConsumerWidget {
         ? surge.textSecondary
         : delay < 0
         ? surge.red
-        : utils.getDelayColor(delay) ?? surge.textSecondary;
+        : surge.latencyColor(delay) ?? surge.textSecondary;
     final delayLabel = delay == null
         ? ''
         : delay == 0

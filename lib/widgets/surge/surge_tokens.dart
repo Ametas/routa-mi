@@ -888,3 +888,31 @@ double snapToScale(List<double> steps, double value) {
 double lerpDouble(double a, double b, double t) {
   return a + (b - a) * t;
 }
+
+/// Theme-independent colours with a fixed role. Everything that follows the
+/// theme comes from [SurgeTheme] / `colorScheme`; these are for content on
+/// surfaces whose colour does not follow the theme (the saturated dashboard
+/// hero, accent swatches, the camera preview) and for scrims.
+abstract final class SurgePalette {
+  /// Text and icons on saturated fills and on the camera preview.
+  static const Color onFill = Color(0xFFFFFFFF);
+
+  /// Modal barriers, camera dimming, route edge shadows.
+  static const Color scrim = Color(0xFF000000);
+
+  /// Faint edge shadow of a sliding route.
+  static const Color routeEdgeShadow = Color(0x04000000);
+
+  /// Gloss and sheen highlights.
+  static const Color highlight = Color(0xFFFFFFFF);
+
+  /// Darkens [color] towards [scrim] by [amount] (gradient ends, tracks).
+  static Color shade(Color color, double amount) =>
+      Color.lerp(color, scrim, amount)!;
+
+  /// [onFill] or [scrim], whichever reads on [color].
+  static Color contentOn(Color color) =>
+      ThemeData.estimateBrightnessForColor(color) == Brightness.dark
+      ? onFill
+      : scrim;
+}
