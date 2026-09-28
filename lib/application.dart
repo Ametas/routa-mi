@@ -12,6 +12,7 @@ import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/plugins/phase4_perf.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/theme/app_color_source.dart';
 import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -47,15 +48,19 @@ class ApplicationState extends ConsumerState<Application> {
     required Brightness brightness,
     required ThemeProps themeProps,
   }) {
-    if (!themeProps.dynamicColor) {
-      return StaticThemeSpec.resolve(
-        themeProps.primaryColor == legacyGraySeedColor
-            ? StaticThemePreset.grayBlack
-            : StaticThemePreset.blueWhite,
+    return switch (themeProps.colorSource) {
+      AppColorSource.preset => StaticThemeSpec.resolve(
+        themeProps.staticPreset,
         brightness,
-      ).colorScheme;
-    }
-    return ref.read(genColorSchemeProvider(brightness, color: null));
+      ).colorScheme,
+      AppColorSource.accent => accentColorScheme(
+        themeProps.primaryColor!,
+        brightness,
+      ),
+      AppColorSource.dynamicColor => ref.read(
+        genColorSchemeProvider(brightness, color: null),
+      ),
+    };
   }
 
   SurgeTheme _getSurgeTheme({
@@ -63,15 +68,10 @@ class ApplicationState extends ConsumerState<Application> {
     required ThemeProps themeProps,
     required ColorScheme colorScheme,
   }) {
-    if (themeProps.dynamicColor) {
+    if (themeProps.colorSource != AppColorSource.preset) {
       return SurgeTheme.fromColorScheme(colorScheme);
     }
-    final spec = StaticThemeSpec.resolve(
-      themeProps.primaryColor == legacyGraySeedColor
-          ? StaticThemePreset.grayBlack
-          : StaticThemePreset.blueWhite,
-      brightness,
-    );
+    final spec = StaticThemeSpec.resolve(themeProps.staticPreset, brightness);
     return SurgeTheme.fromColors(spec.colors, stateColors: spec.stateColors);
   }
 
@@ -174,7 +174,9 @@ class ApplicationState extends ConsumerState<Application> {
       brightness: brightness,
       themeProps: themeProps,
     );
-    final colorScheme = brightness == Brightness.dark && themeProps.dynamicColor
+    final colorScheme =
+        brightness == Brightness.dark &&
+            themeProps.colorSource != AppColorSource.preset
         ? baseColorScheme.toPureBlack(themeProps.pureBlack)
         : baseColorScheme;
     final textTheme = buildSlclashTextTheme();
@@ -225,7 +227,8 @@ class ApplicationState extends ConsumerState<Application> {
           themeProps: themeProps,
         );
         final overlayColorScheme =
-            currentBrightness == Brightness.dark && themeProps.dynamicColor
+            currentBrightness == Brightness.dark &&
+                themeProps.colorSource != AppColorSource.preset
             ? overlayBaseColorScheme.toPureBlack(themeProps.pureBlack)
             : overlayBaseColorScheme;
         final overlaySurge = _getSurgeTheme(

@@ -32,11 +32,11 @@ extension ColorExtension on Color {
   }
 
   Color get opacity10 {
-    return withAlpha(15);
+    return withAlpha(26);
   }
 
   Color get opacity3 {
-    return withAlpha(76);
+    return withAlpha(8);
   }
 
   Color get opacity0 {

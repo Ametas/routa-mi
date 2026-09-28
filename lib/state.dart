@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:animations/animations.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:fl_clash/common/theme.dart';
 import 'package:fl_clash/widgets/dialog.dart';
 import 'package:fl_clash/widgets/input.dart';
 import 'package:fl_clash/widgets/list.dart';
@@ -35,7 +34,6 @@ class GlobalState {
   late final PackageInfo packageInfo;
   Function? updateCurrentDelayDebounce;
   late Measure measure;
-  late CommonTheme theme;
   late Color accentColor;
   late ProviderContainer container;
   bool needInitStatus = true;

@@ -93,18 +93,6 @@ class CommonPopupRoute<T> extends PopupRoute<T> {
   Duration get reverseTransitionDuration => SurgeMotion.state;
 }
 
-class PopupController extends ValueNotifier<bool> {
-  PopupController() : super(false);
-
-  void open() {
-    value = true;
-  }
-
-  void close() {
-    value = false;
-  }
-}
-
 typedef PopupOpen = Function({Offset offset});
 
 class CommonPopupBox extends StatefulWidget {

@@ -418,7 +418,12 @@ void main() {
 
     expect(staticSource, isNot(contains('ColorScheme.fromSeed')));
     expect(staticSource, isNot(contains('DynamicSchemeVariant.monochrome')));
-    expect(applicationSource, contains('if (!themeProps.dynamicColor)'));
+    // Presets are resolved from StaticThemeSpec, never seeded
+    // (see AppColorSource in lib/theme/app_color_source.dart).
+    expect(
+      applicationSource,
+      contains('AppColorSource.preset => StaticThemeSpec.resolve('),
+    );
     expect(applicationSource, contains('StaticThemeSpec.resolve'));
     expect(
       applicationSource,

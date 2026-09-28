@@ -45,14 +45,6 @@ class LogEmptyIllustration extends StatelessWidget {
       const _SoftOsEmptyIllustration('assets/images/empty/log.svg');
 }
 
-class ProxyEmptyIllustration extends StatelessWidget {
-  const ProxyEmptyIllustration({super.key});
-
-  @override
-  Widget build(BuildContext context) =>
-      const _SoftOsEmptyIllustration('assets/images/empty/proxy.svg');
-}
-
 class DataEmptyIllustration extends StatelessWidget {
   const DataEmptyIllustration({super.key});
 
