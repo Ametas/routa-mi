@@ -30,7 +30,7 @@ class SlAppBarActionsRenderer extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < actions.length; i++) ...[
-          if (i > 0) const SizedBox(width: 4),
+          if (i > 0) const SizedBox(width: SurgeSpace.xs),
           _buildAction(context, actions[i]),
         ],
       ],
@@ -107,7 +107,7 @@ class _ActionGroupWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < actions.length; i++) ...[
-          if (i > 0) const SizedBox(width: 2),
+          if (i > 0) const SizedBox(width: SurgeSpace.xxs),
           SlAppBarIconButton(
             icon: actions[i].icon,
             tooltip: actions[i].tooltip,

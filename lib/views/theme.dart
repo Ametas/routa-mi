@@ -103,7 +103,12 @@ class _ThemeModeItem extends ConsumerWidget {
       ),
     ];
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      padding: const EdgeInsets.fromLTRB(
+        SurgeSpace.l,
+        SurgeSpace.m,
+        SurgeSpace.l,
+        SurgeSpace.m,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -111,7 +116,7 @@ class _ThemeModeItem extends ConsumerWidget {
             appLocalizations.themeMode,
             style: _themePageTitleStyle(context, surge),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: SurgeSpace.m),
           _SurgeThemeModeControl(
             value: themeMode,
             items: themeModeItems,
@@ -173,7 +178,7 @@ class _SurgeSegmentedControl<T> extends StatelessWidget {
         .indexWhere((item) => item.value == value)
         .clamp(0, items.length - 1);
     return Container(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(SurgeSpace.xs),
       decoration: BoxDecoration(
         color: surge.fill,
         borderRadius: BorderRadius.circular(surge.radii.list),
@@ -243,17 +248,17 @@ class _SurgeSegmentedButton<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(surge.radii.segmentedIndicator),
         child: Container(
           height: 40,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.s),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 item.iconData,
-                size: 17,
+                size: SurgeIconSize.compact,
                 color: selected ? surge.primary : surge.textSecondary,
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: SurgeSpace.s),
               Flexible(
                 child: AnimatedDefaultTextStyle(
                   duration: SurgeMotion.state,
@@ -340,7 +345,10 @@ class _DynamicColorItem extends ConsumerWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: SurgeSpace.l,
+            vertical: SurgeSpace.s,
+          ),
           child: dynamicColor
               ? _SurgeSegmentedControl<DynamicSchemeVariant>(
                   value: schemeVariant,
@@ -419,7 +427,7 @@ class _DynamicColorItem extends ConsumerWidget {
                       },
                     ),
                     if (staticChoice == _StaticChoice.accent) ...[
-                      const SizedBox(height: 16),
+                      const SizedBox(height: SurgeSpace.l),
                       const ThemeAccentPicker(),
                     ],
                   ],
@@ -470,7 +478,12 @@ class _TextScaleFactorItem extends ConsumerWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
+          padding: const EdgeInsets.fromLTRB(
+            SurgeSpace.l,
+            SurgeSpace.m,
+            SurgeSpace.l,
+            SurgeSpace.m,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
@@ -502,13 +515,13 @@ class _TextScaleFactorItem extends ConsumerWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 4),
+                padding: const EdgeInsets.only(right: SurgeSpace.xs),
                 child: Container(
                   constraints: const BoxConstraints(minWidth: 56),
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
+                    horizontal: SurgeSpace.m,
+                    vertical: SurgeSpace.s,
                   ),
                   decoration: BoxDecoration(
                     color: surge.textSecondary.withValues(alpha: 0.12),

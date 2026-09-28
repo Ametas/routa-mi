@@ -95,7 +95,11 @@ class ThemeAccentPicker extends ConsumerWidget {
               shape: BoxShape.circle,
               border: Border.all(color: surge.separator, width: 1.5),
             ),
-            child: Icon(SurgeIcons.add, size: 20, color: surge.textSecondary),
+            child: Icon(
+              SurgeIcons.add,
+              size: SurgeIconSize.regular,
+              color: surge.textSecondary,
+            ),
           ),
         ),
       ],
@@ -143,7 +147,11 @@ class _AccentSwatch extends StatelessWidget {
           ),
         ),
         child: selected
-            ? Icon(SurgeIcons.confirm, size: 20, color: onColor)
+            ? Icon(
+                SurgeIcons.confirm,
+                size: SurgeIconSize.regular,
+                color: onColor,
+              )
             : null,
       ),
     );
@@ -174,13 +182,13 @@ class _AccentPaletteDialogState extends State<_AccentPaletteDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 8),
+          const SizedBox(height: SurgeSpace.s),
           SizedBox(
             width: 250,
             height: 250,
             child: Palette(controller: _controller),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: SurgeSpace.l),
           ValueListenableBuilder(
             valueListenable: _controller,
             builder: (_, color, _) => Text(
@@ -190,7 +198,7 @@ class _AccentPaletteDialogState extends State<_AccentPaletteDialog> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: SurgeSpace.xl),
           SurgeDialogActionRow(
             cancelLabel: appLocalizations.cancel,
             submitLabel: appLocalizations.confirm,

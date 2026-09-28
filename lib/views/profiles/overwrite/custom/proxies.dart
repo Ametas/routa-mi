@@ -73,7 +73,7 @@ class _EditProxiesViewState extends ConsumerState<EditProxiesView>
       key: ValueKey(proxyName),
       onDismissed: _handleRealRemove,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
         child: ItemPositionProvider(
           position: position,
           child: Consumer(
@@ -115,7 +115,7 @@ class _EditProxiesViewState extends ConsumerState<EditProxiesView>
                       index: index,
                       child: Container(
                         color: Colors.transparent,
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(SurgeSpace.s),
                         child: const Icon(SurgeIcons.dragHandle),
                       ),
                     ),
@@ -185,7 +185,7 @@ class _EditProxiesViewState extends ConsumerState<EditProxiesView>
               child: SizedBox(height: context.sheetTopPadding + 8),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverToBoxAdapter(
                 child: SurgeActionCard(
                   variant: SurgeActionCardVariant.filled,
@@ -214,7 +214,7 @@ class _EditProxiesViewState extends ConsumerState<EditProxiesView>
                               );
                             },
                             icon: Icon(
-                              size: 15,
+                              size: SurgeIconSize.inline,
                               SurgeIcons.info,
                               color: context.colorScheme.onSurfaceVariant,
                             ),
@@ -232,9 +232,9 @@ class _EditProxiesViewState extends ConsumerState<EditProxiesView>
                 ),
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+            const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.s)),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverToBoxAdapter(
                 child: InfoHeader(
                   info: Info(label: appLocalizations.proxies),
@@ -294,7 +294,7 @@ class _EditProxiesViewState extends ConsumerState<EditProxiesView>
               SliverFillRemaining(
                 child: NullStatus(label: appLocalizations.proxiesEmpty),
               ),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.l)),
           ],
         ),
       ),
@@ -368,7 +368,7 @@ class _AddProxiesViewState extends ConsumerState<_AddProxiesView>
       key: ValueKey(title),
       dismiss: dismiss,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
         child: ItemPositionProvider(
           position: position,
           child: OverwriteListItem(
@@ -447,7 +447,9 @@ class _AddProxiesViewState extends ConsumerState<_AddProxiesView>
                   ),
                   if (targets.isNotEmpty) ...[
                     SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SurgeSpace.l,
+                      ),
                       sliver: SliverToBoxAdapter(
                         child: InfoHeader(
                           info: Info(label: appLocalizations.basicStrategy),
@@ -473,11 +475,15 @@ class _AddProxiesViewState extends ConsumerState<_AddProxiesView>
                         );
                       }, childCount: targets.length),
                     ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: SurgeSpace.s),
+                    ),
                   ],
                   if (proxyGroups.isNotEmpty) ...[
                     SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SurgeSpace.l,
+                      ),
                       sliver: SliverToBoxAdapter(
                         child: InfoHeader(
                           info: Info(label: appLocalizations.proxyGroup),
@@ -503,11 +509,15 @@ class _AddProxiesViewState extends ConsumerState<_AddProxiesView>
                         );
                       }, childCount: proxyGroups.length),
                     ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: SurgeSpace.s),
+                    ),
                   ],
                   if (proxies.isNotEmpty) ...[
                     SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SurgeSpace.l,
+                      ),
                       sliver: SliverToBoxAdapter(
                         child: InfoHeader(
                           info: Info(label: appLocalizations.proxies),
@@ -534,7 +544,9 @@ class _AddProxiesViewState extends ConsumerState<_AddProxiesView>
                       }, childCount: proxies.length),
                     ),
                   ],
-                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: SurgeSpace.l),
+                  ),
                 ],
               ),
       ),

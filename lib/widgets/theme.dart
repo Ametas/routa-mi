@@ -13,7 +13,7 @@ class CommonMinFilledButtonTheme extends StatelessWidget {
     return FilledButtonTheme(
       data: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.s),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
         ),
@@ -33,10 +33,10 @@ class CommonMinIconButtonTheme extends StatelessWidget {
     return IconButtonTheme(
       data: IconButtonThemeData(
         style: IconButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xs),
           visualDensity: VisualDensity.compact,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          iconSize: 20,
+          iconSize: SurgeIconSize.regular,
         ),
       ),
       child: child,
@@ -64,7 +64,9 @@ class SurgeAddButton extends ConsumerWidget {
     final style = FilledButton.styleFrom(
       backgroundColor: dynamicColor ? null : surge.primary,
       foregroundColor: dynamicColor ? null : surge.onPrimary,
-      padding: EdgeInsets.symmetric(horizontal: isShortLabel ? 0 : 14),
+      padding: EdgeInsets.symmetric(
+        horizontal: isShortLabel ? 0 : SurgeSpace.l,
+      ),
       fixedSize: isShortLabel ? const Size(55, 38) : null,
       minimumSize: const Size(0, 38),
       tapTargetSize: isShortLabel

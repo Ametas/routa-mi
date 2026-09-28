@@ -7,6 +7,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/widgets/fade_box.dart';
 import 'package:fl_clash/widgets/theme.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -102,7 +103,7 @@ class StatusManagerState extends State<StatusManager> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
                 child: AnimatedSize(
                   duration: animateDuration,
                   child: ValueListenableBuilder(
@@ -136,8 +137,8 @@ class StatusManagerState extends State<StatusManager> {
                                           minHeight: 54,
                                         ),
                                         padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 8,
+                                          horizontal: SurgeSpace.l,
+                                          vertical: SurgeSpace.s,
                                         ),
                                         child: Row(
                                           mainAxisAlignment:
@@ -158,7 +159,7 @@ class StatusManagerState extends State<StatusManager> {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
-                                            const SizedBox(width: 16),
+                                            const SizedBox(width: SurgeSpace.l),
                                             if (messages.last.actionState !=
                                                 null)
                                               CommonMinFilledButtonTheme(
@@ -222,7 +223,7 @@ class StatusManagerState extends State<StatusManager> {
 //       child: loading && isMobileView
 //           ? Container(
 //               height: 54,
-//               margin: EdgeInsets.only(top: 8, left: 14, right: 14),
+//               margin: EdgeInsets.only(top: SurgeSpace.s, left: SurgeSpace.l, right: SurgeSpace.l),
 //               child: Material(
 //                 elevation: 3,
 //                 color: context.colorScheme.surfaceContainer,
@@ -231,7 +232,7 @@ class StatusManagerState extends State<StatusManager> {
 //                   borderRadius: BorderRadius.all(Radius.circular(14)),
 //                 ),
 //                 child: Padding(
-//                   padding: EdgeInsets.symmetric(horizontal: 16),
+//                   padding: EdgeInsets.symmetric(horizontal: SurgeSpace.l),
 //                   child: Row(
 //                     mainAxisSize: MainAxisSize.min,
 //                     spacing: 12,

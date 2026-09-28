@@ -71,7 +71,12 @@ class TrackerInfoItem extends ConsumerWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+            padding: const EdgeInsets.fromLTRB(
+              SurgeSpace.l,
+              SurgeSpace.m,
+              SurgeSpace.m,
+              SurgeSpace.m,
+            ),
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 58),
               child: Column(
@@ -99,7 +104,7 @@ class TrackerInfoItem extends ConsumerWidget {
                                 color: surge.textPrimary,
                               ),
                             ),
-                            const SizedBox(height: 5),
+                            const SizedBox(height: SurgeSpace.xs),
                             Text(
                               _getSourceText(context, trackerInfo),
                               maxLines: 1,
@@ -112,20 +117,21 @@ class TrackerInfoItem extends ConsumerWidget {
                         ),
                       ),
                       if (trailing != null) ...[
-                        const SizedBox(width: 6),
+                        const SizedBox(width: SurgeSpace.s),
                         trailing!,
                       ],
                     ],
                   ),
                   if (trackerInfo.chains.isNotEmpty) ...[
-                    const SizedBox(height: 10),
+                    const SizedBox(height: SurgeSpace.m),
                     SizedBox(
                       height: 28,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         padding: EdgeInsets.zero,
                         itemCount: trackerInfo.chains.length,
-                        separatorBuilder: (_, _) => const SizedBox(width: 6),
+                        separatorBuilder: (_, _) =>
+                            const SizedBox(width: SurgeSpace.s),
                         itemBuilder: (_, index) {
                           final chain = trackerInfo.chains[index];
                           return _TrackerChainPill(
@@ -198,7 +204,7 @@ class _TrackerProcessIcon extends StatelessWidget {
           return const SizedBox.shrink();
         }
         return Padding(
-          padding: const EdgeInsets.only(right: 10),
+          padding: const EdgeInsets.only(right: SurgeSpace.m),
           child: SurgePressable(
             compact: true,
             borderRadius: BorderRadius.circular(surge.radii.compact),
@@ -235,7 +241,7 @@ class _TrackerChainPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(surge.radii.smallCard),
         child: Ink(
           height: 28,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
           decoration: BoxDecoration(
             color: surge.textSecondary.withValues(alpha: 0.055),
             borderRadius: BorderRadius.circular(surge.radii.smallCard),
@@ -347,7 +353,7 @@ class TrackerInfoDetailView extends StatelessWidget {
               Text(title),
               if (quickCopy)
                 Padding(
-                  padding: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.only(top: SurgeSpace.xs),
                   child: IconButton(
                     visualDensity: VisualDensity.compact,
                     padding: EdgeInsets.zero,
@@ -435,7 +441,7 @@ class TrackerInfoDetailView extends StatelessWidget {
     ];
     return SelectionArea(
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: SurgeSpace.m),
         itemCount: items.length,
         itemBuilder: (_, index) {
           return items[index];

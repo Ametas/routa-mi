@@ -526,7 +526,7 @@ class CommonAction extends _$CommonAction {
     }
 
     final url = asset['browser_download_url']?.toString();
-    final name = asset['name']?.toString() ?? 'SlClash-update.apk';
+    final name = asset['name']?.toString() ?? '$appName-update.apk';
     final expectedSha256 = githubAssetSha256(asset['digest']);
     if (url == null || url.isEmpty || expectedSha256 == null) {
       launchUrl(Uri.parse('https://github.com/$repository/releases/latest'));
@@ -612,7 +612,7 @@ class _UpdateDownloadProgressDialog extends StatelessWidget {
             children: [
               Container(
                 height: 64,
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
                 decoration: BoxDecoration(
                   color: surge.fill,
                   borderRadius: BorderRadius.circular(surge.radii.card),
@@ -633,13 +633,13 @@ class _UpdateDownloadProgressDialog extends StatelessWidget {
                           ),
                           Icon(
                             SurgeIcons.download,
-                            size: 18,
+                            size: SurgeIconSize.compact,
                             color: surge.primary,
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: SurgeSpace.m),
                     Expanded(
                       child: Text(
                         percent == null
@@ -656,7 +656,7 @@ class _UpdateDownloadProgressDialog extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: SurgeSpace.l),
               ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: LinearProgressIndicator(
@@ -666,7 +666,7 @@ class _UpdateDownloadProgressDialog extends StatelessWidget {
                   backgroundColor: surge.fill,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: SurgeSpace.m),
               Text(
                 currentAppLocalizations.apkInstallAfterDownload,
                 style: context.typography.supporting.copyWith(
@@ -704,7 +704,7 @@ class _UpdateAvailableDialog extends StatelessWidget {
         children: [
           Container(
             height: 56,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
             decoration: BoxDecoration(
               color: surge.fill,
               borderRadius: BorderRadius.circular(surge.radii.card),
@@ -712,8 +712,8 @@ class _UpdateAvailableDialog extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(SurgeIcons.newRelease, color: surge.primary, size: 22),
-                const SizedBox(width: 12),
+                Icon(SurgeIcons.newRelease, color: surge.primary, size: SurgeIconSize.navigation),
+                const SizedBox(width: SurgeSpace.m),
                 Expanded(
                   child: Text(
                     tagName.takeFirstValid([
@@ -729,7 +729,7 @@ class _UpdateAvailableDialog extends StatelessWidget {
             ),
           ),
           if (submits.isNotEmpty) ...[
-            const SizedBox(height: 14),
+            const SizedBox(height: SurgeSpace.l),
             ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 180),
               child: Scrollbar(
@@ -738,14 +738,14 @@ class _UpdateAvailableDialog extends StatelessWidget {
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   itemCount: submits.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 8),
+                  separatorBuilder: (_, _) => const SizedBox(height: SurgeSpace.s),
                   itemBuilder: (_, index) =>
                       _UpdateChangeItem(text: submits[index]),
                 ),
               ),
             ),
           ],
-          const SizedBox(height: 18),
+          const SizedBox(height: SurgeSpace.xl),
           SurgeDialogActionRow(
             cancelLabel: cancelText,
             submitLabel: currentAppLocalizations.download,
@@ -780,7 +780,7 @@ class _UpdateStatusDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+            padding: const EdgeInsets.fromLTRB(SurgeSpace.l, SurgeSpace.l, SurgeSpace.l, SurgeSpace.l),
             decoration: BoxDecoration(
               color: surge.fill,
               borderRadius: BorderRadius.circular(surge.radii.card),
@@ -788,8 +788,8 @@ class _UpdateStatusDialog extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(icon, color: surge.primary, size: 22),
-                const SizedBox(width: 12),
+                Icon(icon, color: surge.primary, size: SurgeIconSize.navigation),
+                const SizedBox(width: SurgeSpace.m),
                 Expanded(
                   child: Text(
                     message,
@@ -801,7 +801,7 @@ class _UpdateStatusDialog extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: SurgeSpace.xl),
           Row(
             children: [
               SurgeDialogActionButton(
@@ -829,7 +829,7 @@ class _UpdateChangeItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 7),
+          padding: const EdgeInsets.only(top: SurgeSpace.s),
           child: Container(
             width: 5,
             height: 5,
@@ -839,7 +839,7 @@ class _UpdateChangeItem extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: SurgeSpace.m),
         Expanded(
           child: Text(
             text,

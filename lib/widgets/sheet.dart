@@ -215,7 +215,7 @@ class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: SurgeSpace.s),
             child: Container(
               alignment: Alignment.center,
               height: handleSize.height,
@@ -229,10 +229,10 @@ class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xs),
             child: appBar,
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: SurgeSpace.s),
         ],
       );
       return ClipRRect(
@@ -315,7 +315,7 @@ class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
       if (useCloseIcon) {
         leadingOnPressed = context.safeNestedPop;
         leading = Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xs),
           child: type == SheetType.bottomSheet
               ? SoftOsSheetActionTemplate(
                   surfaceColor: backgroundColor,
@@ -339,7 +339,7 @@ class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
               Navigator.of(context).pop();
             };
         leading = Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xs),
           child: SlAppBarIconButton(
             icon: backIconData,
             tooltip: materialLocalizations.backButtonTooltip,
@@ -354,7 +354,7 @@ class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
             Navigator.of(context).maybePop();
           };
       leading = Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xs),
         child: SlAppBarIconButton(
           icon: backIconData,
           tooltip: materialLocalizations.backButtonTooltip,

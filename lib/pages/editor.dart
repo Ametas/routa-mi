@@ -14,6 +14,7 @@ import 'package:re_highlight/languages/javascript.dart';
 import 'package:re_highlight/languages/json.dart';
 import 'package:re_highlight/languages/yaml.dart';
 import 'package:re_highlight/styles/atom-one-light.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 
 typedef EditingValueChangeBuilder = Widget Function(CodeLineEditingValue value);
 typedef TextEditingValueChangeBuilder = Widget Function(TextEditingValue value);
@@ -270,7 +271,7 @@ class _EditorPageState extends ConsumerState<EditorPage> {
                 readOnly: readOnly,
                 isMobileView: isMobileView,
               ),
-              padding: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: SurgeSpace.l),
               autocompleteSymbols: true,
               focusNode: _focusNode,
               scrollbarBuilder: (context, child, details) {
@@ -365,8 +366,11 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
       return const SizedBox(width: 0, height: 0);
     }
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(
+        vertical: SurgeSpace.m,
+        horizontal: SurgeSpace.l,
+      ),
+      margin: const EdgeInsets.only(bottom: SurgeSpace.s),
       color: context.colorScheme.surface,
       alignment: Alignment.centerLeft,
       height: height,
@@ -391,7 +395,7 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
               constraints: const BoxConstraints(maxWidth: 360),
               child: _buildFindInput(context, value),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: SurgeSpace.m),
           ],
           Text(result, style: context.textTheme.bodyMedium),
           Expanded(
@@ -415,7 +419,7 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
                         },
                   icon: SurgeIcons.arrowDown,
                 ),
-                const SizedBox(width: 2),
+                const SizedBox(width: SurgeSpace.xxs),
                 IconButton.filledTonal(
                   onPressed: controller.close,
                   icon: const Icon(
@@ -435,7 +439,7 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           bar,
-          const SizedBox(height: 12),
+          const SizedBox(height: SurgeSpace.m),
           _buildFindInput(context, value),
         ],
       );
@@ -478,7 +482,7 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
             controller.toggleRegex();
           },
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: SurgeSpace.xs),
       ],
     );
   }
@@ -497,7 +501,7 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
         style: context.textTheme.bodyMedium,
         decoration: surgeInputDecoration(
           context,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+          contentPadding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
         ),
         onSubmitted: (_) {
           onSubmitted();
@@ -521,12 +525,12 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
         child: isSelected
             ? IconButton.filledTonal(
                 onPressed: onPressed,
-                padding: const EdgeInsets.all(2),
+                padding: const EdgeInsets.all(SurgeSpace.xxs),
                 icon: Text(text, style: context.textTheme.bodySmall),
               )
             : IconButton(
                 onPressed: onPressed,
-                padding: const EdgeInsets.all(2),
+                padding: const EdgeInsets.all(SurgeSpace.xxs),
                 icon: Text(text, style: context.textTheme.bodySmall),
               ),
       ),
@@ -534,7 +538,10 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildIconButton({required IconData icon, VoidCallback? onPressed}) {
-    return IconButton(onPressed: onPressed, icon: Icon(icon, size: 16));
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(icon, size: SurgeIconSize.inline),
+    );
   }
 }
 
@@ -654,7 +661,10 @@ class _ImportOptionsDialogState extends State<_ImportOptionsDialog> {
     final appLocalizations = context.appLocalizations;
     return CommonDialog(
       title: appLocalizations.import,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SurgeSpace.s,
+        vertical: SurgeSpace.l,
+      ),
       child: Wrap(
         children: [
           ListItem(

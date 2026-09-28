@@ -68,20 +68,28 @@ class ProxyCard extends StatelessWidget {
             },
             showBorder: true,
             showDivider: showDivider,
-            dividerInsets: const EdgeInsets.only(left: 32, right: 16),
+            dividerInsets: const EdgeInsets.only(
+              left: SurgeSpace.xxxl,
+              right: SurgeSpace.l,
+            ),
             dividerOpacity: 0.35,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 7, 12, 7),
+              padding: const EdgeInsets.fromLTRB(
+                SurgeSpace.xxxl,
+                SurgeSpace.s,
+                SurgeSpace.m,
+                SurgeSpace.s,
+              ),
               child: Row(
                 children: [
                   Expanded(
                     child: _ProxyTextBlock(proxy: proxy, type: type),
                   ),
                   if (groupType.supportsFixedSelection) ...[
-                    const SizedBox(width: 8),
+                    const SizedBox(width: SurgeSpace.s),
                     _ProxyComputedMark(groupName: groupName, proxy: proxy),
                   ],
-                  const SizedBox(width: 12),
+                  const SizedBox(width: SurgeSpace.m),
                   Consumer(
                     builder: (context, ref, child) => SurgeDelayPill(
                       delay: ref.watch(
@@ -124,7 +132,7 @@ class _ProxyTextBlock extends ConsumerWidget {
             color: surge.textPrimary,
           ),
         ),
-        const SizedBox(height: 3),
+        const SizedBox(height: SurgeSpace.xs),
         Text(
           subtitle,
           maxLines: 1,
@@ -158,12 +166,16 @@ class _ProxyComputedMark extends ConsumerWidget {
       return const SizedBox();
     }
     return Container(
-      padding: const EdgeInsets.all(3),
+      padding: const EdgeInsets.all(SurgeSpace.xs),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: surge.textSecondary.withValues(alpha: 0.12),
       ),
-      child: Icon(SurgeIcons.autoAwesome, size: 12, color: surge.textPrimary),
+      child: Icon(
+        SurgeIcons.autoAwesome,
+        size: SurgeIconSize.micro,
+        color: surge.textPrimary,
+      ),
     );
   }
 }

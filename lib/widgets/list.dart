@@ -112,7 +112,7 @@ class ListItem<T> extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.leading,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16),
+    this.padding = const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
     this.trailing,
     this.horizontalTitleGap,
     this.dense,
@@ -131,7 +131,7 @@ class ListItem<T> extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.leading,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16),
+    this.padding = const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
     this.trailing,
     required OpenDelegate this.delegate,
     this.horizontalTitleGap,
@@ -150,7 +150,7 @@ class ListItem<T> extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.leading,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16),
+    this.padding = const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
     this.trailing,
     required OptionsDelegate<T> this.delegate,
     this.horizontalTitleGap,
@@ -169,7 +169,7 @@ class ListItem<T> extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.leading,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16),
+    this.padding = const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
     this.trailing,
     required InputDelegate this.delegate,
     this.horizontalTitleGap,
@@ -188,7 +188,10 @@ class ListItem<T> extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.leading,
-    this.padding = const EdgeInsets.only(left: 16, right: 8),
+    this.padding = const EdgeInsets.only(
+      left: SurgeSpace.l,
+      right: SurgeSpace.s,
+    ),
     required CheckboxDelegate<T> this.delegate,
     this.horizontalTitleGap,
     this.dense,
@@ -207,7 +210,10 @@ class ListItem<T> extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.leading,
-    this.padding = const EdgeInsets.only(left: 16, right: 8),
+    this.padding = const EdgeInsets.only(
+      left: SurgeSpace.l,
+      right: SurgeSpace.s,
+    ),
     required SwitchDelegate<T> this.delegate,
     this.horizontalTitleGap,
     this.dense,
@@ -226,7 +232,10 @@ class ListItem<T> extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.trailing,
-    this.padding = const EdgeInsets.only(left: 12, right: 16),
+    this.padding = const EdgeInsets.only(
+      left: SurgeSpace.m,
+      right: SurgeSpace.l,
+    ),
     required RadioDelegate<T> this.delegate,
     this.horizontalTitleGap = 8,
     this.dense,
@@ -499,7 +508,7 @@ class _SurgeListItemRow extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               title,
-                              const SizedBox(height: 3),
+                              const SizedBox(height: SurgeSpace.xs),
                               DefaultTextStyle.merge(
                                 style: _subtitleStyle(context, surge),
                                 child: subtitle!,
@@ -509,7 +518,7 @@ class _SurgeListItemRow extends StatelessWidget {
                   ),
                 ),
                 if (trailing != null) ...[
-                  const SizedBox(width: 12),
+                  const SizedBox(width: SurgeSpace.m),
                   IconTheme.merge(
                     data: IconThemeData(color: surge.textSecondary, size: 21),
                     child: trailing!,
@@ -557,7 +566,7 @@ class SurgeSwitch extends StatelessWidget {
           curve: SurgeMotion.stateCurve,
           width: 48,
           height: 28,
-          padding: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(SurgeSpace.xs),
           decoration: BoxDecoration(
             color: trackColor,
             borderRadius: BorderRadius.circular(999),
@@ -614,7 +623,13 @@ class ListHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
     final effectivePadding =
-        padding ?? const EdgeInsets.fromLTRB(20, 14, 16, 8);
+        padding ??
+        const EdgeInsets.fromLTRB(
+          SurgeSpace.xl,
+          SurgeSpace.l,
+          SurgeSpace.l,
+          SurgeSpace.s,
+        );
     return Padding(
       padding: effectivePadding,
       child: Row(
@@ -633,7 +648,7 @@ class ListHeader extends StatelessWidget {
                   ),
                 ),
                 if (subTitle != null) ...[
-                  const SizedBox(height: 2),
+                  const SizedBox(height: SurgeSpace.xxs),
                   Text(
                     subTitle!,
                     maxLines: 2,
@@ -647,7 +662,7 @@ class ListHeader extends StatelessWidget {
             ),
           ),
           if (actions.isNotEmpty) ...[
-            const SizedBox(width: 12),
+            const SizedBox(width: SurgeSpace.m),
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -789,7 +804,8 @@ class DecorationListItem extends StatelessWidget {
       invalid: invalid,
       horizontalTitleGap: horizontalTitleGap,
       contentPadding:
-          contentPadding ?? const EdgeInsets.only(right: 16, left: 16),
+          contentPadding ??
+          const EdgeInsets.only(right: SurgeSpace.l, left: SurgeSpace.l),
       minVerticalPadding: minVerticalPadding ?? 6,
       minTileHeight: 54,
       borderRadius: borderRadius,
@@ -808,7 +824,7 @@ class _SurgeSelectableListTile extends StatelessWidget {
     this.isSelected,
     this.invalid = false,
     this.horizontalTitleGap,
-    this.contentPadding = const EdgeInsets.symmetric(horizontal: 16),
+    this.contentPadding = const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
     this.minVerticalPadding = 6,
     this.minTileHeight = 54,
     this.borderRadius = BorderRadius.zero,
@@ -936,7 +952,7 @@ class SelectedDecorationListItem extends StatelessWidget {
     return DecorationListItem(
       title: title,
       minVerticalPadding: minVerticalPadding,
-      contentPadding: const EdgeInsets.only(left: 16, right: 0),
+      contentPadding: const EdgeInsets.only(left: SurgeSpace.l, right: 0),
       isSelected: isSelected,
       invalid: invalid,
       leading: leading,

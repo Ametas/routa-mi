@@ -105,10 +105,10 @@ class _Title extends ConsumerWidget {
     final overwriteType = ref.watch(overwriteTypeProvider(profileId));
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        padding: const EdgeInsets.fromLTRB(SurgeSpace.l, SurgeSpace.l, SurgeSpace.l, 0),
         child: SurgeCard(
           shadow: false,
-          padding: const EdgeInsets.fromLTRB(14, 13, 14, 14),
+          padding: const EdgeInsets.fromLTRB(SurgeSpace.l, SurgeSpace.m, SurgeSpace.l, SurgeSpace.l),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -118,7 +118,7 @@ class _Title extends ConsumerWidget {
                   color: SurgeTheme.of(context).textSecondary,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: SurgeSpace.m),
               SurgeSegmentedControl<OverwriteType>(
                 value: overwriteType,
                 height: 42,
@@ -134,7 +134,7 @@ class _Title extends ConsumerWidget {
                   _handleChangeType(ref, profileId, type);
                 },
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: SurgeSpace.m),
               AnimatedSwitcher(
                 duration: SurgeMotion.reveal,
                 switchInCurve: SurgeMotion.enterCurve,

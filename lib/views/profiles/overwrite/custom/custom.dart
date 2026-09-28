@@ -62,13 +62,13 @@ class CustomContent extends ConsumerWidget {
     final hasDefaultRules = vm2.b;
     return SliverMainAxisGroup(
       slivers: [
-        const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.xxl)),
         SliverToBoxAdapter(
           child: OverwriteSectionHeader(label: appLocalizations.custom),
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
             child: SurgeCard(
               shadow: false,
               padding: EdgeInsets.zero,
@@ -100,7 +100,7 @@ class CustomContent extends ConsumerWidget {
             ),
           ),
         ),
-        const SliverToBoxAdapter(child: SizedBox(height: 32)),
+        const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.xxxl)),
         if ((proxyGroupNum == 0 && hasDefaultGroups) ||
             (ruleNum == 0 && hasDefaultRules) ||
             kDebugMode)
@@ -109,19 +109,19 @@ class CustomContent extends ConsumerWidget {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(SurgeSpace.m),
                 child: SurgeActionCard(
                   variant: SurgeActionCardVariant.tonal,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 12,
+                    horizontal: SurgeSpace.l,
+                    vertical: SurgeSpace.m,
                   ),
                   child: Row(
                     children: [
                       Expanded(
                         child: Text(appLocalizations.configDataDetected),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: SurgeSpace.m),
                       SoftOsActionTextButton(
                         onPressed: () {
                           _handleUseDefault(ref, profileId);
@@ -159,11 +159,14 @@ class _CustomNavigationRow extends StatelessWidget {
       onTap: onTap,
       scaleFeedback: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SurgeSpace.l,
+          vertical: SurgeSpace.m,
+        ),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: surge.primary),
-            const SizedBox(width: 12),
+            Icon(icon, size: SurgeIconSize.regular, color: surge.primary),
+            const SizedBox(width: SurgeSpace.m),
             Expanded(
               child: Text(
                 label,
@@ -181,8 +184,12 @@ class _CustomNavigationRow extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 8),
-            Icon(SurgeIcons.forward, size: 18, color: surge.textSecondary),
+            const SizedBox(width: SurgeSpace.s),
+            Icon(
+              SurgeIcons.forward,
+              size: SurgeIconSize.compact,
+              color: surge.textSecondary,
+            ),
           ],
         ),
       ),

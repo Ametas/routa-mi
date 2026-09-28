@@ -107,7 +107,10 @@ class DeveloperView extends ConsumerWidget {
               variant: SurgeActionCardVariant.filled,
               borderRadius: 18,
               child: ListItem.switchItem(
-                padding: const EdgeInsets.only(left: 16, right: 16),
+                padding: const EdgeInsets.only(
+                  left: SurgeSpace.l,
+                  right: SurgeSpace.l,
+                ),
                 title: Text(appLocalizations.developerMode),
                 delegate: SwitchDelegate(
                   value: enable,
@@ -121,7 +124,7 @@ class DeveloperView extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: SurgeSpace.l),
             _getDeveloperList(context, ref),
           ],
         ),

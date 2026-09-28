@@ -1,4 +1,5 @@
 import 'package:fl_clash/common/icons.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'surge_pressable.dart';
@@ -56,7 +57,7 @@ class SurgeListTile extends StatelessWidget {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16),
+              padding: const EdgeInsets.only(left: SurgeSpace.l),
               child: Row(
                 children: [
                   if (leading != null) ...[
@@ -67,17 +68,17 @@ class SurgeListTile extends StatelessWidget {
                       ),
                       child: leading!,
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: SurgeSpace.m),
                   ],
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 14),
+                      padding: const EdgeInsets.only(right: SurgeSpace.l),
                       child: Row(
                         children: [
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                vertical: hasSubtitle ? 8 : 0,
+                                vertical: hasSubtitle ? SurgeSpace.s : 0,
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +94,7 @@ class SurgeListTile extends StatelessWidget {
                                             .copyWith(color: titleColor),
                                   ),
                                   if (hasSubtitle) ...[
-                                    const SizedBox(height: 3),
+                                    const SizedBox(height: SurgeSpace.xs),
                                     Text(
                                       subtitle!,
                                       maxLines: 2,
@@ -108,15 +109,15 @@ class SurgeListTile extends StatelessWidget {
                             ),
                           ),
                           if (trailing != null) ...[
-                            const SizedBox(width: 12),
+                            const SizedBox(width: SurgeSpace.m),
                             trailing!,
                           ],
                           if (showChevron) ...[
-                            const SizedBox(width: 8),
+                            const SizedBox(width: SurgeSpace.s),
                             Icon(
                               SurgeIcons.chevronRight,
                               color: surge.textSecondary.withValues(alpha: 0.7),
-                              size: 22,
+                              size: SurgeIconSize.navigation,
                             ),
                           ],
                         ],

@@ -327,11 +327,11 @@ class _AccessViewState extends ConsumerState<AccessView> {
         ? appLocalizations.accessControlAllowDesc
         : appLocalizations.accessControlNotAllowDesc;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+      padding: const EdgeInsets.fromLTRB(SurgeSpace.l, SurgeSpace.m, SurgeSpace.l, 0),
       child: SurgeActionCard(
         variant: SurgeActionCardVariant.filled,
         borderRadius: surge.radii.list,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l, vertical: SurgeSpace.m),
         child: Row(
           children: [
             Expanded(
@@ -344,7 +344,7 @@ class _AccessViewState extends ConsumerState<AccessView> {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: SurgeSpace.m),
             _SelectedPill(label: '${appLocalizations.selected} $count'),
           ],
         ),
@@ -423,14 +423,14 @@ class _AccessViewState extends ConsumerState<AccessView> {
             _buildBannerBar(mode, valueList.length, hasChanges: hasChanges),
             if (hiddenAccessSelectionCount(accessControl, viewPackageNameList) > 0)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l, vertical: SurgeSpace.s),
                 child: Text(
                   Localizations.localeOf(context).languageCode == 'zh'
                     ? '已保留 ${hiddenAccessSelectionCount(accessControl, viewPackageNameList)} 个未显示的已选应用'
                     : '${hiddenAccessSelectionCount(accessControl, viewPackageNameList)} hidden selections retained',
                 ),
               ),
-            const SizedBox(height: 6),
+            const SizedBox(height: SurgeSpace.s),
             Expanded(
               child: DisabledMask(
                 status: !accessControl.enable,
@@ -466,7 +466,7 @@ class _SelectedPill extends StatelessWidget {
     );
     final borderColor = surge.primary.withValues(alpha: isDark ? 0.34 : 0.22);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.s, vertical: SurgeSpace.xs),
       decoration: BoxDecoration(
         color: surfaceColor,
         borderRadius: BorderRadius.circular(surge.radii.button),
@@ -707,7 +707,7 @@ class _AccessControlPanelState extends ConsumerState<AccessControlPanel> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 32),
+        padding: const EdgeInsets.only(bottom: SurgeSpace.xxxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

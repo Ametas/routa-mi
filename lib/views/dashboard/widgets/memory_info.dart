@@ -85,7 +85,7 @@ class _MemoryCardContent extends StatelessWidget {
               color: surge.primary,
               size: SurgeIconSize.regular,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: SurgeSpace.s),
             Expanded(
               child: Text(
                 title,
@@ -110,7 +110,7 @@ class _MemoryCardContent extends StatelessWidget {
                     color: surge.textPrimary,
                   ),
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: SurgeSpace.s),
                 Text(
                   traffic.unit,
                   style: context.typography.supporting.copyWith(

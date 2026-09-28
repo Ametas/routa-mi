@@ -75,7 +75,11 @@ class RuleItem extends StatelessWidget {
             ),
           );
         },
-        icon: Icon(SurgeIcons.info, size: 16, color: context.colorScheme.error),
+        icon: Icon(
+          SurgeIcons.info,
+          size: SurgeIconSize.inline,
+          color: context.colorScheme.error,
+        ),
       ),
     );
   }
@@ -307,7 +311,7 @@ class _AddOrEditRuleDialogState extends State<AddOrEditRuleDialog> {
                     },
                     child: Text(_ruleAction.value),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: SurgeSpace.xxl),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     onFieldSubmitted: (_) {
@@ -327,7 +331,7 @@ class _AddOrEditRuleDialogState extends State<AddOrEditRuleDialog> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: SurgeSpace.xxl),
                   FormField<String>(
                     validator: (_) {
                       if (_ruleTargetController.text.isEmpty) {
@@ -351,7 +355,7 @@ class _AddOrEditRuleDialogState extends State<AddOrEditRuleDialog> {
                     },
                   ),
                   if (_ruleAction.hasParams) ...[
-                    const SizedBox(height: 20),
+                    const SizedBox(height: SurgeSpace.xl),
                     Wrap(
                       spacing: 8,
                       children: [
@@ -360,8 +364,8 @@ class _AddOrEditRuleDialogState extends State<AddOrEditRuleDialog> {
                           isSelected: _src,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 8,
+                              horizontal: SurgeSpace.s,
+                              vertical: SurgeSpace.s,
                             ),
                             child: Text(
                               appLocalizations.sourceIp,
@@ -379,8 +383,8 @@ class _AddOrEditRuleDialogState extends State<AddOrEditRuleDialog> {
                           isSelected: _noResolve,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 8,
+                              horizontal: SurgeSpace.s,
+                              vertical: SurgeSpace.s,
                             ),
                             child: Text(
                               appLocalizations.noResolve,
@@ -396,7 +400,7 @@ class _AddOrEditRuleDialogState extends State<AddOrEditRuleDialog> {
                       ],
                     ),
                   ],
-                  const SizedBox(height: 20),
+                  const SizedBox(height: SurgeSpace.xl),
                   SurgeDialogActionRow(
                     cancelLabel: appLocalizations.cancel,
                     submitLabel: appLocalizations.confirm,

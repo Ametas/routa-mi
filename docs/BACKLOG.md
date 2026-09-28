@@ -34,7 +34,6 @@ ARB-ключи с «SlClash» (`arb/*.arb` → `lib/l10n/`):
   настройках Android), `.../modules/NotificationModule.kt`
   (`setContentTitle`), `.../models/NotificationParams.kt`, `.../FilesProvider.kt`
   (`COLUMN_TITLE`), `android/app/.../models/State.kt`.
-- `lib/providers/action.dart:529` — имя временного файла `SlClash-update.apk`.
 - **Не менять** схему `flclash://` в `AndroidManifest.xml`: ей пользуются
   провайдеры подписок для импорта (`flclash://install-config?url=…`).
   Добавить свою схему можно, старую удалять нельзя.

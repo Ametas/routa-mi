@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
 import 'item.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 
 class RequestsView extends ConsumerStatefulWidget {
   const RequestsView({super.key});
@@ -168,9 +169,9 @@ class _RequestsViewState extends ConsumerState<RequestsView> {
           }
           return Padding(
             padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 8,
+              left: SurgeSpace.l,
+              right: SurgeSpace.l,
+              top: SurgeSpace.s,
               bottom: _surfaceBottomPadding,
             ),
             child: SoftOsListSurface(

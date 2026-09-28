@@ -68,7 +68,11 @@ class _NetworkDetectionState extends ConsumerState<NetworkDetection> {
                 cancelable: false,
               );
             },
-            icon: Icon(SurgeIcons.info, size: 17, color: surge.textSecondary),
+            icon: Icon(
+              SurgeIcons.info,
+              size: SurgeIconSize.compact,
+              color: surge.textSecondary,
+            ),
           ),
         ),
         child: FadeThroughBox(
@@ -80,7 +84,7 @@ class _NetworkDetectionState extends ConsumerState<NetworkDetection> {
                       _countryCodeToEmoji(ipInfo.countryCode),
                       style: emojiTextStyle,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: SurgeSpace.s),
                     Expanded(
                       child: Text(
                         ipInfo.ip,
@@ -108,7 +112,7 @@ class _NetworkDetectionState extends ConsumerState<NetworkDetection> {
                               active: shouldAnimate,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: SurgeSpace.s),
                           Expanded(
                             child: Text(
                               appLocalizations.loading,

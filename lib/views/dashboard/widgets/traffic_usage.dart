@@ -21,8 +21,8 @@ class TrafficUsage extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(icon, color: color, size: 14),
-        const SizedBox(width: 6),
+        Icon(icon, color: color, size: SurgeIconSize.inline),
+        const SizedBox(width: SurgeSpace.s),
         Text(
           label,
           maxLines: 1,
@@ -31,7 +31,7 @@ class TrafficUsage extends StatelessWidget {
             color: surge.textSecondary,
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: SurgeSpace.s),
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -46,7 +46,7 @@ class TrafficUsage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 3),
+              const SizedBox(width: SurgeSpace.xs),
               Text(
                 trafficValue.traffic.unit,
                 maxLines: 1,
@@ -111,7 +111,7 @@ class TrafficUsage extends StatelessWidget {
                         trafficValue: upTotalTrafficValue,
                         color: primaryColor,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: SurgeSpace.s),
                       _buildTrafficDataItem(
                         context: context,
                         icon: SurgeIcons.arrowDown,
@@ -126,7 +126,7 @@ class TrafficUsage extends StatelessWidget {
                     return Column(
                       children: [
                         chart,
-                        const SizedBox(height: 8),
+                        const SizedBox(height: SurgeSpace.s),
                         Expanded(child: data),
                       ],
                     );
@@ -135,7 +135,7 @@ class TrafficUsage extends StatelessWidget {
                   return Row(
                     children: [
                       chart,
-                      const SizedBox(width: 12),
+                      const SizedBox(width: SurgeSpace.m),
                       Expanded(child: data),
                     ],
                   );

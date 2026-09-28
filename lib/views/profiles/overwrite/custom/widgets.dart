@@ -42,7 +42,12 @@ class OverwriteSectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      padding: const EdgeInsets.fromLTRB(
+        SurgeSpace.l,
+        SurgeSpace.l,
+        SurgeSpace.l,
+        SurgeSpace.s,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -56,7 +61,7 @@ class OverwriteSectionHeader extends StatelessWidget {
             ),
           ),
           if (actions?.isNotEmpty == true) ...[
-            const SizedBox(width: 12),
+            const SizedBox(width: SurgeSpace.m),
             Row(mainAxisSize: MainAxisSize.min, children: actions!),
           ],
         ],
@@ -75,7 +80,10 @@ class OverwriteCountPill extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     return Container(
       constraints: const BoxConstraints(minWidth: 30),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SurgeSpace.s,
+        vertical: SurgeSpace.xs,
+      ),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: surge.primary.withValues(alpha: 0.10),
@@ -122,7 +130,7 @@ class OverwriteIconButton extends StatelessWidget {
           backgroundColor: color.withValues(alpha: 0.11),
           foregroundColor: color,
         ),
-        icon: Icon(icon, size: 18),
+        icon: Icon(icon, size: SurgeIconSize.compact),
       ),
     );
   }
@@ -139,8 +147,14 @@ class OverwriteListItem extends StatelessWidget {
     this.invalid = false,
     this.selected = false,
     this.destructive = false,
-    this.margin = const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-    this.padding = const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+    this.margin = const EdgeInsets.symmetric(
+      horizontal: SurgeSpace.l,
+      vertical: SurgeSpace.xs,
+    ),
+    this.padding = const EdgeInsets.symmetric(
+      horizontal: SurgeSpace.l,
+      vertical: SurgeSpace.m,
+    ),
   });
 
   final Widget title;
@@ -174,7 +188,7 @@ class OverwriteListItem extends StatelessWidget {
                 data: IconThemeData(color: activeColor, size: 20),
                 child: leading!,
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: SurgeSpace.m),
             ],
             Expanded(
               child: Column(
@@ -194,7 +208,7 @@ class OverwriteListItem extends StatelessWidget {
                     child: title,
                   ),
                   if (subtitle != null) ...[
-                    const SizedBox(height: 3),
+                    const SizedBox(height: SurgeSpace.xs),
                     DefaultTextStyle.merge(
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -208,7 +222,7 @@ class OverwriteListItem extends StatelessWidget {
               ),
             ),
             if (trailing != null) ...[
-              const SizedBox(width: 12),
+              const SizedBox(width: SurgeSpace.m),
               IconTheme.merge(
                 data: IconThemeData(color: surge.textSecondary, size: 18),
                 child: trailing!,

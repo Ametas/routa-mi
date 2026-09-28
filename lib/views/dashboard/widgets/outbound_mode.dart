@@ -40,7 +40,7 @@ class OutboundMode extends StatelessWidget {
                   onChanged: _handleChangeMode,
                   height: 38,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: SurgeSpace.m),
                 Expanded(child: _ModeDescription(mode: mode)),
               ],
             ),
@@ -123,7 +123,10 @@ class _ModeDescription extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SurgeSpace.m,
+        vertical: SurgeSpace.m,
+      ),
       decoration: BoxDecoration(
         color: surge.background,
         borderRadius: BorderRadius.circular(surge.radii.smallCard),

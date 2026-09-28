@@ -28,11 +28,11 @@ class AppChangelogDialog extends StatelessWidget {
               shrinkWrap: true,
               padding: EdgeInsets.zero,
               itemCount: entries.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: SurgeSpace.m),
               itemBuilder: (_, index) => _ChangelogCard(entry: entries[index]),
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: SurgeSpace.xl),
           Row(
             children: [
               SurgeDialogActionButton(
@@ -58,7 +58,12 @@ class _ChangelogCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      padding: const EdgeInsets.fromLTRB(
+        SurgeSpace.l,
+        SurgeSpace.l,
+        SurgeSpace.l,
+        SurgeSpace.l,
+      ),
       decoration: BoxDecoration(
         color: surge.fill,
         borderRadius: BorderRadius.circular(surge.radii.card),
@@ -85,12 +90,13 @@ class _ChangelogCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: SurgeSpace.m),
           for (var index = 0; index < entry.changes.length; index++) ...[
             _ChangelogLine(
               text: _localizedChange(context, entry.changes[index]),
             ),
-            if (index != entry.changes.length - 1) const SizedBox(height: 8),
+            if (index != entry.changes.length - 1)
+              const SizedBox(height: SurgeSpace.s),
           ],
         ],
       ),
@@ -127,7 +133,7 @@ class _ChangelogLine extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 7),
+          padding: const EdgeInsets.only(top: SurgeSpace.s),
           child: Container(
             width: 5,
             height: 5,
@@ -137,7 +143,7 @@ class _ChangelogLine extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: SurgeSpace.m),
         Expanded(
           child: Text(
             text,

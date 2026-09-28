@@ -109,7 +109,12 @@ class AboutView extends StatelessWidget {
             SurgeCard(
               borderRadius: 18,
               shadow: true,
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+              padding: const EdgeInsets.fromLTRB(
+                SurgeSpace.l,
+                SurgeSpace.l,
+                SurgeSpace.l,
+                SurgeSpace.l,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -123,7 +128,7 @@ class AboutView extends StatelessWidget {
                               width: 58,
                               height: 58,
                             ),
-                            const SizedBox(width: 14),
+                            const SizedBox(width: SurgeSpace.l),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,13 +138,13 @@ class AboutView extends StatelessWidget {
                                     style: context.typography.appBarTitle
                                         .copyWith(color: surge.textPrimary),
                                   ),
-                                  const SizedBox(height: 5),
+                                  const SizedBox(height: SurgeSpace.xs),
                                   Text(
                                     globalState.packageInfo.version,
                                     style: context.typography.supporting
                                         .copyWith(color: surge.textSecondary),
                                   ),
-                                  const SizedBox(height: 3),
+                                  const SizedBox(height: SurgeSpace.xs),
                                   Text(
                                     appLocalizations.coreReleaseInfo(
                                       _coreVersion,
@@ -166,9 +171,9 @@ class AboutView extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: SurgeSpace.l),
                   Divider(height: 0, color: surge.separator),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: SurgeSpace.m),
                   Text(
                     appLocalizations.aboutDescription,
                     style: context.typography.supporting.copyWith(
@@ -178,7 +183,7 @@ class AboutView extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: SurgeSpace.l),
             _buildMoreSection(context),
           ],
         ),
@@ -208,17 +213,21 @@ class _AboutLinkItem extends StatelessWidget {
         child: SizedBox(
           height: 56,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox.square(
                   dimension: 28,
                   child: Center(
-                    child: Icon(icon, size: 20, color: surge.primary),
+                    child: Icon(
+                      icon,
+                      size: SurgeIconSize.regular,
+                      color: surge.primary,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: SurgeSpace.m),
                 Expanded(
                   child: Text(
                     title,
@@ -228,13 +237,13 @@ class _AboutLinkItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: SurgeSpace.m),
                 SizedBox.square(
                   dimension: 28,
                   child: Center(
                     child: Icon(
                       SurgeIcons.openInNew,
-                      size: 18,
+                      size: SurgeIconSize.compact,
                       color: surge.textSecondary,
                     ),
                   ),

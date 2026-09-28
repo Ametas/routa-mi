@@ -7,6 +7,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 const appName = 'RoutaMi';
@@ -18,12 +19,15 @@ const methodChannelPrefix = 'com.follow.clash';
 const helperPort = 47890;
 const maxTextScale = 1.2;
 const minTextScale = 0.9;
-const baseInfoEdgeInsets = EdgeInsets.symmetric(vertical: 16, horizontal: 16);
+const baseInfoEdgeInsets = EdgeInsets.symmetric(
+  vertical: SurgeSpace.l,
+  horizontal: SurgeSpace.l,
+);
 const listHeaderPadding = EdgeInsets.only(
-  left: 16,
-  right: 8,
-  top: 24,
-  bottom: 8,
+  left: SurgeSpace.l,
+  right: SurgeSpace.s,
+  top: SurgeSpace.xxl,
+  bottom: SurgeSpace.s,
 );
 const sheetAppBarHeight = 68.0;
 

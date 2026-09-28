@@ -213,9 +213,9 @@ class _ConnectionsViewState extends ConsumerState<ConnectionsView> {
           }
           return Padding(
             padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 8,
+              left: SurgeSpace.l,
+              right: SurgeSpace.l,
+              top: SurgeSpace.s,
               bottom: _surfaceBottomPadding,
             ),
             child: SoftOsListSurface(
@@ -237,7 +237,7 @@ class _ConnectionsViewState extends ConsumerState<ConnectionsView> {
                       },
                       visualSize: 30,
                       tapSize: 44,
-                      iconSize: 15,
+                      iconSize: SurgeIconSize.inline,
                     ),
                     detailTitle: appLocalizations.details(
                       appLocalizations.connection,

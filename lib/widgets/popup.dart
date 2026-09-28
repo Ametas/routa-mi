@@ -1,5 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/common.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'animated_cross_slide.dart';
@@ -324,8 +325,12 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
           mainAxisSize: MainAxisSize.max,
           children: [
             if (item.icon != null) ...[
-              Icon(item.icon, size: 18, color: foregroundColor),
-              const SizedBox(width: 16),
+              Icon(
+                item.icon,
+                size: SurgeIconSize.compact,
+                color: foregroundColor,
+              ),
+              const SizedBox(width: SurgeSpace.l),
             ],
             Flexible(
               child: Text(
@@ -367,7 +372,11 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8, top: 6, bottom: 2),
+          padding: const EdgeInsets.only(
+            left: SurgeSpace.s,
+            top: SurgeSpace.s,
+            bottom: SurgeSpace.xxs,
+          ),
           child: Row(
             spacing: 4,
             children: [
@@ -381,11 +390,11 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
                     _status = false;
                   });
                 },
-                iconSize: 18,
+                iconSize: SurgeIconSize.compact,
                 style: const ButtonStyle(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   minimumSize: WidgetStatePropertyAll(Size.zero),
-                  padding: WidgetStatePropertyAll(EdgeInsets.all(8)),
+                  padding: WidgetStatePropertyAll(EdgeInsets.all(SurgeSpace.s)),
                 ),
               ),
               if (_subTitle != null)

@@ -1,8 +1,10 @@
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'surge_motion.dart';
 import 'surge_pressable.dart';
 import 'surge_theme_extension.dart';
+import 'package:fl_clash/common/icons.dart';
 
 @immutable
 class SurgeSegmentedItem<T> {
@@ -24,7 +26,7 @@ class SurgeSegmentedControl<T> extends StatelessWidget {
     required this.items,
     required this.onChanged,
     this.height,
-    this.padding = const EdgeInsets.all(3),
+    this.padding = const EdgeInsets.all(SurgeSpace.xs),
   });
 
   final T value;
@@ -213,14 +215,14 @@ class _SurgeSegment<T> extends StatelessWidget {
         overlayFeedback: false,
         borderRadius: BorderRadius.circular(surge.radii.button),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               if (item.icon != null) ...[
-                Icon(item.icon, color: foreground, size: 15),
-                const SizedBox(width: 5),
+                Icon(item.icon, color: foreground, size: SurgeIconSize.inline),
+                const SizedBox(width: SurgeSpace.xs),
               ],
               Flexible(
                 child: Text(

@@ -30,7 +30,7 @@ class ScriptContent extends ConsumerWidget {
     final scripts = ref.watch(scriptsProvider).value ?? [];
     return SliverMainAxisGroup(
       slivers: [
-        const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.xxl)),
         SliverToBoxAdapter(
           child: Column(
             children: [
@@ -38,10 +38,15 @@ class ScriptContent extends ConsumerWidget {
             ],
           ),
         ),
-        const SliverToBoxAdapter(child: SizedBox(height: 8)),
+        const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.s)),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+            padding: const EdgeInsets.fromLTRB(
+              SurgeSpace.l,
+              0,
+              SurgeSpace.l,
+              SurgeSpace.xs,
+            ),
             child: SurgeCard(
               shadow: false,
               padding: EdgeInsets.zero,
@@ -50,17 +55,17 @@ class ScriptContent extends ConsumerWidget {
                   if (scripts.isEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 16,
+                        horizontal: SurgeSpace.l,
+                        vertical: SurgeSpace.l,
                       ),
                       child: Row(
                         children: [
                           Icon(
                             SurgeIcons.codeOff,
                             color: surge.textSecondary,
-                            size: 22,
+                            size: SurgeIconSize.navigation,
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: SurgeSpace.m),
                           Expanded(
                             child: Text(
                               appLocalizations.nullTip(appLocalizations.script),
@@ -119,11 +124,14 @@ class _ScriptOptionRow extends StatelessWidget {
       onTap: onPressed,
       scaleFeedback: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SurgeSpace.l,
+          vertical: SurgeSpace.m,
+        ),
         child: Row(
           children: [
             SurgeSelectIndicator(selected: selected),
-            const SizedBox(width: 12),
+            const SizedBox(width: SurgeSpace.m),
             Expanded(
               child: Text(
                 label,
@@ -154,7 +162,10 @@ class _ConfigureScriptButton extends StatelessWidget {
       onTap: onPressed,
       scaleFeedback: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SurgeSpace.l,
+          vertical: SurgeSpace.l,
+        ),
         child: Row(
           children: [
             Container(
@@ -170,7 +181,7 @@ class _ConfigureScriptButton extends StatelessWidget {
                 color: surge.primary,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: SurgeSpace.m),
             Expanded(
               child: Text(
                 label,
@@ -181,7 +192,7 @@ class _ConfigureScriptButton extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: SurgeSpace.m),
             Icon(
               SurgeIcons.forward,
               size: SurgeIconSize.inline,

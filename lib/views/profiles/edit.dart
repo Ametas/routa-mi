@@ -268,7 +268,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ),
               ),
               if (widget.profile.type == ProfileType.url) ...[
-                const SizedBox(height: 14),
+                const SizedBox(height: SurgeSpace.l),
                 SurgeField(
                   label: appLocalizations.url,
                   child: TextFormField(
@@ -292,7 +292,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: SurgeSpace.xl),
                 SurgeToggleFieldRow(
                   label: appLocalizations.autoUpdate,
                   value: _autoUpdate,
@@ -301,7 +301,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 SurgeAnimatedReveal(
                   visible: _autoUpdate,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 14),
+                    padding: const EdgeInsets.only(top: SurgeSpace.l),
                     child: SurgeField(
                       label: appLocalizations.autoUpdateInterval,
                       child: TextFormField(
@@ -330,7 +330,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   ),
                 ),
               ],
-              const SizedBox(height: 18),
+              const SizedBox(height: SurgeSpace.xl),
               ValueListenableBuilder<FileInfo?>(
                 valueListenable: _fileInfoNotifier,
                 builder: (_, fileInfo, _) {
@@ -373,7 +373,12 @@ class _ProfileEditFileActions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(2, 0, 2, 8),
+          padding: const EdgeInsets.fromLTRB(
+            SurgeSpace.xxs,
+            0,
+            SurgeSpace.xxs,
+            SurgeSpace.s,
+          ),
           child: Text(
             description,
             maxLines: 1,
@@ -392,7 +397,7 @@ class _ProfileEditFileActions extends StatelessWidget {
                 onPressed: onEdit,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: SurgeSpace.m),
             Expanded(
               child: _ProfileEditActionButton(
                 icon: SurgeIcons.upload,
@@ -425,7 +430,7 @@ class _ProfileEditActionButton extends StatelessWidget {
       height: 40,
       child: FilledButton.icon(
         onPressed: onPressed,
-        icon: Icon(icon, size: 18),
+        icon: Icon(icon, size: SurgeIconSize.compact),
         label: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
         style: FilledButton.styleFrom(
           elevation: 0,

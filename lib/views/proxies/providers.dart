@@ -67,7 +67,12 @@ class _ProvidersViewState extends ConsumerState<ProvidersView> {
       body: ColoredBox(
         color: surge.background,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+          padding: const EdgeInsets.fromLTRB(
+            SurgeSpace.l,
+            SurgeSpace.s,
+            SurgeSpace.l,
+            SurgeSpace.xxxl,
+          ),
           children: [
             if (proxyProviders.isNotEmpty)
               _ProviderSection(
@@ -75,7 +80,7 @@ class _ProvidersViewState extends ConsumerState<ProvidersView> {
                 providers: proxyProviders,
               ),
             if (proxyProviders.isNotEmpty && ruleProviders.isNotEmpty)
-              const SizedBox(height: 14),
+              const SizedBox(height: SurgeSpace.l),
             if (ruleProviders.isNotEmpty)
               _ProviderSection(
                 title: appLocalizations.ruleProviders,
@@ -103,7 +108,12 @@ class _ProviderSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+          padding: const EdgeInsets.fromLTRB(
+            SurgeSpace.xs,
+            0,
+            SurgeSpace.xs,
+            SurgeSpace.s,
+          ),
           child: Text(
             title,
             style: context.typography.rowTitle.copyWith(
@@ -264,7 +274,12 @@ class ProviderItem extends StatelessWidget {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+              padding: const EdgeInsets.fromLTRB(
+                SurgeSpace.l,
+                SurgeSpace.m,
+                SurgeSpace.l,
+                SurgeSpace.m,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -282,7 +297,7 @@ class ProviderItem extends StatelessWidget {
                                 color: surge.textPrimary,
                               ),
                             ),
-                            const SizedBox(height: 5),
+                            const SizedBox(height: SurgeSpace.xs),
                             Text(
                               hasUpdated
                                   ? _providerDesc(context)
@@ -296,7 +311,7 @@ class ProviderItem extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: SurgeSpace.m),
                       _ProviderActionDock(
                         uploadLabel: context.appLocalizations.upload,
                         syncLabel: context.appLocalizations.sync,
@@ -308,7 +323,7 @@ class ProviderItem extends StatelessWidget {
                     ],
                   ),
                   if (provider.subscriptionInfo != null) ...[
-                    const SizedBox(height: 10),
+                    const SizedBox(height: SurgeSpace.m),
                     SubscriptionInfoView(
                       subscriptionInfo: provider.subscriptionInfo,
                     ),

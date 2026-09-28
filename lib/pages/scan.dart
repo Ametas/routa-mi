@@ -6,6 +6,7 @@ import 'package:fl_clash/common/icons.dart';
 import 'package:fl_clash/providers/action.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/activate_box.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -86,7 +87,7 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
             automaticallyImplyLeading: false,
             leading: IconButton(
               style: IconButton.styleFrom(
-                iconSize: 32,
+                iconSize: SurgeIconSize.hero,
                 foregroundColor: Colors.white,
               ),
               onPressed: () {
@@ -115,7 +116,9 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
                       backgroundColor = Colors.orange;
                   }
                   return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: SurgeSpace.s,
+                    ),
                     child: ActivateBox(
                       active: state.torchState != TorchState.unavailable,
                       child: IconButton(
@@ -134,7 +137,7 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
             ],
           ),
           Container(
-            margin: const EdgeInsets.only(bottom: 32),
+            margin: const EdgeInsets.only(bottom: SurgeSpace.xxxl),
             alignment: Alignment.bottomCenter,
             child: IconButton(
               color: Colors.white,
@@ -142,8 +145,8 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.grey,
               ),
-              padding: const EdgeInsets.all(16),
-              iconSize: 32.0,
+              padding: const EdgeInsets.all(SurgeSpace.l),
+              iconSize: SurgeIconSize.hero,
               onPressed: globalState.container
                   .read(profilesActionProvider.notifier)
                   .addProfileFormQrCode,

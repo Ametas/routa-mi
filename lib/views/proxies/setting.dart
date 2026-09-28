@@ -58,7 +58,12 @@ class ProxiesSetting extends ConsumerWidget {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+      padding: const EdgeInsets.fromLTRB(
+        SurgeSpace.l,
+        SurgeSpace.s,
+        SurgeSpace.l,
+        SurgeSpace.xxxl,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -80,7 +85,7 @@ class ProxiesSetting extends ConsumerWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: SurgeSpace.l),
           _SettingSection(
             title: appLocalizations.iconStyle,
             children: [
@@ -119,7 +124,12 @@ class _SettingSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+          padding: const EdgeInsets.fromLTRB(
+            SurgeSpace.xs,
+            0,
+            SurgeSpace.xs,
+            SurgeSpace.s,
+          ),
           child: Row(
             children: [
               Text(
@@ -166,7 +176,10 @@ class _SettingOption extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+          padding: const EdgeInsets.symmetric(
+            horizontal: SurgeSpace.l,
+            vertical: SurgeSpace.m,
+          ),
           child: Row(
             children: [
               Container(
@@ -176,9 +189,13 @@ class _SettingOption extends StatelessWidget {
                   color: selected ? selectedFill : surge.fill,
                   borderRadius: BorderRadius.circular(surge.radii.input),
                 ),
-                child: Icon(icon, size: 17, color: foreground),
+                child: Icon(
+                  icon,
+                  size: SurgeIconSize.compact,
+                  color: foreground,
+                ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: SurgeSpace.m),
               Expanded(
                 child: Text(
                   label,
@@ -192,7 +209,7 @@ class _SettingOption extends StatelessWidget {
               SurgeSelectIndicator(
                 selected: selected,
                 size: 18,
-                iconSize: 12,
+                iconSize: SurgeIconSize.micro,
                 showCheck: false,
               ),
             ],

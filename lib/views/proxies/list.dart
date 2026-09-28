@@ -463,7 +463,7 @@ class _ProxiesListViewState extends State<ProxiesListView> {
                                   color: SurgeTheme.of(context).background,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
+                                      horizontal: SurgeSpace.l,
                                     ),
                                     child: _buildHeader(
                                       ref,
@@ -554,14 +554,14 @@ class _ListHeaderState extends State<ListHeader> {
           ProxiesIconStyle.standard => LayoutBuilder(
             builder: (_, constraints) {
               return Container(
-                margin: const EdgeInsets.only(right: 12),
+                margin: const EdgeInsets.only(right: SurgeSpace.m),
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: Container(
                     height: constraints.maxHeight,
                     width: constraints.maxWidth,
                     alignment: Alignment.center,
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(SurgeSpace.xs),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(surge.radii.input),
                       color: surge.textSecondary.withValues(alpha: 0.08),
@@ -577,7 +577,7 @@ class _ListHeaderState extends State<ListHeader> {
             },
           ),
           ProxiesIconStyle.icon => Container(
-            margin: const EdgeInsets.only(right: 12),
+            margin: const EdgeInsets.only(right: SurgeSpace.m),
             child: LayoutBuilder(
               builder: (_, constraints) {
                 return IconTheme.merge(
@@ -668,8 +668,8 @@ class _ListHeaderState extends State<ListHeader> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+                  horizontal: SurgeSpace.l,
+                  vertical: SurgeSpace.m,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -716,7 +716,7 @@ class _ListHeaderState extends State<ListHeader> {
                                             .proxyGroupTitle
                                             .copyWith(color: surge.textPrimary),
                                       ),
-                                      const SizedBox(height: 4),
+                                      const SizedBox(height: SurgeSpace.xs),
                                       Flexible(
                                         flex: 1,
                                         child: Row(
@@ -737,7 +737,7 @@ class _ListHeaderState extends State<ListHeader> {
                                                     color: surge.textSecondary,
                                                   ),
                                             ),
-                                            const SizedBox(width: 12),
+                                            const SizedBox(width: SurgeSpace.m),
                                             if (displayLabel.isNotEmpty)
                                               Flexible(
                                                 flex: 1,
@@ -804,7 +804,7 @@ class _ListHeaderState extends State<ListHeader> {
           SoftOsDockButton(
             tooltip: context.appLocalizations.locateCurrentNode,
             icon: SurgeIcons.selector,
-            iconSize: 15.5,
+            iconSize: SurgeIconSize.inline,
             onTap: () {
               widget.onScrollToSelected(groupName);
             },
@@ -813,7 +813,7 @@ class _ListHeaderState extends State<ListHeader> {
           SoftOsDockButton(
             tooltip: context.appLocalizations.testLatency,
             icon: SurgeIcons.networkPing,
-            iconSize: 15.5,
+            iconSize: SurgeIconSize.inline,
             onTap: _delayTest,
           ),
           const SoftOsDockDivider(height: 18),
@@ -823,7 +823,7 @@ class _ListHeaderState extends State<ListHeader> {
               ? context.appLocalizations.collapse
               : context.appLocalizations.expand,
           icon: isExpand ? SurgeIcons.collapse : SurgeIcons.expand,
-          iconSize: 15.5,
+          iconSize: SurgeIconSize.inline,
           onTap: () {
             _handleChange(groupName);
           },

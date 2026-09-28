@@ -130,7 +130,7 @@ class _CustomProxyGroupsViewState extends ConsumerState<CustomProxyGroupsView> {
                 scrollController: _scrollController,
                 buildDefaultDragHandles: false,
                 padding: const EdgeInsets.symmetric(
-                  vertical: 12,
+                  vertical: SurgeSpace.m,
                 ).copyWith(bottom: 24),
                 itemBuilder: (context, index) {
                   final proxyGroup = proxyGroups[index];
@@ -232,7 +232,7 @@ class _ProxyGroupItem extends ConsumerWidget {
                 ReorderableDelayedDragStartListener(
                   index: index,
                   child: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(SurgeSpace.s),
                     color: Colors.transparent,
                     child: const Icon(SurgeIcons.dragHandle),
                   ),
@@ -806,7 +806,7 @@ class _EditProxyGroupViewState extends ConsumerState<_EditProxyGroupView> {
         height: height,
         child: ListView(
           padding: const EdgeInsets.symmetric(
-            horizontal: 16,
+            horizontal: SurgeSpace.l,
           ).copyWith(bottom: 20, top: context.sheetTopPadding),
           children: [
             generateSectionV3(
@@ -878,10 +878,10 @@ class _CheckIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.all(SurgeSpace.s),
       child: Icon(
         SurgeIcons.successOutline,
-        size: 20,
+        size: SurgeIconSize.regular,
         color: Colors.greenAccent.harmonizeWith(context.colorScheme.primary),
       ),
     );

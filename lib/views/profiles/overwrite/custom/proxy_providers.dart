@@ -79,7 +79,7 @@ class _EditProxyProvidersViewState extends ConsumerState<EditProxyProvidersView>
       key: ValueKey(providerName),
       onDismissed: _handleRealRemove,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
         child: ItemPositionProvider(
           position: position,
           child: Consumer(
@@ -119,7 +119,7 @@ class _EditProxyProvidersViewState extends ConsumerState<EditProxyProvidersView>
                       index: index,
                       child: Container(
                         color: Colors.transparent,
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(SurgeSpace.s),
                         child: const Icon(SurgeIcons.dragHandle),
                       ),
                     ),
@@ -181,7 +181,7 @@ class _EditProxyProvidersViewState extends ConsumerState<EditProxyProvidersView>
               child: SizedBox(height: context.sheetTopPadding + 8),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverToBoxAdapter(
                 child: SurgeActionCard(
                   variant: SurgeActionCardVariant.filled,
@@ -211,7 +211,7 @@ class _EditProxyProvidersViewState extends ConsumerState<EditProxyProvidersView>
                               );
                             },
                             icon: Icon(
-                              size: 15,
+                              size: SurgeIconSize.inline,
                               SurgeIcons.info,
                               color: context.colorScheme.onSurfaceVariant,
                             ),
@@ -229,9 +229,9 @@ class _EditProxyProvidersViewState extends ConsumerState<EditProxyProvidersView>
                 ),
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+            const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.s)),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
               sliver: SliverToBoxAdapter(
                 child: InfoHeader(
                   info: Info(label: appLocalizations.proxyProviders),
@@ -290,7 +290,7 @@ class _EditProxyProvidersViewState extends ConsumerState<EditProxyProvidersView>
                 hasScrollBody: false,
                 child: NullStatus(label: appLocalizations.proxyProvidersEmpty),
               ),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: SurgeSpace.l)),
           ],
         ),
       ),
@@ -350,7 +350,7 @@ class _AddProxyProvidersViewState extends ConsumerState<_AddProxyProvidersView>
       key: ValueKey(title),
       dismiss: dismiss,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
         child: ItemPositionProvider(
           position: position,
           child: OverwriteListItem(
@@ -407,7 +407,9 @@ class _AddProxyProvidersViewState extends ConsumerState<_AddProxyProvidersView>
                   ),
                   if (providerNames.isNotEmpty) ...[
                     SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SurgeSpace.l,
+                      ),
                       sliver: SliverToBoxAdapter(
                         child: InfoHeader(
                           info: Info(label: appLocalizations.proxyProviders),

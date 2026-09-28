@@ -261,13 +261,13 @@ class GlobalState {
               ),
             ],
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: SurgeSpace.xs),
               constraints: const BoxConstraints(maxHeight: 200),
               child: ListView.separated(
                 itemBuilder: (_, index) {
                   final message = messages[index];
                   return ListItem(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xxl),
                     title: Text(message.label),
                     subtitle: Text(message.message),
                   );
@@ -332,10 +332,10 @@ class GlobalState {
                         context,
                         hintText: appLocalizations.externalLink,
                         contentPadding: const EdgeInsets.fromLTRB(
-                          16,
-                          14,
-                          8,
-                          14,
+                          SurgeSpace.l,
+                          SurgeSpace.l,
+                          SurgeSpace.s,
+                          SurgeSpace.l,
                         ),
                         suffixIcon: const Icon(SurgeIcons.lock),
                       ).copyWith(

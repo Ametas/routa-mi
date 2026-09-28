@@ -31,7 +31,12 @@ class SurgeSettingSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+            padding: const EdgeInsets.fromLTRB(
+              SurgeSpace.xs,
+              0,
+              SurgeSpace.xs,
+              SurgeSpace.s,
+            ),
             child: Row(
               children: [
                 Flexible(
@@ -44,7 +49,7 @@ class SurgeSettingSection extends StatelessWidget {
                   ),
                 ),
                 if (subtitle != null) ...[
-                  const SizedBox(width: 8),
+                  const SizedBox(width: SurgeSpace.s),
                   Flexible(
                     child: Text(
                       subtitle!,
@@ -109,7 +114,7 @@ class SurgeSettingOption extends StatelessWidget {
           SurgeSelectIndicator(
             selected: selected,
             size: 20,
-            iconSize: 13,
+            iconSize: SurgeIconSize.micro,
             showCheck: false,
           ),
     );

@@ -1,3 +1,4 @@
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'surge_card.dart';
@@ -62,7 +63,10 @@ class SurgeSection extends StatelessWidget {
         children: [
           if (title != null || actions.isNotEmpty) ...[
             Padding(
-              padding: const EdgeInsets.only(left: 4, bottom: 8),
+              padding: const EdgeInsets.only(
+                left: SurgeSpace.xs,
+                bottom: SurgeSpace.s,
+              ),
               child: Row(
                 children: [
                   if (title != null)
@@ -77,7 +81,7 @@ class SurgeSection extends StatelessWidget {
                   else
                     const Spacer(),
                   if (actions.isNotEmpty) ...[
-                    const SizedBox(width: 12),
+                    const SizedBox(width: SurgeSpace.m),
                     Row(mainAxisSize: MainAxisSize.min, children: actions),
                   ],
                 ],
@@ -92,7 +96,11 @@ class SurgeSection extends StatelessWidget {
           ),
           if (footer != null) ...[
             Padding(
-              padding: const EdgeInsets.only(left: 4, top: 8, right: 4),
+              padding: const EdgeInsets.only(
+                left: SurgeSpace.xs,
+                top: SurgeSpace.s,
+                right: SurgeSpace.xs,
+              ),
               child: Text(
                 footer!,
                 style: context.typography.supporting.copyWith(

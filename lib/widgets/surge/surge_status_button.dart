@@ -1,3 +1,4 @@
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'soft_os_metrics.dart';
@@ -87,7 +88,7 @@ class SurgeStatusButton extends StatelessWidget {
                 strokeWidth: 2,
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: SurgeSpace.s),
           ] else if (icon != null) ...[
             Icon(icon, size: resolveSize(compact ? 14 : 16)),
             SizedBox(width: resolveSize(6)),

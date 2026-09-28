@@ -1,5 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 class SubscriptionInfoView extends StatelessWidget {
@@ -35,14 +36,14 @@ class SubscriptionInfoView extends StatelessWidget {
           value: progress,
           backgroundColor: context.colorScheme.primary.opacity15,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: SurgeSpace.s),
         Text(
           '$useShow / $totalShow · $expireShow',
           style: context.typography.detailLabel.copyWith(
             color: context.colorScheme.onSurfaceVariant,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: SurgeSpace.xs),
       ],
     );
   }
