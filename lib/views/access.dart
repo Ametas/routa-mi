@@ -282,7 +282,7 @@ class _AccessViewState extends ConsumerState<AccessView> {
                     final surge = SurgeTheme.of(context);
                     return ColoredBox(
                       color: surge.card,
-                      child: Divider(height: 0, color: surge.separator),
+                      child: const Divider(height: 0),
                     );
                   },
                   itemBuilder: (_, index) {

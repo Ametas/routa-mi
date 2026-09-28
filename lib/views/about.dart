@@ -172,7 +172,7 @@ class AboutView extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: SurgeSpace.l),
-                  Divider(height: 0, color: surge.separator),
+                  const Divider(height: 0),
                   const SizedBox(height: SurgeSpace.m),
                   Text(
                     appLocalizations.aboutDescription,

@@ -746,7 +746,7 @@ class _MediaCheckControlCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: SurgeSpace.s),
-          Divider(height: 1, color: surge.separator),
+          const Divider(height: 1),
           const SizedBox(height: SurgeSpace.s),
           _ControlMetricsLine(
             targetCount: targetCount,
@@ -755,7 +755,7 @@ class _MediaCheckControlCard extends StatelessWidget {
             runningCount: runningCount,
           ),
           const SizedBox(height: SurgeSpace.s),
-          Divider(height: 1, color: surge.separator),
+          const Divider(height: 1),
           const SizedBox(height: SurgeSpace.xs),
           Row(
             children: [
@@ -815,7 +815,7 @@ class _MediaCheckControlCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: SurgeSpace.xs),
-          Divider(height: 1, color: surge.separator),
+          const Divider(height: 1),
           _ObservationControl(
             observing: observing,
             intervalLabel: observeIntervalLabel,
@@ -823,7 +823,7 @@ class _MediaCheckControlCard extends StatelessWidget {
             onChanged: onObservingChanged,
             onIntervalTap: onObserveIntervalTap,
           ),
-          Divider(height: 1, color: surge.separator),
+          const Divider(height: 1),
           const SizedBox(height: SurgeSpace.m),
           _MediaCheckInlineStats(
             filter: filter,
@@ -970,7 +970,6 @@ class _ControlMetricsLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
     final items = [
       (context.appLocalizations.nodes, '$targetCount'),
       (context.appLocalizations.cache, '$cachedCount'),
@@ -984,13 +983,9 @@ class _ControlMetricsLine extends StatelessWidget {
             child: _ControlMetricText(label: items[i].$1, value: items[i].$2),
           ),
           if (i != items.length - 1)
-            SizedBox(
+            const SizedBox(
               height: 28,
-              child: VerticalDivider(
-                width: 18,
-                thickness: 1,
-                color: surge.separator,
-              ),
+              child: VerticalDivider(width: 18, thickness: 1),
             ),
         ],
       ],
@@ -1047,7 +1042,6 @@ class _MediaCheckInlineStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
     return Row(
       children: [
         for (var i = 0; i < _MediaCheckFilter.values.length; i++) ...[
@@ -1066,13 +1060,9 @@ class _MediaCheckInlineStats extends StatelessWidget {
             ),
           ),
           if (i != _MediaCheckFilter.values.length - 1)
-            SizedBox(
+            const SizedBox(
               height: 46,
-              child: VerticalDivider(
-                width: 18,
-                thickness: 1,
-                color: surge.separator,
-              ),
+              child: VerticalDivider(width: 18, thickness: 1),
             ),
         ],
       ],
@@ -1222,7 +1212,7 @@ class _MediaCheckResultList extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 1, color: surge.separator),
+          const Divider(height: 1),
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: _resultPanelMaxHeight),
             child: Theme(
@@ -1543,7 +1533,7 @@ class _MediaCheckEmptyResultCard extends StatelessWidget {
               ),
             ),
           ),
-          Divider(height: 1, color: surge.separator),
+          const Divider(height: 1),
           Padding(
             padding: const EdgeInsets.symmetric(
               vertical: SurgeSpace.xxxl,

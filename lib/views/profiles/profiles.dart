@@ -1265,8 +1265,7 @@ class _CurrentProfileProxyPreview extends StatelessWidget {
                   itemCount: proxies.length,
                   itemBuilder: (_, index) =>
                       _ProfileProxyPreviewCard(proxy: proxies[index]),
-                  separatorBuilder: (_, _) =>
-                      Divider(height: 1, color: surge.separator),
+                  separatorBuilder: (_, _) => const Divider(height: 1),
                 ),
               ),
             ),

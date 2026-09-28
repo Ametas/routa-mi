@@ -779,11 +779,7 @@ class _ListHeaderState extends State<ListHeader> {
                   left: 16,
                   right: 16,
                   bottom: 0,
-                  child: Divider(
-                    height: 0,
-                    thickness: surge.spacing.hairline,
-                    color: surge.separator,
-                  ),
+                  child: Divider(height: 0, thickness: surge.spacing.hairline),
                 ),
             ],
           ),

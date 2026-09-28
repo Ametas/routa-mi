@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/theme/static_theme.dart';
+import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/views/theme.dart';
 import 'package:fl_clash/views/views.dart';
@@ -97,17 +98,14 @@ void main() {
                 GlobalWidgetsLocalizations.delegate,
               ],
               supportedLocales: AppLocalizations.delegate.supportedLocales,
-              theme: ThemeData(
+              theme: buildSurgeThemeData(
                 colorScheme: spec.colorScheme,
                 textTheme: textTheme,
-                scaffoldBackgroundColor: spec.colors.background,
-                extensions: [
-                  SurgeTheme.fromColors(
-                    spec.colors,
-                    stateColors: spec.stateColors,
-                  ),
-                  SurgeTypography.fromTextTheme(textTheme),
-                ],
+                surge: SurgeTheme.fromColors(
+                  spec.colors,
+                  stateColors: spec.stateColors,
+                ),
+                typography: SurgeTypography.fromTextTheme(textTheme),
               ),
               home: build(),
             ),

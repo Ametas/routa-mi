@@ -193,7 +193,7 @@ Flutter `Durations`). Роли `SurgeMotion` (`press`, `state`, `reveal`,
 |---|---|
 | 0. Уборка | ✅ PR #3: мёртвые виджеты удалены, `AppColorSource`, выбор акцента, `opacity10` |
 | 1. Токены | ✅ PR #4: `SurgeSpace`, `SurgeIconSize` (+`snap`), единый `UiScale`; PR #6: шкала прозрачности `SurgeAlpha` (+`snap`), уровни теней `SurgeShadows` (`lib/widgets/surge/surge_shadows.dart`); PR #7: шкала длительностей `SurgeDuration` (шаги Material 3, +`snap`), роли `SurgeMotion` сведены к ней |
-| 2. Material-темы от Surge | ◻ |
+| 2. Material-темы от Surge | ✅ PR #8: `lib/theme/surge_theme_data.dart` (`buildSurgeThemeData`, `SurgeComponentThemes`) — app bar, навигация, переключатели, radio, checkbox, разделители, диалоги, шторки, прогресс, снекбары, выделение текста; `application.dart` и скриншоты строят тему через него. Поля ввода намеренно не темизируются (голые `TextField` — плоские поля app bar и редактора), оформленные идут через `surgeInputDecoration` |
 | 3. «Храповик» | ✅ PR #4: `test/design/design_token_ratchet_test.dart` |
 | 4. Эталонные компоненты | ◻ |
 | 5. Экраны | ◐ PR #5: отступы, промежутки и размеры иконок во всех экранах и виджетах сведены к шкале; PR #6: литеральные прозрачности (включая тернарии и `withOpacity`) сведены к `SurgeAlpha`, хелперы `.opacityNN` из FlClash удалены, все `BoxShadow` — через `SurgeShadows`; PR #7: длительности анимаций, переходов и снекбаров — через `SurgeMotion`/`SurgeDuration`; остаются цвета и масштабируемые значения дашборда (`layout.geometry`) |
