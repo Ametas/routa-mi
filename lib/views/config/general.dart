@@ -618,7 +618,7 @@ class _PortDialogState extends ConsumerState<_PortDialog> {
                       visualDensity: VisualDensity.compact,
                       foregroundColor: surge.textPrimary,
                       side: BorderSide(
-                        color: surge.separator.withValues(alpha: 0.9),
+                        color: surge.separator.withValues(alpha: SurgeAlpha.a92),
                         width: surge.spacing.hairline,
                       ),
                       textStyle: context.typography.controlLabel,

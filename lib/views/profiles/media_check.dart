@@ -689,14 +689,14 @@ class _MediaCheckControlCard extends StatelessWidget {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: surge.primary.withValues(alpha: 0.08),
+                    color: surge.primary.withValues(alpha: SurgeAlpha.a08),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   alignment: Alignment.center,
                   child: Icon(
                     SurgeIcons.mediaCheck,
                     size: SurgeIconSize.inline,
-                    color: surge.primary.withValues(alpha: 0.82),
+                    color: surge.primary.withValues(alpha: SurgeAlpha.a82),
                   ),
                 ),
                 const SizedBox(width: SurgeSpace.s),
@@ -773,7 +773,7 @@ class _MediaCheckControlCard extends StatelessWidget {
                                 : (cachedCount > 0 ? 1 : 0),
                             minHeight: 5,
                             backgroundColor: surge.textSecondary.withValues(
-                              alpha: 0.1,
+                              alpha: SurgeAlpha.a12,
                             ),
                             color: checking ? surge.primary : surge.green,
                           ),
@@ -1137,7 +1137,7 @@ class _InlineFilterMetric extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: context.typography.mediaFilterSubtitle.copyWith(
                         color: selected
-                            ? color.withValues(alpha: 0.82)
+                            ? color.withValues(alpha: SurgeAlpha.a82)
                             : surge.textSecondary,
                       ),
                     ),
@@ -1242,7 +1242,7 @@ class _MediaCheckResultList extends StatelessWidget {
                     height: 1,
                     indent: 14,
                     endIndent: 14,
-                    color: surge.separator.withValues(alpha: 0.7),
+                    color: surge.separator.withValues(alpha: SurgeAlpha.a72),
                   ),
                   itemBuilder: (_, index) =>
                       _MediaCheckResultCard(row: rows[index], filter: filter),
@@ -1318,7 +1318,7 @@ class _MediaCheckResultCard extends StatelessWidget {
                     vertical: 1,
                   ),
                   decoration: BoxDecoration(
-                    color: surge.orange.withValues(alpha: 0.15),
+                    color: surge.orange.withValues(alpha: SurgeAlpha.a16),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
@@ -1383,7 +1383,7 @@ class _SingleResultLine extends StatelessWidget {
       height: 38,
       padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withValues(alpha: SurgeAlpha.a12),
         borderRadius: BorderRadius.circular(surge.radii.metric),
       ),
       child: Row(
@@ -1428,7 +1428,7 @@ class _HealthResultLine extends StatelessWidget {
       height: 38,
       padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withValues(alpha: SurgeAlpha.a12),
         borderRadius: BorderRadius.circular(surge.radii.metric),
       ),
       child: Row(

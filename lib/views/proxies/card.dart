@@ -169,7 +169,7 @@ class _ProxyComputedMark extends ConsumerWidget {
       padding: const EdgeInsets.all(SurgeSpace.xs),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: surge.textSecondary.withValues(alpha: 0.12),
+        color: surge.textSecondary.withValues(alpha: SurgeAlpha.a12),
       ),
       child: Icon(
         SurgeIcons.autoAwesome,

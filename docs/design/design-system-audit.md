@@ -167,6 +167,13 @@ inputDecoration, кнопки, chip, divider, popupMenu, snackBar, tooltip.
 3. **Спорные размеры отступов и иконок** — сводить к шкале.
 4. **`opacity10`** — исправить значение.
 
+Шкала прозрачности: `0 · .04 · .08 · .12 · .16 · .24 · .38 · .48 · .62 ·
+.72 · .82 · .92 · 1` (шаги Material 3 для состояний и «disabled» плюс
+частые значения экранов). Уровни теней: `ambient` (плотность темы),
+`hairline`, `raised`, `knob`, `card`, `bar`, `floating`, `action`, цветные `glow`
+и `halo`. `withValues(alpha:)` задаёт плотность абсолютно, поэтому у
+уровней она фиксирована, а от темы берётся оттенок.
+
 Порядок: сначала уборка (этап 0) вместе с решениями 1 и 4, затем токены и
 шкала (этапы 1–3, решения 2 и 3), затем компоненты и экраны.
 
@@ -175,11 +182,11 @@ inputDecoration, кнопки, chip, divider, popupMenu, snackBar, tooltip.
 | Этап | Состояние |
 |---|---|
 | 0. Уборка | ✅ PR #3: мёртвые виджеты удалены, `AppColorSource`, выбор акцента, `opacity10` |
-| 1. Токены | ✅ PR #4: `SurgeSpace`, `SurgeIconSize` (+`snap`), единый `UiScale`; ◻ именованные уровни прозрачности, подключение `SurgeShadows` |
+| 1. Токены | ✅ PR #4: `SurgeSpace`, `SurgeIconSize` (+`snap`), единый `UiScale`; PR #6: шкала прозрачности `SurgeAlpha` (+`snap`), уровни теней `SurgeShadows` (`lib/widgets/surge/surge_shadows.dart`) |
 | 2. Material-темы от Surge | ◻ |
 | 3. «Храповик» | ✅ PR #4: `test/design/design_token_ratchet_test.dart` |
 | 4. Эталонные компоненты | ◻ |
-| 5. Экраны | ◐ PR #5: отступы, промежутки и размеры иконок во всех экранах и виджетах сведены к шкале; остаются прозрачности, цвета, тени, длительности и масштабируемые значения дашборда (`layout.geometry`) |
+| 5. Экраны | ◐ PR #5: отступы, промежутки и размеры иконок во всех экранах и виджетах сведены к шкале; PR #6: литеральные прозрачности (включая тернарии и `withOpacity`) сведены к `SurgeAlpha`, хелперы `.opacityNN` из FlClash удалены, все `BoxShadow` — через `SurgeShadows`; остаются цвета, длительности и масштабируемые значения дашборда (`layout.geometry`) |
 
 Снимки экранов для сравнения «до/после»:
 `SHOT_DIR=/tmp/shots flutter test test/tools/screenshots_test.dart`.

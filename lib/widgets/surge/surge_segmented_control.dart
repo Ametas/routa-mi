@@ -199,12 +199,12 @@ class _SurgeSegment<T> extends StatelessWidget {
       curve: SurgeMotion.stateCurve,
       decoration: BoxDecoration(
         color: selected
-            ? surge.card.withValues(alpha: 0.92)
+            ? surge.card.withValues(alpha: SurgeAlpha.a92)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(surge.radii.button),
         border: Border.all(
           color: selected
-              ? surge.separator.withValues(alpha: 0.72)
+              ? surge.separator.withValues(alpha: SurgeAlpha.a72)
               : Colors.transparent,
           width: surge.spacing.hairline,
         ),

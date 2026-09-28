@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'surge_pressable.dart';
+import 'surge_shadows.dart';
 import 'surge_theme_extension.dart';
 
 class SurgeCard extends StatelessWidget {
@@ -39,15 +40,7 @@ class SurgeCard extends StatelessWidget {
       color: backgroundColor ?? surge.card,
       border: border ?? Border.all(color: surge.separator, width: 0.5),
       borderRadius: radius,
-      boxShadow: shadow
-          ? [
-              BoxShadow(
-                color: surge.shadow.withValues(alpha: 0.55),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ]
-          : null,
+      boxShadow: shadow ? SurgeShadows.card(surge) : null,
     );
 
     return Padding(

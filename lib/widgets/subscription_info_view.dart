@@ -34,7 +34,9 @@ class SubscriptionInfoView extends StatelessWidget {
         LinearProgressIndicator(
           minHeight: 6,
           value: progress,
-          backgroundColor: context.colorScheme.primary.opacity15,
+          backgroundColor: context.colorScheme.primary.withValues(
+            alpha: SurgeAlpha.a16,
+          ),
         ),
         const SizedBox(height: SurgeSpace.s),
         Text(

@@ -99,10 +99,14 @@ class _SoftOsEmptyIllustration extends StatelessWidget {
       height: 184,
       padding: const EdgeInsets.all(SurgeSpace.m),
       decoration: BoxDecoration(
-        color: surge.card.withValues(alpha: isDark ? 0.58 : 0.72),
+        color: surge.card.withValues(
+          alpha: isDark ? SurgeAlpha.a62 : SurgeAlpha.a72,
+        ),
         borderRadius: BorderRadius.circular(46),
         border: Border.all(
-          color: surge.separator.withValues(alpha: isDark ? 0.72 : 0.58),
+          color: surge.separator.withValues(
+            alpha: isDark ? SurgeAlpha.a72 : SurgeAlpha.a62,
+          ),
           width: surge.spacing.hairline,
         ),
       ),
@@ -130,11 +134,11 @@ class _ThemeAwareSvg extends StatelessWidget {
           var svg = snapshot.data!;
           svg = svg.replaceAll(
             '#E8DEF8',
-            '#${_colorToHex(surge.separator.withValues(alpha: 0.82))}',
+            '#${_colorToHex(surge.separator.withValues(alpha: SurgeAlpha.a82))}',
           );
           svg = svg.replaceAll(
             '#6750A4',
-            '#${_colorToHex(surge.textSecondary.withValues(alpha: 0.72))}',
+            '#${_colorToHex(surge.textSecondary.withValues(alpha: SurgeAlpha.a72))}',
           );
           svg = svg.replaceAll('#FDF7FF', '#${_colorToHex(surge.card)}');
           svg = svg.replaceAll('#C4C7C5', '#${_colorToHex(surge.separator)}');

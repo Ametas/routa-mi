@@ -11,7 +11,7 @@ Color _resolveActionColor(
 ) {
   final colorScheme = Theme.of(context).colorScheme;
   if (!enabled) {
-    return colorScheme.onSurfaceVariant.withValues(alpha: 0.38);
+    return colorScheme.onSurfaceVariant.withValues(alpha: SurgeAlpha.a38);
   }
   return switch (tone) {
     SlAppBarActionTone.normal => colorScheme.onSurfaceVariant,

@@ -2,6 +2,7 @@ import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'surge_pressable.dart';
+import 'surge_shadows.dart';
 import 'surge_theme_extension.dart';
 
 /// Visual presentations for a selected item without duplicating selection
@@ -128,13 +129,7 @@ class SurgeSelectableRow extends StatelessWidget {
               borderRadius: rowRadius,
               border: border,
               boxShadow: showShadow && _isFirst
-                  ? [
-                      BoxShadow(
-                        color: surge.shadow.withValues(alpha: 0.10),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ]
+                  ? SurgeShadows.raised(surge)
                   : null,
             ),
             child: Stack(
@@ -166,7 +161,9 @@ class SurgeSelectableRow extends StatelessWidget {
                         width: selectedIndicatorWidth,
                         height: selectedIndicatorHeight,
                         decoration: BoxDecoration(
-                          color: surge.primary.withValues(alpha: 0.64),
+                          color: surge.primary.withValues(
+                            alpha: SurgeAlpha.a62,
+                          ),
                           borderRadius: BorderRadius.circular(
                             selectedIndicatorWidth / 2,
                           ),

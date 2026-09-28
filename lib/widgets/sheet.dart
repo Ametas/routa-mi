@@ -277,7 +277,9 @@ class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
                                 ),
                                 child: ColoredBox(
                                   color: isScrolled
-                                      ? backgroundColor.opacity60
+                                      ? backgroundColor.withValues(
+                                          alpha: SurgeAlpha.a62,
+                                        )
                                       : backgroundColor,
                                   child: child!,
                                 ),

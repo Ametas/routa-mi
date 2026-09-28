@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:fl_clash/common/color.dart';
 import 'package:fl_clash/common/icons.dart';
 import 'package:fl_clash/providers/action.dart';
 import 'package:fl_clash/state.dart';
@@ -190,7 +189,7 @@ class ScannerOverlay extends CustomPainter {
       );
 
     final backgroundPaint = Paint()
-      ..color = Colors.black.opacity50
+      ..color = Colors.black.withValues(alpha: SurgeAlpha.a48)
       ..style = PaintingStyle.fill
       ..blendMode = BlendMode.dstOut;
 

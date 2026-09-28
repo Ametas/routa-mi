@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'animated_cross_slide.dart';
 import 'surge/surge_motion.dart';
+import 'surge/surge_shadows.dart';
 import 'surge/surge_theme_extension.dart';
 
 class CommonPopupRoute<T> extends PopupRoute<T> {
@@ -224,14 +225,7 @@ class CommonPopupMenu extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
-        boxShadow: [
-          BoxShadow(
-            color: surge.shadow.withValues(alpha: 0.08),
-            blurRadius: 12,
-            spreadRadius: -3,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: SurgeShadows.floating(surge),
       ),
       child: Material(
         elevation: 0,
@@ -240,7 +234,7 @@ class CommonPopupMenu extends StatelessWidget {
         shape: RoundedSuperellipseBorder(
           borderRadius: BorderRadius.circular(radius),
           side: BorderSide(
-            color: surge.separator.withValues(alpha: 0.72),
+            color: surge.separator.withValues(alpha: SurgeAlpha.a72),
             width: 0.5,
           ),
         ),
@@ -293,9 +287,11 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
     final disabled = onPressed == null;
     final surge = SurgeTheme.of(context);
     final color = item.danger ? surge.red : surge.textPrimary;
-    final foregroundColor = disabled ? color.opacity30 : color;
+    final foregroundColor = disabled
+        ? color.withValues(alpha: SurgeAlpha.a24)
+        : color;
     final backgroundColor = item.danger
-        ? surge.red.withValues(alpha: 0.08)
+        ? surge.red.withValues(alpha: SurgeAlpha.a08)
         : Colors.transparent;
     return TextButton(
       style: TextButton.styleFrom(
@@ -303,7 +299,7 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
         shape: LinearBorder.none,
         foregroundColor: foregroundColor,
         backgroundColor: backgroundColor,
-        overlayColor: foregroundColor.withValues(alpha: 0.07),
+        overlayColor: foregroundColor.withValues(alpha: SurgeAlpha.a08),
       ),
       onPressed: onPressed != null
           ? () {
@@ -359,7 +355,9 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
               thickness: 0.5,
               indent: 12,
               endIndent: 12,
-              color: SurgeTheme.of(context).separator.withValues(alpha: 0.58),
+              color: SurgeTheme.of(
+                context,
+              ).separator.withValues(alpha: SurgeAlpha.a62),
             ),
         ],
       ],
@@ -383,7 +381,9 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
               IconButton(
                 icon: Icon(
                   SurgeIcons.back,
-                  color: context.colorScheme.onSurfaceVariant.opacity80,
+                  color: context.colorScheme.onSurfaceVariant.withValues(
+                    alpha: SurgeAlpha.a82,
+                  ),
                 ),
                 onPressed: () {
                   setState(() {
@@ -401,7 +401,9 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
                 Text(
                   _subTitle!,
                   style: context.typography.supporting.copyWith(
-                    color: context.colorScheme.onSurfaceVariant.opacity80,
+                    color: context.colorScheme.onSurfaceVariant.withValues(
+                      alpha: SurgeAlpha.a82,
+                    ),
                   ),
                 ),
             ],

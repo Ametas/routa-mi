@@ -1175,7 +1175,11 @@ class PlatformLatencyPanel extends StatelessWidget {
 
   Color _trackColor(NetworkDiagnosticTargetState? result) {
     final flow = _flowColor(result);
-    return Color.lerp(flow, Colors.black, 0.76)!.withValues(alpha: 0.58);
+    return Color.lerp(
+      flow,
+      Colors.black,
+      0.76,
+    )!.withValues(alpha: SurgeAlpha.a62);
   }
 
   double _barWidth(NetworkDiagnosticTargetState? result) {
@@ -1556,9 +1560,9 @@ class _FlowingLatencyBarState extends State<_FlowingLatencyBar>
                           begin: Alignment(-1.8 + 3.6 * sweep, 0),
                           end: Alignment(-0.2 + 3.6 * sweep, 0),
                           colors: [
-                            widget.flowColor.withValues(alpha: 0.70),
+                            widget.flowColor.withValues(alpha: SurgeAlpha.a72),
                             widget.flowColor,
-                            widget.flowColor.withValues(alpha: 0.74),
+                            widget.flowColor.withValues(alpha: SurgeAlpha.a72),
                           ],
                           stops: const [0, 0.48, 1],
                         ),

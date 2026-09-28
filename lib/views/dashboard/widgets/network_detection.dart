@@ -135,7 +135,7 @@ class _NetworkDetectionState extends ConsumerState<NetworkDetection> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: context.typography.controlLabel.copyWith(
-                    color: surge.red.withValues(alpha: 0.82),
+                    color: surge.red.withValues(alpha: SurgeAlpha.a82),
                   ),
                 )
               : const SizedBox.shrink(key: ValueKey('network-idle')),

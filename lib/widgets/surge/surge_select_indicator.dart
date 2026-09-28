@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'surge_motion.dart';
 import 'surge_theme_extension.dart';
+import 'surge_tokens.dart';
 
 class SurgeSelectIndicator extends StatelessWidget {
   const SurgeSelectIndicator({
@@ -23,7 +24,7 @@ class SurgeSelectIndicator extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     if (!showCheck) {
       final selectedColor = surge.primary;
-      final idleColor = surge.textSecondary.withValues(alpha: 0.42);
+      final idleColor = surge.textSecondary.withValues(alpha: SurgeAlpha.a38);
       final borderColor = selected ? selectedColor : idleColor;
       return AnimatedContainer(
         duration: SurgeMotion.state,
@@ -62,7 +63,9 @@ class SurgeSelectIndicator extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: selected ? surge.primary : surge.fill.withValues(alpha: 0.58),
+        color: selected
+            ? surge.primary
+            : surge.fill.withValues(alpha: SurgeAlpha.a62),
         border: Border.all(
           color: selected ? Colors.transparent : surge.separator,
           width: surge.spacing.hairline,

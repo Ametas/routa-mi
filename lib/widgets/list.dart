@@ -544,12 +544,12 @@ class SurgeSwitch extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     final enabled = onChanged != null;
     final knobColor = !enabled
-        ? surge.textSecondary.withValues(alpha: 0.5)
+        ? surge.textSecondary.withValues(alpha: SurgeAlpha.a48)
         : value
         ? surge.semantic.state.onToggleActive
         : surge.elevatedCard;
     final trackColor = !enabled
-        ? surge.textSecondary.withValues(alpha: 0.1)
+        ? surge.textSecondary.withValues(alpha: SurgeAlpha.a12)
         : value
         ? surge.semantic.state.toggleActive
         : surge.fill;
@@ -573,7 +573,7 @@ class SurgeSwitch extends StatelessWidget {
             border: Border.all(
               color: value
                   ? Colors.transparent
-                  : surge.separator.withValues(alpha: 0.8),
+                  : surge.separator.withValues(alpha: SurgeAlpha.a82),
               width: 0.5,
             ),
           ),
@@ -587,13 +587,7 @@ class SurgeSwitch extends StatelessWidget {
               decoration: BoxDecoration(
                 color: knobColor,
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: surge.shadow.withValues(alpha: 0.65),
-                    blurRadius: 5,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                boxShadow: SurgeShadows.knob(surge),
               ),
             ),
           ),
@@ -654,7 +648,9 @@ class ListHeader extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: context.typography.supporting.copyWith(
-                      color: surge.textSecondary.withValues(alpha: 0.78),
+                      color: surge.textSecondary.withValues(
+                        alpha: SurgeAlpha.a82,
+                      ),
                     ),
                   ),
                 ],
@@ -848,7 +844,7 @@ class _SurgeSelectableListTile extends StatelessWidget {
 
   Color _backgroundColor(SurgeTheme surge) {
     if (invalid) {
-      return surge.red.withValues(alpha: 0.12);
+      return surge.red.withValues(alpha: SurgeAlpha.a12);
     }
     if (isSelected == true) {
       return surge.selectedFill;
@@ -858,11 +854,14 @@ class _SurgeSelectableListTile extends StatelessWidget {
 
   BorderSide _borderSide(SurgeTheme surge) {
     if (invalid) {
-      return BorderSide(color: surge.red.withValues(alpha: 0.65), width: 0.7);
+      return BorderSide(
+        color: surge.red.withValues(alpha: SurgeAlpha.a62),
+        width: 0.7,
+      );
     }
     if (isSelected == true) {
       return BorderSide(
-        color: surge.primary.withValues(alpha: 0.42),
+        color: surge.primary.withValues(alpha: SurgeAlpha.a38),
         width: 0.7,
       );
     }

@@ -35,8 +35,8 @@ InputDecoration surgeInputDecoration(
       : surge.fill;
   final borderSide = BorderSide(
     color: isDark
-        ? surge.separator.withValues(alpha: 0.36)
-        : surge.separator.withValues(alpha: 0.82),
+        ? surge.separator.withValues(alpha: SurgeAlpha.a38)
+        : surge.separator.withValues(alpha: SurgeAlpha.a82),
     width: 0.7,
   );
   final radius = BorderRadius.circular(surge.radii.card);
@@ -47,19 +47,19 @@ InputDecoration surgeInputDecoration(
   final focusedBorder = OutlineInputBorder(
     borderRadius: radius,
     borderSide: BorderSide(
-      color: surge.primary.withValues(alpha: 0.42),
+      color: surge.primary.withValues(alpha: SurgeAlpha.a38),
       width: 1.2,
     ),
   );
   final errorBorder = OutlineInputBorder(
     borderRadius: radius,
     borderSide: BorderSide(
-      color: surge.red.withValues(alpha: 0.72),
+      color: surge.red.withValues(alpha: SurgeAlpha.a72),
       width: 1.2,
     ),
   );
   final hintStyle = context.typography.body.copyWith(
-    color: surge.textSecondary.withValues(alpha: 0.68),
+    color: surge.textSecondary.withValues(alpha: SurgeAlpha.a72),
   );
 
   return InputDecoration(
@@ -112,12 +112,12 @@ class SurgeDialogActionButton extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     final background = primary
         ? (onPressed == null
-              ? surge.primary.withValues(alpha: 0.24)
+              ? surge.primary.withValues(alpha: SurgeAlpha.a24)
               : surge.primary)
-        : surge.fill.withValues(alpha: 0.82);
+        : surge.fill.withValues(alpha: SurgeAlpha.a82);
     final foreground = primary
-        ? surge.onPrimary.withValues(alpha: onPressed == null ? 0.62 : 1)
-        : surge.textPrimary.withValues(alpha: onPressed == null ? 0.42 : 1);
+        ? surge.onPrimary.withValues(alpha: onPressed == null ? SurgeAlpha.a62 : SurgeAlpha.full)
+        : surge.textPrimary.withValues(alpha: onPressed == null ? SurgeAlpha.a38 : SurgeAlpha.full);
     return Expanded(
       child: SizedBox(
         height: 45,
@@ -244,8 +244,8 @@ class SurgeToggleFieldRow extends StatelessWidget {
     final radius = BorderRadius.circular(surge.radii.card);
     final border = Border.all(
       color: isDark
-          ? surge.separator.withValues(alpha: 0.36)
-          : surge.separator.withValues(alpha: 0.82),
+          ? surge.separator.withValues(alpha: SurgeAlpha.a38)
+          : surge.separator.withValues(alpha: SurgeAlpha.a82),
       width: 0.7,
     );
     return Material(
@@ -338,7 +338,7 @@ class SurgeInlineTextFormField extends StatelessWidget {
     final focusedBorder = OutlineInputBorder(
       borderRadius: radius,
       borderSide: BorderSide(
-        color: surge.primary.withValues(alpha: 0.38),
+        color: surge.primary.withValues(alpha: SurgeAlpha.a38),
         width: 1,
       ),
     );
@@ -360,7 +360,7 @@ class SurgeInlineTextFormField extends StatelessWidget {
           style: context.typography.body.copyWith(color: surge.textPrimary),
           decoration: InputDecoration(
             filled: true,
-            fillColor: surge.fill.withValues(alpha: 0.72),
+            fillColor: surge.fill.withValues(alpha: SurgeAlpha.a72),
             hoverColor: Colors.transparent,
             border: border,
             enabledBorder: border,
@@ -373,7 +373,7 @@ class SurgeInlineTextFormField extends StatelessWidget {
             ),
             hintText: hintText,
             hintStyle: context.typography.body.copyWith(
-              color: surge.textSecondary.withValues(alpha: 0.72),
+              color: surge.textSecondary.withValues(alpha: SurgeAlpha.a72),
             ),
           ),
         ),

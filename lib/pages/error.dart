@@ -1,5 +1,4 @@
 import 'package:fl_clash/common/icons.dart';
-import 'package:fl_clash/common/color.dart';
 import 'package:fl_clash/common/context.dart';
 import 'package:fl_clash/theme/typography/typography_context.dart';
 import 'package:fl_clash/widgets/surge/surge_tokens.dart';
@@ -54,9 +53,13 @@ class InitErrorScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(SurgeSpace.m),
                 decoration: BoxDecoration(
-                  color: colorScheme.errorContainer.opacity50,
+                  color: colorScheme.errorContainer.withValues(
+                    alpha: SurgeAlpha.a48,
+                  ),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: colorScheme.error.opacity50),
+                  border: Border.all(
+                    color: colorScheme.error.withValues(alpha: SurgeAlpha.a48),
+                  ),
                 ),
                 child: SelectableText(
                   error.toString(),
@@ -75,7 +78,9 @@ class InitErrorScreen extends StatelessWidget {
                       ? Colors.grey[900]
                       : Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.opacity50),
+                  border: Border.all(
+                    color: Colors.grey.withValues(alpha: SurgeAlpha.a48),
+                  ),
                 ),
                 child: SelectableText(
                   stack.toString(),

@@ -86,10 +86,10 @@ class OverwriteCountPill extends StatelessWidget {
       ),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: surge.primary.withValues(alpha: 0.10),
+        color: surge.primary.withValues(alpha: SurgeAlpha.a12),
         borderRadius: BorderRadius.circular(surge.radii.button),
         border: Border.all(
-          color: surge.primary.withValues(alpha: 0.14),
+          color: surge.primary.withValues(alpha: SurgeAlpha.a16),
           width: surge.spacing.hairline,
         ),
       ),
@@ -127,7 +127,7 @@ class OverwriteIconButton extends StatelessWidget {
           minimumSize: const Size.square(40),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
-          backgroundColor: color.withValues(alpha: 0.11),
+          backgroundColor: color.withValues(alpha: SurgeAlpha.a12),
           foregroundColor: color,
         ),
         icon: Icon(icon, size: SurgeIconSize.compact),

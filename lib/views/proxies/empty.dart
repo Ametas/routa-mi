@@ -63,12 +63,12 @@ class ProxiesEmptyState extends StatelessWidget {
                         width: metrics.value(44),
                         height: metrics.value(44),
                         decoration: BoxDecoration(
-                          color: accent.withValues(alpha: 0.09),
+                          color: accent.withValues(alpha: SurgeAlpha.a08),
                           borderRadius: BorderRadius.circular(
                             surge.radii.menuRow,
                           ),
                           border: Border.all(
-                            color: accent.withValues(alpha: 0.14),
+                            color: accent.withValues(alpha: SurgeAlpha.a16),
                             width: surge.spacing.hairline,
                           ),
                         ),

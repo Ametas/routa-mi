@@ -16,6 +16,7 @@ export 'surge_pressable.dart';
 export 'surge_section.dart';
 export 'surge_select_indicator.dart';
 export 'surge_selectable_row.dart';
+export 'surge_shadows.dart';
 export 'surge_segmented_control.dart';
 export 'surge_status_button.dart';
 export 'surge_theme_extension.dart';

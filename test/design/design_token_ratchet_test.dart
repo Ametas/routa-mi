@@ -22,6 +22,7 @@ const _excluded = <String>{
   'lib/widgets/surge/surge_tokens.dart',
   'lib/widgets/surge/surge_motion.dart',
   'lib/widgets/surge/surge_theme_extension.dart',
+  'lib/widgets/surge/surge_shadows.dart',
 };
 
 const _excludedPrefixes = <String>['lib/theme/', 'lib/l10n/'];
@@ -35,7 +36,9 @@ final _categories = <String, RegExp>{
   ),
   'radius': RegExp(r'Radius\.circular\(\s*\d'),
   'color': RegExp(r'Color\(0x|Colors\.(?!transparent\b)[a-z]\w*'),
-  'alpha': RegExp(r'with(?:Values\(\s*alpha:|Opacity\(|Alpha\()\s*\d'),
+  'alpha': RegExp(
+    r'with(?:Values\(\s*alpha:|Opacity\(|Alpha\()(?:[^,()]*?[?:])?\s*\d',
+  ),
   'shadow': RegExp(r'BoxShadow\('),
   'duration': RegExp(r'Duration\(\s*(?:milliseconds|seconds):\s*\d'),
   'iconSize': RegExp(
@@ -155,6 +158,15 @@ void main() {
     expect(count('color', 'Color(0xFF000000)'), 1);
     expect(count('alpha', 'c.withValues(alpha: 0.4)'), 1);
     expect(count('alpha', 'c.withValues(alpha: opacity.muted)'), 0);
+    expect(count('alpha', 'c.withValues(alpha: on ? 0.2 : SurgeAlpha.a12)'), 1);
+    expect(count('alpha', 'c.withValues(alpha: on ? x : 0.2)'), 1);
+    expect(
+      count(
+        'alpha',
+        'c.withValues(alpha: on ? SurgeAlpha.a24 : SurgeAlpha.a12)',
+      ),
+      0,
+    );
     expect(count('shadow', 'BoxShadow(blurRadius: 4)'), 1);
     expect(count('duration', 'Duration(milliseconds: 200)'), 1);
     expect(count('duration', 'SurgeMotion.state'), 0);

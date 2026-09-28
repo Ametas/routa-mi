@@ -371,7 +371,9 @@ class _ResourceStatusCard extends StatelessWidget {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: surge.textSecondary.withValues(alpha: 0.055),
+                    color: surge.textSecondary.withValues(
+                      alpha: SurgeAlpha.a04,
+                    ),
                     borderRadius: BorderRadius.circular(surge.radii.button),
                   ),
                   child: Icon(
@@ -379,7 +381,7 @@ class _ResourceStatusCard extends StatelessWidget {
                         ? SurgeIcons.pause
                         : SurgeIcons.update,
                     size: SurgeIconSize.inline,
-                    color: surge.textPrimary.withValues(alpha: 0.72),
+                    color: surge.textPrimary.withValues(alpha: SurgeAlpha.a72),
                   ),
                 ),
                 const SizedBox(width: SurgeSpace.m),
@@ -414,7 +416,7 @@ class _ResourceStatusCard extends StatelessWidget {
                 Icon(
                   SurgeIcons.chevronRight,
                   size: SurgeIconSize.navigation,
-                  color: surge.textSecondary.withValues(alpha: 0.7),
+                  color: surge.textSecondary.withValues(alpha: SurgeAlpha.a72),
                 ),
               ],
             ),
@@ -515,17 +517,19 @@ class _ResourceItemCard extends ConsumerWidget {
                   width: 34,
                   height: 34,
                   decoration: BoxDecoration(
-                    color: surge.textSecondary.withValues(alpha: 0.055),
+                    color: surge.textSecondary.withValues(
+                      alpha: SurgeAlpha.a04,
+                    ),
                     borderRadius: BorderRadius.circular(surge.radii.menuRow),
                     border: Border.all(
-                      color: surge.separator.withValues(alpha: 0.38),
+                      color: surge.separator.withValues(alpha: SurgeAlpha.a38),
                       width: surge.spacing.hairline,
                     ),
                   ),
                   child: Icon(
                     item.icon,
                     size: SurgeIconSize.compact,
-                    color: surge.textPrimary.withValues(alpha: 0.72),
+                    color: surge.textPrimary.withValues(alpha: SurgeAlpha.a72),
                   ),
                 ),
                 const SizedBox(width: SurgeSpace.m),
@@ -594,7 +598,9 @@ class _ResourceItemCard extends ConsumerWidget {
                       Text(
                         url,
                         style: context.typography.supporting.copyWith(
-                          color: surge.textSecondary.withValues(alpha: 0.82),
+                          color: surge.textSecondary.withValues(
+                            alpha: SurgeAlpha.a82,
+                          ),
                         ),
                       ),
                     ],
@@ -612,7 +618,7 @@ class _ResourceItemCard extends ConsumerWidget {
             child: Divider(
               height: 0,
               thickness: surge.spacing.hairline,
-              color: surge.separator.withValues(alpha: 0.56),
+              color: surge.separator.withValues(alpha: SurgeAlpha.a62),
             ),
           ),
       ],
@@ -736,11 +742,11 @@ class _ResourceSheetOption extends StatelessWidget {
                 height: 30,
                 decoration: BoxDecoration(
                   color: selected
-                      ? surge.primary.withValues(alpha: 0.1)
-                      : surge.textSecondary.withValues(alpha: 0.055),
+                      ? surge.primary.withValues(alpha: SurgeAlpha.a12)
+                      : surge.textSecondary.withValues(alpha: SurgeAlpha.a04),
                   borderRadius: BorderRadius.circular(surge.radii.button),
                   border: Border.all(
-                    color: surge.separator.withValues(alpha: 0.38),
+                    color: surge.separator.withValues(alpha: SurgeAlpha.a38),
                     width: surge.spacing.hairline,
                   ),
                 ),

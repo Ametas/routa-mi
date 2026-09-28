@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'surge_card.dart';
 import 'surge_pressable.dart';
 import 'surge_theme_extension.dart';
+import 'surge_tokens.dart';
 
 enum SurgeActionCardVariant { plain, filled, tonal }
 
@@ -34,29 +35,39 @@ class SurgeActionCard extends StatelessWidget {
 
   Color _backgroundColor(SurgeTheme surge) {
     if (destructive) {
-      return surge.red.withValues(alpha: selected ? 0.18 : 0.10);
+      return surge.red.withValues(
+        alpha: selected ? SurgeAlpha.a16 : SurgeAlpha.a12,
+      );
     }
     if (selected) {
       return surge.selectedFill;
     }
     return switch (variant) {
       SurgeActionCardVariant.plain => surge.card,
-      SurgeActionCardVariant.filled => surge.fill.withValues(alpha: 0.68),
-      SurgeActionCardVariant.tonal => surge.primary.withValues(alpha: 0.08),
+      SurgeActionCardVariant.filled => surge.fill.withValues(
+        alpha: SurgeAlpha.a72,
+      ),
+      SurgeActionCardVariant.tonal => surge.primary.withValues(
+        alpha: SurgeAlpha.a08,
+      ),
     };
   }
 
   Color _borderColor(SurgeTheme surge) {
     if (destructive) {
-      return surge.red.withValues(alpha: selected ? 0.72 : 0.42);
+      return surge.red.withValues(
+        alpha: selected ? SurgeAlpha.a72 : SurgeAlpha.a38,
+      );
     }
     if (selected) {
-      return surge.primary.withValues(alpha: 0.48);
+      return surge.primary.withValues(alpha: SurgeAlpha.a48);
     }
     return switch (variant) {
       SurgeActionCardVariant.plain => surge.separator,
       SurgeActionCardVariant.filled => Colors.transparent,
-      SurgeActionCardVariant.tonal => surge.primary.withValues(alpha: 0.16),
+      SurgeActionCardVariant.tonal => surge.primary.withValues(
+        alpha: SurgeAlpha.a16,
+      ),
     };
   }
 

@@ -524,7 +524,7 @@ class _HeroModeCardSurface extends StatelessWidget {
             width: layout.geometry(38),
             height: layout.geometry(38),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.14),
+              color: Colors.white.withValues(alpha: SurgeAlpha.a16),
               borderRadius: BorderRadius.circular(layout.geometry(16)),
             ),
             child: Icon(
@@ -740,13 +740,7 @@ class _HeroActionButton extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(layout.geometry(18)),
-        boxShadow: [
-          BoxShadow(
-            color: baseColor.withValues(alpha: 0.2),
-            blurRadius: layout.geometry(14),
-            offset: Offset(0, layout.geometry(6)),
-          ),
-        ],
+        boxShadow: SurgeShadows.glow(baseColor, scale: layout.geometryScale),
       ),
       child: Material(
         color: Colors.transparent,
@@ -821,9 +815,9 @@ class _ActionButtonSheen extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.white.withValues(alpha: 0),
-                      Colors.white.withValues(alpha: 0.18),
-                      Colors.white.withValues(alpha: 0),
+                      Colors.white.withValues(alpha: SurgeAlpha.none),
+                      Colors.white.withValues(alpha: SurgeAlpha.a16),
+                      Colors.white.withValues(alpha: SurgeAlpha.none),
                     ],
                   ),
                 ),
@@ -912,7 +906,7 @@ class _SubscriptionSelectorBar extends ConsumerWidget {
     if (coreStatus == CoreStatus.connecting || showConnecting || isStart) {
       return surge.semantic.connected;
     }
-    return surge.textSecondary.withValues(alpha: 0.48);
+    return surge.textSecondary.withValues(alpha: SurgeAlpha.a48);
   }
 
   @override
@@ -996,7 +990,9 @@ class _SubscriptionSelectorBar extends ConsumerWidget {
                   radius: surge.radii.menuRow,
                   selectedSurfaceColor: surge.selectedFill,
                   unselectedSurfaceColor: surge.fill,
-                  selectedBorderColor: surge.primary.withValues(alpha: 0.48),
+                  selectedBorderColor: surge.primary.withValues(
+                    alpha: SurgeAlpha.a48,
+                  ),
                   unselectedBorderColor: surge.separator,
                   selectedBorderWidth: 1,
                   unselectedBorderWidth: surge.spacing.hairline,
@@ -1083,8 +1079,10 @@ class _StatusPill extends StatelessWidget {
     final pillAlpha = onBlue && dynamicColor ? 0.24 : 0.18;
     final background = Colors.white.withValues(alpha: pillAlpha);
     final borderColor = onBlue
-        ? Colors.white.withValues(alpha: dynamicColor ? 0.28 : 0.16)
-        : Colors.white.withValues(alpha: 0.18);
+        ? Colors.white.withValues(
+            alpha: dynamicColor ? SurgeAlpha.a24 : SurgeAlpha.a16,
+          )
+        : Colors.white.withValues(alpha: SurgeAlpha.a16);
     const textColor = Colors.white;
     return Container(
       padding: EdgeInsets.symmetric(
@@ -1189,8 +1187,8 @@ class _PillStatusLightState extends State<_PillStatusLight>
       return surge.semantic.statusLightActive;
     }
     return widget.onBlue
-        ? Colors.white.withValues(alpha: 0.75)
-        : Colors.white.withValues(alpha: 0.72);
+        ? Colors.white.withValues(alpha: SurgeAlpha.a72)
+        : Colors.white.withValues(alpha: SurgeAlpha.a72);
   }
 
   @override
@@ -1210,21 +1208,16 @@ class _PillStatusLightState extends State<_PillStatusLight>
         decoration: BoxDecoration(
           color: color,
           shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: color.withValues(
-                alpha:
-                    !widget.active &&
-                        !widget.connecting &&
-                        !widget.failed &&
-                        !widget.isSmartPaused
-                    ? 0
-                    : 0.32,
-              ),
-              blurRadius: 8,
-              spreadRadius: 1,
-            ),
-          ],
+          boxShadow: SurgeShadows.halo(
+            color,
+            alpha:
+                !widget.active &&
+                    !widget.connecting &&
+                    !widget.failed &&
+                    !widget.isSmartPaused
+                ? SurgeAlpha.none
+                : SurgeAlpha.a38,
+          ),
         ),
       ),
     );
@@ -1365,7 +1358,9 @@ class _HeroProxySelectorBar extends ConsumerWidget {
                     radius: surge.radii.menuRow,
                     selectedSurfaceColor: surge.selectedFill,
                     unselectedSurfaceColor: surge.fill,
-                    selectedBorderColor: surge.primary.withValues(alpha: 0.48),
+                    selectedBorderColor: surge.primary.withValues(
+                      alpha: SurgeAlpha.a48,
+                    ),
                     unselectedBorderColor: surge.separator,
                     selectedBorderWidth: 1,
                     unselectedBorderWidth: surge.spacing.hairline,
@@ -1722,7 +1717,7 @@ class _NodeCard extends ConsumerWidget {
         radius: surge.radii.menuRow,
         selectedSurfaceColor: surge.selectedFill,
         unselectedSurfaceColor: surge.fill,
-        selectedBorderColor: surge.primary.withValues(alpha: 0.48),
+        selectedBorderColor: surge.primary.withValues(alpha: SurgeAlpha.a48),
         unselectedBorderColor: surge.separator,
         selectedBorderWidth: 1,
         unselectedBorderWidth: surge.spacing.hairline,
@@ -1763,7 +1758,7 @@ class _NodeCard extends ConsumerWidget {
                       vertical: SurgeSpace.s,
                     ),
                     decoration: BoxDecoration(
-                      color: delayColor.withValues(alpha: 0.1),
+                      color: delayColor.withValues(alpha: SurgeAlpha.a12),
                       borderRadius: BorderRadius.circular(surge.radii.metric),
                     ),
                     child: Text(

@@ -25,15 +25,19 @@ Future<void> _loadFont(String family, List<String> files) async {
 }
 
 // Screenshot harness for design work, not a regular test: renders the main
-// screens with real Roboto/Material Icons fonts on a 384dp light theme and
+// screens with real Roboto/Material Icons fonts on a 384dp screen and
 // writes PNGs. Skipped unless SHOT_DIR is set:
 //
 //   SHOT_DIR=/tmp/shots flutter test test/tools/screenshots_test.dart
+// Light theme by default; SHOT_BRIGHTNESS=dark renders the dark one.
 //
 // Screens that need a running core may log errors but still render.
 void main() {
   final out = Platform.environment['SHOT_DIR'] ?? '';
   final skip = out.isEmpty ? 'set SHOT_DIR to render screenshots' : null;
+  final brightness = Platform.environment['SHOT_BRIGHTNESS'] == 'dark'
+      ? Brightness.dark
+      : Brightness.light;
   final fonts =
       '${Platform.environment['FLUTTER_ROOT']}/bin/cache/artifacts/material_fonts';
   setUpAll(() async {
@@ -68,7 +72,7 @@ void main() {
       tester.view.devicePixelRatio = 2.5;
       final spec = StaticThemeSpec.resolve(
         StaticThemePreset.blueWhite,
-        Brightness.light,
+        brightness,
       );
       final textTheme = buildSlclashTextTheme();
       final key = GlobalKey();

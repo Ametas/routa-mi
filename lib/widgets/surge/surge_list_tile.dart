@@ -39,7 +39,7 @@ class SurgeListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
     final titleColor = !enabled
-        ? surge.textSecondary.withValues(alpha: 0.45)
+        ? surge.textSecondary.withValues(alpha: SurgeAlpha.a48)
         : destructive
         ? surge.red
         : surge.textPrimary;
@@ -116,7 +116,9 @@ class SurgeListTile extends StatelessWidget {
                             const SizedBox(width: SurgeSpace.s),
                             Icon(
                               SurgeIcons.chevronRight,
-                              color: surge.textSecondary.withValues(alpha: 0.7),
+                              color: surge.textSecondary.withValues(
+                                alpha: SurgeAlpha.a72,
+                              ),
                               size: SurgeIconSize.navigation,
                             ),
                           ],

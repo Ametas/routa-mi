@@ -117,7 +117,7 @@ class ApplicationState extends ConsumerState<Application> {
     return SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
-          return surge.textSecondary.withValues(alpha: 0.45);
+          return surge.textSecondary.withValues(alpha: SurgeAlpha.a48);
         }
         if (states.contains(WidgetState.selected)) {
           return surge.semantic.state.onToggleActive;
@@ -126,7 +126,7 @@ class ApplicationState extends ConsumerState<Application> {
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
-          return surge.textSecondary.withValues(alpha: 0.1);
+          return surge.textSecondary.withValues(alpha: SurgeAlpha.a12);
         }
         if (states.contains(WidgetState.selected)) {
           return surge.semantic.state.toggleActive;
@@ -148,7 +148,7 @@ class ApplicationState extends ConsumerState<Application> {
         if (states.contains(WidgetState.selected)) {
           return surge.primary;
         }
-        return surge.textSecondary.withValues(alpha: 0.78);
+        return surge.textSecondary.withValues(alpha: SurgeAlpha.a82);
       }),
     );
   }

@@ -809,16 +809,42 @@ class SurgeOpacity {
   }
 }
 
-class SurgeShadows {
-  const SurgeShadows._();
+/// Alpha (opacity) scale for tints, borders and secondary content.
+/// Colours are the theme's; only the alpha comes from here.
+abstract final class SurgeAlpha {
+  static const double none = 0;
+  static const double a04 = 0.04;
+  static const double a08 = 0.08;
+  static const double a12 = 0.12;
+  static const double a16 = 0.16;
+  static const double a24 = 0.24;
+  static const double a38 = 0.38;
+  static const double a48 = 0.48;
+  static const double a62 = 0.62;
+  static const double a72 = 0.72;
+  static const double a82 = 0.82;
+  static const double a92 = 0.92;
+  static const double full = 1;
 
-  static const card = [
-    BoxShadow(color: Color(0x12000000), blurRadius: 16, offset: Offset(0, 6)),
+  static const values = <double>[
+    none,
+    a04,
+    a08,
+    a12,
+    a16,
+    a24,
+    a38,
+    a48,
+    a62,
+    a72,
+    a82,
+    a92,
+    full,
   ];
 
-  static const subtle = [
-    BoxShadow(color: Color(0x0A000000), blurRadius: 8, offset: Offset(0, 2)),
-  ];
+  /// Nearest step of the scale; a value exactly between two steps goes to
+  /// the larger one.
+  static double snap(double value) => snapToScale(values, value);
 }
 
 /// Spacing scale: the Material 3 4dp grid plus a 2dp step for hairline
@@ -848,7 +874,11 @@ double snapToScale(List<double> steps, double value) {
   for (final step in steps) {
     final distance = (step - value).abs();
     final bestDistance = (best - value).abs();
-    if (distance < bestDistance || (distance == bestDistance && step > best)) {
+    // Tolerance keeps float noise (0.06 - 0.04 vs 0.08 - 0.06) from breaking
+    // the ties-up rule on fractional scales.
+    const epsilon = 1e-9;
+    if (distance < bestDistance - epsilon ||
+        ((distance - bestDistance).abs() <= epsilon && step > best)) {
       best = step;
     }
   }
