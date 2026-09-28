@@ -45,10 +45,10 @@ class CommonDesktopRoute<T> extends PageRoute<T> {
   bool get maintainState => true;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 200);
+  Duration get transitionDuration => SurgeMotion.fade;
 
   @override
-  Duration get reverseTransitionDuration => const Duration(milliseconds: 200);
+  Duration get reverseTransitionDuration => SurgeMotion.fade;
 }
 
 class CommonRoute<T> extends PageRoute<T> {

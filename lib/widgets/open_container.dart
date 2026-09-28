@@ -1,3 +1,4 @@
+import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -23,7 +24,7 @@ class OpenContainer<T extends Object?> extends StatefulWidget {
     required this.closedBuilder,
     required this.openBuilder,
     this.tappable = true,
-    this.transitionDuration = const Duration(milliseconds: 300),
+    this.transitionDuration = SurgeMotion.contentSwap,
     this.transitionType = ContainerTransitionType.fade,
     this.useRootNavigator = false,
     this.routeSettings,

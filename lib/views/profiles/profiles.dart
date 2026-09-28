@@ -22,6 +22,9 @@ import 'edit.dart';
 import 'media_check.dart';
 import 'preview.dart';
 
+/// Refresh rate of "updated N minutes ago" labels.
+const _relativeTimeTick = Duration(minutes: 1);
+
 class ProfilesView extends StatefulWidget {
   const ProfilesView({super.key});
 
@@ -2225,7 +2228,7 @@ class _ProfileCombinedSummary extends StatelessWidget {
       return _SummaryText(text: '$trafficText · $expireText', style: style);
     }
     return TickBuilder(
-      duration: const Duration(minutes: 1),
+      duration: _relativeTimeTick,
       builder: (context, _) => _SummaryText(
         text:
             '${profile.lastUpdateDate!.getLastUpdateTimeDesc(context)} · $trafficText · $expireText',
@@ -2255,7 +2258,7 @@ class _ProfileUpdateSummary extends StatelessWidget {
         ? '${context.appLocalizations.localFile} · '
         : '';
     return TickBuilder(
-      duration: const Duration(minutes: 1),
+      duration: _relativeTimeTick,
       builder: (context, _) {
         return _SummaryText(
           text:
@@ -2343,7 +2346,7 @@ class LastUpdateTimeText extends StatelessWidget {
       return Text('', style: style);
     }
     return TickBuilder(
-      duration: const Duration(minutes: 1),
+      duration: _relativeTimeTick,
       builder: (context, _) {
         return Text(
           lastUpdateDate!.getLastUpdateTimeDesc(context),

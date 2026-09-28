@@ -118,8 +118,8 @@ void main() {
       expect(dynamic.semantic.error, const Color(0xFFFF453A));
       expect(dynamic.semantic.state.profileActive, dynamic.green);
       expect(dynamic.controls.minimumTapExtent, 44);
-      expect(SurgeMotion.press, const Duration(milliseconds: 110));
-      expect(SurgeMotion.container, const Duration(milliseconds: 220));
+      expect(SurgeMotion.press, const Duration(milliseconds: 100));
+      expect(SurgeMotion.container, const Duration(milliseconds: 200));
     });
   });
 

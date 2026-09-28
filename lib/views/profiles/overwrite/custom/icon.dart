@@ -95,7 +95,7 @@ class _IconEditViewState extends ConsumerState<IconEditView>
     _recordsNotifier = ValueNotifier([]);
     _state = _IconEditStateNotifier<File?>(
       vsync: this,
-      duration: commonDuration * 2,
+      duration: SurgeDuration.long4,
     );
     _handleInputRealChange();
   }

@@ -1,3 +1,4 @@
+import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:flutter/material.dart';
 
 class CommonCircleLoading extends StatefulWidget {
@@ -22,12 +23,12 @@ class _CommonCircleLoadingState extends State<CommonCircleLoading>
   void initState() {
     super.initState();
     _rotateController = AnimationController(
-      duration: const Duration(seconds: 3),
+      duration: SurgeMotion.loadingSpin,
       vsync: this,
     );
 
     _pointsController = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: SurgeMotion.loadingDots,
       vsync: this,
     );
 

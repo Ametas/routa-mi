@@ -40,7 +40,13 @@ final _categories = <String, RegExp>{
     r'with(?:Values\(\s*alpha:|Opacity\(|Alpha\()(?:[^,()]*?[?:])?\s*\d',
   ),
   'shadow': RegExp(r'BoxShadow\('),
-  'duration': RegExp(r'Duration\(\s*(?:milliseconds|seconds):\s*\d'),
+  // Motion only: durations handed to animations, routes and snackbars.
+  // Timers, timeouts and debounce windows (`}, duration: …` calls) are logic.
+  'duration': RegExp(
+    r'(?<!\}, )\b(?:duration|reverseDuration|transitionDuration|'
+    r'reverseTransitionDuration)\b\s*(?::|=>|=)\s*(?:const\s+)?'
+    r'(?:Duration\(|(?:commonDuration|midDuration|animateDuration|moreDuration)\b)',
+  ),
   'iconSize': RegExp(
     r'(?:\bIcon\((?:[^()]|\([^()]*\))*?\bsize:\s*\d)|(?:\biconSize:\s*\d)',
   ),
@@ -168,8 +174,16 @@ void main() {
       0,
     );
     expect(count('shadow', 'BoxShadow(blurRadius: 4)'), 1);
-    expect(count('duration', 'Duration(milliseconds: 200)'), 1);
+    expect(count('duration', 'duration: const Duration(milliseconds: 200)'), 1);
     expect(count('duration', 'SurgeMotion.state'), 0);
+    expect(count('duration', 'duration: SurgeMotion.state'), 0);
+    expect(count('duration', 'duration: commonDuration,'), 1);
+    expect(
+      count('duration', 'Duration get transitionDuration => const Duration('),
+      1,
+    );
+    expect(count('duration', 'Timer(const Duration(seconds: 2), f)'), 0);
+    expect(count('duration', '}, duration: const Duration(seconds: 1));'), 0);
     expect(count('iconSize', 'Icon(SurgeIcons.add, size: 20)'), 1);
     expect(
       count('iconSize', 'Icon(SurgeIcons.add, size: SurgeIconSize.regular)'),

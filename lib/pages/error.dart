@@ -1,6 +1,7 @@
 import 'package:fl_clash/common/icons.dart';
 import 'package:fl_clash/common/context.dart';
 import 'package:fl_clash/theme/typography/typography_context.dart';
+import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -116,7 +117,7 @@ class InitErrorScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(context.appLocalizations.errorDetailsCopied),
-        duration: const Duration(seconds: 2),
+        duration: SurgeMotion.snackBar,
       ),
     );
   }
