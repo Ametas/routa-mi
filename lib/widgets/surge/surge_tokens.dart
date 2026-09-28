@@ -821,6 +821,40 @@ class SurgeShadows {
   ];
 }
 
+/// Spacing scale: the Material 3 4dp grid plus a 2dp step for hairline
+/// gaps. Paddings, gaps and margins use these values only.
+abstract final class SurgeSpace {
+  static const double none = 0;
+  static const double xxs = 2;
+  static const double xs = 4;
+  static const double s = 8;
+  static const double m = 12;
+  static const double l = 16;
+  static const double xl = 20;
+  static const double xxl = 24;
+  static const double xxxl = 32;
+  static const double huge = 48;
+
+  static const values = <double>[none, xxs, xs, s, m, l, xl, xxl, xxxl, huge];
+
+  /// Nearest step of the scale; a value exactly between two steps goes to
+  /// the larger one.
+  static double snap(double value) => snapToScale(values, value);
+}
+
+/// Nearest of [steps] to [value]; ties go to the larger step.
+double snapToScale(List<double> steps, double value) {
+  var best = steps.first;
+  for (final step in steps) {
+    final distance = (step - value).abs();
+    final bestDistance = (best - value).abs();
+    if (distance < bestDistance || (distance == bestDistance && step > best)) {
+      best = step;
+    }
+  }
+  return best;
+}
+
 double lerpDouble(double a, double b, double t) {
   return a + (b - a) * t;
 }

@@ -1,12 +1,28 @@
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
-/// Standard visual sizes for the app icon system.
+/// Icon size scale for the app icon system. Icons use these values only.
 abstract final class SurgeIconSize {
+  static const double micro = 12;
   static const double inline = 16;
   static const double compact = 18;
   static const double regular = 20;
   static const double navigation = 24;
+  static const double hero = 32;
+
+  static const values = <double>[
+    micro,
+    inline,
+    compact,
+    regular,
+    navigation,
+    hero,
+  ];
+
+  /// Nearest step of the scale; a value exactly between two steps goes to
+  /// the larger one.
+  static double snap(double value) => snapToScale(values, value);
 }
 
 /// Semantic Material Rounded icons used by the FlClash UI.
