@@ -3,11 +3,10 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
-import 'package:fl_clash/widgets/card.dart';
 import 'package:fl_clash/widgets/dialog.dart';
 import 'package:fl_clash/widgets/list.dart';
 import 'package:fl_clash/widgets/scaffold.dart';
-import 'package:fl_clash/widgets/surge/surge_tokens.dart';
+import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -342,13 +341,12 @@ class KeyboardKeyBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CommonCard(
-      type: CommonCardType.filled,
-      child: Padding(
-        padding: const EdgeInsets.all(SurgeSpace.m),
-        child: Text(keyboardKey.label, style: context.typography.controlLabel),
-      ),
-      onPressed: () {},
+    return SurgeActionCard(
+      variant: SurgeActionCardVariant.filled,
+      borderRadius: SurgeTheme.of(context).radii.smallCard,
+      padding: const EdgeInsets.all(SurgeSpace.m),
+      pressFeedback: false,
+      child: Text(keyboardKey.label, style: context.typography.controlLabel),
     );
   }
 }
