@@ -597,8 +597,10 @@ class SoftOsStatusPill extends StatelessWidget {
             ),
             boxShadow: active ? const [] : _softOsActionShadows(context),
           ),
-          alignment: Alignment.center,
-          child: child,
+          // Shrink-wraps its content unless a width is given, even in
+          // parents with a bounded width (a plain Container alignment
+          // would stretch the pill to the full width).
+          child: Align(widthFactor: 1, child: child),
         ),
       ),
     );
