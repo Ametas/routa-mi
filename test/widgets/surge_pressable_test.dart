@@ -17,12 +17,12 @@ Widget _app(Widget child) {
 
 void main() {
   test('motion tokens keep the agreed interaction rhythm', () {
-    expect(SurgeMotion.press, const Duration(milliseconds: 110));
-    expect(SurgeMotion.state, const Duration(milliseconds: 160));
-    expect(SurgeMotion.reveal, const Duration(milliseconds: 180));
-    expect(SurgeMotion.container, const Duration(milliseconds: 220));
-    expect(SurgeMotion.pageEnter, const Duration(milliseconds: 280));
-    expect(SurgeMotion.pageExit, const Duration(milliseconds: 210));
+    expect(SurgeMotion.press, const Duration(milliseconds: 100));
+    expect(SurgeMotion.state, const Duration(milliseconds: 150));
+    expect(SurgeMotion.reveal, const Duration(milliseconds: 200));
+    expect(SurgeMotion.container, const Duration(milliseconds: 200));
+    expect(SurgeMotion.pageEnter, const Duration(milliseconds: 300));
+    expect(SurgeMotion.pageExit, const Duration(milliseconds: 200));
     expect(SurgeMotion.sheetEnter, const Duration(milliseconds: 300));
     expect(SurgeMotion.sheetExit, const Duration(milliseconds: 200));
     expect(SurgeMotion.pressedScale, 0.98);

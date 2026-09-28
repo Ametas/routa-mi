@@ -5,6 +5,7 @@ import 'package:fl_clash/models/state.dart';
 import 'package:fl_clash/widgets/inherited.dart';
 import 'package:fl_clash/widgets/scaffold.dart';
 import 'package:fl_clash/widgets/sheet.dart';
+import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
@@ -55,7 +56,7 @@ extension BuildContextExtension on BuildContext {
         action: action,
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        duration: const Duration(milliseconds: 1500),
+        duration: SurgeMotion.snackBar,
         margin: margin,
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:flutter/material.dart';
 
 class FadeBox extends StatelessWidget {
@@ -24,7 +24,7 @@ class FadeBox extends StatelessWidget {
       transitionBuilder: (child, animation) {
         return FadeTransition(opacity: animation, child: child);
       },
-      duration: commonDuration,
+      duration: SurgeMotion.contentSwap,
       child: child,
     );
   }
@@ -74,7 +74,7 @@ class FadeRotationScaleBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final realAlignment = alignment ?? Alignment.center;
     return AnimatedSwitcher(
-      duration: commonDuration,
+      duration: SurgeMotion.contentSwap,
       switchInCurve: Curves.easeOutBack,
       switchOutCurve: Curves.easeInBack,
       transitionBuilder: (child, animation) {
@@ -112,7 +112,10 @@ class _FadeScaleEnterBoxState extends State<FadeScaleEnterBox>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: commonDuration);
+    _controller = AnimationController(
+      vsync: this,
+      duration: SurgeMotion.contentSwap,
+    );
     _animation = Tween<double>(
       begin: 0,
       end: 1,

@@ -6,6 +6,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/widgets/fade_box.dart';
+import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:fl_clash/widgets/theme.dart';
 import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +106,7 @@ class StatusManagerState extends State<StatusManager> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
                 child: AnimatedSize(
-                  duration: animateDuration,
+                  duration: SurgeMotion.press,
                   child: ValueListenableBuilder(
                     valueListenable: _messagesNotifier,
                     builder: (_, messages, _) {

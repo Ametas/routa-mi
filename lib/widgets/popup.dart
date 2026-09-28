@@ -427,7 +427,7 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
       crossSlideState: _status
           ? CrossSlideState.showSecond
           : CrossSlideState.showFirst,
-      duration: const Duration(milliseconds: 250),
+      duration: SurgeMotion.menu,
     );
   }
 }

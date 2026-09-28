@@ -39,8 +39,8 @@ RoutaMi — Android-клиент (arm64-v8a) на ядре mihomo, жёстки�
 9. **Дизайн-токены.** Отступы — `SurgeSpace`, иконки — `SurgeIconSize`,
    радиусы — `surge.radii`, цвета — `SurgeTheme`/`colorScheme`,
    прозрачность — шкала `SurgeAlpha` или семантика `SurgeOpacity`,
-   тени — уровни `SurgeShadows`, анимации —
-   `SurgeMotion`, масштаб под экран — `UiScale` (`lib/theme/ui_scale.dart`).
+   тени — уровни `SurgeShadows`, анимации — роли `SurgeMotion` на шкале
+   `SurgeDuration` (таймауты и интервалы логики — не токены), масштаб под экран — `UiScale` (`lib/theme/ui_scale.dart`).
    Новые литералы ловит `test/design/design_token_ratchet_test.dart`;
    убрали литералы — обновите базовую линию:
    `UPDATE_DESIGN_BASELINE=1 flutter test test/design/design_token_ratchet_test.dart`.

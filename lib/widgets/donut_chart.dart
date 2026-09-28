@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:flutter/material.dart';
 
 @immutable
@@ -37,7 +38,7 @@ class DonutChart extends StatefulWidget {
   const DonutChart({
     super.key,
     required this.data,
-    this.duration = commonDuration,
+    this.duration = SurgeMotion.chart,
   });
 
   @override

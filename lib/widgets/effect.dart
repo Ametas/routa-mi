@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:fl_clash/common/icons.dart';
 import 'package:fl_clash/widgets/inherited.dart';
+import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:flutter/material.dart';
 
 class CommonExpandIcon extends StatefulWidget {
@@ -28,7 +29,7 @@ class _CommonExpandIconState extends State<CommonExpandIcon>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 200),
+      duration: SurgeMotion.fade,
       vsync: this,
     );
     _iconTurns = _animationController.drive(_iconTurnTween);
