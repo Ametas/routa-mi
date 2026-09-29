@@ -74,6 +74,25 @@ void main() {
         ],
       ),
     ),
+    'profile_item_menu': () => Scaffold(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(SurgeSpace.l),
+            child: ProfileItem(
+              profile: const Profile(
+                id: 1,
+                label: 'Home',
+                url: 'https://example.com/sub',
+                autoUpdateDuration: Duration(hours: 12),
+              ),
+              groupValue: 1,
+              onChanged: (_) {},
+            ),
+          ),
+        ],
+      ),
+    ),
     'profiles_manage_empty': () =>
         const Scaffold(body: ProfilesManageSheet(profiles: [])),
     'logs': () => const LogsView(),
@@ -128,6 +147,13 @@ void main() {
         ),
       );
       await tester.pump(const Duration(milliseconds: 600));
+      // Screens whose interesting state needs a tap first.
+      if (name == 'profile_item_menu') {
+        await tester.tap(find.byIcon(SurgeIcons.more).first);
+        for (var i = 0; i < 6; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+      }
       await tester.runAsync(() async {
         final boundary =
             key.currentContext!.findRenderObject()! as RenderRepaintBoundary;

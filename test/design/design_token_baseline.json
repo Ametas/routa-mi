@@ -111,9 +111,6 @@
   "lib/widgets/palette.dart": {
     "color": 6
   },
-  "lib/widgets/popup.dart": {
-    "spacing": 1
-  },
   "lib/widgets/scroll.dart": {
     "radius": 1
   },

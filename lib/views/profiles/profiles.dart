@@ -1695,45 +1695,46 @@ class _ProfileActionButton extends StatelessWidget {
     final appLocalizations = context.appLocalizations;
     return CommonPopupBox(
       key: const ValueKey('menu'),
-      popup: _ProfileActionMenu(
-        children: [
-          _ProfileActionMenuItem(
+      popup: CommonPopupMenu(
+        minWidth: 188,
+        items: [
+          PopupMenuItemData(
             icon: SurgeIcons.editFilled,
             label: appLocalizations.edit,
-            onTap: onEdit,
+            onPressed: onEdit,
           ),
-          _ProfileActionMenuItem(
+          PopupMenuItemData(
             icon: SurgeIcons.visibilityFilled,
             label: appLocalizations.preview,
-            onTap: onPreview,
+            onPressed: onPreview,
           ),
           if (onSync != null)
-            _ProfileActionMenuItem(
+            PopupMenuItemData(
               icon: SurgeIcons.sync,
               label: appLocalizations.sync,
-              onTap: onSync!,
+              onPressed: onSync,
             ),
-          _ProfileActionMenuItem(
+          PopupMenuItemData(
             icon: SurgeIcons.tune,
             label: appLocalizations.override,
-            onTap: onOverride,
+            onPressed: onOverride,
           ),
           if (onCopyLink != null)
-            _ProfileActionMenuItem(
+            PopupMenuItemData(
               icon: SurgeIcons.link,
               label: appLocalizations.copyLink,
-              onTap: onCopyLink!,
+              onPressed: onCopyLink,
             ),
-          _ProfileActionMenuItem(
+          PopupMenuItemData(
             icon: SurgeIcons.share,
             label: appLocalizations.exportFile,
-            onTap: onExport,
+            onPressed: onExport,
           ),
-          _ProfileActionMenuItem(
+          PopupMenuItemData(
             icon: SurgeIcons.delete,
             label: appLocalizations.delete,
             danger: true,
-            onTap: onDelete,
+            onPressed: onDelete,
           ),
         ],
       ),
@@ -1746,91 +1747,6 @@ class _ProfileActionButton extends StatelessWidget {
           iconSize: SurgeIconSize.inline,
         );
       },
-    );
-  }
-}
-
-class _ProfileActionMenu extends StatelessWidget {
-  const _ProfileActionMenu({required this.children});
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return SurgeCard(
-      shadow: true,
-      padding: const EdgeInsets.symmetric(vertical: SurgeSpace.s),
-      borderRadius: 14,
-      border: Border.all(
-        color: surge.separator.withValues(alpha: SurgeAlpha.a72),
-      ),
-      child: IntrinsicWidth(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minWidth: 188),
-          child: Column(mainAxisSize: MainAxisSize.min, children: children),
-        ),
-      ),
-    );
-  }
-}
-
-class _ProfileActionMenuItem extends StatelessWidget {
-  const _ProfileActionMenuItem({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.danger = false,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final bool danger;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final color = danger
-        ? surge.red.withValues(alpha: SurgeAlpha.a92)
-        : surge.textPrimary.withValues(alpha: SurgeAlpha.a72);
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).pop();
-        onTap();
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SurgeSpace.m,
-          vertical: SurgeSpace.s,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: danger
-                    ? surge.red.withValues(alpha: SurgeAlpha.a08)
-                    : surge.textSecondary.withValues(alpha: SurgeAlpha.a04),
-                borderRadius: BorderRadius.circular(surge.radii.button),
-              ),
-              child: Icon(icon, size: SurgeIconSize.inline, color: color),
-            ),
-            const SizedBox(width: SurgeSpace.m),
-            Expanded(
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.typography.controlLabel.copyWith(
-                  color: danger ? color : surge.textPrimary,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -2066,8 +1982,8 @@ class _ProfilePill extends StatelessWidget {
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
     final metrics = SoftOsMetrics.of(context);
-    const backgroundAlpha = 0.055;
-    const borderAlpha = 0.38;
+    const backgroundAlpha = SurgeAlpha.a04;
+    const borderAlpha = SurgeAlpha.a38;
     final textColor = surge.textPrimary.withValues(alpha: SurgeAlpha.a72);
     final height = metrics.value(surge.controls.statusPillHeight);
     return Container(
