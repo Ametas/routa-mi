@@ -9,6 +9,7 @@ class SurgeSection extends StatelessWidget {
     super.key,
     required this.children,
     this.title,
+    this.subtitle,
     this.footer,
     this.actions = const [],
     this.padding,
@@ -17,6 +18,9 @@ class SurgeSection extends StatelessWidget {
   });
 
   final String? title;
+
+  /// Short note next to the title (for example a count).
+  final String? subtitle;
   final String? footer;
   final List<Widget> actions;
   final List<Widget> children;
@@ -71,8 +75,19 @@ class SurgeSection extends StatelessWidget {
                 children: [
                   if (title != null)
                     Expanded(
-                      child: Text(
-                        title!,
+                      child: Text.rich(
+                        TextSpan(
+                          text: title,
+                          children: [
+                            if (subtitle != null)
+                              TextSpan(
+                                text: '  $subtitle',
+                                style: context.typography.supporting.copyWith(
+                                  color: surge.textSecondary,
+                                ),
+                              ),
+                          ],
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: context.typography.sectionTitle,

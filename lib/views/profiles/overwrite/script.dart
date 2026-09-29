@@ -168,18 +168,13 @@ class _ConfigureScriptButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: surge.primary.withValues(alpha: SurgeAlpha.a12),
-                borderRadius: BorderRadius.circular(surge.radii.input),
-              ),
-              child: Icon(
-                SurgeIcons.tune,
-                size: SurgeIconSize.compact,
-                color: surge.primary,
-              ),
+            SurgeIconTile(
+              icon: SurgeIcons.tune,
+              color: surge.primary,
+              size: 32,
+              iconSize: SurgeIconSize.compact,
+              backgroundAlpha: SurgeAlpha.a12,
+              foregroundAlpha: SurgeAlpha.full,
             ),
             const SizedBox(width: SurgeSpace.m),
             Expanded(
