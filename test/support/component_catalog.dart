@@ -221,21 +221,22 @@ final componentCatalog = <CatalogEntry>[
     ),
   ),
   CatalogEntry(
-    'SoftOsControlDock',
+    'SoftOsActionDock.inset',
     (_) => const Row(
       children: [
-        SoftOsControlDock(
+        SoftOsActionDock(
+          style: SoftOsDockStyle.inset,
           children: [
-            SoftOsDockButton(
+            SoftOsActionDockButton(
               tooltip: 'Search',
               icon: SurgeIcons.search,
-              onTap: _noop,
+              onPressed: _noop,
             ),
             SoftOsDockDivider(),
-            SoftOsDockButton(
+            SoftOsActionDockButton(
               tooltip: 'Add',
               icon: SurgeIcons.add,
-              onTap: _noop,
+              onPressed: _noop,
             ),
           ],
         ),
@@ -243,7 +244,7 @@ final componentCatalog = <CatalogEntry>[
     ),
   ),
   CatalogEntry(
-    'SoftOsActionDock',
+    'SoftOsActionDock.raised',
     (_) => const Row(
       children: [
         SoftOsActionDock(
