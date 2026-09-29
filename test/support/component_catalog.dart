@@ -74,6 +74,34 @@ final componentCatalog = <CatalogEntry>[
     ),
   ),
   CatalogEntry(
+    'SurgeRow',
+    (_) => const SurgeCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          SurgeRow(
+            leading: Icon(SurgeIcons.logs),
+            title: Text('Row layout shared by every list row'),
+            subtitle: Text('Subtitle in the secondary colour'),
+            trailing: Icon(SurgeIcons.chevronRight),
+            contentPadding: EdgeInsets.symmetric(horizontal: SurgeSpace.l),
+            minVerticalPadding: SurgeSpace.m,
+            titleAlignment: ListTileTitleAlignment.center,
+            onTap: _noop,
+          ),
+          SurgeRow(
+            title: Text('Disabled row'),
+            enabled: false,
+            contentPadding: EdgeInsets.symmetric(horizontal: SurgeSpace.l),
+            minVerticalPadding: SurgeSpace.m,
+            titleAlignment: ListTileTitleAlignment.center,
+            onTap: _noop,
+          ),
+        ],
+      ),
+    ),
+  ),
+  CatalogEntry(
     'ListItem',
     (_) => const Column(
       children: [
