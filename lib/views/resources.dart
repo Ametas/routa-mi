@@ -574,21 +574,22 @@ class _ResourceItemCard extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(width: SurgeSpace.s),
-                          SoftOsControlDock(
+                          SoftOsActionDock(
+                            style: SoftOsDockStyle.inset,
                             height: 34,
                             tapHeight: 44,
                             children: [
-                              SoftOsDockButton(
+                              SoftOsActionDockButton(
                                 tooltip: context.appLocalizations.edit,
                                 icon: SurgeIcons.edit,
-                                onTap: () => _updateUrl(context, ref, url),
+                                onPressed: () => _updateUrl(context, ref, url),
                               ),
                               const SoftOsDockDivider(height: 15),
-                              SoftOsDockButton(
+                              SoftOsActionDockButton(
                                 tooltip: context.appLocalizations.sync,
                                 icon: SurgeIcons.sync,
                                 loading: updating,
-                                onTap: onUpdate,
+                                onPressed: onUpdate,
                               ),
                             ],
                           ),

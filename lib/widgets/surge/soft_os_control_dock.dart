@@ -267,18 +267,73 @@ class SoftOsActionButton extends StatelessWidget {
 }
 
 /// AppBar-level pill dock for two or more actions.
+/// How a [SoftOsActionDock] sits on its background.
+enum SoftOsDockStyle {
+  /// Raised pill with a surface, border and shadow (app bars).
+  raised,
+
+  /// Flat tinted pill without a shadow, for controls inside cards.
+  inset,
+}
+
+class _SoftOsDockScope extends InheritedWidget {
+  const _SoftOsDockScope({
+    required this.style,
+    required this.visualHeight,
+    required super.child,
+  });
+
+  final SoftOsDockStyle style;
+  final double visualHeight;
+
+  static _SoftOsDockScope? of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_SoftOsDockScope>();
+
+  @override
+  bool updateShouldNotify(_SoftOsDockScope oldWidget) =>
+      style != oldWidget.style || visualHeight != oldWidget.visualHeight;
+}
+
+/// The one button dock: a pill holding [SoftOsActionDockButton]s and
+/// [SoftOsDockDivider]s. [style] picks the raised app-bar look or the flat
+/// inset look used inside cards.
 class SoftOsActionDock extends StatelessWidget {
   const SoftOsActionDock({
     super.key,
     required this.children,
     this.compact = false,
+    this.style = SoftOsDockStyle.raised,
+    this.height,
+    this.tapHeight,
+    this.surfaceAlpha,
+    this.borderAlpha,
+    this.borderRadius,
   });
 
   final List<Widget> children;
   final bool compact;
+  final SoftOsDockStyle style;
+
+  /// Visual height of the pill; inset docks only.
+  final double? height;
+
+  /// Height of the tap area; inset docks only.
+  final double? tapHeight;
+
+  /// Surface and border opacity overrides; inset docks only.
+  final double? surfaceAlpha;
+  final double? borderAlpha;
+  final double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
+    return switch (style) {
+      SoftOsDockStyle.raised => _buildRaised(context),
+      SoftOsDockStyle.inset => _buildInset(context),
+    };
+  }
+
+  Widget _buildRaised(BuildContext context) {
     final surge = SurgeTheme.of(context);
     final metrics = SoftOsMetrics.of(context);
     final height = metrics.value(
@@ -287,37 +342,94 @@ class SoftOsActionDock extends StatelessWidget {
           : surge.controls.actionVisualHeight,
     );
     final tapSize = metrics.tap(surge.controls.actionTapExtent);
-    return SizedBox(
-      height: tapSize,
-      child: IntrinsicWidth(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned(
-              left: 0,
-              right: 0,
-              top: (tapSize - height) / 2,
-              bottom: (tapSize - height) / 2,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: _softOsActionSurface(context),
-                  borderRadius: BorderRadius.circular(height / 2),
-                  border: Border.all(
-                    color: _softOsActionBorder(context),
-                    width: surge.spacing.hairline,
+    return _SoftOsDockScope(
+      style: style,
+      visualHeight: height,
+      child: SizedBox(
+        height: tapSize,
+        child: IntrinsicWidth(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                left: 0,
+                right: 0,
+                top: (tapSize - height) / 2,
+                bottom: (tapSize - height) / 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: _softOsActionSurface(context),
+                    borderRadius: BorderRadius.circular(height / 2),
+                    border: Border.all(
+                      color: _softOsActionBorder(context),
+                      width: surge.spacing.hairline,
+                    ),
+                    boxShadow: _softOsActionShadows(context),
                   ),
-                  boxShadow: _softOsActionShadows(context),
                 ),
               ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(tapSize / 2),
-              child: SizedBox(
-                height: tapSize,
-                child: Row(mainAxisSize: MainAxisSize.min, children: children),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(tapSize / 2),
+                child: SizedBox(
+                  height: tapSize,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: children,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInset(BuildContext context) {
+    final surge = SurgeTheme.of(context);
+    final metrics = SoftOsMetrics.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final effectiveHeight = metrics.value(
+      height ?? surge.controls.actionVisualHeight,
+    );
+    final effectiveTapHeight = metrics.tap(
+      tapHeight ?? surge.controls.minimumTapExtent,
+    );
+    final radius = borderRadius == null
+        ? effectiveHeight / 2
+        : metrics.value(borderRadius!);
+    final effectiveSurfaceAlpha = isDark
+        ? (surfaceAlpha ?? surge.opacity.controlSurface)
+              .clamp(0.09, 1.0)
+              .toDouble()
+        : surfaceAlpha ?? surge.opacity.controlSurface;
+    final effectiveBorderAlpha = isDark
+        ? (borderAlpha ?? surge.opacity.controlBorder)
+              .clamp(0.48, 1.0)
+              .toDouble()
+        : borderAlpha ?? surge.opacity.controlBorder;
+    return _SoftOsDockScope(
+      style: style,
+      visualHeight: effectiveHeight,
+      child: SizedBox(
+        height: effectiveTapHeight,
+        child: Center(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: surge.textSecondary.withValues(
+                alpha: effectiveSurfaceAlpha,
+              ),
+              borderRadius: BorderRadius.circular(radius),
+              border: Border.all(
+                color: surge.separator.withValues(alpha: effectiveBorderAlpha),
+                width: surge.spacing.hairline,
               ),
             ),
-          ],
+            child: SizedBox(
+              height: effectiveHeight,
+              child: Row(mainAxisSize: MainAxisSize.min, children: children),
+            ),
+          ),
         ),
       ),
     );
@@ -334,6 +446,8 @@ class SoftOsActionDockButton extends StatelessWidget {
     this.tooltip,
     this.loading = false,
     this.compact = false,
+    this.iconSize,
+    this.foregroundAlpha,
   }) : assert(icon != null || child != null);
 
   final IconData? icon;
@@ -343,8 +457,16 @@ class SoftOsActionDockButton extends StatelessWidget {
   final bool loading;
   final bool compact;
 
+  /// Icon size and foreground opacity overrides; inset docks only.
+  final double? iconSize;
+  final double? foregroundAlpha;
+
   @override
   Widget build(BuildContext context) {
+    final scope = _SoftOsDockScope.of(context);
+    if (scope?.style == SoftOsDockStyle.inset) {
+      return _buildInset(context, scope!.visualHeight);
+    }
     final surge = SurgeTheme.of(context);
     final metrics = SoftOsMetrics.of(context);
     final width = metrics.value(
@@ -359,7 +481,7 @@ class SoftOsActionDockButton extends StatelessWidget {
     );
     final appBarTemplate = SoftOsAppBarActionTemplate.active(context);
     final iconSize = metrics.value(
-      appBarTemplate ? 18 : surge.controls.actionIconSize,
+      appBarTemplate ? 18 : this.iconSize ?? surge.controls.actionIconSize,
     );
     final tapSize = metrics.tap(surge.controls.actionTapExtent);
     final enabled = onPressed != null && !loading;
@@ -403,6 +525,51 @@ class SoftOsActionDockButton extends StatelessWidget {
       ),
     );
 
+    if (tooltip != null && tooltip!.isNotEmpty) {
+      result = Tooltip(message: tooltip!, child: result);
+    }
+    return result;
+  }
+
+  Widget _buildInset(BuildContext context, double visualHeight) {
+    final surge = SurgeTheme.of(context);
+    final metrics = SoftOsMetrics.of(context);
+    final width = metrics.value(surge.controls.dockButtonWidth);
+    final tapHeight = metrics.tap(surge.controls.minimumTapExtent);
+    final foreground = loading
+        ? surge.textSecondary
+        : surge.textPrimary.withValues(
+            alpha: foregroundAlpha ?? surge.opacity.dockForeground,
+          );
+    final size = metrics.value(iconSize ?? surge.controls.dockButtonIconSize);
+    Widget result = SurgePressable(
+      onTap: loading ? null : onPressed,
+      enabled: onPressed != null && !loading,
+      scaleFeedback: false,
+      overlayOpacity: surge.opacity.selectedSurface,
+      overlayInsets: EdgeInsets.symmetric(
+        vertical: ((tapHeight - visualHeight) / 2).clamp(0, double.infinity),
+      ),
+      borderRadius: BorderRadius.circular(visualHeight / 2),
+      child: SizedBox(
+        width: width,
+        height: tapHeight,
+        child: Center(
+          child: loading
+              ? SizedBox.square(
+                  dimension: metrics.value(surge.controls.dockButtonLoaderSize),
+                  child: CircularProgressIndicator(
+                    strokeWidth: surge.controls.dockButtonLoaderStrokeWidth,
+                    color: foreground,
+                  ),
+                )
+              : IconTheme.merge(
+                  data: IconThemeData(size: size, color: foreground),
+                  child: child ?? Icon(icon, size: size, color: foreground),
+                ),
+        ),
+      ),
+    );
     if (tooltip != null && tooltip!.isNotEmpty) {
       result = Tooltip(message: tooltip!, child: result);
     }
@@ -628,143 +795,8 @@ class _SoftOsActionText extends StatelessWidget {
   }
 }
 
-/// A pill-shaped dock container following the Soft OS visual language.
-///
-/// Outer height is [tapHeight] (44dp) for real touch targets.
-/// The visible pill with background/border is only [height] (34dp) tall,
-/// centered vertically inside the tap area.
-class SoftOsControlDock extends StatelessWidget {
-  const SoftOsControlDock({
-    super.key,
-    this.height,
-    this.tapHeight,
-    this.surfaceAlpha,
-    this.borderAlpha,
-    this.borderRadius,
-    required this.children,
-  });
-
-  final double? height;
-  final double? tapHeight;
-  final double? surfaceAlpha;
-  final double? borderAlpha;
-  final double? borderRadius;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final metrics = SoftOsMetrics.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveHeight = metrics.value(
-      height ?? surge.controls.actionVisualHeight,
-    );
-    final effectiveTapHeight = metrics.tap(
-      tapHeight ?? surge.controls.minimumTapExtent,
-    );
-    final radius = borderRadius == null
-        ? effectiveHeight / 2
-        : metrics.value(borderRadius!);
-    final effectiveSurfaceAlpha = isDark
-        ? (surfaceAlpha ?? surge.opacity.controlSurface)
-              .clamp(0.09, 1.0)
-              .toDouble()
-        : surfaceAlpha ?? surge.opacity.controlSurface;
-    final effectiveBorderAlpha = isDark
-        ? (borderAlpha ?? surge.opacity.controlBorder)
-              .clamp(0.48, 1.0)
-              .toDouble()
-        : borderAlpha ?? surge.opacity.controlBorder;
-    return SizedBox(
-      height: effectiveTapHeight,
-      child: Center(
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: surge.textSecondary.withValues(alpha: effectiveSurfaceAlpha),
-            borderRadius: BorderRadius.circular(radius),
-            border: Border.all(
-              color: surge.separator.withValues(alpha: effectiveBorderAlpha),
-              width: surge.spacing.hairline,
-            ),
-          ),
-          child: SizedBox(
-            height: effectiveHeight,
-            child: Row(mainAxisSize: MainAxisSize.min, children: children),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// A single button inside [SoftOsControlDock].
-///
-/// Click area is 36dp wide × 44dp tall; the icon centers vertically
-/// inside the visual pill. Taps are disabled while [loading] is true.
-class SoftOsDockButton extends StatelessWidget {
-  const SoftOsDockButton({
-    super.key,
-    required this.tooltip,
-    required this.icon,
-    required this.onTap,
-    this.loading = false,
-    this.iconSize,
-    this.foregroundAlpha,
-  });
-
-  final String tooltip;
-  final IconData icon;
-  final VoidCallback? onTap;
-  final bool loading;
-  final double? iconSize;
-  final double? foregroundAlpha;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final metrics = SoftOsMetrics.of(context);
-    final foreground = loading
-        ? surge.textSecondary
-        : surge.textPrimary.withValues(
-            alpha: foregroundAlpha ?? surge.opacity.dockForeground,
-          );
-    return Tooltip(
-      message: tooltip,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: loading ? null : onTap,
-          customBorder: const CircleBorder(),
-          child: SizedBox(
-            width: metrics.value(surge.controls.dockButtonWidth),
-            height: metrics.tap(surge.controls.minimumTapExtent),
-            child: Center(
-              child: loading
-                  ? SizedBox.square(
-                      dimension: metrics.value(
-                        surge.controls.dockButtonLoaderSize,
-                      ),
-                      child: CircularProgressIndicator(
-                        strokeWidth: surge.controls.dockButtonLoaderStrokeWidth,
-                        color: foreground,
-                      ),
-                    )
-                  : Icon(
-                      icon,
-                      size: metrics.value(
-                        iconSize ?? surge.controls.dockButtonIconSize,
-                      ),
-                      color: foreground,
-                    ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// A thin vertical divider inside [SoftOsControlDock], centered in the tap area.
+/// A thin vertical divider inside a [SoftOsActionDock], centered in the tap
+/// area.
 class SoftOsDockDivider extends StatelessWidget {
   const SoftOsDockDivider({super.key, this.height, this.dividerAlpha});
 

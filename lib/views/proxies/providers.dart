@@ -364,20 +364,21 @@ class _ProviderActionDock extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isUpdating = canSync && ref.watch(isUpdatingProvider(updatingKey));
 
-    return SoftOsControlDock(
+    return SoftOsActionDock(
+      style: SoftOsDockStyle.inset,
       children: [
-        SoftOsDockButton(
+        SoftOsActionDockButton(
           tooltip: uploadLabel,
           icon: SurgeIcons.uploadFile,
-          onTap: onUpload,
+          onPressed: onUpload,
         ),
         if (canSync) ...[
           const SoftOsDockDivider(),
-          SoftOsDockButton(
+          SoftOsActionDockButton(
             tooltip: syncLabel,
             icon: SurgeIcons.sync,
             loading: isUpdating,
-            onTap: onSync,
+            onPressed: onSync,
           ),
         ],
       ],

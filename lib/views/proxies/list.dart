@@ -790,34 +790,35 @@ class _ProxyGroupHeaderState extends State<ProxyGroupHeader> {
   }
 
   Widget _buildActions(BuildContext context) {
-    return SoftOsControlDock(
+    return SoftOsActionDock(
+      style: SoftOsDockStyle.inset,
       height: 34,
       children: [
         if (isExpand) ...[
-          SoftOsDockButton(
+          SoftOsActionDockButton(
             tooltip: context.appLocalizations.locateCurrentNode,
             icon: SurgeIcons.selector,
             iconSize: SurgeIconSize.inline,
-            onTap: () {
+            onPressed: () {
               widget.onScrollToSelected(groupName);
             },
           ),
           const SoftOsDockDivider(height: 18),
-          SoftOsDockButton(
+          SoftOsActionDockButton(
             tooltip: context.appLocalizations.testLatency,
             icon: SurgeIcons.networkPing,
             iconSize: SurgeIconSize.inline,
-            onTap: _delayTest,
+            onPressed: _delayTest,
           ),
           const SoftOsDockDivider(height: 18),
         ],
-        SoftOsDockButton(
+        SoftOsActionDockButton(
           tooltip: isExpand
               ? context.appLocalizations.collapse
               : context.appLocalizations.expand,
           icon: isExpand ? SurgeIcons.collapse : SurgeIcons.expand,
           iconSize: SurgeIconSize.inline,
-          onTap: () {
+          onPressed: () {
             _handleChange(groupName);
           },
         ),
