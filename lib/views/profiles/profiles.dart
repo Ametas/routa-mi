@@ -225,63 +225,49 @@ class _MediaCheckCompactRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
     final profileCount = profiles.length;
-    return SurgePressable(
-      behavior: HitTestBehavior.opaque,
-      scaleFeedback: false,
-      overlayInsets: EdgeInsets.symmetric(vertical: surge.spacing.hairline),
-      overlayBaseColor: surge.card,
+    return SurgeRow(
       onTap: () {
         BaseNavigator.push(
           context,
           ProfileMediaCheckView(profiles: profiles, initialProfile: profile),
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SurgeSpace.l,
-          vertical: SurgeSpace.m,
-        ),
-        child: Row(
-          children: [
-            SurgeIconTile(icon: SurgeIcons.mediaCheck, color: surge.primary),
-            const SizedBox(width: SurgeSpace.m),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.appLocalizations.mediaCheck,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.typography.itemLabel.copyWith(
-                      color: surge.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: SurgeSpace.xxs),
-                  Text(
-                    profileCount > 1
-                        ? context.appLocalizations.mediaCheckByProfileDesc
-                        : context.appLocalizations.mediaCheckDesc,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.typography.compactDescription.copyWith(
-                      color: surge.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
+      minTileHeight: 0,
+      contentPadding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
+      minVerticalPadding: SurgeSpace.m,
+      titleAlignment: ListTileTitleAlignment.center,
+      leading: SurgeIconTile(icon: SurgeIcons.mediaCheck, color: surge.primary),
+      title: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.appLocalizations.mediaCheck,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: context.typography.itemLabel.copyWith(
+              color: surge.textPrimary,
             ),
-            const SizedBox(width: SurgeSpace.s),
-            const SoftOsIconButton(
-              icon: SurgeIcons.chevronRight,
-              onPressed: null,
-              visualSize: 30,
-              tapSize: 44,
-              iconSize: SurgeIconSize.inline,
+          ),
+          const SizedBox(height: SurgeSpace.xxs),
+          Text(
+            profileCount > 1
+                ? context.appLocalizations.mediaCheckByProfileDesc
+                : context.appLocalizations.mediaCheckDesc,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: context.typography.compactDescription.copyWith(
+              color: surge.textSecondary,
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+      trailing: const SoftOsIconButton(
+        icon: SurgeIcons.chevronRight,
+        onPressed: null,
+        visualSize: 30,
+        tapSize: 44,
+        iconSize: SurgeIconSize.inline,
       ),
     );
   }
@@ -914,53 +900,38 @@ class _CurrentProfileExpandButton extends StatelessWidget {
     return Semantics(
       button: true,
       enabled: enabled,
-      child: SurgePressable(
+      child: SurgeRow(
         enabled: enabled,
-        compact: true,
-        behavior: HitTestBehavior.opaque,
-        scaleFeedback: false,
-        overlayInsets: EdgeInsets.only(top: surge.spacing.hairline),
-        overlayBaseColor: surge.card,
-        onTap: enabled ? onTap : null,
-        child: SizedBox(
-          height: 52,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
-            child: Row(
-              children: [
-                SurgeIconTile(
-                  icon: SurgeIcons.hub,
-                  color: enabled ? surge.primary : surge.textSecondary,
-                  shape: SurgeIconTileShape.circle,
-                  backgroundAlpha: enabled ? SurgeAlpha.a08 : SurgeAlpha.a04,
-                  foregroundAlpha: enabled ? SurgeAlpha.a92 : SurgeAlpha.a62,
-                ),
-                const SizedBox(width: SurgeSpace.m),
-                Expanded(
-                  child: Text(
-                    enabled
-                        ? context.appLocalizations.expandCurrentProfileNodes
-                        : context.appLocalizations.readingCurrentProfileNodes,
-                    style: context.typography.itemLabel.copyWith(
-                      color: enabled ? surge.textPrimary : surge.textSecondary,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: SurgeSpace.s),
-                IgnorePointer(
-                  child: AnimatedRotation(
-                    turns: expanded ? 0.5 : 0,
-                    duration: SurgeMotion.reveal,
-                    child: SoftOsIconButton(
-                      icon: SurgeIcons.expand,
-                      onPressed: enabled ? onTap : null,
-                      visualSize: 30,
-                      tapSize: 44,
-                      iconSize: SurgeIconSize.inline,
-                    ),
-                  ),
-                ),
-              ],
+        onTap: onTap,
+        minTileHeight: 52,
+        contentPadding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
+        minVerticalPadding: 0,
+        titleAlignment: ListTileTitleAlignment.center,
+        leading: SurgeIconTile(
+          icon: SurgeIcons.hub,
+          color: enabled ? surge.primary : surge.textSecondary,
+          shape: SurgeIconTileShape.circle,
+          backgroundAlpha: enabled ? SurgeAlpha.a08 : SurgeAlpha.a04,
+          foregroundAlpha: enabled ? SurgeAlpha.a92 : SurgeAlpha.a62,
+        ),
+        title: Text(
+          enabled
+              ? context.appLocalizations.expandCurrentProfileNodes
+              : context.appLocalizations.readingCurrentProfileNodes,
+          style: context.typography.itemLabel.copyWith(
+            color: enabled ? surge.textPrimary : surge.textSecondary,
+          ),
+        ),
+        trailing: IgnorePointer(
+          child: AnimatedRotation(
+            turns: expanded ? 0.5 : 0,
+            duration: SurgeMotion.reveal,
+            child: SoftOsIconButton(
+              icon: SurgeIcons.expand,
+              onPressed: enabled ? onTap : null,
+              visualSize: 30,
+              tapSize: 44,
+              iconSize: SurgeIconSize.inline,
             ),
           ),
         ),
@@ -2038,84 +2009,6 @@ class LastUpdateTimeText extends StatelessWidget {
           style: style,
         );
       },
-    );
-  }
-}
-
-class ReorderableProfilesSheet extends StatefulWidget {
-  final List<Profile> profiles;
-
-  const ReorderableProfilesSheet({super.key, required this.profiles});
-
-  @override
-  State<ReorderableProfilesSheet> createState() =>
-      _ReorderableProfilesSheetState();
-}
-
-class _ReorderableProfilesSheetState extends State<ReorderableProfilesSheet> {
-  late List<Profile> profiles;
-
-  @override
-  void initState() {
-    super.initState();
-    profiles = List.from(widget.profiles);
-  }
-
-  Widget _buildItem(int index) {
-    final position = ItemPosition.get(index, profiles.length);
-    final profile = profiles[index];
-    return ItemPositionProvider(
-      key: Key(profile.id.toString()),
-      position: position,
-      child: DecorationListItem(
-        trailing: ReorderableDelayedDragStartListener(
-          index: index,
-          child: const Icon(SurgeIcons.dragHandle),
-        ),
-        title: Text(profile.realLabel),
-      ),
-    );
-  }
-
-  void _handleSave() {
-    Navigator.of(context).pop();
-    globalState.container.read(profilesProvider.notifier).reorder(profiles);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocalizations = context.appLocalizations;
-    return AdaptiveSheetScaffold(
-      sheetTransparentToolBar: true,
-      appBarActions: [
-        SlAppBarIconAction(
-          icon: SurgeIcons.confirm,
-          tooltip: appLocalizations.confirm,
-          onPressed: _handleSave,
-        ),
-      ],
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: SurgeSpace.xxxl),
-        child: ReorderableListView.builder(
-          buildDefaultDragHandles: false,
-          padding: const EdgeInsets.symmetric(
-            horizontal: SurgeSpace.l,
-          ).copyWith(top: context.sheetTopPadding),
-          proxyDecorator: (child, index, animation) {
-            return commonProxyDecorator(_buildItem(index), index, animation);
-          },
-          onReorder: (oldIndex, newIndex) {
-            setState(() {
-              reorderProfileList(profiles, oldIndex, newIndex);
-            });
-          },
-          itemBuilder: (_, index) {
-            return _buildItem(index);
-          },
-          itemCount: profiles.length,
-        ),
-      ),
-      title: appLocalizations.profilesSort,
     );
   }
 }

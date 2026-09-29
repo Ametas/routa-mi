@@ -75,7 +75,7 @@
   },
   "lib/views/profiles/profiles.dart": {
     "spacing": 3,
-    "gap": 2,
+    "gap": 1,
     "radius": 1
   },
   "lib/views/proxies/list.dart": {

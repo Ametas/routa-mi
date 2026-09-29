@@ -12,6 +12,7 @@ import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 
 /// One canonical component in a representative state.
 class CatalogEntry {
@@ -357,9 +358,11 @@ Widget catalogApp({
   required Brightness brightness,
   required double textScale,
   required Widget child,
+  List<Override> overrides = const [],
 }) {
   return ProviderScope(
     overrides: [
+      ...overrides,
       viewSizeProvider.overrideWithBuild(
         (_, _) => const Size(catalogWidth, 800),
       ),
