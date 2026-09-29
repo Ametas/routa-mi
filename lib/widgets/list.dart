@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/state.dart';
@@ -669,44 +668,6 @@ class ListHeader extends StatelessWidget {
       ),
     );
   }
-}
-
-List<Widget> generateSection({
-  String? title,
-  required Iterable<Widget> items,
-  List<Widget>? actions,
-  bool isFirst = false,
-  bool separated = true,
-}) {
-  final genItems = separated
-      ? items.separated(const Divider(height: 0))
-      : items;
-  return [
-    if (items.isNotEmpty && title != null)
-      ListHeader(
-        title: title,
-        actions: actions,
-        padding: isFirst
-            ? listHeaderPadding.copyWith(top: 8)
-            : listHeaderPadding,
-      ),
-    ...genItems,
-  ];
-}
-
-Widget generateSectionV2({
-  String? title,
-  required Iterable<Widget> items,
-  List<Widget>? actions,
-  bool separated = true,
-}) {
-  final children = items.toList();
-  return SurgeSection(
-    title: children.isNotEmpty ? title : null,
-    actions: actions ?? const [],
-    showDividers: separated,
-    children: children,
-  );
 }
 
 Widget generateSectionV3({

@@ -114,3 +114,26 @@ class SurgeSection extends StatelessWidget {
     );
   }
 }
+
+/// A scrolling settings page made of [SurgeSection]s: each section is its
+/// own card with its title above it.
+class SurgeSectionList extends StatelessWidget {
+  const SurgeSectionList({super.key, required this.sections});
+
+  final List<Widget> sections;
+
+  @override
+  Widget build(BuildContext context) {
+    final surge = SurgeTheme.of(context);
+    return ColoredBox(
+      color: surge.background,
+      child: ListView(
+        padding: EdgeInsets.only(
+          top: SurgeSpace.m,
+          bottom: SurgeSpace.xxxl + MediaQuery.paddingOf(context).bottom,
+        ),
+        children: sections,
+      ),
+    );
+  }
+}

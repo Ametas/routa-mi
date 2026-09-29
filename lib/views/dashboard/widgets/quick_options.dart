@@ -24,15 +24,11 @@ class TUNButton extends StatelessWidget {
               return Builder(
                 builder: (context) {
                   return AdaptiveSheetScaffold(
-                    body: generateListView(
-                      generateSection(
-                        items: [
-                          if (system.isDesktop) const TUNItem(),
-                          if (system.isMacOS) const AutoSetSystemDnsItem(),
-                          const TunStackItem(),
-                        ],
-                      ),
-                    ),
+                    body: generateListView([
+                      if (system.isDesktop) const TUNItem(),
+                      if (system.isMacOS) const AutoSetSystemDnsItem(),
+                      const TunStackItem(),
+                    ]),
                     title: appLocalizations.tun,
                     appBarActions: const [],
                   );
@@ -77,11 +73,10 @@ class SystemProxyButton extends StatelessWidget {
             context: context,
             builder: (_) {
               return AdaptiveSheetScaffold(
-                body: generateListView(
-                  generateSection(
-                    items: [const SystemProxyItem(), const BypassDomainItem()],
-                  ),
-                ),
+                body: generateListView([
+                  const SystemProxyItem(),
+                  const BypassDomainItem(),
+                ]),
                 title: appLocalizations.systemProxy,
                 appBarActions: const [],
               );
@@ -123,15 +118,11 @@ class VpnButton extends StatelessWidget {
             context: context,
             builder: (_) {
               return AdaptiveSheetScaffold(
-                body: generateListView(
-                  generateSection(
-                    items: [
-                      const VPNItem(),
-                      const VpnSystemProxyItem(),
-                      const TunStackItem(),
-                    ],
-                  ),
-                ),
+                body: generateListView([
+                  const VPNItem(),
+                  const VpnSystemProxyItem(),
+                  const TunStackItem(),
+                ]),
                 title: 'VPN',
                 appBarActions: const [],
               );
