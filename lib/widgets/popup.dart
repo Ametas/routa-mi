@@ -4,8 +4,9 @@ import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 import 'animated_cross_slide.dart';
+import 'surge/surge_card.dart';
+import 'surge/surge_icon_tile.dart';
 import 'surge/surge_motion.dart';
-import 'surge/surge_shadows.dart';
 import 'surge/surge_theme_extension.dart';
 
 class CommonPopupRoute<T> extends PopupRoute<T> {
@@ -215,29 +216,22 @@ class CommonPopupMenu extends StatelessWidget {
     super.key,
     required this.items,
     this.minWidth = 0,
-    this.minItemVerticalPadding = 16,
+    this.minItemVerticalPadding = SurgeSpace.s,
   });
 
   @override
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
-    final radius = surge.radii.menuRow;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
-        boxShadow: SurgeShadows.floating(surge),
+    return SurgeCard(
+      shadow: true,
+      padding: const EdgeInsets.symmetric(vertical: SurgeSpace.s),
+      borderRadius: surge.radii.smallCard,
+      border: Border.all(
+        color: surge.separator.withValues(alpha: SurgeAlpha.a72),
+        width: 0.5,
       ),
       child: Material(
-        elevation: 0,
-        color: surge.elevatedCard,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedSuperellipseBorder(
-          borderRadius: BorderRadius.circular(radius),
-          side: BorderSide(
-            color: surge.separator.withValues(alpha: SurgeAlpha.a72),
-            width: 0.5,
-          ),
-        ),
+        type: MaterialType.transparency,
         child: IntrinsicWidth(
           child: _CommonPopupMenuItems(
             items: items,
@@ -287,19 +281,24 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
     final disabled = onPressed == null;
     final surge = SurgeTheme.of(context);
     final color = item.danger ? surge.red : surge.textPrimary;
-    final foregroundColor = disabled
+    final labelColor = disabled
         ? color.withValues(alpha: SurgeAlpha.a24)
+        : item.danger
+        ? color.withValues(alpha: SurgeAlpha.a92)
         : color;
-    final backgroundColor = item.danger
-        ? surge.red.withValues(alpha: SurgeAlpha.a08)
-        : Colors.transparent;
+    final iconAlpha = disabled
+        ? SurgeAlpha.a24
+        : item.danger
+        ? SurgeAlpha.a92
+        : SurgeAlpha.a72;
     return TextButton(
       style: TextButton.styleFrom(
         padding: EdgeInsets.zero,
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         shape: LinearBorder.none,
-        foregroundColor: foregroundColor,
-        backgroundColor: backgroundColor,
-        overlayColor: foregroundColor.withValues(alpha: SurgeAlpha.a08),
+        foregroundColor: labelColor,
+        overlayColor: labelColor.withValues(alpha: SurgeAlpha.a08),
       ),
       onPressed: onPressed != null
           ? () {
@@ -311,28 +310,28 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
           : null,
       child: Container(
         constraints: BoxConstraints(minWidth: widget.minWidth),
-        padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          top: widget.minItemVerticalPadding,
-          bottom: widget.minItemVerticalPadding,
+        padding: EdgeInsets.symmetric(
+          horizontal: SurgeSpace.m,
+          vertical: widget.minItemVerticalPadding,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             if (item.icon != null) ...[
-              Icon(
-                item.icon,
-                size: SurgeIconSize.compact,
-                color: foregroundColor,
+              SurgeIconTile(
+                icon: item.icon!,
+                color: color,
+                shape: SurgeIconTileShape.circle,
+                backgroundAlpha: item.danger ? SurgeAlpha.a08 : SurgeAlpha.a04,
+                foregroundAlpha: iconAlpha,
               ),
-              const SizedBox(width: SurgeSpace.l),
+              const SizedBox(width: SurgeSpace.m),
             ],
             Flexible(
               child: Text(
                 item.label,
                 style: context.typography.controlLabel.copyWith(
-                  color: foregroundColor,
+                  color: labelColor,
                 ),
               ),
             ),
@@ -347,19 +346,8 @@ class _CommonPopupMenuItemsState extends State<_CommonPopupMenuItems> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final item in items.asMap().entries) ...[
+        for (final item in items.asMap().entries)
           _popupMenuItem(context, item: item.value, index: item.key),
-          if (item.value != items.last)
-            Divider(
-              height: 0.5,
-              thickness: 0.5,
-              indent: 12,
-              endIndent: 12,
-              color: SurgeTheme.of(
-                context,
-              ).separator.withValues(alpha: SurgeAlpha.a62),
-            ),
-        ],
       ],
     );
   }

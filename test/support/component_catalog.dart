@@ -5,7 +5,9 @@ import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/widgets/dialog.dart';
 import 'package:fl_clash/widgets/input.dart';
+import 'package:fl_clash/models/common.dart';
 import 'package:fl_clash/widgets/list.dart';
+import 'package:fl_clash/widgets/popup.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -274,6 +276,34 @@ final componentCatalog = <CatalogEntry>[
           ],
         ),
       ],
+    ),
+  ),
+  CatalogEntry(
+    'CommonPopupMenu',
+    (_) => const Align(
+      alignment: Alignment.centerLeft,
+      child: CommonPopupMenu(
+        minWidth: 188,
+        items: [
+          PopupMenuItemData(
+            icon: SurgeIcons.edit,
+            label: 'Edit',
+            onPressed: _noop,
+          ),
+          PopupMenuItemData(
+            icon: SurgeIcons.sync,
+            label: 'A longer menu item label',
+            onPressed: _noop,
+          ),
+          PopupMenuItemData(icon: SurgeIcons.share, label: 'Disabled'),
+          PopupMenuItemData(
+            icon: SurgeIcons.delete,
+            label: 'Delete',
+            danger: true,
+            onPressed: _noop,
+          ),
+        ],
+      ),
     ),
   ),
   CatalogEntry(
