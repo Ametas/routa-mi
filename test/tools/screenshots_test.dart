@@ -4,6 +4,9 @@ import 'dart:ui' as ui;
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/app.dart';
+import 'package:fl_clash/providers/config.dart';
+import 'package:fl_clash/providers/database.dart';
+import 'package:fl_clash/state.dart';
 import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
@@ -98,6 +101,7 @@ void main() {
     'logs': () => const LogsView(),
     'dashboard': () => const DashboardView(),
     'profiles': () => const ProfilesView(),
+    'profiles_active': () => const ProfilesView(),
     'proxies': () => const ProxiesView(),
   };
 
@@ -114,9 +118,29 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           viewSizeProvider.overrideWithBuild((_, _) => const Size(384, 853)),
+          if (name == 'profiles_active') ...[
+            profilesProvider.overrideWithBuild(
+              (_, _) => const [
+                Profile(
+                  id: 1,
+                  label: 'Home',
+                  url: 'https://example.com/home',
+                  autoUpdateDuration: Duration(hours: 12),
+                ),
+                Profile(
+                  id: 2,
+                  label: 'Work',
+                  url: 'https://example.com/work',
+                  autoUpdateDuration: Duration(hours: 12),
+                ),
+              ],
+            ),
+            currentProfileIdProvider.overrideWithBuild((_, _) => 1),
+          ],
         ],
       );
       addTearDown(container.dispose);
+      globalState.container = container;
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
