@@ -10,6 +10,7 @@ export 'surge_animated_reveal.dart';
 export 'surge_card.dart';
 export 'surge_delay_pill.dart';
 export 'surge_dual_select_bar.dart';
+export 'surge_icon_tile.dart';
 export 'surge_list_tile.dart';
 export 'surge_row.dart';
 export 'surge_motion.dart';

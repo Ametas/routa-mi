@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:fl_clash/l10n/l10n.dart';
+import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/theme/surge_theme_data.dart';
@@ -65,6 +66,16 @@ void main() {
     'config': () => const ConfigView(),
     'network': () => const Scaffold(body: NetworkListView()),
     'dns': () => const Scaffold(body: DnsListView()),
+    'profiles_manage': () => const Scaffold(
+      body: ProfilesManageSheet(
+        profiles: [
+          Profile(id: 1, label: 'Home', autoUpdateDuration: Duration.zero),
+          Profile(id: 2, label: 'Work', autoUpdateDuration: Duration.zero),
+        ],
+      ),
+    ),
+    'profiles_manage_empty': () =>
+        const Scaffold(body: ProfilesManageSheet(profiles: [])),
     'logs': () => const LogsView(),
     'dashboard': () => const DashboardView(),
     'profiles': () => const ProfilesView(),

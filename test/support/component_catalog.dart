@@ -54,6 +54,7 @@ final componentCatalog = <CatalogEntry>[
     'SurgeSection',
     (_) => const SurgeSection(
       title: 'Section title',
+      subtitle: '3',
       footer: 'Footer text explaining what the rows above change.',
       showDividers: true,
       children: [
@@ -70,6 +71,25 @@ final componentCatalog = <CatalogEntry>[
           onTap: _noop,
         ),
         SurgeListTile(title: 'Disabled row', enabled: false),
+      ],
+    ),
+  ),
+  CatalogEntry(
+    'SurgeIconTile',
+    (context) => Row(
+      children: [
+        SurgeIconTile(
+          icon: SurgeIcons.mediaCheck,
+          color: SurgeTheme.of(context).primary,
+        ),
+        const SizedBox(width: SurgeSpace.s),
+        SurgeIconTile(
+          icon: SurgeIcons.hub,
+          color: SurgeTheme.of(context).textSecondary,
+          shape: SurgeIconTileShape.circle,
+          backgroundAlpha: SurgeAlpha.a04,
+          foregroundAlpha: SurgeAlpha.a62,
+        ),
       ],
     ),
   ),

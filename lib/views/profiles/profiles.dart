@@ -103,7 +103,7 @@ class _ProfilesViewState extends State<ProfilesView> {
                   props: const SheetProps(isScrollControlled: true),
                   builder: (_) {
                     return AdaptiveSheetScaffold(
-                      body: _ProfilesManageSheet(profiles: profiles),
+                      body: ProfilesManageSheet(profiles: profiles),
                       title: context.appLocalizations.profileManagement,
                       appBarActions: const [],
                     );
@@ -243,15 +243,7 @@ class _MediaCheckCompactRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _SoftOsIconSurface(
-              icon: SurgeIcons.mediaCheck,
-              color: surge.primary,
-              size: 30,
-              radius: 10,
-              iconSize: SurgeIconSize.inline,
-              backgroundAlpha: 0.08,
-              foregroundAlpha: 0.88,
-            ),
+            SurgeIconTile(icon: SurgeIcons.mediaCheck, color: surge.primary),
             const SizedBox(width: SurgeSpace.m),
             Expanded(
               child: Column(
@@ -295,53 +287,16 @@ class _MediaCheckCompactRow extends StatelessWidget {
   }
 }
 
-class _SoftOsIconSurface extends StatelessWidget {
-  const _SoftOsIconSurface({
-    required this.icon,
-    required this.color,
-    this.size = 30,
-    this.radius,
-    this.iconSize = 16,
-    this.backgroundAlpha = 0.055,
-    this.foregroundAlpha = 0.72,
-  });
-
-  final IconData icon;
-  final Color color;
-  final double size;
-  final double? radius;
-  final double iconSize;
-  final double backgroundAlpha;
-  final double foregroundAlpha;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: backgroundAlpha),
-        borderRadius: BorderRadius.circular(radius ?? size / 2),
-      ),
-      child: Icon(
-        icon,
-        size: iconSize,
-        color: color.withValues(alpha: foregroundAlpha),
-      ),
-    );
-  }
-}
-
-class _ProfilesManageSheet extends StatefulWidget {
-  const _ProfilesManageSheet({required this.profiles});
+class ProfilesManageSheet extends StatefulWidget {
+  const ProfilesManageSheet({super.key, required this.profiles});
 
   final List<Profile> profiles;
 
   @override
-  State<_ProfilesManageSheet> createState() => _ProfilesManageSheetState();
+  State<ProfilesManageSheet> createState() => _ProfilesManageSheetState();
 }
 
-class _ProfilesManageSheetState extends State<_ProfilesManageSheet> {
+class _ProfilesManageSheetState extends State<ProfilesManageSheet> {
   late List<Profile> _profiles;
 
   @override
@@ -351,7 +306,7 @@ class _ProfilesManageSheetState extends State<_ProfilesManageSheet> {
   }
 
   @override
-  void didUpdateWidget(covariant _ProfilesManageSheet oldWidget) {
+  void didUpdateWidget(covariant ProfilesManageSheet oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!profileListEquality.equals(oldWidget.profiles, widget.profiles)) {
       _profiles = List.from(widget.profiles);
@@ -436,37 +391,45 @@ class _ProfilesManageSheetState extends State<_ProfilesManageSheet> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _ProfileSettingSection(
-            title: context.appLocalizations.addProfileTitle,
+          SurgeSection(
+            title: appLocalizations.addProfileTitle,
+            margin: const EdgeInsets.only(bottom: SurgeSpace.l),
             children: [
-              _ProfileSettingOption(
-                label: appLocalizations.qrcode,
+              SurgeListTile(
+                title: appLocalizations.qrcode,
                 subtitle: appLocalizations.qrcodeDesc,
+                showChevron: true,
                 onTap: _toScan,
               ),
-              _ProfileSettingOption(
-                label: appLocalizations.file,
+              SurgeListTile(
+                title: appLocalizations.file,
                 subtitle: appLocalizations.fileDesc,
+                showChevron: true,
                 onTap: _handleAddProfileFormFile,
               ),
-              _ProfileSettingOption(
-                label: appLocalizations.url,
+              SurgeListTile(
+                title: appLocalizations.url,
                 subtitle: appLocalizations.urlDesc,
+                showChevron: true,
+                showDivider: false,
                 onTap: _toAddUrl,
               ),
             ],
           ),
-          const SizedBox(height: SurgeSpace.l),
-          _ProfileSettingSection(
-            title: context.appLocalizations.profileSort,
+          SurgeSection(
+            title: appLocalizations.profileSort,
             subtitle: '${_profiles.length}',
+            margin: EdgeInsets.zero,
             children: [
               if (_profiles.isEmpty)
-                _ProfileSettingOption(
-                  icon: SurgeIcons.sort,
-                  label: context.appLocalizations.noProfiles,
+                SurgeListTile(
+                  leading: SurgeIconTile(
+                    icon: SurgeIcons.sort,
+                    color: SurgeTheme.of(context).textSecondary,
+                  ),
+                  title: appLocalizations.noProfiles,
                   enabled: false,
-                  onTap: () {},
+                  showDivider: false,
                 )
               else
                 ReorderableListView.builder(
@@ -479,10 +442,15 @@ class _ProfilesManageSheetState extends State<_ProfilesManageSheet> {
                   onReorder: _handleReorder,
                   itemBuilder: (_, index) {
                     final profile = _profiles[index];
-                    return _ProfileSortOption(
+                    return SurgeListTile(
                       key: ValueKey(profile.id),
-                      profile: profile,
-                      index: index,
+                      title: profile.realLabel,
+                      dense: true,
+                      showDivider: index != _profiles.length - 1,
+                      trailing: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(SurgeIcons.dragHandle),
+                      ),
                     );
                   },
                   itemCount: _profiles.length,
@@ -653,202 +621,6 @@ class _AddUrlProfileSheetState extends State<_AddUrlProfileSheet> {
                     },
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ProfileSettingSection extends StatelessWidget {
-  const _ProfileSettingSection({
-    required this.title,
-    required this.children,
-    this.subtitle,
-  });
-
-  final String title;
-  final String? subtitle;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            SurgeSpace.xs,
-            0,
-            SurgeSpace.xs,
-            SurgeSpace.s,
-          ),
-          child: Row(
-            children: [
-              Text(
-                title,
-                style: context.typography.cardTitle.copyWith(
-                  color: surge.textPrimary,
-                ),
-              ),
-              if (subtitle != null) ...[
-                const SizedBox(width: SurgeSpace.s),
-                Text(
-                  subtitle!,
-                  style: context.typography.chartLabel.copyWith(
-                    color: surge.textSecondary,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        SurgeCard(
-          padding: EdgeInsets.zero,
-          borderRadius: 18,
-          shadow: true,
-          child: Column(children: children),
-        ),
-      ],
-    );
-  }
-}
-
-class _ProfileSettingOption extends StatelessWidget {
-  const _ProfileSettingOption({
-    required this.label,
-    required this.onTap,
-    this.icon,
-    this.subtitle,
-    this.enabled = true,
-  });
-
-  final IconData? icon;
-  final String label;
-  final String? subtitle;
-  final VoidCallback onTap;
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final foreground = enabled
-        ? surge.textSecondary
-        : surge.textSecondary.withValues(alpha: SurgeAlpha.a38);
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: enabled ? onTap : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: SurgeSpace.l,
-            vertical: SurgeSpace.m,
-          ),
-          child: Row(
-            children: [
-              if (icon != null) ...[
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: foreground.withValues(alpha: SurgeAlpha.a08),
-                    borderRadius: BorderRadius.circular(surge.radii.input),
-                  ),
-                  child: Icon(
-                    icon,
-                    size: SurgeIconSize.compact,
-                    color: foreground,
-                  ),
-                ),
-                const SizedBox(width: SurgeSpace.m),
-              ],
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.typography.rowTitle.copyWith(
-                        color: enabled
-                            ? surge.textPrimary
-                            : surge.textSecondary.withValues(
-                                alpha: SurgeAlpha.a38,
-                              ),
-                      ),
-                    ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: SurgeSpace.xs),
-                      Text(
-                        subtitle!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.typography.supporting.copyWith(
-                          color: surge.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              if (enabled)
-                Icon(
-                  SurgeIcons.chevronRight,
-                  color: surge.textSecondary.withValues(alpha: SurgeAlpha.a72),
-                  size: SurgeIconSize.regular,
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ProfileSortOption extends StatelessWidget {
-  const _ProfileSortOption({
-    super.key,
-    required this.profile,
-    required this.index,
-  });
-
-  final Profile profile;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-
-    return Material(
-      color: Colors.transparent,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SurgeSpace.l,
-          vertical: SurgeSpace.m,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                profile.realLabel,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.typography.rowTitle.copyWith(
-                  color: surge.textPrimary,
-                ),
-              ),
-            ),
-            ReorderableDragStartListener(
-              index: index,
-              child: Icon(
-                SurgeIcons.dragHandle,
-                color: surge.textSecondary.withValues(alpha: SurgeAlpha.a82),
               ),
             ),
           ],
@@ -1156,14 +928,12 @@ class _CurrentProfileExpandButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
             child: Row(
               children: [
-                _SoftOsIconSurface(
+                SurgeIconTile(
                   icon: SurgeIcons.hub,
                   color: enabled ? surge.primary : surge.textSecondary,
-                  size: 30,
-                  radius: 15,
-                  iconSize: SurgeIconSize.inline,
-                  backgroundAlpha: enabled ? 0.08 : 0.04,
-                  foregroundAlpha: enabled ? 0.88 : 0.55,
+                  shape: SurgeIconTileShape.circle,
+                  backgroundAlpha: enabled ? SurgeAlpha.a08 : SurgeAlpha.a04,
+                  foregroundAlpha: enabled ? SurgeAlpha.a92 : SurgeAlpha.a62,
                 ),
                 const SizedBox(width: SurgeSpace.m),
                 Expanded(
