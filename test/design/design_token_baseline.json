@@ -117,9 +117,6 @@
   "lib/widgets/scroll.dart": {
     "radius": 1
   },
-  "lib/widgets/setting.dart": {
-    "spacing": 1
-  },
   "lib/widgets/sheet.dart": {
     "spacing": 2,
     "radius": 2

@@ -15,9 +15,10 @@ class DeveloperView extends ConsumerWidget {
 
   Widget _getDeveloperList(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
-    return generateSectionV2(
+    return SurgeSection(
       title: appLocalizations.options,
-      items: [
+      showDividers: true,
+      children: [
         ListItem(
           title: Text(appLocalizations.messageTest),
           minVerticalPadding: 12,

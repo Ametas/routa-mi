@@ -576,7 +576,7 @@ class _AccessControlPanelState extends ConsumerState<AccessControlPanel> {
           final accessControlMode = ref.watch(
             accessControlStateProvider.select((state) => state.mode),
           );
-          return SurgeSettingSection(
+          return SurgeSection(
             title: appLocalizations.mode,
             children: [
               for (
@@ -622,7 +622,7 @@ class _AccessControlPanelState extends ConsumerState<AccessControlPanel> {
           final accessSortType = ref.watch(
             accessControlStateProvider.select((state) => state.sort),
           );
-          return SurgeSettingSection(
+          return SurgeSection(
             title: appLocalizations.sort,
             children: [
               for (var index = 0; index < AccessSortType.values.length; index++)
@@ -664,7 +664,7 @@ class _AccessControlPanelState extends ConsumerState<AccessControlPanel> {
                   VM2(state.isFilterSystemApp, state.isFilterNonInternetApp),
             ),
           );
-          return SurgeSettingSection(
+          return SurgeSection(
             title: appLocalizations.source,
             children: [
               SurgeSettingOption(

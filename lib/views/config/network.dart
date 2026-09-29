@@ -2,6 +2,7 @@ import 'package:fl_clash/services/settings/settings_contract.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/config.dart';
+import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -398,37 +399,42 @@ class NetworkListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
-    return generateListView([
-      if (system.isAndroid) const VPNItem(),
-      if (system.isAndroid)
-        ...generateSection(
-          items: [
-            const VpnSystemProxyItem(),
-            const BypassDomainItem(),
-            const SmartAutoStopItem(),
-            const SmartAutoStopNetworksItem(),
-            const AllowBypassItem(),
-            const Ipv6Item(),
-            const DNSHijackingItem(),
+    return SurgeSectionList(
+      sections: [
+        if (system.isAndroid)
+          const SurgeSection(
+            showDividers: true,
+            children: [
+              VPNItem(),
+              VpnSystemProxyItem(),
+              BypassDomainItem(),
+              SmartAutoStopItem(),
+              SmartAutoStopNetworksItem(),
+              AllowBypassItem(),
+              Ipv6Item(),
+              DNSHijackingItem(),
+            ],
+          ),
+        if (system.isDesktop)
+          SurgeSection(
+            title: appLocalizations.system,
+            showDividers: true,
+            children: const [SystemProxyItem(), BypassDomainItem()],
+          ),
+        SurgeSection(
+          title: appLocalizations.options,
+          showDividers: true,
+          children: [
+            if (system.isDesktop) const TUNItem(),
+            if (system.isMacOS) const AutoSetSystemDnsItem(),
+            const TunStackItem(),
+            if (!system.isDesktop) ...[
+              const RouteModeItem(),
+              const RouteAddressItem(),
+            ],
           ],
         ),
-      if (system.isDesktop)
-        ...generateSection(
-          title: appLocalizations.system,
-          items: [const SystemProxyItem(), const BypassDomainItem()],
-        ),
-      ...generateSection(
-        title: appLocalizations.options,
-        items: [
-          if (system.isDesktop) const TUNItem(),
-          if (system.isMacOS) const AutoSetSystemDnsItem(),
-          const TunStackItem(),
-          if (!system.isDesktop) ...[
-            const RouteModeItem(),
-            const RouteAddressItem(),
-          ],
-        ],
-      ),
-    ]);
+      ],
+    );
   }
 }

@@ -6,6 +6,8 @@ import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
+import 'package:fl_clash/views/config/dns.dart';
+import 'package:fl_clash/views/config/network.dart';
 import 'package:fl_clash/views/theme.dart';
 import 'package:fl_clash/views/views.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -61,6 +63,8 @@ void main() {
     'backup': () => const BackupAndRestore(),
     'access': () => const AccessView(),
     'config': () => const ConfigView(),
+    'network': () => const Scaffold(body: NetworkListView()),
+    'dns': () => const Scaffold(body: DnsListView()),
     'logs': () => const LogsView(),
     'dashboard': () => const DashboardView(),
     'profiles': () => const ProfilesView(),

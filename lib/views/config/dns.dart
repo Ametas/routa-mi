@@ -1,6 +1,7 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/config.dart';
+import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -629,27 +630,26 @@ class DnsOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
-    return Column(
-      children: generateSection(
-        title: appLocalizations.options,
-        items: [
-          const StatusItem(),
-          const ListenItem(),
-          const UseHostsItem(),
-          const UseSystemHostsItem(),
-          const IPv6Item(),
-          const RespectRulesItem(),
-          const PreferH3Item(),
-          const DnsModeItem(),
-          const FakeIpRangeItem(),
-          const FakeIpFilterItem(),
-          const DefaultNameserverItem(),
-          const NameserverPolicyItem(),
-          const NameserverItem(),
-          const FallbackItem(),
-          const ProxyServerNameserverItem(),
-        ],
-      ),
+    return SurgeSection(
+      title: appLocalizations.options,
+      showDividers: true,
+      children: const [
+        StatusItem(),
+        ListenItem(),
+        UseHostsItem(),
+        UseSystemHostsItem(),
+        IPv6Item(),
+        RespectRulesItem(),
+        PreferH3Item(),
+        DnsModeItem(),
+        FakeIpRangeItem(),
+        FakeIpFilterItem(),
+        DefaultNameserverItem(),
+        NameserverPolicyItem(),
+        NameserverItem(),
+        FallbackItem(),
+        ProxyServerNameserverItem(),
+      ],
     );
   }
 }
@@ -660,17 +660,16 @@ class FallbackFilterOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
-    return Column(
-      children: generateSection(
-        title: appLocalizations.fallbackFilter,
-        items: [
-          const GeoipItem(),
-          const GeoipCodeItem(),
-          const GeositeItem(),
-          const IpcidrItem(),
-          const DomainItem(),
-        ],
-      ),
+    return SurgeSection(
+      title: appLocalizations.fallbackFilter,
+      showDividers: true,
+      children: const [
+        GeoipItem(),
+        GeoipCodeItem(),
+        GeositeItem(),
+        IpcidrItem(),
+        DomainItem(),
+      ],
     );
   }
 }
@@ -696,11 +695,13 @@ class DnsListView extends ConsumerWidget {
       null when ref.watch(currentProfileIdProvider) == null => settingsText(context, '请先添加订阅，再配置 DNS 覆写', 'Add a subscription before configuring DNS override'),
       null => settingsText(context, source.isLoading ? '正在确认 DNS 来源…' : 'DNS 来源暂不可用，请选择订阅并等待内核就绪。', source.isLoading ? 'Resolving DNS source…' : 'DNS source unavailable; select a profile and wait for the core.'),
     };
-    return generateListView([
-      OverrideItem(description: label),
-      if (source.hasError || (value == null && !source.isLoading))
-        TextButton(onPressed: () => ref.invalidate(dnsSettingsSourceProvider),
-          child: Text(settingsText(context, '重试', 'Retry'))),
+    return SurgeSectionList(sections: [
+      SurgeSection(showDividers: true, children: [
+        OverrideItem(description: label),
+        if (source.hasError || (value == null && !source.isLoading))
+          TextButton(onPressed: () => ref.invalidate(dnsSettingsSourceProvider),
+            child: Text(settingsText(context, '重试', 'Retry'))),
+      ]),
       IgnorePointer(ignoring: !editable, child: ExcludeSemantics(excluding: !editable,
         child: Opacity(opacity: editable ? 1 : 0.45, child: const DnsOptions()))),
       IgnorePointer(ignoring: !editable, child: ExcludeSemantics(excluding: !editable,
