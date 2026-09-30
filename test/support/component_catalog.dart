@@ -346,19 +346,46 @@ final componentCatalog = <CatalogEntry>[
     'CommonDialog',
     (context) => const CommonDialog(
       title: 'Dialog title',
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('Dialog body text that explains the action.'),
-          SizedBox(height: SurgeSpace.l),
-          SurgeDialogActionRow(
-            cancelLabel: 'Cancel',
-            submitLabel: 'Confirm',
-            onCancel: _noop,
-            onSubmit: _noop,
-          ),
-        ],
-      ),
+      actions: [
+        SurgeDialogActionButton(label: 'Cancel', onPressed: _noop),
+        SurgeDialogActionButton(
+          label: 'Confirm',
+          primary: true,
+          onPressed: _noop,
+        ),
+      ],
+      child: Text('Dialog body text that explains the action.'),
+    ),
+  ),
+  CatalogEntry(
+    'SurgeDialogActionButton',
+    (context) => const Column(
+      spacing: SurgeSpace.s,
+      children: [
+        Row(
+          children: [
+            SurgeDialogActionButton(
+              label: 'Remove',
+              destructive: true,
+              onPressed: _noop,
+            ),
+            SizedBox(width: SurgeSpace.l),
+            SurgeDialogActionButton(
+              label: 'Disabled',
+              primary: true,
+              onPressed: null,
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            SurgeDialogActionButton(
+              label: 'A long action label that wraps',
+              onPressed: _noop,
+            ),
+          ],
+        ),
+      ],
     ),
   ),
 ];

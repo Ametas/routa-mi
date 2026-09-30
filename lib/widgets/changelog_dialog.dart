@@ -19,30 +19,19 @@ class AppChangelogDialog extends StatelessWidget {
     final dialog = CommonDialog(
       title: context.appLocalizations.changelog,
       overrideScroll: true,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Flexible(
-            child: ListView.separated(
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              itemCount: entries.length,
-              separatorBuilder: (_, _) => const SizedBox(height: SurgeSpace.m),
-              itemBuilder: (_, index) => _ChangelogCard(entry: entries[index]),
-            ),
-          ),
-          const SizedBox(height: SurgeSpace.xl),
-          Row(
-            children: [
-              SurgeDialogActionButton(
-                label: context.appLocalizations.confirm,
-                primary: true,
-                onPressed: () => Navigator.of(context).pop(true),
-              ),
-            ],
-          ),
-        ],
+      actions: [
+        SurgeDialogActionButton(
+          label: context.appLocalizations.confirm,
+          primary: true,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
+      child: ListView.separated(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        itemCount: entries.length,
+        separatorBuilder: (_, _) => const SizedBox(height: SurgeSpace.m),
+        itemBuilder: (_, index) => _ChangelogCard(entry: entries[index]),
       ),
     );
     return PopScope(canPop: !requireConfirmation, child: dialog);

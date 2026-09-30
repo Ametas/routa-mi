@@ -70,11 +70,11 @@ class _BackupAndRestoreState extends ConsumerState<BackupAndRestore>
             title: title,
             message: message,
             actions: [
-              _SoftOsDialogAction(
+              SurgeDialogActionButton(
                 label: context.appLocalizations.cancel,
                 onPressed: () => Navigator.pop(context, false),
               ),
-              _SoftOsDialogAction(
+              SurgeDialogActionButton(
                 label: confirmLabel ?? context.appLocalizations.confirm,
                 primary: true,
                 onPressed: () => Navigator.pop(context, true),
@@ -93,11 +93,11 @@ class _BackupAndRestoreState extends ConsumerState<BackupAndRestore>
       title: title,
       message: message,
       actions: [
-        _SoftOsDialogAction(
+        SurgeDialogActionButton(
           label: context.appLocalizations.cancel,
           onPressed: () => Navigator.pop(context),
         ),
-        _SoftOsDialogAction(
+        SurgeDialogActionButton(
           label: context.appLocalizations.confirm,
           primary: true,
           onPressed: () => Navigator.pop(context),
@@ -489,11 +489,11 @@ class _CenteredWebDAVFileListState extends State<_CenteredWebDAVFileList> {
       maxContentHeight: 350,
       childScrolls: true,
       actions: [
-        _SoftOsDialogAction(
+        SurgeDialogActionButton(
           label: context.appLocalizations.cancel,
           onPressed: () => Navigator.pop(context),
         ),
-        _SoftOsDialogAction(
+        SurgeDialogActionButton(
           label: context.appLocalizations.restore,
           primary: true,
           onPressed: selected == null
@@ -702,7 +702,7 @@ class _WebDAVFormDialogState extends ConsumerState<WebDAVFormDialog> {
     return _SoftOsBackupDialog(
       title: appLocalizations.webDAVConfiguration,
       actions: [
-        _SoftOsDialogAction(
+        SurgeDialogActionButton(
           label: widget.dav == null
               ? appLocalizations.cancel
               : appLocalizations.delete,
@@ -711,7 +711,7 @@ class _WebDAVFormDialogState extends ConsumerState<WebDAVFormDialog> {
               ? () => Navigator.pop(context)
               : _delete,
         ),
-        _SoftOsDialogAction(
+        SurgeDialogActionButton(
           label: appLocalizations.save,
           primary: true,
           onPressed: _submit,
@@ -816,6 +816,7 @@ class _SoftOsBackupDialog extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     return CommonDialog(
       title: title,
+      actions: actions,
       overrideScroll: true,
       padding: const EdgeInsets.fromLTRB(
         SurgeSpace.xl,
@@ -865,85 +866,7 @@ class _SoftOsBackupDialog extends StatelessWidget {
                     : SingleChildScrollView(child: child),
               ),
             ),
-          const SizedBox(height: SurgeSpace.xl),
-          if (actions.length == 2)
-            Row(
-              children: [
-                Expanded(child: actions.first),
-                const SizedBox(width: SurgeSpace.l),
-                Expanded(child: actions.last),
-              ],
-            )
-          else
-            Wrap(
-              alignment: WrapAlignment.end,
-              spacing: 8,
-              runSpacing: 8,
-              children: actions,
-            ),
         ],
-      ),
-    );
-  }
-}
-
-class _SoftOsDialogAction extends StatelessWidget {
-  const _SoftOsDialogAction({
-    required this.label,
-    required this.onPressed,
-    this.primary = false,
-    this.destructive = false,
-  });
-
-  final String label;
-  final VoidCallback? onPressed;
-  final bool primary;
-  final bool destructive;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final enabled = onPressed != null;
-    final background = destructive
-        ? surge.red.withValues(alpha: SurgeAlpha.a12)
-        : primary
-        ? enabled
-              ? surge.primary
-              : surge.primary.withValues(alpha: SurgeAlpha.a16)
-        : surge.fill;
-    final foreground = destructive
-        ? surge.red
-        : primary
-        ? enabled
-              ? surge.onPrimary
-              : surge.textSecondary.withValues(alpha: SurgeAlpha.a72)
-        : surge.textPrimary;
-    return Semantics(
-      button: true,
-      label: label,
-      child: TextButton(
-        onPressed: onPressed,
-        style: TextButton.styleFrom(
-          minimumSize: const Size.fromHeight(45),
-          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
-          foregroundColor: foreground,
-          backgroundColor: background,
-          disabledForegroundColor: foreground,
-          disabledBackgroundColor: background,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(surge.radii.button),
-            side: primary
-                ? BorderSide.none
-                : BorderSide(
-                    color: destructive
-                        ? surge.red.withValues(alpha: SurgeAlpha.a16)
-                        : surge.separator,
-                    width: surge.spacing.hairline,
-                  ),
-          ),
-          textStyle: context.typography.controlLabel,
-        ),
-        child: Text(label),
       ),
     );
   }
@@ -970,11 +893,11 @@ class _SoftOsRestoreStrategyDialogState
       title: currentAppLocalizations.restoreStrategy,
       message: currentAppLocalizations.selectRestoreStrategy,
       actions: [
-        _SoftOsDialogAction(
+        SurgeDialogActionButton(
           label: context.appLocalizations.cancel,
           onPressed: () => Navigator.pop(context),
         ),
-        _SoftOsDialogAction(
+        SurgeDialogActionButton(
           label: context.appLocalizations.submit,
           primary: true,
           onPressed: () => Navigator.pop(context, selected),
