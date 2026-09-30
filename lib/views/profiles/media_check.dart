@@ -1094,6 +1094,7 @@ class _InlineFilterMetric extends StatelessWidget {
       onTap: onTap,
       scaleFeedback: false,
       borderRadius: BorderRadius.circular(surge.radii.input),
+      clipChild: false,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: SurgeSpace.xxs),
         child: Column(

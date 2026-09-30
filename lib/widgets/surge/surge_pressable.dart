@@ -19,6 +19,7 @@ class SurgePressable extends StatefulWidget {
     this.enabled = true,
     this.semanticLabel,
     this.behavior = HitTestBehavior.opaque,
+    this.clipChild = true,
   });
 
   final Widget child;
@@ -34,6 +35,10 @@ class SurgePressable extends StatefulWidget {
   final bool enabled;
   final String? semanticLabel;
   final HitTestBehavior behavior;
+
+  /// Clips [child] to [borderRadius]. Turn off when the child has no
+  /// inset of its own (text at the edge); the press overlay stays rounded.
+  final bool clipChild;
 
   @override
   State<SurgePressable> createState() => _SurgePressableState();
@@ -81,7 +86,10 @@ class _SurgePressableState extends State<SurgePressable> {
         fit: StackFit.passthrough,
         clipBehavior: Clip.none,
         children: [
-          ClipRRect(borderRadius: widget.borderRadius, child: widget.child),
+          if (widget.clipChild)
+            ClipRRect(borderRadius: widget.borderRadius, child: widget.child)
+          else
+            widget.child,
           if (widget.overlayFeedback)
             Positioned(
               left: -overlayInsets.left,
