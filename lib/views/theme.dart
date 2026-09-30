@@ -24,18 +24,6 @@ class ThemeModeItem {
   });
 }
 
-class _SegmentedItem<T> {
-  final T value;
-  final IconData iconData;
-  final String label;
-
-  const _SegmentedItem({
-    required this.value,
-    required this.iconData,
-    required this.label,
-  });
-}
-
 class FontFamilyItem {
   final FontFamily fontFamily;
   final String label;
@@ -145,138 +133,18 @@ class _SurgeThemeModeControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _SurgeSegmentedControl<ThemeMode>(
+    return SurgeSegmentedControl<ThemeMode>(
       value: value,
+      height: 48,
       items: [
         for (final item in items)
-          _SegmentedItem(
+          SurgeSegmentedItem(
             value: item.themeMode,
-            iconData: item.iconData,
+            icon: item.iconData,
             label: item.label,
           ),
       ],
       onChanged: onChanged,
-    );
-  }
-}
-
-class _SurgeSegmentedControl<T> extends StatelessWidget {
-  const _SurgeSegmentedControl({
-    required this.value,
-    required this.items,
-    required this.onChanged,
-  });
-
-  final T value;
-  final List<_SegmentedItem<T>> items;
-  final ValueChanged<T> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final selectedIndex = items
-        .indexWhere((item) => item.value == value)
-        .clamp(0, items.length - 1);
-    return Container(
-      padding: const EdgeInsets.all(SurgeSpace.xs),
-      decoration: BoxDecoration(
-        color: surge.fill,
-        borderRadius: BorderRadius.circular(surge.radii.list),
-      ),
-      child: SizedBox(
-        height: 40,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final itemWidth = constraints.maxWidth / items.length;
-            return Stack(
-              children: [
-                AnimatedPositioned(
-                  duration: SurgeMotion.container,
-                  curve: SurgeMotion.stateCurve,
-                  left: itemWidth * selectedIndex,
-                  top: 0,
-                  bottom: 0,
-                  width: itemWidth,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: surge.elevatedCard,
-                      borderRadius: BorderRadius.circular(
-                        surge.radii.segmentedIndicator,
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    for (final item in items)
-                      Expanded(
-                        child: _SurgeSegmentedButton<T>(
-                          item: item,
-                          selected: value == item.value,
-                          onTap: () => onChanged(item.value),
-                        ),
-                      ),
-                  ],
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _SurgeSegmentedButton<T> extends StatelessWidget {
-  const _SurgeSegmentedButton({
-    required this.item,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final _SegmentedItem<T> item;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(surge.radii.segmentedIndicator),
-        child: Container(
-          height: 40,
-          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.s),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                item.iconData,
-                size: SurgeIconSize.compact,
-                color: selected ? surge.primary : surge.textSecondary,
-              ),
-              const SizedBox(width: SurgeSpace.s),
-              Flexible(
-                child: AnimatedDefaultTextStyle(
-                  duration: SurgeMotion.state,
-                  curve: SurgeMotion.stateCurve,
-                  style: context.typography.controlLabel.copyWith(
-                    color: selected ? surge.textPrimary : surge.textSecondary,
-                  ),
-                  child: Text(
-                    item.label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
@@ -350,22 +218,23 @@ class _DynamicColorItem extends ConsumerWidget {
             vertical: SurgeSpace.s,
           ),
           child: dynamicColor
-              ? _SurgeSegmentedControl<DynamicSchemeVariant>(
+              ? SurgeSegmentedControl<DynamicSchemeVariant>(
                   value: schemeVariant,
+                  height: 48,
                   items: [
-                    _SegmentedItem(
+                    SurgeSegmentedItem(
                       value: DynamicSchemeVariant.monochrome,
-                      iconData: SurgeIcons.contrast,
+                      icon: SurgeIcons.contrast,
                       label: context.appLocalizations.monochrome,
                     ),
-                    _SegmentedItem(
+                    SurgeSegmentedItem(
                       value: DynamicSchemeVariant.tonalSpot,
-                      iconData: SurgeIcons.blur,
+                      icon: SurgeIcons.blur,
                       label: context.appLocalizations.tonal,
                     ),
-                    _SegmentedItem(
+                    SurgeSegmentedItem(
                       value: DynamicSchemeVariant.content,
-                      iconData: SurgeIcons.appearance,
+                      icon: SurgeIcons.appearance,
                       label: context.appLocalizations.contentColor,
                     ),
                   ],
@@ -383,22 +252,23 @@ class _DynamicColorItem extends ConsumerWidget {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SurgeSegmentedControl<_StaticChoice>(
+                    SurgeSegmentedControl<_StaticChoice>(
                       value: staticChoice,
+                      height: 48,
                       items: [
-                        _SegmentedItem(
+                        SurgeSegmentedItem(
                           value: _StaticChoice.blueWhite,
-                          iconData: SurgeIcons.water,
+                          icon: SurgeIcons.water,
                           label: context.appLocalizations.blueWhiteMonochrome,
                         ),
-                        _SegmentedItem(
+                        SurgeSegmentedItem(
                           value: _StaticChoice.grayBlack,
-                          iconData: SurgeIcons.contrast,
+                          icon: SurgeIcons.contrast,
                           label: context.appLocalizations.darkMonochrome,
                         ),
-                        _SegmentedItem(
+                        SurgeSegmentedItem(
                           value: _StaticChoice.accent,
-                          iconData: SurgeIcons.colorize,
+                          icon: SurgeIcons.colorize,
                           label: context.appLocalizations.custom,
                         ),
                       ],

@@ -85,8 +85,7 @@
     "spacing": 2
   },
   "lib/views/theme.dart": {
-    "spacing": 1,
-    "gap": 1
+    "spacing": 1
   },
   "lib/views/theme_accent.dart": {
     "gap": 1
