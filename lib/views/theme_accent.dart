@@ -176,6 +176,18 @@ class _AccentPaletteDialogState extends State<_AccentPaletteDialog> {
     final appLocalizations = context.appLocalizations;
     return CommonDialog(
       title: appLocalizations.palette,
+      actions: [
+        SurgeDialogActionButton(
+          label: appLocalizations.cancel,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        SurgeDialogActionButton(
+          label: appLocalizations.confirm,
+          primary: true,
+          onPressed: () =>
+              Navigator.of(context).pop(_controller.value.toARGB32()),
+        ),
+      ],
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -194,14 +206,6 @@ class _AccentPaletteDialogState extends State<_AccentPaletteDialog> {
                 color: SurgeTheme.of(context).textPrimary,
               ),
             ),
-          ),
-          const SizedBox(height: SurgeSpace.xl),
-          SurgeDialogActionRow(
-            cancelLabel: appLocalizations.cancel,
-            submitLabel: appLocalizations.confirm,
-            onCancel: () => Navigator.of(context).pop(),
-            onSubmit: () =>
-                Navigator.of(context).pop(_controller.value.toARGB32()),
           ),
         ],
       ),

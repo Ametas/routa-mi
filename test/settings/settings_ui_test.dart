@@ -81,7 +81,7 @@ void main() {
       );
       await tester.tap(find.text('Open'));
       await tester.pumpAndSettle();
-      expect(find.byType(SurgeDialogActionRow), findsOneWidget);
+      expect(find.byType(SurgeDialogActionButton), findsNWidgets(2));
       expect(find.byType(InputDecorator), findsOneWidget);
       expect(find.text('Native recovery failed'), findsOneWidget);
       await tester.tap(find.text(retry ? 'Retry' : 'Close'));

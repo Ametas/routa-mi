@@ -80,6 +80,17 @@ class SettingsApplyFailureDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) => CommonDialog(
     title: settingsText(context, '设置应用失败', 'Settings application failed'),
+    actions: [
+      SurgeDialogActionButton(
+        label: settingsText(context, '关闭', 'Close'),
+        onPressed: () => Navigator.of(context).pop(false),
+      ),
+      SurgeDialogActionButton(
+        label: settingsText(context, '重试', 'Retry'),
+        primary: true,
+        onPressed: () => Navigator.of(context).pop(true),
+      ),
+    ],
     child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -96,12 +107,6 @@ class SettingsApplyFailureDialog extends StatelessWidget {
             ),
           ),
           child: Text(message, style: context.typography.body),
-        ),
-        SurgeDialogActionRow(
-          cancelLabel: settingsText(context, '关闭', 'Close'),
-          submitLabel: settingsText(context, '重试', 'Retry'),
-          onCancel: () => Navigator.of(context).pop(false),
-          onSubmit: () => Navigator.of(context).pop(true),
         ),
       ],
     ),

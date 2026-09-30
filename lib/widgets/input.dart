@@ -152,36 +152,6 @@ class SurgeDialogActionButton extends StatelessWidget {
   }
 }
 
-class SurgeDialogActionRow extends StatelessWidget {
-  final String cancelLabel;
-  final String submitLabel;
-  final VoidCallback onCancel;
-  final VoidCallback? onSubmit;
-
-  const SurgeDialogActionRow({
-    super.key,
-    required this.cancelLabel,
-    required this.submitLabel,
-    required this.onCancel,
-    required this.onSubmit,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SurgeDialogActionButton(label: cancelLabel, onPressed: onCancel),
-        const SizedBox(width: SurgeSpace.l),
-        SurgeDialogActionButton(
-          label: submitLabel,
-          onPressed: onSubmit,
-          primary: true,
-        ),
-      ],
-    );
-  }
-}
-
 class SurgeField extends StatelessWidget {
   const SurgeField({
     super.key,
@@ -555,6 +525,19 @@ class _InputDialogState extends State<InputDialog> {
 
     return CommonDialog(
       title: title,
+      actions: [
+        SurgeDialogActionButton(
+          label: appLocalizations.cancel,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        SurgeDialogActionButton(
+          label: appLocalizations.submit,
+          primary: true,
+          onPressed: _handleUpdate,
+        ),
+      ],
       child: Form(
         autovalidateMode: widget.autovalidateMode,
         key: _formKey,
@@ -567,14 +550,6 @@ class _InputDialogState extends State<InputDialog> {
               SurgeField(label: labelText, child: buildTextField())
             else
               buildTextField(),
-            SurgeDialogActionRow(
-              cancelLabel: appLocalizations.cancel,
-              submitLabel: appLocalizations.submit,
-              onCancel: () {
-                Navigator.of(context).pop();
-              },
-              onSubmit: _handleUpdate,
-            ),
           ],
         ),
       ),
@@ -1201,6 +1176,19 @@ class _AddDialogState extends State<AddDialog> {
 
     return CommonDialog(
       title: widget.title,
+      actions: [
+        SurgeDialogActionButton(
+          label: appLocalizations.cancel,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        SurgeDialogActionButton(
+          label: appLocalizations.confirm,
+          primary: true,
+          onPressed: _submit,
+        ),
+      ],
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: _formKey,
@@ -1255,14 +1243,6 @@ class _AddDialogState extends State<AddDialog> {
               SurgeField(label: valueField.label, child: buildValueField())
             else
               buildValueField(),
-            SurgeDialogActionRow(
-              cancelLabel: appLocalizations.cancel,
-              submitLabel: appLocalizations.confirm,
-              onCancel: () {
-                Navigator.of(context).pop();
-              },
-              onSubmit: _submit,
-            ),
           ],
         ),
       ),
