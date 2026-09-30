@@ -2,17 +2,20 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/database.dart';
+import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/views/config/dns.dart';
 import 'package:fl_clash/views/config/network.dart';
+import 'package:fl_clash/views/profiles/media_check.dart';
 import 'package:fl_clash/views/theme.dart';
 import 'package:fl_clash/views/views.dart';
 import 'package:fl_clash/widgets/input.dart';
@@ -23,6 +26,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> _loadFont(String family, List<String> files) async {
   final loader = FontLoader(family);
@@ -41,6 +45,24 @@ Future<void> _loadFont(String family, List<String> files) async {
 // Light theme by default; SHOT_BRIGHTNESS=dark renders the dark one.
 //
 // Screens that need a running core may log errors but still render.
+const _heroGroups = [
+  Group(
+    type: GroupType.Selector,
+    name: 'Proxy',
+    now: 'JP01',
+    all: [
+      Proxy(name: 'JP01', type: 'Vless'),
+      Proxy(name: 'HK01', type: 'Vless'),
+      Proxy(name: 'SG01', type: 'Trojan'),
+    ],
+  ),
+];
+
+const _mediaProfiles = [
+  Profile(id: 1, label: 'Daily', autoUpdateDuration: Duration(hours: 24)),
+  Profile(id: 2, label: 'AI', autoUpdateDuration: Duration(hours: 24)),
+];
+
 // Dialogs are opened over an empty screen, the way the app shows them.
 final _dialogs = <String, Future<void> Function(BuildContext)>{
   'dialog_message': (context) => globalState.showMessage(
@@ -133,11 +155,23 @@ void main() {
     'profiles': () => const ProfilesView(),
     'profiles_active': () => const ProfilesView(),
     'proxies': () => const ProxiesView(),
+    'hero_node_sheet': () => const DashboardView(),
+    'media_check': () => ProfileMediaCheckView(
+      profiles: _mediaProfiles,
+      initialProfile: _mediaProfiles.first,
+      configLoader: (profileId) async => {
+        'proxies': [
+          {'name': 'JP01', 'type': 'Vless'},
+          {'name': 'HK01', 'type': 'Vless'},
+        ],
+      },
+    ),
     for (final name in _dialogs.keys) name: () => const Scaffold(),
   };
 
   for (final MapEntry(key: name, value: build) in views.entries) {
     testWidgets('shot $name', skip: skip != null, (tester) async {
+      SharedPreferences.setMockInitialValues({});
       await tester.binding.setSurfaceSize(const Size(384, 853));
       tester.view.devicePixelRatio = 2.5;
       final spec = StaticThemeSpec.resolve(
@@ -149,6 +183,12 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           viewSizeProvider.overrideWithBuild((_, _) => const Size(384, 853)),
+          if (name == 'hero_node_sheet') ...[
+            groupsProvider.overrideWithBuild((_, _) => _heroGroups),
+            currentGroupsStateProvider.overrideWithValue(
+              const GroupsState(value: _heroGroups),
+            ),
+          ],
           if (name == 'profiles_active') ...[
             profilesProvider.overrideWithBuild(
               (_, _) => const [
@@ -206,6 +246,13 @@ void main() {
       final openDialog = _dialogs[name];
       if (openDialog != null) {
         unawaited(openDialog(tester.element(find.byType(Scaffold).first)));
+        for (var i = 0; i < 6; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+      }
+      if (name == 'hero_node_sheet') {
+        final bar = tester.getRect(find.byType(SurgeDualSelectBar));
+        await tester.tapAt(Offset(bar.left + bar.width * 0.75, bar.center.dy));
         for (var i = 0; i < 6; i++) {
           await tester.pump(const Duration(milliseconds: 100));
         }

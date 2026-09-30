@@ -144,9 +144,9 @@ class _ProfilesViewState extends State<ProfilesView> {
                   child: SingleChildScrollView(
                     key: profilesStoreKey,
                     padding: EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      top: 12,
+                      left: SurgeSpace.l,
+                      right: SurgeSpace.l,
+                      top: SurgeSpace.m,
                       bottom: SurgeBottomNavLayout.mainPageBottomPadding(
                         context,
                       ),
@@ -525,10 +525,10 @@ class _AddUrlProfileSheetState extends State<_AddUrlProfileSheet> {
         autovalidateMode: AutovalidateMode.onUnfocus,
         child: ListView(
           padding: EdgeInsets.fromLTRB(
-            20,
-            12,
-            20,
-            20 + MediaQuery.paddingOf(context).bottom,
+            SurgeSpace.xl,
+            SurgeSpace.m,
+            SurgeSpace.xl,
+            SurgeSpace.xl + MediaQuery.paddingOf(context).bottom,
           ),
           children: [
             SurgeField(
@@ -1850,7 +1850,7 @@ class SoftOsUsageBar extends StatelessWidget {
         : surge.primary.withValues(alpha: SurgeAlpha.a72);
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(2.5),
+      borderRadius: BorderRadius.circular(surge.radii.button),
       child: LinearProgressIndicator(
         minHeight: 5,
         value: progress,

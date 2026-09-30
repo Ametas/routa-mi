@@ -49,27 +49,28 @@ class NetworkOverviewCardLayoutCalculator {
   static const double pixelRoundingAllowance = 1;
 
   static double headerHeightFor(DashboardResponsiveLayout layout) =>
-      math.max(layout.legacy(28), layout.textIcon(18));
+      math.max(layout.geometry(28), layout.textIcon(18));
   static double chartHeightFor(DashboardResponsiveLayout layout) =>
-      layout.legacy(82);
+      layout.geometry(82);
   static double headerToChartGapFor(DashboardResponsiveLayout layout) =>
-      layout.legacy(10);
+      layout.geometry(10);
   static double chartToDividerGapFor(DashboardResponsiveLayout layout) =>
-      layout.legacy(16);
+      layout.geometry(16);
   static double dividerToTrafficGapFor(DashboardResponsiveLayout layout) =>
-      layout.legacy(16);
+      layout.geometry(16);
   static double trafficTitleToChartGapFor(DashboardResponsiveLayout layout) =>
-      layout.legacy(24);
+      layout.geometry(24);
   static double latencyHeaderToRowsGapFor(DashboardResponsiveLayout layout) =>
-      layout.legacy(14);
+      layout.geometry(14);
   static double latencyRowGapFor(DashboardResponsiveLayout layout) =>
-      layout.legacy(12);
+      layout.geometry(12);
   static double trafficToDividerGapFor(DashboardResponsiveLayout layout) =>
-      layout.legacy(16);
+      layout.geometry(16);
   static double detectionBarHeightFor(DashboardResponsiveLayout layout) {
     const metricLineHeight = 16.0;
     final scaledLineHeight = metricLineHeight * layout.textScale;
-    return layout.legacy(34) + math.max(0, scaledLineHeight - metricLineHeight);
+    return layout.geometry(34) +
+        math.max(0, scaledLineHeight - metricLineHeight);
   }
 
   static double detectionSectionHeightFor(DashboardResponsiveLayout layout) =>
@@ -79,11 +80,11 @@ class NetworkOverviewCardLayoutCalculator {
     final donutColumn =
         headerHeightFor(layout) +
         trafficTitleToChartGapFor(layout) +
-        layout.legacy(78);
+        layout.geometry(78);
     final latencyColumn =
         headerHeightFor(layout) +
         latencyHeaderToRowsGapFor(layout) +
-        layout.legacy(25) * 3 +
+        layout.geometry(25) * 3 +
         latencyRowGapFor(layout) * 2;
     if (layout.requiresReflow) {
       return donutColumn + layout.geometry(12) + latencyColumn;
@@ -92,7 +93,7 @@ class NetworkOverviewCardLayoutCalculator {
   }
 
   static double naturalOuterHeightFor(DashboardResponsiveLayout layout) {
-    return layout.legacy(16) +
+    return layout.geometry(16) +
         naturalInnerHeightFor(layout) +
         pixelRoundingAllowance;
   }
@@ -100,7 +101,7 @@ class NetworkOverviewCardLayoutCalculator {
   static double naturalInnerHeightFor(DashboardResponsiveLayout layout) {
     final reflowHeaderExtra = layout.requiresReflow ? layout.geometry(32) : 0.0;
     final reflowTextExtra = layout.requiresReflow
-        ? layout.legacy(72) * math.max(0, layout.textScale - 1)
+        ? layout.geometry(72) * math.max(0, layout.textScale - 1)
         : 0.0;
     return headerHeightFor(layout) +
         reflowHeaderExtra +
@@ -216,7 +217,7 @@ class SurgeNetworkOverviewCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(
         layout.cardHorizontalPadding,
-        layout.legacy(16),
+        layout.geometry(16),
         layout.cardHorizontalPadding,
         0,
       ),
@@ -232,7 +233,7 @@ class SurgeNetworkOverviewCard extends StatelessWidget {
         builder: (context, constraints) {
           final cardLayout = NetworkOverviewCardLayoutCalculator.layoutFor(
             availableOuterHeight: constraints.maxHeight.isFinite
-                ? constraints.maxHeight + layout.legacy(16)
+                ? constraints.maxHeight + layout.geometry(16)
                 : NetworkOverviewCardLayoutCalculator.naturalOuterHeightFor(
                     layout,
                   ),
@@ -510,8 +511,8 @@ class _OverviewTrafficTotals extends ConsumerWidget {
         Padding(
           padding: EdgeInsets.only(left: layout.geometry(2)),
           child: SizedBox(
-            width: layout.legacy(78),
-            height: layout.legacy(78),
+            width: layout.geometry(78),
+            height: layout.geometry(78),
             child: DonutChart(
               data: [
                 DonutChartData(
@@ -1331,7 +1332,7 @@ class _PlatformLatencyRow extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             onTap: onRetest,
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: layout.legacy(8)),
+              padding: EdgeInsets.symmetric(vertical: layout.geometry(8)),
               child: _FlowingLatencyBar(
                 widthFactor: barWidthFactor,
                 trackColor: trackColor,
@@ -1414,8 +1415,8 @@ class _BrandImageIcon extends StatelessWidget {
     return Tooltip(
       message: tooltip,
       child: SizedBox(
-        width: layout.legacy(25),
-        height: layout.legacy(25),
+        width: layout.geometry(25),
+        height: layout.geometry(25),
         child: Image.asset(
           assetPath,
           fit: BoxFit.contain,
@@ -1449,8 +1450,8 @@ class _RouteFlagBadge extends StatelessWidget {
         ? _countryCodeToEmoji(countryCode!)
         : null;
     return SizedBox(
-      width: layout.legacy(20),
-      height: layout.legacy(20),
+      width: layout.geometry(20),
+      height: layout.geometry(20),
       child: flag == null || flag.isEmpty
           ? Center(
               child: Icon(
@@ -1539,7 +1540,7 @@ class _FlowingLatencyBarState extends State<_FlowingLatencyBar>
       child: ClipRRect(
         borderRadius: BorderRadius.circular(surge.radii.chart),
         child: SizedBox(
-          height: widget.layout.legacy(8),
+          height: widget.layout.geometry(8),
           child: Stack(
             children: [
               Positioned.fill(child: ColoredBox(color: widget.trackColor)),

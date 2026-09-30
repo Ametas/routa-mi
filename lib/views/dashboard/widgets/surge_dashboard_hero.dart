@@ -326,9 +326,9 @@ class _SurgeDashboardHeroState extends ConsumerState<SurgeDashboardHero>
           : BoxConstraints(minHeight: widget.allocatedHeight!),
       padding: EdgeInsets.fromLTRB(
         layout.cardHorizontalPadding,
-        layout.legacy(18),
+        layout.geometry(18),
         layout.cardHorizontalPadding,
-        layout.legacy(18),
+        layout.geometry(18),
       ),
       decoration: BoxDecoration(
         color: surge.card,
@@ -346,7 +346,7 @@ class _SurgeDashboardHeroState extends ConsumerState<SurgeDashboardHero>
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 subscriptionSelector,
-                SizedBox(height: layout.legacy(8)),
+                SizedBox(height: layout.geometry(8)),
                 Align(alignment: Alignment.centerRight, child: actionButton),
               ],
             )
@@ -500,7 +500,7 @@ class _HeroModeCardSurface extends StatelessWidget {
           height: layout.requiresReflow ? null : height,
           padding: EdgeInsets.symmetric(
             horizontal: layout.geometry(18),
-            vertical: layout.legacy(10),
+            vertical: layout.geometry(10),
           ),
           decoration: BoxDecoration(
             color: fillColor,
@@ -745,12 +745,12 @@ class _HeroActionButton extends StatelessWidget {
         child: ConstrainedBox(
           constraints: BoxConstraints(
             minWidth: layout.geometry(74),
-            minHeight: layout.legacy(28),
+            minHeight: layout.geometry(28),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: layout.geometry(12),
-              vertical: layout.legacy(4),
+              vertical: layout.geometry(4),
             ),
             child: Stack(
               alignment: Alignment.center,
@@ -935,7 +935,7 @@ class _SubscriptionSelectorBar extends ConsumerWidget {
             duration: SurgeMotion.reveal,
             child: Icon(
               SurgeIcons.expand,
-              size: layout.legacy(18),
+              size: layout.geometry(18),
               color: statusColor,
             ),
           ),
@@ -1081,7 +1081,7 @@ class _StatusPill extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: layout.geometry(12),
-        vertical: layout.legacy(9),
+        vertical: layout.geometry(9),
       ),
       decoration: BoxDecoration(
         color: background,
@@ -1246,8 +1246,8 @@ class _ModeSwitch extends StatelessWidget {
           label: context.appLocalizations.global,
         ),
       ],
-      height: layout.legacy(34),
-      padding: EdgeInsets.all(layout.legacy(3)),
+      height: layout.geometry(34),
+      padding: EdgeInsets.all(layout.geometry(3)),
     );
   }
 }
@@ -1288,7 +1288,7 @@ class _HeroProxySelectorBar extends ConsumerWidget {
               selectedProxyName ?? '',
             )
           : null,
-      height: layout.legacy(34),
+      height: layout.geometry(34),
       padding: EdgeInsets.symmetric(horizontal: layout.geometry(14)),
       radius: layout.geometry(22),
       itemRadius: layout.geometry(18),
@@ -1296,7 +1296,7 @@ class _HeroProxySelectorBar extends ConsumerWidget {
       dividerMargin: layout.geometry(10),
       iconSize: layout.geometry(16),
       labelGap: layout.geometry(2),
-      itemVerticalInset: layout.legacy(3),
+      itemVerticalInset: layout.geometry(3),
       labelStyle: context.typography.selectorLabel,
     );
   }
@@ -1413,16 +1413,17 @@ class _HeroProxySelectorBar extends ConsumerWidget {
     final group = matchingGroups.isNotEmpty
         ? matchingGroups.first
         : groups.first;
-    showModalBottomSheet(
+    showSheet(
       context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => SizedBox(
+      props: const SheetProps(isScrollControlled: true),
+      builder: (sheetContext) => SizedBox(
         height: MediaQuery.of(context).size.height * 0.65,
-        child: _NodeSelectionSheet(
-          group: group,
-          currentProxyName: currentProxyName,
+        child: AdaptiveSheetScaffold(
+          title: sheetContext.appLocalizations.nodes,
+          body: _NodeSelectionSheet(
+            group: group,
+            currentProxyName: currentProxyName,
+          ),
         ),
       ),
     );
@@ -1490,166 +1491,99 @@ class _NodeSelectionSheetState extends ConsumerState<_NodeSelectionSheet> {
         )
         .toList();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      child: Column(
-        children: [
-          // Drag handle
-          Container(
-            width: 28,
-            height: 4,
-            margin: const EdgeInsets.only(top: SurgeSpace.s),
-            decoration: ShapeDecoration(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              shape: RoundedSuperellipseBorder(
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
+    return Column(
+      children: [
+        // Search field with embedded action buttons
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: SurgeSpace.xl,
+            vertical: SurgeSpace.s,
           ),
-          // Title bar: same structure as AdaptiveSheetScaffold bottomSheet
-          SizedBox(
-            height: 48,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.s),
-              child: Row(
+          child: TextField(
+            controller: _searchController,
+            onChanged: (value) => setState(() => _searchQuery = value),
+            style: context.typography.body,
+            decoration: surgeInputDecoration(
+              context,
+              hintText: context.appLocalizations.search,
+              prefixIcon: Icon(
+                SurgeIcons.search,
+                color: surge.textSecondary,
+                size: SurgeIconSize.regular,
+              ),
+              suffixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  SoftOsActionButton(
-                    icon: SurgeIcons.close,
-                    onPressed: () => Navigator.of(context).pop(),
-                    tooltip: MaterialLocalizations.of(
-                      context,
-                    ).closeButtonTooltip,
-                    compact: true,
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    padding: const EdgeInsets.all(SurgeSpace.xs),
+                    onPressed: _scrollToSelected,
+                    iconSize: SurgeIconSize.regular,
+                    icon: Icon(SurgeIcons.selector, color: surge.textSecondary),
                   ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        context.appLocalizations.nodes,
-                        style: context.typography.sheetTitle,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: SurgeSpace.huge),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: SurgeSpace.s),
-          // Search field with embedded action buttons
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: SurgeSpace.xl,
-              vertical: SurgeSpace.s,
-            ),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) => setState(() => _searchQuery = value),
-              style: context.typography.body,
-              decoration: InputDecoration(
-                hintText: context.appLocalizations.search,
-                hintStyle: context.typography.body.copyWith(
-                  color: surge.textSecondary,
-                ),
-                prefixIcon: Icon(
-                  SurgeIcons.search,
-                  color: surge.textSecondary,
-                  size: SurgeIconSize.regular,
-                ),
-                suffixIcon: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      visualDensity: VisualDensity.compact,
-                      padding: const EdgeInsets.all(SurgeSpace.xs),
-                      onPressed: _scrollToSelected,
-                      iconSize: SurgeIconSize.regular,
-                      icon: Icon(
-                        SurgeIcons.selector,
-                        color: surge.textSecondary,
-                      ),
-                    ),
-                    IconButton(
-                      visualDensity: VisualDensity.compact,
-                      padding: const EdgeInsets.all(SurgeSpace.xs),
-                      onPressed: _isDelayTesting ? null : _delayTest,
-                      iconSize: SurgeIconSize.regular,
-                      icon: _isDelayTesting
-                          ? SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: surge.textSecondary,
-                              ),
-                            )
-                          : Icon(
-                              SurgeIcons.networkPing,
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    padding: const EdgeInsets.all(SurgeSpace.xs),
+                    onPressed: _isDelayTesting ? null : _delayTest,
+                    iconSize: SurgeIconSize.regular,
+                    icon: _isDelayTesting
+                        ? SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
                               color: surge.textSecondary,
                             ),
-                    ),
-                  ],
-                ),
-                isDense: true,
-                filled: true,
-                fillColor: surge.fill,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: SurgeSpace.m,
-                  vertical: SurgeSpace.s,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(surge.radii.input),
-                  borderSide: BorderSide(color: surge.separator),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(surge.radii.input),
-                  borderSide: BorderSide(color: surge.separator),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(surge.radii.input),
-                  borderSide: BorderSide(color: surge.primary, width: 1.5),
-                ),
+                          )
+                        : Icon(
+                            SurgeIcons.networkPing,
+                            color: surge.textSecondary,
+                          ),
+                  ),
+                ],
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: SurgeSpace.m,
+                vertical: SurgeSpace.s,
               ),
             ),
           ),
-          // Node list
-          Expanded(
-            child: filteredProxies.isEmpty
-                ? Center(
-                    child: Text(
-                      context.appLocalizations.noData,
-                      style: context.typography.supporting,
-                    ),
-                  )
-                : ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: SurgeSpace.xl,
-                      vertical: SurgeSpace.s,
-                    ),
-                    itemCount: filteredProxies.length,
-                    itemBuilder: (context, index) {
-                      final proxy = filteredProxies[index];
-                      return _NodeCard(
-                        proxy: proxy,
-                        group: widget.group,
-                        isSelected: proxy.name == widget.currentProxyName,
-                        onTap: () {
-                          if (proxy_common.applyProxyGroupMemberTap(
-                            group: widget.group,
-                            tappedName: proxy.name,
-                          )) {
-                            Navigator.of(context).pop();
-                          }
-                        },
-                      );
-                    },
+        ),
+        // Node list
+        Expanded(
+          child: filteredProxies.isEmpty
+              ? Center(
+                  child: Text(
+                    context.appLocalizations.noData,
+                    style: context.typography.supporting,
                   ),
-          ),
-        ],
-      ),
+                )
+              : ListView.builder(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: SurgeSpace.xl,
+                    vertical: SurgeSpace.s,
+                  ),
+                  itemCount: filteredProxies.length,
+                  itemBuilder: (context, index) {
+                    final proxy = filteredProxies[index];
+                    return _NodeCard(
+                      proxy: proxy,
+                      group: widget.group,
+                      isSelected: proxy.name == widget.currentProxyName,
+                      onTap: () {
+                        if (proxy_common.applyProxyGroupMemberTap(
+                          group: widget.group,
+                          tappedName: proxy.name,
+                        )) {
+                          Navigator.of(context).pop();
+                        }
+                      },
+                    );
+                  },
+                ),
+        ),
+      ],
     );
   }
 }
