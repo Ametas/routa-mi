@@ -124,6 +124,49 @@ void main() {
   });
 
   group('SurgeSegmentedControl', () {
+    testWidgets('selected label is primary text and semibold', (tester) async {
+      await _pump(
+        tester,
+        SurgeSegmentedControl<int>(
+          value: 1,
+          items: const [
+            SurgeSegmentedItem(value: 0, label: 'Rule', icon: SurgeIcons.rule),
+            SurgeSegmentedItem(value: 1, label: 'Global'),
+          ],
+          onChanged: (_) {},
+        ),
+      );
+      final surge = SurgeTheme.of(tester.element(find.text('Rule')));
+      TextStyle styleOf(String label) => tester
+          .widget<AnimatedDefaultTextStyle>(
+            find
+                .ancestor(
+                  of: find.text(label),
+                  matching: find.byType(AnimatedDefaultTextStyle),
+                )
+                .first,
+          )
+          .style;
+      expect(styleOf('Global').color, surge.textPrimary);
+      expect(styleOf('Global').fontWeight, FontWeight.w600);
+      expect(styleOf('Rule').color, surge.textSecondary);
+      final icon = tester.widget<Icon>(find.byIcon(SurgeIcons.rule));
+      expect(icon.color, surge.textSecondary);
+      expect(
+        tester.getSemantics(find.text('Global')),
+        matchesSemantics(
+          label: 'Global',
+          isSelected: true,
+          isInMutuallyExclusiveGroup: true,
+          isButton: true,
+          hasTapAction: true,
+          isEnabled: true,
+          hasEnabledState: true,
+          hasSelectedState: true,
+        ),
+      );
+    });
+
     testWidgets('reports the tapped segment', (tester) async {
       int? picked;
       await _pump(

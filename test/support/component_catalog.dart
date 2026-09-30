@@ -175,6 +175,27 @@ final componentCatalog = <CatalogEntry>[
     ),
   ),
   CatalogEntry(
+    'SurgeSegmentedControl.icons',
+    (_) => SurgeSegmentedControl<int>(
+      value: 0,
+      height: 48,
+      items: const [
+        SurgeSegmentedItem(
+          value: 0,
+          label: 'Automatic',
+          icon: SurgeIcons.loading,
+        ),
+        SurgeSegmentedItem(
+          value: 1,
+          label: 'Light',
+          icon: SurgeIcons.themeLight,
+        ),
+        SurgeSegmentedItem(value: 2, label: 'Dark', icon: SurgeIcons.themeDark),
+      ],
+      onChanged: (_) {},
+    ),
+  ),
+  CatalogEntry(
     'SoftOsSelectPill',
     (_) => SoftOsSelectPill<int>(
       value: 0,

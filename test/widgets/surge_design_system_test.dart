@@ -502,7 +502,7 @@ void main() {
       expect(find.text('Timeout'), findsOneWidget);
     });
 
-    testWidgets('sliding segmented control reports the selected item', (
+    testWidgets('segmented control slides to the selected item', (
       tester,
     ) async {
       var selected = 'rule';
@@ -510,34 +510,34 @@ void main() {
         MaterialApp(
           theme: _theme(SurgeTheme.light()),
           themeMode: ThemeMode.light,
-          home: StatefulBuilder(
-            builder: (context, setState) {
-              final surge = SurgeTheme.of(context);
-              return SurgeSlidingSegmentedControl<String>(
-                value: selected,
-                items: const [
-                  SurgeSegmentedItem(value: 'rule', label: '规则'),
-                  SurgeSegmentedItem(value: 'global', label: '全局'),
-                ],
-                onChanged: (value) => setState(() => selected = value),
-                height: 34,
-                padding: const EdgeInsets.all(3),
-                backgroundColor: surge.fill,
-                selectedSurfaceColor: surge.elevatedCard,
-                selectedColor: surge.primary,
-                unselectedColor: surge.textSecondary,
-                outerRadius: 26,
-                selectedRadius: 24,
-                labelStyle: _typography().rowTitle,
-              );
-            },
+          home: Scaffold(
+            body: SizedBox(
+              width: 300,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return SurgeSegmentedControl<String>(
+                    value: selected,
+                    items: const [
+                      SurgeSegmentedItem(value: 'rule', label: '规则'),
+                      SurgeSegmentedItem(value: 'global', label: '全局'),
+                    ],
+                    onChanged: (value) => setState(() => selected = value),
+                  );
+                },
+              ),
+            ),
           ),
         ),
       );
+      double indicatorLeft() => tester
+          .widget<AnimatedPositioned>(find.byType(AnimatedPositioned))
+          .left!;
+      expect(indicatorLeft(), 0);
 
       await tester.tap(find.text('全局'));
       await tester.pumpAndSettle();
       expect(selected, 'global');
+      expect(indicatorLeft(), greaterThan(100));
     });
   });
 

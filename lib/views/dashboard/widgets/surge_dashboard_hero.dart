@@ -1232,8 +1232,7 @@ class _ModeSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return SurgeSlidingSegmentedControl<Mode>(
+    return SurgeSegmentedControl<Mode>(
       value: value,
       onChanged: onChanged,
       items: [
@@ -1252,16 +1251,6 @@ class _ModeSwitch extends StatelessWidget {
       ],
       height: layout.legacy(34),
       padding: EdgeInsets.all(layout.legacy(3)),
-      backgroundColor: surge.fill,
-      selectedSurfaceColor: surge.elevatedCard,
-      selectedColor: surge.textPrimary,
-      unselectedColor: surge.textSecondary,
-      outerRadius: layout.geometry(26),
-      selectedRadius: layout.geometry(24),
-      labelStyle: context.typography.modeTabLabel,
-      selectedLabelStyle: context.typography.selectedModeTabLabel,
-      indicatorDuration: SurgeMotion.container,
-      textDuration: SurgeMotion.state,
     );
   }
 }
