@@ -6,7 +6,6 @@ export 'app_bar/sl_app_bar_buttons.dart';
 export 'builder.dart';
 export 'card.dart';
 export 'changelog_dialog.dart';
-export 'chip.dart';
 export 'dialog.dart';
 export 'disabled_mask.dart';
 export 'dismissible.dart';

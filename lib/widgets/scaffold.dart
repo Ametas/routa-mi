@@ -1,5 +1,4 @@
 import 'package:fl_clash/common/common.dart';
-import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/widgets/pop_scope.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/rendering.dart';
 import 'app_bar/sl_app_bar.dart';
 import 'app_bar/sl_app_bar_action.dart';
 import 'app_bar/sl_app_bar_buttons.dart';
-import 'chip.dart';
 import 'inherited.dart';
 
 typedef OnKeywordsUpdateCallback = void Function(List<String> keywords);
@@ -407,14 +405,13 @@ class CommonScaffoldState extends State<CommonScaffold> {
                   vertical: SurgeSpace.l,
                 ),
                 child: Wrap(
-                  runSpacing: 8,
-                  spacing: 8,
+                  runSpacing: SurgeSpace.s,
+                  spacing: SurgeSpace.s,
                   children: [
                     for (final keyword in keywords)
-                      CommonChip(
+                      SurgeTag(
                         label: keyword,
-                        type: ChipType.delete,
-                        onPressed: () {
+                        onRemove: () {
                           _deleteKeyword(keyword);
                         },
                       ),

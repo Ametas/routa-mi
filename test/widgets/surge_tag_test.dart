@@ -116,4 +116,23 @@ void main() {
     await pump(tester, const SurgeTag(label: 'chain'));
     expect(find.byType(SurgePressable), findsNothing);
   });
+
+  testWidgets('onRemove adds a close mark and removes on tap', (tester) async {
+    var removed = 0;
+    await pump(tester, SurgeTag(label: 'Relay', onRemove: () => removed++));
+    expect(find.byIcon(SurgeIcons.close), findsOneWidget);
+    expect(
+      tester.getSemantics(find.byType(SurgePressable)),
+      matchesSemantics(
+        label: 'Delete\nRelay',
+        isButton: true,
+        isEnabled: true,
+        hasEnabledState: true,
+        hasTapAction: true,
+      ),
+    );
+    await tester.tap(find.byType(SurgeTag));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(removed, 1);
+  });
 }
