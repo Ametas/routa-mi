@@ -70,38 +70,6 @@ class OverwriteSectionHeader extends StatelessWidget {
   }
 }
 
-class OverwriteCountPill extends StatelessWidget {
-  const OverwriteCountPill({super.key, required this.value});
-
-  final Object value;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return Container(
-      constraints: const BoxConstraints(minWidth: 30),
-      padding: const EdgeInsets.symmetric(
-        horizontal: SurgeSpace.s,
-        vertical: SurgeSpace.xs,
-      ),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: surge.primary.withValues(alpha: SurgeAlpha.a12),
-        borderRadius: BorderRadius.circular(surge.radii.button),
-        border: Border.all(
-          color: surge.primary.withValues(alpha: SurgeAlpha.a16),
-          width: surge.spacing.hairline,
-        ),
-      ),
-      child: Text(
-        '$value',
-        maxLines: 1,
-        style: context.typography.badgeLabel.copyWith(color: surge.primary),
-      ),
-    );
-  }
-}
-
 class OverwriteIconButton extends StatelessWidget {
   const OverwriteIconButton({
     super.key,

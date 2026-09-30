@@ -22,5 +22,6 @@ export 'surge_shadows.dart';
 export 'surge_latency.dart';
 export 'surge_segmented_control.dart';
 export 'surge_status_button.dart';
+export 'surge_tag.dart';
 export 'surge_theme_extension.dart';
 export 'surge_tokens.dart';

@@ -1,7 +1,9 @@
+import 'package:fl_clash/theme/ui_scale.dart';
 import 'package:fl_clash/widgets/surge/soft_os_metrics.dart';
 import 'package:fl_clash/widgets/surge/surge_latency.dart';
 import 'package:fl_clash/widgets/surge/surge_motion.dart';
 import 'package:fl_clash/widgets/surge/surge_pressable.dart';
+import 'package:fl_clash/widgets/surge/surge_tag.dart';
 import 'package:fl_clash/widgets/surge/surge_theme_extension.dart';
 import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
@@ -14,18 +16,14 @@ class SurgeMetricBadge extends StatelessWidget {
     super.key,
     required this.state,
     required this.label,
-    required this.background,
-    required this.border,
-    required this.foreground,
+    required this.colors,
     this.onTap,
     this.width = 64,
   });
 
   final SurgeMetricState state;
   final String label;
-  final Color background;
-  final Color border;
-  final Color foreground;
+  final SurgeTagColors colors;
   final VoidCallback? onTap;
   final double width;
 
@@ -43,9 +41,12 @@ class SurgeMetricBadge extends StatelessWidget {
         height: height,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: background,
+            color: colors.background,
             borderRadius: BorderRadius.circular(height / 2),
-            border: Border.all(color: border, width: surge.spacing.hairline),
+            border: Border.all(
+              color: colors.border,
+              width: surge.spacing.hairline,
+            ),
           ),
           child: AnimatedSwitcher(
             duration: SurgeMotion.state,
@@ -60,7 +61,7 @@ class SurgeMetricBadge extends StatelessWidget {
                       dimension: 12,
                       child: CircularProgressIndicator(
                         strokeWidth: 1.6,
-                        color: foreground,
+                        color: colors.foreground,
                       ),
                     )
                   : Text(
@@ -68,8 +69,12 @@ class SurgeMetricBadge extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
+                      // Grows with the pill, not with the raw text scale.
+                      textScaler: TextScaler.linear(
+                        UiScale.moderatedTextOf(context),
+                      ),
                       style: context.typography.badgeLabel.copyWith(
-                        color: foreground,
+                        color: colors.foreground,
                       ),
                     ),
             ),
@@ -94,32 +99,16 @@ class SurgeDelayPill extends StatelessWidget {
     final isUntested = delay == null;
     final isTimeout = delay != null && delay! < 0;
     final isSuccess = delay != null && delay! > 0;
-    final Color background;
-    final Color border;
-    final Color foreground;
-
-    if (isUntested) {
-      background = surge.textSecondary.withValues(alpha: SurgeAlpha.a04);
-      border = surge.separator.withValues(alpha: SurgeAlpha.a38);
-      foreground = surge.textPrimary.withValues(alpha: SurgeAlpha.a72);
-    } else if (isTesting) {
-      background = surge.textSecondary.withValues(alpha: SurgeAlpha.a04);
-      border = surge.separator.withValues(alpha: SurgeAlpha.a38);
-      foreground = surge.textSecondary.withValues(alpha: SurgeAlpha.a82);
-    } else if (isSuccess) {
-      final delayColor = surge.latencyColor(delay) ?? surge.green;
-      background = delayColor.withValues(alpha: SurgeAlpha.a08);
-      border = delayColor.withValues(alpha: SurgeAlpha.a16);
-      foreground = delayColor.withValues(alpha: SurgeAlpha.a92);
-    } else if (isTimeout) {
-      background = surge.red.withValues(alpha: SurgeAlpha.a08);
-      border = surge.red.withValues(alpha: SurgeAlpha.a16);
-      foreground = surge.red.withValues(alpha: SurgeAlpha.a92);
-    } else {
-      background = surge.fill;
-      border = surge.separator;
-      foreground = surge.textSecondary;
-    }
+    final neutral = SurgeTagColors.neutral(surge);
+    final colors = isSuccess
+        ? SurgeTagColors.accent(surge.latencyColor(delay) ?? surge.green)
+        : isTimeout
+        ? SurgeTagColors.accent(surge.red)
+        : isTesting
+        ? neutral.copyWith(
+            foreground: surge.textSecondary.withValues(alpha: SurgeAlpha.a82),
+          )
+        : neutral;
 
     final label = isUntested
         ? 'Test'
@@ -138,9 +127,7 @@ class SurgeDelayPill extends StatelessWidget {
           ? SurgeMetricState.value
           : SurgeMetricState.idle,
       label: label,
-      background: background,
-      border: border,
-      foreground: foreground,
+      colors: colors,
       onTap: onTap,
     );
   }

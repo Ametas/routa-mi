@@ -47,9 +47,6 @@
   "lib/views/config/scripts.dart": {
     "spacing": 1
   },
-  "lib/views/connection/item.dart": {
-    "gap": 1
-  },
   "lib/views/dashboard/widgets/surge_dashboard_hero.dart": {
     "spacing": 1,
     "gap": 2,
