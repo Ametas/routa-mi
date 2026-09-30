@@ -229,6 +229,10 @@ final componentCatalog = <CatalogEntry>[
           label: 'A proxy chain name that is far too long for a tag',
           onTap: _noop,
         ),
+        const SurgeTag(
+          label: 'A search keyword that is far too long for a tag',
+          onRemove: _noop,
+        ),
       ],
     ),
   ),

@@ -1,3 +1,4 @@
+import 'package:fl_clash/common/icons.dart';
 import 'package:fl_clash/theme/ui_scale.dart';
 import 'package:fl_clash/widgets/surge/soft_os_metrics.dart';
 import 'package:fl_clash/widgets/surge/surge_pressable.dart';
@@ -62,7 +63,9 @@ enum SurgeTagSize {
 ///
 /// Neutral without [color], accent-tinted with it. Capsules that act as
 /// buttons with icons or loading state are [SoftOsStatusPill]; a tag may
-/// still take an [onTap] (a chain name that filters the list).
+/// still take an [onTap] (a chain name that filters the list) or an
+/// [onRemove] (a search keyword: a close mark follows the label and a tap
+/// anywhere on the tag removes it).
 class SurgeTag extends StatelessWidget {
   const SurgeTag({
     super.key,
@@ -73,7 +76,8 @@ class SurgeTag extends StatelessWidget {
     this.maxWidth,
     this.textStyle,
     this.onTap,
-  });
+    this.onRemove,
+  }) : assert(onTap == null || onRemove == null);
 
   final String label;
   final Color? color;
@@ -86,6 +90,7 @@ class SurgeTag extends StatelessWidget {
   /// Replaces the badge type style; the tag colour is applied on top.
   final TextStyle? textStyle;
   final VoidCallback? onTap;
+  final VoidCallback? onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +101,32 @@ class SurgeTag extends StatelessWidget {
         : SurgeTagColors.accent(color!);
     final regular = size == SurgeTagSize.regular;
     final radius = BorderRadius.circular(surge.radii.button);
+    final textScaler = regular
+        ? TextScaler.linear(UiScale.moderatedTextOf(context))
+        : MediaQuery.textScalerOf(context);
+    Widget text = Text(
+      label,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textScaler: regular ? textScaler : null,
+      style: (textStyle ?? context.typography.badgeLabel).copyWith(
+        color: colors.foreground,
+      ),
+    );
+    if (onRemove != null) {
+      text = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(child: text),
+          const SizedBox(width: SurgeSpace.xs),
+          Icon(
+            SurgeIcons.close,
+            size: textScaler.scale(SurgeIconSize.micro),
+            color: colors.foreground,
+          ),
+        ],
+      );
+    }
     Widget tag = Container(
       height: regular ? metrics.value(surge.controls.statusPillHeight) : null,
       constraints: BoxConstraints(
@@ -119,27 +150,18 @@ class SurgeTag extends StatelessWidget {
       ),
       // Shrink-wraps the text (a Container alignment would stretch the tag
       // to the full width of a bounded parent).
-      child: Align(
-        widthFactor: 1,
-        heightFactor: 1,
-        child: Text(
-          label,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textScaler: regular
-              ? TextScaler.linear(UiScale.moderatedTextOf(context))
-              : null,
-          style: (textStyle ?? context.typography.badgeLabel).copyWith(
-            color: colors.foreground,
-          ),
-        ),
-      ),
+      child: Align(widthFactor: 1, heightFactor: 1, child: text),
     );
-    if (onTap != null) {
+    final action = onTap ?? onRemove;
+    if (action != null) {
       tag = SurgePressable(
         compact: true,
         borderRadius: radius,
-        onTap: onTap,
+        onTap: action,
+        // Read together with the label: "Delete, <label>".
+        semanticLabel: onRemove == null
+            ? null
+            : MaterialLocalizations.of(context).deleteButtonTooltip,
         child: tag,
       );
     }

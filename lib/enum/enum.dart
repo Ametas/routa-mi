@@ -153,8 +153,6 @@ enum InvokeMessageType { protect, process }
 
 enum FindProcessMode { always, off }
 
-enum ChipType { action, delete }
-
 enum ProxiesType { tab, list }
 
 enum ProxiesLayout { loose, standard, tight }
