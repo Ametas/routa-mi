@@ -100,24 +100,33 @@ class SurgeDialogActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool primary;
 
+  /// Irreversible action (remove, delete): tinted red instead of filled.
+  final bool destructive;
+
   const SurgeDialogActionButton({
     super.key,
     required this.label,
     required this.onPressed,
     this.primary = false,
+    this.destructive = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
-    final background = primary
-        ? (onPressed == null
-              ? surge.primary.withValues(alpha: SurgeAlpha.a24)
-              : surge.primary)
+    final enabled = onPressed != null;
+    final background = destructive
+        ? surge.red.withValues(alpha: enabled ? SurgeAlpha.a12 : SurgeAlpha.a04)
+        : primary
+        ? (enabled
+              ? surge.primary
+              : surge.primary.withValues(alpha: SurgeAlpha.a24))
         : surge.fill.withValues(alpha: SurgeAlpha.a82);
-    final foreground = primary
-        ? surge.onPrimary.withValues(alpha: onPressed == null ? SurgeAlpha.a62 : SurgeAlpha.full)
-        : surge.textPrimary.withValues(alpha: onPressed == null ? SurgeAlpha.a38 : SurgeAlpha.full);
+    final foreground = destructive
+        ? surge.red.withValues(alpha: enabled ? SurgeAlpha.full : SurgeAlpha.a38)
+        : primary
+        ? surge.onPrimary.withValues(alpha: enabled ? SurgeAlpha.full : SurgeAlpha.a62)
+        : surge.textPrimary.withValues(alpha: enabled ? SurgeAlpha.full : SurgeAlpha.a38);
     return Expanded(
       child: SizedBox(
         height: 45,

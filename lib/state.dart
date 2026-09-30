@@ -213,17 +213,18 @@ class GlobalState {
             title: title ?? appLocalizations.tip,
             actions: [
               if (cancelable)
-                TextButton(
+                SurgeDialogActionButton(
+                  label: cancelText ?? appLocalizations.cancel,
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
-                  child: Text(cancelText ?? appLocalizations.cancel),
                 ),
-              TextButton(
+              SurgeDialogActionButton(
+                label: confirmText ?? appLocalizations.confirm,
+                primary: true,
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
-                child: Text(confirmText ?? appLocalizations.confirm),
               ),
             ],
             child: Container(
@@ -232,7 +233,9 @@ class GlobalState {
               child: SingleChildScrollView(
                 child: SelectableText.rich(
                   TextSpan(
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: context.typography.body.copyWith(
+                      color: SurgeTheme.of(context).textPrimary,
+                    ),
                     children: [message],
                   ),
                 ),
@@ -255,11 +258,12 @@ class GlobalState {
             padding: EdgeInsets.zero,
             title: appLocalizations.tip,
             actions: [
-              TextButton(
+              SurgeDialogActionButton(
+                label: appLocalizations.confirm,
+                primary: true,
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
-                child: Text(appLocalizations.confirm),
               ),
             ],
             child: Container(
@@ -438,17 +442,18 @@ class GlobalState {
           child: CommonDialog(
             title: currentAppLocalizations.disclaimer,
             actions: [
-              TextButton(
+              SurgeDialogActionButton(
+                label: currentAppLocalizations.exit,
                 onPressed: () {
                   Navigator.of(_context).pop<bool>(false);
                 },
-                child: Text(currentAppLocalizations.exit),
               ),
-              TextButton(
+              SurgeDialogActionButton(
+                label: currentAppLocalizations.agree,
+                primary: true,
                 onPressed: () {
                   Navigator.of(_context).pop<bool>(true);
                 },
-                child: Text(currentAppLocalizations.agree),
               ),
             ],
             child: Text(currentAppLocalizations.disclaimerDesc),

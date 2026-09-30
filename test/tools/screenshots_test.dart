@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -14,6 +15,7 @@ import 'package:fl_clash/views/config/dns.dart';
 import 'package:fl_clash/views/config/network.dart';
 import 'package:fl_clash/views/theme.dart';
 import 'package:fl_clash/views/views.dart';
+import 'package:fl_clash/widgets/input.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -39,6 +41,34 @@ Future<void> _loadFont(String family, List<String> files) async {
 // Light theme by default; SHOT_BRIGHTNESS=dark renders the dark one.
 //
 // Screens that need a running core may log errors but still render.
+// Dialogs are opened over an empty screen, the way the app shows them.
+final _dialogs = <String, Future<void> Function(BuildContext)>{
+  'dialog_message': (context) => globalState.showMessage(
+    context: context,
+    title: 'Delete profile',
+    message: const TextSpan(
+      text: 'The profile "Home" and its overrides will be removed.',
+    ),
+  ),
+  'dialog_input': (context) => globalState.showCommonDialog<String>(
+    context: context,
+    child: const InputDialog(
+      title: 'Port',
+      value: '7890',
+      labelText: 'Mixed port',
+    ),
+  ),
+  'dialog_options': (context) => globalState.showCommonDialog<String>(
+    context: context,
+    child: OptionsDialog<String>(
+      title: 'Log level',
+      options: const ['debug', 'info', 'warning', 'error'],
+      value: 'info',
+      textBuilder: (value) => value,
+    ),
+  ),
+};
+
 void main() {
   final out = Platform.environment['SHOT_DIR'] ?? '';
   final skip = out.isEmpty ? 'set SHOT_DIR to render screenshots' : null;
@@ -103,6 +133,7 @@ void main() {
     'profiles': () => const ProfilesView(),
     'profiles_active': () => const ProfilesView(),
     'proxies': () => const ProxiesView(),
+    for (final name in _dialogs.keys) name: () => const Scaffold(),
   };
 
   for (final MapEntry(key: name, value: build) in views.entries) {
@@ -172,6 +203,13 @@ void main() {
       );
       await tester.pump(const Duration(milliseconds: 600));
       // Screens whose interesting state needs a tap first.
+      final openDialog = _dialogs[name];
+      if (openDialog != null) {
+        unawaited(openDialog(tester.element(find.byType(Scaffold).first)));
+        for (var i = 0; i < 6; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+      }
       if (name == 'profile_item_menu') {
         await tester.tap(find.byIcon(SurgeIcons.more).first);
         for (var i = 0; i < 6; i++) {

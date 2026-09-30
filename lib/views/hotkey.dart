@@ -4,6 +4,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/dialog.dart';
+import 'package:fl_clash/widgets/input.dart';
 import 'package:fl_clash/widgets/list.dart';
 import 'package:fl_clash/widgets/scaffold.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -287,18 +288,15 @@ class _HotKeyRecorderState extends ConsumerState<HotKeyRecorder> {
       child: CommonDialog(
         title: IntlExt.actionMessage(widget.hotKeyAction.action.name),
         actions: [
-          TextButton(
-            onPressed: () {
-              _handleRemove();
-            },
-            child: Text(appLocalizations.remove),
+          SurgeDialogActionButton(
+            label: appLocalizations.remove,
+            destructive: true,
+            onPressed: _handleRemove,
           ),
-          const SizedBox(width: SurgeSpace.s),
-          TextButton(
-            onPressed: () {
-              _handleConfirm();
-            },
-            child: Text(appLocalizations.confirm),
+          SurgeDialogActionButton(
+            label: appLocalizations.confirm,
+            primary: true,
+            onPressed: _handleConfirm,
           ),
         ],
         child: ValueListenableBuilder(
