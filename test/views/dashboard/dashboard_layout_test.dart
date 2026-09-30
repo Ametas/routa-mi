@@ -183,10 +183,13 @@ void main() {
         availableOuterHeight: layout.heroNaturalHeight + 100,
       );
 
-      expect(hero.topRowToModeGap - layout.legacy(16), closeTo(32, 0.001));
-      expect(hero.modeCardHeight - layout.legacy(80), closeTo(38, 0.001));
-      expect(hero.modeToSwitchGap - layout.legacy(12), closeTo(16, 0.001));
-      expect(hero.switchToSelectorGap - layout.legacy(12), closeTo(14, 0.001));
+      expect(hero.topRowToModeGap - layout.geometry(16), closeTo(32, 0.001));
+      expect(hero.modeCardHeight - layout.geometry(80), closeTo(38, 0.001));
+      expect(hero.modeToSwitchGap - layout.geometry(12), closeTo(16, 0.001));
+      expect(
+        hero.switchToSelectorGap - layout.geometry(12),
+        closeTo(14, 0.001),
+      );
     });
 
     test('preserves enlarged dashboard text without changing primary rows', () {

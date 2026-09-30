@@ -47,10 +47,10 @@ class DashboardHeroLayoutCalculator {
     final extraHeight = math.max(0, availableOuterHeight - naturalOuterHeight);
 
     return DashboardHeroContentLayout(
-      topRowToModeGap: responsiveLayout.legacy(16) + extraHeight * 0.32,
-      modeCardHeight: responsiveLayout.legacy(80) + extraHeight * 0.38,
-      modeToSwitchGap: responsiveLayout.legacy(12) + extraHeight * 0.16,
-      switchToSelectorGap: responsiveLayout.legacy(12) + extraHeight * 0.14,
+      topRowToModeGap: responsiveLayout.geometry(16) + extraHeight * 0.32,
+      modeCardHeight: responsiveLayout.geometry(80) + extraHeight * 0.38,
+      modeToSwitchGap: responsiveLayout.geometry(12) + extraHeight * 0.16,
+      switchToSelectorGap: responsiveLayout.geometry(12) + extraHeight * 0.14,
     );
   }
 }
@@ -165,30 +165,26 @@ class DashboardResponsiveLayout {
   double textIcon(double referenceValue) =>
       referenceValue * geometryScale * textScale;
 
-  /// Preserves dimensions which previously used `value * layoutScale` at the
-  /// reference viewport, while making that scaling shared by both cards.
-  double legacy(double value) => value * geometryScale;
-
   double get cardRadius => geometry(26);
   double get cardHorizontalPadding => geometry(18);
 
   double get heroNaturalHeight {
-    final topRow = legacy(28);
-    final reflowExtra = requiresReflow ? legacy(36) : 0.0;
+    final topRow = geometry(28);
+    final reflowExtra = requiresReflow ? geometry(36) : 0.0;
     final textExtra = requiresReflow
-        ? legacy(48) * math.max(0, textScale - 1)
+        ? geometry(48) * math.max(0, textScale - 1)
         : 0.0;
-    return legacy(18) +
+    return geometry(18) +
         topRow +
         reflowExtra +
         textExtra +
-        legacy(16) +
-        legacy(80) +
-        legacy(12) +
-        legacy(34) +
-        legacy(10) +
-        legacy(34) +
-        legacy(16);
+        geometry(16) +
+        geometry(80) +
+        geometry(12) +
+        geometry(34) +
+        geometry(10) +
+        geometry(34) +
+        geometry(16);
   }
 
   factory DashboardResponsiveLayout.fromViewport({

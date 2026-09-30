@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/database.dart';
+import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/theme/surge_theme_data.dart';
@@ -43,6 +45,19 @@ Future<void> _loadFont(String family, List<String> files) async {
 // Light theme by default; SHOT_BRIGHTNESS=dark renders the dark one.
 //
 // Screens that need a running core may log errors but still render.
+const _heroGroups = [
+  Group(
+    type: GroupType.Selector,
+    name: 'Proxy',
+    now: 'JP01',
+    all: [
+      Proxy(name: 'JP01', type: 'Vless'),
+      Proxy(name: 'HK01', type: 'Vless'),
+      Proxy(name: 'SG01', type: 'Trojan'),
+    ],
+  ),
+];
+
 const _mediaProfiles = [
   Profile(id: 1, label: 'Daily', autoUpdateDuration: Duration(hours: 24)),
   Profile(id: 2, label: 'AI', autoUpdateDuration: Duration(hours: 24)),
@@ -140,6 +155,7 @@ void main() {
     'profiles': () => const ProfilesView(),
     'profiles_active': () => const ProfilesView(),
     'proxies': () => const ProxiesView(),
+    'hero_node_sheet': () => const DashboardView(),
     'media_check': () => ProfileMediaCheckView(
       profiles: _mediaProfiles,
       initialProfile: _mediaProfiles.first,
@@ -167,6 +183,12 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           viewSizeProvider.overrideWithBuild((_, _) => const Size(384, 853)),
+          if (name == 'hero_node_sheet') ...[
+            groupsProvider.overrideWithBuild((_, _) => _heroGroups),
+            currentGroupsStateProvider.overrideWithValue(
+              const GroupsState(value: _heroGroups),
+            ),
+          ],
           if (name == 'profiles_active') ...[
             profilesProvider.overrideWithBuild(
               (_, _) => const [
@@ -224,6 +246,13 @@ void main() {
       final openDialog = _dialogs[name];
       if (openDialog != null) {
         unawaited(openDialog(tester.element(find.byType(Scaffold).first)));
+        for (var i = 0; i < 6; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+      }
+      if (name == 'hero_node_sheet') {
+        final bar = tester.getRect(find.byType(SurgeDualSelectBar));
+        await tester.tapAt(Offset(bar.left + bar.width * 0.75, bar.center.dy));
         for (var i = 0; i < 6; i++) {
           await tester.pump(const Duration(milliseconds: 100));
         }

@@ -49,8 +49,7 @@
   },
   "lib/views/dashboard/widgets/surge_dashboard_hero.dart": {
     "spacing": 1,
-    "gap": 2,
-    "radius": 2
+    "gap": 1
   },
   "lib/views/profiles/edit.dart": {
     "spacing": 1,
