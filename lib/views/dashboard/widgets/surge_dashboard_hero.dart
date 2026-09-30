@@ -739,48 +739,45 @@ class _HeroActionButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(layout.geometry(18)),
         boxShadow: SurgeShadows.glow(baseColor, scale: layout.geometryScale),
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(layout.geometry(18)),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: layout.geometry(74),
-              minHeight: layout.legacy(28),
+      child: SurgePressable(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(layout.geometry(18)),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: layout.geometry(74),
+            minHeight: layout.legacy(28),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: layout.geometry(12),
+              vertical: layout.legacy(4),
             ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: layout.geometry(12),
-                vertical: layout.legacy(4),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Shimmer layer — only visible when loading
-                  if (loading)
-                    Positioned.fill(
-                      child: _ActionButtonSheen(controller: sheenController),
-                    ),
-                  // Text label
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        label,
-                        style: context.typography.controlLabel.copyWith(
-                          color: surge.semantic.state.onHeroAction,
-                        ),
-                      ),
-                      // Animated dots during loading
-                      if (loading) ...[
-                        const SizedBox(width: SurgeSpace.xxs),
-                        _LoadingDots(controller: sheenController),
-                      ],
-                    ],
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Shimmer layer — only visible when loading
+                if (loading)
+                  Positioned.fill(
+                    child: _ActionButtonSheen(controller: sheenController),
                   ),
-                ],
-              ),
+                // Text label
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      label,
+                      style: context.typography.controlLabel.copyWith(
+                        color: surge.semantic.state.onHeroAction,
+                      ),
+                    ),
+                    // Animated dots during loading
+                    if (loading) ...[
+                      const SizedBox(width: SurgeSpace.xxs),
+                      _LoadingDots(controller: sheenController),
+                    ],
+                  ],
+                ),
+              ],
             ),
           ),
         ),

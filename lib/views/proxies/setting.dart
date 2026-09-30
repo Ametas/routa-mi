@@ -171,49 +171,43 @@ class _SettingOption extends StatelessWidget {
     final foreground = selected ? surge.textPrimary : surge.textSecondary;
     final selectedFill = surge.selectedFill;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: SurgeSpace.l,
-            vertical: SurgeSpace.m,
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: selected ? selectedFill : surge.fill,
-                  borderRadius: BorderRadius.circular(surge.radii.input),
-                ),
-                child: Icon(
-                  icon,
-                  size: SurgeIconSize.compact,
-                  color: foreground,
-                ),
+    return SurgePressable(
+      onTap: onTap,
+      scaleFeedback: false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: SurgeSpace.l,
+          vertical: SurgeSpace.m,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: selected ? selectedFill : surge.fill,
+                borderRadius: BorderRadius.circular(surge.radii.input),
               ),
-              const SizedBox(width: SurgeSpace.m),
-              Expanded(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.typography.rowTitle.copyWith(
-                    color: surge.textPrimary,
-                  ),
+              child: Icon(icon, size: SurgeIconSize.compact, color: foreground),
+            ),
+            const SizedBox(width: SurgeSpace.m),
+            Expanded(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: context.typography.rowTitle.copyWith(
+                  color: surge.textPrimary,
                 ),
               ),
-              SurgeSelectIndicator(
-                selected: selected,
-                size: 18,
-                iconSize: SurgeIconSize.micro,
-                showCheck: false,
-              ),
-            ],
-          ),
+            ),
+            SurgeSelectIndicator(
+              selected: selected,
+              size: 18,
+              iconSize: SurgeIconSize.micro,
+              showCheck: false,
+            ),
+          ],
         ),
       ),
     );

@@ -130,7 +130,7 @@ void main() {
       expect(node.hasFlag(SemanticsFlag.isEnabled), isFalse);
     });
 
-    testWidgets('uses onSurfaceVariant for normal tone', (tester) async {
+    testWidgets('uses secondary text for normal tone', (tester) async {
       await tester.pumpWidget(
         _app(
           SlAppBarIconButton(
@@ -142,11 +142,11 @@ void main() {
         ),
       );
       final context = tester.element(find.byType(SlAppBarIconButton));
-      final colorScheme = Theme.of(context).colorScheme;
+      final surge = SurgeTheme.of(context);
       final iconButton = tester.widget<IconButton>(
         find.byType(IconButton),
       );
-      expect(iconButton.color, colorScheme.onSurfaceVariant);
+      expect(iconButton.color, surge.textSecondary);
     });
 
     testWidgets('uses primary color for primary tone', (tester) async {
@@ -161,14 +161,14 @@ void main() {
         ),
       );
       final context = tester.element(find.byType(SlAppBarIconButton));
-      final colorScheme = Theme.of(context).colorScheme;
+      final surge = SurgeTheme.of(context);
       final iconButton = tester.widget<IconButton>(
         find.byType(IconButton),
       );
-      expect(iconButton.color, colorScheme.primary);
+      expect(iconButton.color, surge.primary);
     });
 
-    testWidgets('uses error color for destructive tone', (tester) async {
+    testWidgets('uses red for destructive tone', (tester) async {
       await tester.pumpWidget(
         _app(
           SlAppBarIconButton(
@@ -180,11 +180,11 @@ void main() {
         ),
       );
       final context = tester.element(find.byType(SlAppBarIconButton));
-      final colorScheme = Theme.of(context).colorScheme;
+      final surge = SurgeTheme.of(context);
       final iconButton = tester.widget<IconButton>(
         find.byType(IconButton),
       );
-      expect(iconButton.color, colorScheme.error);
+      expect(iconButton.color, surge.red);
     });
   });
 

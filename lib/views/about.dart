@@ -206,50 +206,48 @@ class _AboutLinkItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: SizedBox(
-          height: 56,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox.square(
-                  dimension: 28,
-                  child: Center(
-                    child: Icon(
-                      icon,
-                      size: SurgeIconSize.regular,
-                      color: surge.primary,
-                    ),
+    return SurgePressable(
+      onTap: onTap,
+      scaleFeedback: false,
+      child: SizedBox(
+        height: 56,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox.square(
+                dimension: 28,
+                child: Center(
+                  child: Icon(
+                    icon,
+                    size: SurgeIconSize.regular,
+                    color: surge.primary,
                   ),
                 ),
-                const SizedBox(width: SurgeSpace.m),
-                Expanded(
-                  child: Text(
-                    title,
-                    maxLines: 2,
-                    style: context.typography.rowTitle.copyWith(
-                      color: surge.textPrimary,
-                    ),
+              ),
+              const SizedBox(width: SurgeSpace.m),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  style: context.typography.rowTitle.copyWith(
+                    color: surge.textPrimary,
                   ),
                 ),
-                const SizedBox(width: SurgeSpace.m),
-                SizedBox.square(
-                  dimension: 28,
-                  child: Center(
-                    child: Icon(
-                      SurgeIcons.openInNew,
-                      size: SurgeIconSize.compact,
-                      color: surge.textSecondary,
-                    ),
+              ),
+              const SizedBox(width: SurgeSpace.m),
+              SizedBox.square(
+                dimension: 28,
+                child: Center(
+                  child: Icon(
+                    SurgeIcons.openInNew,
+                    size: SurgeIconSize.compact,
+                    color: surge.textSecondary,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

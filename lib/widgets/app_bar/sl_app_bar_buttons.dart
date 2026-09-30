@@ -9,14 +9,14 @@ Color _resolveActionColor(
   SlAppBarActionTone tone,
   bool enabled,
 ) {
-  final colorScheme = Theme.of(context).colorScheme;
+  final surge = SurgeTheme.of(context);
   if (!enabled) {
-    return colorScheme.onSurfaceVariant.withValues(alpha: SurgeAlpha.a38);
+    return surge.textSecondary.withValues(alpha: SurgeAlpha.a38);
   }
   return switch (tone) {
-    SlAppBarActionTone.normal => colorScheme.onSurfaceVariant,
-    SlAppBarActionTone.primary => colorScheme.primary,
-    SlAppBarActionTone.destructive => colorScheme.error,
+    SlAppBarActionTone.normal => surge.textSecondary,
+    SlAppBarActionTone.primary => surge.primary,
+    SlAppBarActionTone.destructive => surge.red,
   };
 }
 
