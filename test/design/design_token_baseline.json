@@ -57,9 +57,8 @@
     "gap": 1
   },
   "lib/views/profiles/media_check.dart": {
-    "spacing": 3,
-    "gap": 6,
-    "radius": 3
+    "spacing": 2,
+    "gap": 6
   },
   "lib/views/profiles/overwrite/custom/groups.dart": {
     "radius": 1
@@ -71,9 +70,8 @@
     "radius": 1
   },
   "lib/views/profiles/profiles.dart": {
-    "spacing": 3,
-    "gap": 1,
-    "radius": 1
+    "spacing": 1,
+    "gap": 1
   },
   "lib/views/proxies/list.dart": {
     "spacing": 1

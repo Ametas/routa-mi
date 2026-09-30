@@ -516,9 +516,9 @@ class _ProfileMediaCheckViewState extends ConsumerState<ProfileMediaCheckView> {
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
           padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 16,
+            left: SurgeSpace.l,
+            right: SurgeSpace.l,
+            top: SurgeSpace.l,
             bottom: 112 + MediaQuery.paddingOf(context).bottom,
           ),
           child: Column(
@@ -684,20 +684,11 @@ class _MediaCheckControlCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SurgeIconTile(
                   key: const Key('media-check-header-icon'),
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: surge.primary.withValues(alpha: SurgeAlpha.a08),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    SurgeIcons.mediaCheck,
-                    size: SurgeIconSize.inline,
-                    color: surge.primary.withValues(alpha: SurgeAlpha.a82),
-                  ),
+                  icon: SurgeIcons.mediaCheck,
+                  color: surge.primary,
+                  foregroundAlpha: SurgeAlpha.a82,
                 ),
                 const SizedBox(width: SurgeSpace.s),
                 Expanded(
@@ -766,7 +757,9 @@ class _MediaCheckControlCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(3),
+                          borderRadius: BorderRadius.circular(
+                            surge.radii.button,
+                          ),
                           child: LinearProgressIndicator(
                             value: checking
                                 ? progress
@@ -1301,21 +1294,10 @@ class _MediaCheckResultCard extends StatelessWidget {
               ],
               if (row.expired) ...[
                 const SizedBox(width: SurgeSpace.s),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: SurgeSpace.xs,
-                    vertical: 1,
-                  ),
-                  decoration: BoxDecoration(
-                    color: surge.orange.withValues(alpha: SurgeAlpha.a16),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    context.appLocalizations.expired,
-                    style: context.typography.badgeLabel.copyWith(
-                      color: surge.orange,
-                    ),
-                  ),
+                SurgeTag(
+                  label: context.appLocalizations.expired,
+                  color: surge.orange,
+                  size: SurgeTagSize.compact,
                 ),
               ],
             ],

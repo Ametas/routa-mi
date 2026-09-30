@@ -13,6 +13,7 @@ import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/views/config/dns.dart';
 import 'package:fl_clash/views/config/network.dart';
+import 'package:fl_clash/views/profiles/media_check.dart';
 import 'package:fl_clash/views/theme.dart';
 import 'package:fl_clash/views/views.dart';
 import 'package:fl_clash/widgets/input.dart';
@@ -23,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> _loadFont(String family, List<String> files) async {
   final loader = FontLoader(family);
@@ -41,6 +43,11 @@ Future<void> _loadFont(String family, List<String> files) async {
 // Light theme by default; SHOT_BRIGHTNESS=dark renders the dark one.
 //
 // Screens that need a running core may log errors but still render.
+const _mediaProfiles = [
+  Profile(id: 1, label: 'Daily', autoUpdateDuration: Duration(hours: 24)),
+  Profile(id: 2, label: 'AI', autoUpdateDuration: Duration(hours: 24)),
+];
+
 // Dialogs are opened over an empty screen, the way the app shows them.
 final _dialogs = <String, Future<void> Function(BuildContext)>{
   'dialog_message': (context) => globalState.showMessage(
@@ -133,11 +140,22 @@ void main() {
     'profiles': () => const ProfilesView(),
     'profiles_active': () => const ProfilesView(),
     'proxies': () => const ProxiesView(),
+    'media_check': () => ProfileMediaCheckView(
+      profiles: _mediaProfiles,
+      initialProfile: _mediaProfiles.first,
+      configLoader: (profileId) async => {
+        'proxies': [
+          {'name': 'JP01', 'type': 'Vless'},
+          {'name': 'HK01', 'type': 'Vless'},
+        ],
+      },
+    ),
     for (final name in _dialogs.keys) name: () => const Scaffold(),
   };
 
   for (final MapEntry(key: name, value: build) in views.entries) {
     testWidgets('shot $name', skip: skip != null, (tester) async {
+      SharedPreferences.setMockInitialValues({});
       await tester.binding.setSurfaceSize(const Size(384, 853));
       tester.view.devicePixelRatio = 2.5;
       final spec = StaticThemeSpec.resolve(
