@@ -894,6 +894,11 @@ class _NumberCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OverwriteCountPill(value: number);
+    return SurgeTag(
+      label: '$number',
+      color: SurgeTheme.of(context).primary,
+      size: SurgeTagSize.compact,
+      minWidth: 30,
+    );
   }
 }

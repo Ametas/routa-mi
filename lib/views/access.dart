@@ -345,7 +345,11 @@ class _AccessViewState extends ConsumerState<AccessView> {
               ),
             ),
             const SizedBox(width: SurgeSpace.m),
-            _SelectedPill(label: '${appLocalizations.selected} $count'),
+            SurgeTag(
+              label: '${appLocalizations.selected} $count',
+              color: surge.primary,
+              size: SurgeTagSize.compact,
+            ),
           ],
         ),
       ),
@@ -446,36 +450,6 @@ class _AccessViewState extends ConsumerState<AccessView> {
           isSelectedAll: valueList.length == viewPackageNameList.length,
           allValueList: viewPackageNameList,
         ),
-      ),
-    );
-  }
-}
-
-class _SelectedPill extends StatelessWidget {
-  final String label;
-
-  const _SelectedPill({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final surfaceColor = Color.alphaBlend(
-      surge.primary.withValues(alpha: isDark ? SurgeAlpha.a24 : SurgeAlpha.a12),
-      surge.card,
-    );
-    final borderColor = surge.primary.withValues(alpha: isDark ? SurgeAlpha.a38 : SurgeAlpha.a24);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.s, vertical: SurgeSpace.xs),
-      decoration: BoxDecoration(
-        color: surfaceColor,
-        borderRadius: BorderRadius.circular(surge.radii.button),
-        border: Border.all(color: borderColor, width: surge.spacing.hairline),
-      ),
-      child: Text(
-        label,
-        maxLines: 1,
-        style: context.typography.badgeLabel.copyWith(color: surge.primary),
       ),
     );
   }

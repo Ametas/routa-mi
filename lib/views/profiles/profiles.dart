@@ -1554,9 +1554,10 @@ class ProfileItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: SurgeSpace.m),
-                    _ProfilePill(
+                    SurgeTag(
                       label: profile.type.name,
-                      color: surge.textSecondary,
+                      minWidth: 48,
+                      maxWidth: 64,
                     ),
                     const SizedBox(width: SurgeSpace.xs),
                     SizedBox(
@@ -1939,49 +1940,6 @@ class _SummaryText extends StatelessWidget {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: style,
-    );
-  }
-}
-
-class _ProfilePill extends StatelessWidget {
-  const _ProfilePill({required this.label, required this.color});
-
-  final String label;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final metrics = SoftOsMetrics.of(context);
-    const backgroundAlpha = SurgeAlpha.a04;
-    const borderAlpha = SurgeAlpha.a38;
-    final textColor = surge.textPrimary.withValues(alpha: SurgeAlpha.a72);
-    final height = metrics.value(surge.controls.statusPillHeight);
-    return Container(
-      height: height,
-      constraints: BoxConstraints(
-        minWidth: metrics.value(48),
-        maxWidth: metrics.value(64),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: metrics.value(10)),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: backgroundAlpha),
-        borderRadius: BorderRadius.circular(height / 2),
-        border: Border.all(
-          color: surge.separator.withValues(alpha: borderAlpha),
-          width: surge.spacing.hairline,
-        ),
-      ),
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          label,
-          maxLines: 1,
-          textScaler: TextScaler.noScaling,
-          style: context.typography.badgeLabel.copyWith(color: textColor),
-        ),
-      ),
     );
   }
 }

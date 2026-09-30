@@ -212,6 +212,27 @@ final componentCatalog = <CatalogEntry>[
     ),
   ),
   CatalogEntry(
+    'SurgeTag',
+    (context) => Wrap(
+      spacing: SurgeSpace.s,
+      runSpacing: SurgeSpace.s,
+      children: [
+        const SurgeTag(label: 'url', minWidth: 48, maxWidth: 64),
+        SurgeTag(label: 'Selected 12', color: SurgeTheme.of(context).primary),
+        SurgeTag(
+          label: '7',
+          color: SurgeTheme.of(context).primary,
+          size: SurgeTagSize.compact,
+          minWidth: 30,
+        ),
+        const SurgeTag(
+          label: 'A proxy chain name that is far too long for a tag',
+          onTap: _noop,
+        ),
+      ],
+    ),
+  ),
+  CatalogEntry(
     'SurgeStatusButton',
     (_) => const Wrap(
       spacing: SurgeSpace.s,

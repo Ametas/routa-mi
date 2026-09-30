@@ -125,7 +125,9 @@ class TrackerInfoItem extends ConsumerWidget {
                   if (trackerInfo.chains.isNotEmpty) ...[
                     const SizedBox(height: SurgeSpace.m),
                     SizedBox(
-                      height: 28,
+                      height: SoftOsMetrics.of(
+                        context,
+                      ).value(surge.controls.statusPillHeight),
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         padding: EdgeInsets.zero,
@@ -134,8 +136,9 @@ class TrackerInfoItem extends ConsumerWidget {
                             const SizedBox(width: SurgeSpace.s),
                         itemBuilder: (_, index) {
                           final chain = trackerInfo.chains[index];
-                          return _TrackerChainPill(
+                          return SurgeTag(
                             label: chain,
+                            textStyle: context.typography.techLabel,
                             onTap: onClickKeyword == null
                                 ? null
                                 : () => onClickKeyword!(chain),
@@ -225,47 +228,6 @@ class _TrackerProcessIcon extends StatelessWidget {
   }
 }
 
-class _TrackerChainPill extends StatelessWidget {
-  const _TrackerChainPill({required this.label, this.onTap});
-
-  final String label;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(surge.radii.smallCard),
-        child: Ink(
-          height: 28,
-          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.m),
-          decoration: BoxDecoration(
-            color: surge.textSecondary.withValues(alpha: SurgeAlpha.a04),
-            borderRadius: BorderRadius.circular(surge.radii.smallCard),
-            border: Border.all(
-              color: surge.separator.withValues(alpha: SurgeAlpha.a38),
-              width: surge.spacing.hairline,
-            ),
-          ),
-          child: Center(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: context.typography.techLabel.copyWith(
-                color: surge.textPrimary.withValues(alpha: SurgeAlpha.a72),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class TrackerInfoDetailView extends StatelessWidget {
   final TrackerInfo trackerInfo;
 
@@ -315,12 +277,12 @@ class TrackerInfoDetailView extends StatelessWidget {
 
   Widget _buildChains(BuildContext context) {
     final chains = Wrap(
-      spacing: 8,
-      runSpacing: 8,
+      spacing: SurgeSpace.s,
+      runSpacing: SurgeSpace.s,
       alignment: WrapAlignment.end,
       children: [
         for (final chain in trackerInfo.chains)
-          CommonChip(label: chain, onPressed: () {}),
+          SurgeTag(label: chain, textStyle: context.typography.techLabel),
       ],
     );
     return ListItem(
