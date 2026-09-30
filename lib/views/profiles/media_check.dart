@@ -1090,56 +1090,54 @@ class _InlineFilterMetric extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     final color = filter.color(surge);
     final textColor = selected ? color : surge.textPrimary;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(surge.radii.input),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: SurgeSpace.xxs),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(filter.icon, size: SurgeIconSize.inline, color: color),
-                  const SizedBox(width: SurgeSpace.xs),
-                  Expanded(
-                    child: Text(
-                      filter.label(context),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.typography.mediaFilterTitle.copyWith(
-                        color: textColor,
-                      ),
+    return SurgePressable(
+      onTap: onTap,
+      scaleFeedback: false,
+      borderRadius: BorderRadius.circular(surge.radii.input),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: SurgeSpace.xxs),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(filter.icon, size: SurgeIconSize.inline, color: color),
+                const SizedBox(width: SurgeSpace.xs),
+                Expanded(
+                  child: Text(
+                    filter.label(context),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.typography.mediaFilterTitle.copyWith(
+                      color: textColor,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: SurgeSpace.xs),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Text(
-                      subtitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.typography.mediaFilterSubtitle.copyWith(
-                        color: selected
-                            ? color.withValues(alpha: SurgeAlpha.a82)
-                            : surge.textSecondary,
-                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: SurgeSpace.xs),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Text(
+                    subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.typography.mediaFilterSubtitle.copyWith(
+                      color: selected
+                          ? color.withValues(alpha: SurgeAlpha.a82)
+                          : surge.textSecondary,
                     ),
                   ),
-                  Text(
-                    value,
-                    style: context.typography.metric.copyWith(color: color),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+                Text(
+                  value,
+                  style: context.typography.metric.copyWith(color: color),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

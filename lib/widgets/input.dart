@@ -227,53 +227,51 @@ class SurgeToggleFieldRow extends StatelessWidget {
           : surge.separator.withValues(alpha: SurgeAlpha.a82),
       width: 0.7,
     );
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          onChanged(!value);
-        },
-        borderRadius: radius,
-        child: AnimatedContainer(
-          duration: SurgeMotion.state,
-          curve: SurgeMotion.stateCurve,
-          padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xl, vertical: SurgeSpace.m),
-          decoration: BoxDecoration(
-            color: fillColor,
-            borderRadius: radius,
-            border: border,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+    return SurgePressable(
+      onTap: () {
+        onChanged(!value);
+      },
+      scaleFeedback: false,
+      borderRadius: radius,
+      child: AnimatedContainer(
+        duration: SurgeMotion.state,
+        curve: SurgeMotion.stateCurve,
+        padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xl, vertical: SurgeSpace.m),
+        decoration: BoxDecoration(
+          color: fillColor,
+          borderRadius: radius,
+          border: border,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    label,
+                    style: context.typography.rowTitle.copyWith(
+                      color: surge.textPrimary,
+                    ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: SurgeSpace.xs),
                     Text(
-                      label,
-                      style: context.typography.rowTitle.copyWith(
-                        color: surge.textPrimary,
+                      subtitle!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.typography.supporting.copyWith(
+                        color: surge.textSecondary,
                       ),
                     ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: SurgeSpace.xs),
-                      Text(
-                        subtitle!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.typography.supporting.copyWith(
-                          color: surge.textSecondary,
-                        ),
-                      ),
-                    ],
                   ],
-                ),
+                ],
               ),
-              const SizedBox(width: SurgeSpace.m),
-              SurgeSwitch(value: value, onChanged: onChanged),
-            ],
-          ),
+            ),
+            const SizedBox(width: SurgeSpace.m),
+            SurgeSwitch(value: value, onChanged: onChanged),
+          ],
         ),
       ),
     );

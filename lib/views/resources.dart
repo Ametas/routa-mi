@@ -727,70 +727,64 @@ class _ResourceSheetOption extends StatelessWidget {
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
     final foreground = selected ? surge.textPrimary : surge.textSecondary;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: SurgeSpace.l,
-            vertical: SurgeSpace.m,
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: selected
-                      ? surge.primary.withValues(alpha: SurgeAlpha.a12)
-                      : surge.textSecondary.withValues(alpha: SurgeAlpha.a04),
-                  borderRadius: BorderRadius.circular(surge.radii.button),
-                  border: Border.all(
-                    color: surge.separator.withValues(alpha: SurgeAlpha.a38),
-                    width: surge.spacing.hairline,
+    return SurgePressable(
+      onTap: onTap,
+      scaleFeedback: false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: SurgeSpace.l,
+          vertical: SurgeSpace.m,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: selected
+                    ? surge.primary.withValues(alpha: SurgeAlpha.a12)
+                    : surge.textSecondary.withValues(alpha: SurgeAlpha.a04),
+                borderRadius: BorderRadius.circular(surge.radii.button),
+                border: Border.all(
+                  color: surge.separator.withValues(alpha: SurgeAlpha.a38),
+                  width: surge.spacing.hairline,
+                ),
+              ),
+              child: Icon(icon, size: SurgeIconSize.inline, color: foreground),
+            ),
+            const SizedBox(width: SurgeSpace.m),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.typography.rowTitle.copyWith(
+                      color: surge.textPrimary,
+                    ),
                   ),
-                ),
-                child: Icon(
-                  icon,
-                  size: SurgeIconSize.inline,
-                  color: foreground,
-                ),
-              ),
-              const SizedBox(width: SurgeSpace.m),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.typography.rowTitle.copyWith(
-                        color: surge.textPrimary,
-                      ),
+                  const SizedBox(height: SurgeSpace.xs),
+                  Text(
+                    subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.typography.supporting.copyWith(
+                      color: surge.textSecondary,
                     ),
-                    const SizedBox(height: SurgeSpace.xs),
-                    Text(
-                      subtitle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.typography.supporting.copyWith(
-                        color: surge.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(width: SurgeSpace.m),
-              SurgeSelectIndicator(
-                selected: selected,
-                size: 18,
-                iconSize: SurgeIconSize.micro,
-                showCheck: false,
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(width: SurgeSpace.m),
+            SurgeSelectIndicator(
+              selected: selected,
+              size: 18,
+              iconSize: SurgeIconSize.micro,
+              showCheck: false,
+            ),
+          ],
         ),
       ),
     );
