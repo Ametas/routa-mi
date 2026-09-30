@@ -327,6 +327,21 @@ class GlobalState {
           final appLocalizations = context.appLocalizations;
           return CommonDialog(
             title: appLocalizations.externalLink,
+            actions: [
+              SurgeDialogActionButton(
+                label: appLocalizations.cancel,
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              SurgeDialogActionButton(
+                label: appLocalizations.go,
+                primary: true,
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+            ],
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -359,16 +374,6 @@ class GlobalState {
                       style: context.typography.body,
                     ),
                   ),
-                ),
-                SurgeDialogActionRow(
-                  cancelLabel: appLocalizations.cancel,
-                  submitLabel: appLocalizations.go,
-                  onCancel: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  onSubmit: () {
-                    Navigator.of(context).pop(true);
-                  },
                 ),
               ],
             ),

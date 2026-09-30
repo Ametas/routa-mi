@@ -697,6 +697,17 @@ class _UpdateAvailableDialog extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     return CommonDialog(
       title: currentAppLocalizations.discoverNewVersion,
+      actions: [
+        SurgeDialogActionButton(
+          label: cancelText,
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+        SurgeDialogActionButton(
+          label: currentAppLocalizations.download,
+          primary: true,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
       overrideScroll: true,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -745,13 +756,6 @@ class _UpdateAvailableDialog extends StatelessWidget {
               ),
             ),
           ],
-          const SizedBox(height: SurgeSpace.xl),
-          SurgeDialogActionRow(
-            cancelLabel: cancelText,
-            submitLabel: currentAppLocalizations.download,
-            onCancel: () => Navigator.of(context).pop(false),
-            onSubmit: () => Navigator.of(context).pop(true),
-          ),
         ],
       ),
     );
@@ -774,6 +778,13 @@ class _UpdateStatusDialog extends StatelessWidget {
     final surge = SurgeTheme.of(context);
     return CommonDialog(
       title: title,
+      actions: [
+        SurgeDialogActionButton(
+          label: currentAppLocalizations.confirm,
+          primary: true,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
       overrideScroll: true,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -800,16 +811,6 @@ class _UpdateStatusDialog extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: SurgeSpace.xl),
-          Row(
-            children: [
-              SurgeDialogActionButton(
-                label: currentAppLocalizations.confirm,
-                onPressed: () => Navigator.of(context).pop(),
-                primary: true,
-              ),
-            ],
           ),
         ],
       ),

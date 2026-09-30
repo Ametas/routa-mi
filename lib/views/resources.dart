@@ -839,6 +839,19 @@ class _UpdateGeoUrlFormDialogState extends State<UpdateGeoUrlFormDialog> {
     final appLocalizations = context.appLocalizations;
     return CommonDialog(
       title: widget.title,
+      actions: [
+        SurgeDialogActionButton(
+          label: appLocalizations.cancel,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        SurgeDialogActionButton(
+          label: appLocalizations.submit,
+          primary: true,
+          onPressed: _handleUpdate,
+        ),
+      ],
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -856,14 +869,6 @@ class _UpdateGeoUrlFormDialogState extends State<UpdateGeoUrlFormDialog> {
                 hintText: appLocalizations.url,
               ),
             ),
-          ),
-          SurgeDialogActionRow(
-            cancelLabel: appLocalizations.cancel,
-            submitLabel: appLocalizations.submit,
-            onCancel: () {
-              Navigator.of(context).pop();
-            },
-            onSubmit: _handleUpdate,
           ),
         ],
       ),

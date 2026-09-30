@@ -578,6 +578,19 @@ class _PortDialogState extends ConsumerState<_PortDialog> {
     final surge = SurgeTheme.of(context);
     return CommonDialog(
       title: appLocalizations.port,
+      actions: [
+        SurgeDialogActionButton(
+          label: appLocalizations.cancel,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        SurgeDialogActionButton(
+          label: appLocalizations.submit,
+          primary: true,
+          onPressed: _handleUpdate,
+        ),
+      ],
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: _formKey,
@@ -874,14 +887,6 @@ class _PortDialogState extends ConsumerState<_PortDialog> {
                   ],
                 ],
               ),
-            ),
-            SurgeDialogActionRow(
-              cancelLabel: appLocalizations.cancel,
-              submitLabel: appLocalizations.submit,
-              onCancel: () {
-                Navigator.of(context).pop();
-              },
-              onSubmit: _handleUpdate,
             ),
           ],
         ),
