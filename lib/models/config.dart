@@ -35,6 +35,8 @@ const defaultAppSettingProps = AppSettingProps(
 const defaultVpnProps = VpnProps();
 const defaultNetworkProps = NetworkProps();
 const defaultAuthenticationProps = AuthenticationProps();
+const defaultLocalVlessPort = 7894;
+const defaultLocalVlessProps = LocalVlessProps();
 const defaultProxiesStyleProps = ProxiesStyleProps(
   iconStyle: ProxiesIconStyle.none,
 );
@@ -205,6 +207,20 @@ abstract class AuthenticationProps with _$AuthenticationProps {
       : _$AuthenticationPropsFromJson(json);
 }
 
+/// Optional plain VLESS inbound for local clients (see
+/// `lib/common/local_vless.dart`); the UUID is its credential.
+@freezed
+abstract class LocalVlessProps with _$LocalVlessProps {
+  const factory LocalVlessProps({
+    @Default(false) bool enable,
+    @Default(defaultLocalVlessPort) int port,
+    @Default('') String uuid,
+  }) = _LocalVlessProps;
+
+  factory LocalVlessProps.fromJson(Map<String, Object?>? json) =>
+      json == null ? defaultLocalVlessProps : _$LocalVlessPropsFromJson(json);
+}
+
 @freezed
 abstract class NetworkProps with _$NetworkProps {
   const factory NetworkProps({
@@ -214,6 +230,7 @@ abstract class NetworkProps with _$NetworkProps {
     @Default(true) bool autoSetSystemDns,
     @Default(false) bool appendSystemDns,
     @Default(defaultAuthenticationProps) AuthenticationProps authentication,
+    @Default(defaultLocalVlessProps) LocalVlessProps localVless,
   }) = _NetworkProps;
 
   factory NetworkProps.fromJson(Map<String, Object?>? json) =>

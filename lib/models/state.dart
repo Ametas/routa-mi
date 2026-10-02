@@ -333,6 +333,7 @@ abstract class MakeRealProfileState with _$MakeRealProfileState {
     required List<Rule> addedRules,
     required String defaultUA,
     @Default([]) List<String> authentication,
+    Map<String, dynamic>? localVlessListener,
   }) = _MakeRealProfileState;
 }
 

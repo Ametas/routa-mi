@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fl_clash/common/local_vless.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,9 +57,17 @@ extension AuthenticationPropsCredentials on AuthenticationProps {
       'PROXY $proxyUserInfo$host:$port';
 }
 
-/// Fills in credentials when authentication is on but none exist yet:
-/// a fresh install, a reset, or a backup made before this setting existed.
+/// Fills in the local inbounds' credentials (SOCKS/HTTP authentication and
+/// the VLESS UUID) when they are on but none exist yet: a fresh install, a
+/// reset, or a backup made before these settings existed.
 NetworkProps ensureLocalProxyCredentials(NetworkProps props, {Random? random}) {
+  return ensureLocalVlessUuid(
+    _ensureAuthentication(props, random: random),
+    random: random,
+  );
+}
+
+NetworkProps _ensureAuthentication(NetworkProps props, {Random? random}) {
   final authentication = props.authentication;
   if (!authentication.enable || authentication.isComplete) return props;
   final generated = LocalProxyAuth.generate(random: random);

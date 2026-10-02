@@ -1475,9 +1475,278 @@ as String,
 
 
 /// @nodoc
+mixin _$LocalVlessProps {
+
+ bool get enable; int get port; String get uuid;
+/// Create a copy of LocalVlessProps
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$LocalVlessPropsCopyWith<LocalVlessProps> get copyWith => _$LocalVlessPropsCopyWithImpl<LocalVlessProps>(this as LocalVlessProps, _$identity);
+
+  /// Serializes this LocalVlessProps to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LocalVlessProps&&(identical(other.enable, enable) || other.enable == enable)&&(identical(other.port, port) || other.port == port)&&(identical(other.uuid, uuid) || other.uuid == uuid));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,enable,port,uuid);
+
+@override
+String toString() {
+  return 'LocalVlessProps(enable: $enable, port: $port, uuid: $uuid)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $LocalVlessPropsCopyWith<$Res>  {
+  factory $LocalVlessPropsCopyWith(LocalVlessProps value, $Res Function(LocalVlessProps) _then) = _$LocalVlessPropsCopyWithImpl;
+@useResult
+$Res call({
+ bool enable, int port, String uuid
+});
+
+
+
+
+}
+/// @nodoc
+class _$LocalVlessPropsCopyWithImpl<$Res>
+    implements $LocalVlessPropsCopyWith<$Res> {
+  _$LocalVlessPropsCopyWithImpl(this._self, this._then);
+
+  final LocalVlessProps _self;
+  final $Res Function(LocalVlessProps) _then;
+
+/// Create a copy of LocalVlessProps
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? enable = null,Object? port = null,Object? uuid = null,}) {
+  return _then(_self.copyWith(
+enable: null == enable ? _self.enable : enable // ignore: cast_nullable_to_non_nullable
+as bool,port: null == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
+as int,uuid: null == uuid ? _self.uuid : uuid // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [LocalVlessProps].
+extension LocalVlessPropsPatterns on LocalVlessProps {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _LocalVlessProps value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _LocalVlessProps() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _LocalVlessProps value)  $default,){
+final _that = this;
+switch (_that) {
+case _LocalVlessProps():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _LocalVlessProps value)?  $default,){
+final _that = this;
+switch (_that) {
+case _LocalVlessProps() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool enable,  int port,  String uuid)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _LocalVlessProps() when $default != null:
+return $default(_that.enable,_that.port,_that.uuid);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool enable,  int port,  String uuid)  $default,) {final _that = this;
+switch (_that) {
+case _LocalVlessProps():
+return $default(_that.enable,_that.port,_that.uuid);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool enable,  int port,  String uuid)?  $default,) {final _that = this;
+switch (_that) {
+case _LocalVlessProps() when $default != null:
+return $default(_that.enable,_that.port,_that.uuid);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _LocalVlessProps implements LocalVlessProps {
+  const _LocalVlessProps({this.enable = false, this.port = defaultLocalVlessPort, this.uuid = ''});
+  factory _LocalVlessProps.fromJson(Map<String, dynamic> json) => _$LocalVlessPropsFromJson(json);
+
+@override@JsonKey() final  bool enable;
+@override@JsonKey() final  int port;
+@override@JsonKey() final  String uuid;
+
+/// Create a copy of LocalVlessProps
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LocalVlessPropsCopyWith<_LocalVlessProps> get copyWith => __$LocalVlessPropsCopyWithImpl<_LocalVlessProps>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$LocalVlessPropsToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LocalVlessProps&&(identical(other.enable, enable) || other.enable == enable)&&(identical(other.port, port) || other.port == port)&&(identical(other.uuid, uuid) || other.uuid == uuid));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,enable,port,uuid);
+
+@override
+String toString() {
+  return 'LocalVlessProps(enable: $enable, port: $port, uuid: $uuid)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$LocalVlessPropsCopyWith<$Res> implements $LocalVlessPropsCopyWith<$Res> {
+  factory _$LocalVlessPropsCopyWith(_LocalVlessProps value, $Res Function(_LocalVlessProps) _then) = __$LocalVlessPropsCopyWithImpl;
+@override @useResult
+$Res call({
+ bool enable, int port, String uuid
+});
+
+
+
+
+}
+/// @nodoc
+class __$LocalVlessPropsCopyWithImpl<$Res>
+    implements _$LocalVlessPropsCopyWith<$Res> {
+  __$LocalVlessPropsCopyWithImpl(this._self, this._then);
+
+  final _LocalVlessProps _self;
+  final $Res Function(_LocalVlessProps) _then;
+
+/// Create a copy of LocalVlessProps
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? enable = null,Object? port = null,Object? uuid = null,}) {
+  return _then(_LocalVlessProps(
+enable: null == enable ? _self.enable : enable // ignore: cast_nullable_to_non_nullable
+as bool,port: null == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
+as int,uuid: null == uuid ? _self.uuid : uuid // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
 mixin _$NetworkProps {
 
- bool get systemProxy; List<String> get bypassDomain; RouteMode get routeMode; bool get autoSetSystemDns; bool get appendSystemDns; AuthenticationProps get authentication;
+ bool get systemProxy; List<String> get bypassDomain; RouteMode get routeMode; bool get autoSetSystemDns; bool get appendSystemDns; AuthenticationProps get authentication; LocalVlessProps get localVless;
 /// Create a copy of NetworkProps
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1490,16 +1759,16 @@ $NetworkPropsCopyWith<NetworkProps> get copyWith => _$NetworkPropsCopyWithImpl<N
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NetworkProps&&(identical(other.systemProxy, systemProxy) || other.systemProxy == systemProxy)&&const DeepCollectionEquality().equals(other.bypassDomain, bypassDomain)&&(identical(other.routeMode, routeMode) || other.routeMode == routeMode)&&(identical(other.autoSetSystemDns, autoSetSystemDns) || other.autoSetSystemDns == autoSetSystemDns)&&(identical(other.appendSystemDns, appendSystemDns) || other.appendSystemDns == appendSystemDns)&&(identical(other.authentication, authentication) || other.authentication == authentication));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NetworkProps&&(identical(other.systemProxy, systemProxy) || other.systemProxy == systemProxy)&&const DeepCollectionEquality().equals(other.bypassDomain, bypassDomain)&&(identical(other.routeMode, routeMode) || other.routeMode == routeMode)&&(identical(other.autoSetSystemDns, autoSetSystemDns) || other.autoSetSystemDns == autoSetSystemDns)&&(identical(other.appendSystemDns, appendSystemDns) || other.appendSystemDns == appendSystemDns)&&(identical(other.authentication, authentication) || other.authentication == authentication)&&(identical(other.localVless, localVless) || other.localVless == localVless));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,systemProxy,const DeepCollectionEquality().hash(bypassDomain),routeMode,autoSetSystemDns,appendSystemDns,authentication);
+int get hashCode => Object.hash(runtimeType,systemProxy,const DeepCollectionEquality().hash(bypassDomain),routeMode,autoSetSystemDns,appendSystemDns,authentication,localVless);
 
 @override
 String toString() {
-  return 'NetworkProps(systemProxy: $systemProxy, bypassDomain: $bypassDomain, routeMode: $routeMode, autoSetSystemDns: $autoSetSystemDns, appendSystemDns: $appendSystemDns, authentication: $authentication)';
+  return 'NetworkProps(systemProxy: $systemProxy, bypassDomain: $bypassDomain, routeMode: $routeMode, autoSetSystemDns: $autoSetSystemDns, appendSystemDns: $appendSystemDns, authentication: $authentication, localVless: $localVless)';
 }
 
 
@@ -1510,11 +1779,11 @@ abstract mixin class $NetworkPropsCopyWith<$Res>  {
   factory $NetworkPropsCopyWith(NetworkProps value, $Res Function(NetworkProps) _then) = _$NetworkPropsCopyWithImpl;
 @useResult
 $Res call({
- bool systemProxy, List<String> bypassDomain, RouteMode routeMode, bool autoSetSystemDns, bool appendSystemDns, AuthenticationProps authentication
+ bool systemProxy, List<String> bypassDomain, RouteMode routeMode, bool autoSetSystemDns, bool appendSystemDns, AuthenticationProps authentication, LocalVlessProps localVless
 });
 
 
-$AuthenticationPropsCopyWith<$Res> get authentication;
+$AuthenticationPropsCopyWith<$Res> get authentication;$LocalVlessPropsCopyWith<$Res> get localVless;
 
 }
 /// @nodoc
@@ -1527,7 +1796,7 @@ class _$NetworkPropsCopyWithImpl<$Res>
 
 /// Create a copy of NetworkProps
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? systemProxy = null,Object? bypassDomain = null,Object? routeMode = null,Object? autoSetSystemDns = null,Object? appendSystemDns = null,Object? authentication = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? systemProxy = null,Object? bypassDomain = null,Object? routeMode = null,Object? autoSetSystemDns = null,Object? appendSystemDns = null,Object? authentication = null,Object? localVless = null,}) {
   return _then(_self.copyWith(
 systemProxy: null == systemProxy ? _self.systemProxy : systemProxy // ignore: cast_nullable_to_non_nullable
 as bool,bypassDomain: null == bypassDomain ? _self.bypassDomain : bypassDomain // ignore: cast_nullable_to_non_nullable
@@ -1535,7 +1804,8 @@ as List<String>,routeMode: null == routeMode ? _self.routeMode : routeMode // ig
 as RouteMode,autoSetSystemDns: null == autoSetSystemDns ? _self.autoSetSystemDns : autoSetSystemDns // ignore: cast_nullable_to_non_nullable
 as bool,appendSystemDns: null == appendSystemDns ? _self.appendSystemDns : appendSystemDns // ignore: cast_nullable_to_non_nullable
 as bool,authentication: null == authentication ? _self.authentication : authentication // ignore: cast_nullable_to_non_nullable
-as AuthenticationProps,
+as AuthenticationProps,localVless: null == localVless ? _self.localVless : localVless // ignore: cast_nullable_to_non_nullable
+as LocalVlessProps,
   ));
 }
 /// Create a copy of NetworkProps
@@ -1546,6 +1816,15 @@ $AuthenticationPropsCopyWith<$Res> get authentication {
   
   return $AuthenticationPropsCopyWith<$Res>(_self.authentication, (value) {
     return _then(_self.copyWith(authentication: value));
+  });
+}/// Create a copy of NetworkProps
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$LocalVlessPropsCopyWith<$Res> get localVless {
+  
+  return $LocalVlessPropsCopyWith<$Res>(_self.localVless, (value) {
+    return _then(_self.copyWith(localVless: value));
   });
 }
 }
@@ -1629,10 +1908,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool systemProxy,  List<String> bypassDomain,  RouteMode routeMode,  bool autoSetSystemDns,  bool appendSystemDns,  AuthenticationProps authentication)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool systemProxy,  List<String> bypassDomain,  RouteMode routeMode,  bool autoSetSystemDns,  bool appendSystemDns,  AuthenticationProps authentication,  LocalVlessProps localVless)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NetworkProps() when $default != null:
-return $default(_that.systemProxy,_that.bypassDomain,_that.routeMode,_that.autoSetSystemDns,_that.appendSystemDns,_that.authentication);case _:
+return $default(_that.systemProxy,_that.bypassDomain,_that.routeMode,_that.autoSetSystemDns,_that.appendSystemDns,_that.authentication,_that.localVless);case _:
   return orElse();
 
 }
@@ -1650,10 +1929,10 @@ return $default(_that.systemProxy,_that.bypassDomain,_that.routeMode,_that.autoS
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool systemProxy,  List<String> bypassDomain,  RouteMode routeMode,  bool autoSetSystemDns,  bool appendSystemDns,  AuthenticationProps authentication)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool systemProxy,  List<String> bypassDomain,  RouteMode routeMode,  bool autoSetSystemDns,  bool appendSystemDns,  AuthenticationProps authentication,  LocalVlessProps localVless)  $default,) {final _that = this;
 switch (_that) {
 case _NetworkProps():
-return $default(_that.systemProxy,_that.bypassDomain,_that.routeMode,_that.autoSetSystemDns,_that.appendSystemDns,_that.authentication);case _:
+return $default(_that.systemProxy,_that.bypassDomain,_that.routeMode,_that.autoSetSystemDns,_that.appendSystemDns,_that.authentication,_that.localVless);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1670,10 +1949,10 @@ return $default(_that.systemProxy,_that.bypassDomain,_that.routeMode,_that.autoS
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool systemProxy,  List<String> bypassDomain,  RouteMode routeMode,  bool autoSetSystemDns,  bool appendSystemDns,  AuthenticationProps authentication)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool systemProxy,  List<String> bypassDomain,  RouteMode routeMode,  bool autoSetSystemDns,  bool appendSystemDns,  AuthenticationProps authentication,  LocalVlessProps localVless)?  $default,) {final _that = this;
 switch (_that) {
 case _NetworkProps() when $default != null:
-return $default(_that.systemProxy,_that.bypassDomain,_that.routeMode,_that.autoSetSystemDns,_that.appendSystemDns,_that.authentication);case _:
+return $default(_that.systemProxy,_that.bypassDomain,_that.routeMode,_that.autoSetSystemDns,_that.appendSystemDns,_that.authentication,_that.localVless);case _:
   return null;
 
 }
@@ -1685,7 +1964,7 @@ return $default(_that.systemProxy,_that.bypassDomain,_that.routeMode,_that.autoS
 @JsonSerializable()
 
 class _NetworkProps implements NetworkProps {
-  const _NetworkProps({this.systemProxy = true, final  List<String> bypassDomain = defaultBypassDomain, this.routeMode = RouteMode.config, this.autoSetSystemDns = true, this.appendSystemDns = false, this.authentication = defaultAuthenticationProps}): _bypassDomain = bypassDomain;
+  const _NetworkProps({this.systemProxy = true, final  List<String> bypassDomain = defaultBypassDomain, this.routeMode = RouteMode.config, this.autoSetSystemDns = true, this.appendSystemDns = false, this.authentication = defaultAuthenticationProps, this.localVless = defaultLocalVlessProps}): _bypassDomain = bypassDomain;
   factory _NetworkProps.fromJson(Map<String, dynamic> json) => _$NetworkPropsFromJson(json);
 
 @override@JsonKey() final  bool systemProxy;
@@ -1700,6 +1979,7 @@ class _NetworkProps implements NetworkProps {
 @override@JsonKey() final  bool autoSetSystemDns;
 @override@JsonKey() final  bool appendSystemDns;
 @override@JsonKey() final  AuthenticationProps authentication;
+@override@JsonKey() final  LocalVlessProps localVless;
 
 /// Create a copy of NetworkProps
 /// with the given fields replaced by the non-null parameter values.
@@ -1714,16 +1994,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NetworkProps&&(identical(other.systemProxy, systemProxy) || other.systemProxy == systemProxy)&&const DeepCollectionEquality().equals(other._bypassDomain, _bypassDomain)&&(identical(other.routeMode, routeMode) || other.routeMode == routeMode)&&(identical(other.autoSetSystemDns, autoSetSystemDns) || other.autoSetSystemDns == autoSetSystemDns)&&(identical(other.appendSystemDns, appendSystemDns) || other.appendSystemDns == appendSystemDns)&&(identical(other.authentication, authentication) || other.authentication == authentication));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NetworkProps&&(identical(other.systemProxy, systemProxy) || other.systemProxy == systemProxy)&&const DeepCollectionEquality().equals(other._bypassDomain, _bypassDomain)&&(identical(other.routeMode, routeMode) || other.routeMode == routeMode)&&(identical(other.autoSetSystemDns, autoSetSystemDns) || other.autoSetSystemDns == autoSetSystemDns)&&(identical(other.appendSystemDns, appendSystemDns) || other.appendSystemDns == appendSystemDns)&&(identical(other.authentication, authentication) || other.authentication == authentication)&&(identical(other.localVless, localVless) || other.localVless == localVless));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,systemProxy,const DeepCollectionEquality().hash(_bypassDomain),routeMode,autoSetSystemDns,appendSystemDns,authentication);
+int get hashCode => Object.hash(runtimeType,systemProxy,const DeepCollectionEquality().hash(_bypassDomain),routeMode,autoSetSystemDns,appendSystemDns,authentication,localVless);
 
 @override
 String toString() {
-  return 'NetworkProps(systemProxy: $systemProxy, bypassDomain: $bypassDomain, routeMode: $routeMode, autoSetSystemDns: $autoSetSystemDns, appendSystemDns: $appendSystemDns, authentication: $authentication)';
+  return 'NetworkProps(systemProxy: $systemProxy, bypassDomain: $bypassDomain, routeMode: $routeMode, autoSetSystemDns: $autoSetSystemDns, appendSystemDns: $appendSystemDns, authentication: $authentication, localVless: $localVless)';
 }
 
 
@@ -1734,11 +2014,11 @@ abstract mixin class _$NetworkPropsCopyWith<$Res> implements $NetworkPropsCopyWi
   factory _$NetworkPropsCopyWith(_NetworkProps value, $Res Function(_NetworkProps) _then) = __$NetworkPropsCopyWithImpl;
 @override @useResult
 $Res call({
- bool systemProxy, List<String> bypassDomain, RouteMode routeMode, bool autoSetSystemDns, bool appendSystemDns, AuthenticationProps authentication
+ bool systemProxy, List<String> bypassDomain, RouteMode routeMode, bool autoSetSystemDns, bool appendSystemDns, AuthenticationProps authentication, LocalVlessProps localVless
 });
 
 
-@override $AuthenticationPropsCopyWith<$Res> get authentication;
+@override $AuthenticationPropsCopyWith<$Res> get authentication;@override $LocalVlessPropsCopyWith<$Res> get localVless;
 
 }
 /// @nodoc
@@ -1751,7 +2031,7 @@ class __$NetworkPropsCopyWithImpl<$Res>
 
 /// Create a copy of NetworkProps
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? systemProxy = null,Object? bypassDomain = null,Object? routeMode = null,Object? autoSetSystemDns = null,Object? appendSystemDns = null,Object? authentication = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? systemProxy = null,Object? bypassDomain = null,Object? routeMode = null,Object? autoSetSystemDns = null,Object? appendSystemDns = null,Object? authentication = null,Object? localVless = null,}) {
   return _then(_NetworkProps(
 systemProxy: null == systemProxy ? _self.systemProxy : systemProxy // ignore: cast_nullable_to_non_nullable
 as bool,bypassDomain: null == bypassDomain ? _self._bypassDomain : bypassDomain // ignore: cast_nullable_to_non_nullable
@@ -1759,7 +2039,8 @@ as List<String>,routeMode: null == routeMode ? _self.routeMode : routeMode // ig
 as RouteMode,autoSetSystemDns: null == autoSetSystemDns ? _self.autoSetSystemDns : autoSetSystemDns // ignore: cast_nullable_to_non_nullable
 as bool,appendSystemDns: null == appendSystemDns ? _self.appendSystemDns : appendSystemDns // ignore: cast_nullable_to_non_nullable
 as bool,authentication: null == authentication ? _self.authentication : authentication // ignore: cast_nullable_to_non_nullable
-as AuthenticationProps,
+as AuthenticationProps,localVless: null == localVless ? _self.localVless : localVless // ignore: cast_nullable_to_non_nullable
+as LocalVlessProps,
   ));
 }
 
@@ -1771,6 +2052,15 @@ $AuthenticationPropsCopyWith<$Res> get authentication {
   
   return $AuthenticationPropsCopyWith<$Res>(_self.authentication, (value) {
     return _then(_self.copyWith(authentication: value));
+  });
+}/// Create a copy of NetworkProps
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$LocalVlessPropsCopyWith<$Res> get localVless {
+  
+  return $LocalVlessPropsCopyWith<$Res>(_self.localVless, (value) {
+    return _then(_self.copyWith(localVless: value));
   });
 }
 }

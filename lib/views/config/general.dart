@@ -470,6 +470,12 @@ class _PortDialog extends ConsumerStatefulWidget {
 }
 
 class _PortDialogState extends ConsumerState<_PortDialog> {
+  /// Ports of the app's own inbounds, which these must not reuse.
+  List<String> get _appInboundPorts {
+    final vless = ref.read(networkSettingProvider).localVless;
+    return vless.enable ? ['${vless.port}'] : const [];
+  }
+
   final _formKey = GlobalKey<FormState>();
   bool _isMore = false;
 
@@ -665,6 +671,7 @@ class _PortDialogState extends ConsumerState<_PortDialog> {
                           );
                         }
                         final ports = [
+                          ..._appInboundPorts,
                           _portController.text,
                           _socksPortController.text,
                           _tProxyPortController.text,
@@ -713,6 +720,7 @@ class _PortDialogState extends ConsumerState<_PortDialog> {
                             );
                           }
                           final ports = [
+                            ..._appInboundPorts,
                             _mixedPortController.text,
                             _socksPortController.text,
                             _tProxyPortController.text,
@@ -760,6 +768,7 @@ class _PortDialogState extends ConsumerState<_PortDialog> {
                             );
                           }
                           final ports = [
+                            ..._appInboundPorts,
                             _portController.text,
                             _mixedPortController.text,
                             _tProxyPortController.text,
@@ -807,6 +816,7 @@ class _PortDialogState extends ConsumerState<_PortDialog> {
                             );
                           }
                           final ports = [
+                            ..._appInboundPorts,
                             _portController.text,
                             _socksPortController.text,
                             _tProxyPortController.text,
@@ -854,6 +864,7 @@ class _PortDialogState extends ConsumerState<_PortDialog> {
                             );
                           }
                           final ports = [
+                            ..._appInboundPorts,
                             _portController.text,
                             _socksPortController.text,
                             _mixedPortController.text,

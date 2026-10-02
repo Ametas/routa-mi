@@ -182,6 +182,20 @@ Map<String, dynamic> _$AuthenticationPropsToJson(
   'password': instance.password,
 };
 
+_LocalVlessProps _$LocalVlessPropsFromJson(Map<String, dynamic> json) =>
+    _LocalVlessProps(
+      enable: json['enable'] as bool? ?? false,
+      port: (json['port'] as num?)?.toInt() ?? defaultLocalVlessPort,
+      uuid: json['uuid'] as String? ?? '',
+    );
+
+Map<String, dynamic> _$LocalVlessPropsToJson(_LocalVlessProps instance) =>
+    <String, dynamic>{
+      'enable': instance.enable,
+      'port': instance.port,
+      'uuid': instance.uuid,
+    };
+
 _NetworkProps _$NetworkPropsFromJson(Map<String, dynamic> json) =>
     _NetworkProps(
       systemProxy: json['systemProxy'] as bool? ?? true,
@@ -200,6 +214,11 @@ _NetworkProps _$NetworkPropsFromJson(Map<String, dynamic> json) =>
           : AuthenticationProps.fromJson(
               json['authentication'] as Map<String, dynamic>?,
             ),
+      localVless: json['localVless'] == null
+          ? defaultLocalVlessProps
+          : LocalVlessProps.fromJson(
+              json['localVless'] as Map<String, dynamic>?,
+            ),
     );
 
 Map<String, dynamic> _$NetworkPropsToJson(_NetworkProps instance) =>
@@ -210,6 +229,7 @@ Map<String, dynamic> _$NetworkPropsToJson(_NetworkProps instance) =>
       'autoSetSystemDns': instance.autoSetSystemDns,
       'appendSystemDns': instance.appendSystemDns,
       'authentication': instance.authentication,
+      'localVless': instance.localVless,
     };
 
 const _$RouteModeEnumMap = {

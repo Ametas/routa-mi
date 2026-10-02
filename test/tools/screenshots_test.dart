@@ -121,6 +121,7 @@ void main() {
     'backup': () => const BackupAndRestore(),
     'access': () => const AccessView(),
     'config': () => const ConfigView(),
+    'config_vless': () => const ConfigView(),
     'network': () => const Scaffold(body: NetworkListView()),
     'dns': () => const Scaffold(body: DnsListView()),
     'profiles_manage': () => const Scaffold(
@@ -187,6 +188,11 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           viewSizeProvider.overrideWithBuild((_, _) => const Size(384, 853)),
+          if (name == 'config_vless')
+            networkSettingProvider.overrideWithBuild(
+              (_, _) =>
+                  const NetworkProps(localVless: LocalVlessProps(enable: true)),
+            ),
           if (name == 'hero_node_sheet') ...[
             groupsProvider.overrideWithBuild((_, _) => _heroGroups),
             currentGroupsStateProvider.overrideWithValue(
@@ -269,6 +275,12 @@ void main() {
           await tester.pump(const Duration(milliseconds: 100));
         }
         await tester.tap(find.byIcon(SurgeIcons.schedule).last);
+        for (var i = 0; i < 6; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+      }
+      if (name == 'config_vless') {
+        await tester.drag(find.byType(Scrollable).first, const Offset(0, -400));
         for (var i = 0; i < 6; i++) {
           await tester.pump(const Duration(milliseconds: 100));
         }

@@ -2,14 +2,15 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/views/config/general.dart';
 import 'package:fl_clash/views/config/local_proxy_auth_items.dart';
+import 'package:fl_clash/views/config/local_vless_items.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Basic settings in FlClash's grouping: inbound (port, LAN, controller,
-/// authentication), the credentials when authentication is on, then the
-/// rest of the core settings.
+/// authentication, local VLESS), their sections when on, then the rest of
+/// the core settings.
 class ConfigView extends ConsumerWidget {
   const ConfigView({super.key});
 
@@ -18,6 +19,9 @@ class ConfigView extends ConsumerWidget {
     final appLocalizations = context.appLocalizations;
     final authentication = ref.watch(
       networkSettingProvider.select((state) => state.authentication.enable),
+    );
+    final localVless = ref.watch(
+      networkSettingProvider.select((state) => state.localVless.enable),
     );
     return CommonScaffold(
       title: appLocalizations.basicConfig,
@@ -31,6 +35,7 @@ class ConfigView extends ConsumerWidget {
               AllowLanItem(),
               ExternalControllerItem(),
               AuthenticationItem(),
+              LocalVlessItem(),
             ],
           ),
           if (authentication)
@@ -41,6 +46,17 @@ class ConfigView extends ConsumerWidget {
                 AuthenticationAccountItem(),
                 AuthenticationPasswordItem(),
                 AuthenticationRegenerateItem(),
+              ],
+            ),
+          if (localVless)
+            const SurgeSection(
+              title: 'VLESS',
+              showDividers: true,
+              children: [
+                LocalVlessPortItem(),
+                LocalVlessUuidItem(),
+                LocalVlessLinkItem(),
+                LocalVlessRegenerateItem(),
               ],
             ),
           SurgeSection(
