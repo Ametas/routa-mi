@@ -1,6 +1,7 @@
 import 'package:fl_clash/services/settings/settings_contract.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/local_proxy_auth.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -76,9 +77,15 @@ UpdateParams updateParams(Ref ref) {
   final routeMode = ref.watch(
     networkSettingProvider.select((state) => state.routeMode),
   );
+  final authentication = ref.watch(
+    networkSettingProvider.select(
+      (state) => state.authentication.credentials,
+    ),
+  );
   return ref.watch(
     patchClashConfigProvider.select(
       (state) => UpdateParams(
+        authentication: authentication,
         tun: state.tun.getRealTun(routeMode),
         allowLan: state.allowLan,
         findProcessMode: state.findProcessMode,

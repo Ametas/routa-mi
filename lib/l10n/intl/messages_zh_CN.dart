@@ -86,7 +86,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "about": MessageLookupByLibrary.simpleMessage("关于"),
     "aboutDescription": MessageLookupByLibrary.simpleMessage(
-      "SlClash 是基于 FlClash 和 Mihomo 内核私有裁剪和重设计的 Android 代理客户端。",
+      "RoutaMi 是基于 FlClash 与 Mihomo 内核的 Android 代理客户端。",
     ),
     "accessControl": MessageLookupByLibrary.simpleMessage("访问控制"),
     "accessControlAllowDesc": MessageLookupByLibrary.simpleMessage(
@@ -128,7 +128,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowLan": MessageLookupByLibrary.simpleMessage("局域网代理"),
     "allowLanDesc": MessageLookupByLibrary.simpleMessage("允许通过局域网访问代理"),
     "allowUnknownAppInstall": MessageLookupByLibrary.simpleMessage(
-      "请允许 SlClash 安装未知应用后，再次点击安装更新。",
+      "请允许 RoutaMi 安装未知应用后，再次点击安装更新。",
     ),
     "apkInstallAfterDownload": MessageLookupByLibrary.simpleMessage(
       "下载完成后将自动打开系统安装界面。",
@@ -139,6 +139,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "appendSystemDnsTip": MessageLookupByLibrary.simpleMessage("强制为配置附加系统DNS"),
     "application": MessageLookupByLibrary.simpleMessage("应用程序"),
     "applicationDesc": MessageLookupByLibrary.simpleMessage("修改应用程序相关设置"),
+    "authentication": MessageLookupByLibrary.simpleMessage("认证"),
+    "authenticationDesc": MessageLookupByLibrary.simpleMessage(
+      "本地代理端口需要用户名和密码，防止本机其他应用借用隧道",
+    ),
+    "authenticationOffWarning": MessageLookupByLibrary.simpleMessage(
+      "关闭认证后，本机任何应用都可以通过本地代理端口发送流量并绕过分应用规则。",
+    ),
+    "authenticationSystemProxyDesc": MessageLookupByLibrary.simpleMessage(
+      "认证开启时不生效：系统代理无法携带凭据",
+    ),
     "authorized": MessageLookupByLibrary.simpleMessage("已授权"),
     "auto": MessageLookupByLibrary.simpleMessage("自动"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage("自动检查更新"),
@@ -183,35 +193,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel": MessageLookupByLibrary.simpleMessage("取消"),
     "cancelSelectAll": MessageLookupByLibrary.simpleMessage("取消全选"),
     "changelog": MessageLookupByLibrary.simpleMessage("更新日志"),
-    "changelog204Item1": MessageLookupByLibrary.simpleMessage(
-      "本地导出和 WebDAV 备份统一使用原生 V1 母包。",
+    "changelog010Item1": MessageLookupByLibrary.simpleMessage(
+      "RoutaMi 首个版本：基于 FlClash 与 SlClash，采用 MetaCubeX 官方 Mihomo 内核。",
     ),
-    "changelog204Item2": MessageLookupByLibrary.simpleMessage(
-      "SlClash 导出的母包可直接导入 Clash Verge Rev，覆盖订阅数据。",
+    "changelog010Item2": MessageLookupByLibrary.simpleMessage(
+      "基于统一设计系统重新设计界面。",
     ),
-    "changelog204Item3": MessageLookupByLibrary.simpleMessage(
-      "恢复仅更新订阅数据，不影响其他应用设置。",
-    ),
-    "changelog205Item1": MessageLookupByLibrary.simpleMessage(
-      "SlClash 与 Clash Verge Rev 的订阅备份现已支持双向导入。",
-    ),
-    "changelog205Item2": MessageLookupByLibrary.simpleMessage(
-      "修复未使用统一订阅中心时，首次无法备份的问题。",
-    ),
-    "changelog205Item3": MessageLookupByLibrary.simpleMessage(
-      "优化兼容与覆盖恢复，避免重复订阅并保留本地配置状态。",
-    ),
-    "changelog207Item1": MessageLookupByLibrary.simpleMessage(
-      "重构全局字体层级，优化文字呈现与信息布局。",
-    ),
-    "changelog207Item2": MessageLookupByLibrary.simpleMessage(
-      "打通 SlClash 与 Clash Verge Rev 的订阅备份互导。",
-    ),
-    "changelog207Item3": MessageLookupByLibrary.simpleMessage(
-      "减少无效错误提示，降低操作干扰。",
-    ),
-    "changelog207Item4": MessageLookupByLibrary.simpleMessage(
-      "优化运行流程，提升整体稳定性。",
+    "changelog010Item3": MessageLookupByLibrary.simpleMessage(
+      "本地代理端口默认启用用户名和密码认证。",
     ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage("请检查网络后重试。"),
     "checkResultsAppearHere": MessageLookupByLibrary.simpleMessage(
@@ -266,6 +255,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("创建"),
     "createProfile": MessageLookupByLibrary.simpleMessage("创建配置"),
     "creationTime": MessageLookupByLibrary.simpleMessage("创建时间"),
+    "credentialCharactersTip": MessageLookupByLibrary.simpleMessage(
+      "仅限字母、数字和 . _ ~ -",
+    ),
     "currentProfileHasNoNodes": MessageLookupByLibrary.simpleMessage(
       "当前订阅没有可展示的节点",
     ),
@@ -297,6 +289,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerMode": MessageLookupByLibrary.simpleMessage("开发者模式"),
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage("开发者模式已启用。"),
     "direct": MessageLookupByLibrary.simpleMessage("直连"),
+    "disable": MessageLookupByLibrary.simpleMessage("关闭"),
     "disableUDP": MessageLookupByLibrary.simpleMessage("禁用UDP"),
     "disclaimer": MessageLookupByLibrary.simpleMessage("免责声明"),
     "disclaimerDesc": MessageLookupByLibrary.simpleMessage(
@@ -386,6 +379,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "health": MessageLookupByLibrary.simpleMessage("健康"),
     "healthHistorySummary": m10,
     "healthMonitoring": MessageLookupByLibrary.simpleMessage("健康观测"),
+    "hide": MessageLookupByLibrary.simpleMessage("隐藏"),
     "hideFromList": MessageLookupByLibrary.simpleMessage("从列表中隐藏"),
     "historicallyStable": MessageLookupByLibrary.simpleMessage("历史稳定"),
     "host": MessageLookupByLibrary.simpleMessage("主机"),
@@ -403,6 +397,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "importFile": MessageLookupByLibrary.simpleMessage("通过文件导入"),
     "importFromURL": MessageLookupByLibrary.simpleMessage("从URL导入"),
     "importUrl": MessageLookupByLibrary.simpleMessage("通过URL导入"),
+    "inbound": MessageLookupByLibrary.simpleMessage("入站"),
     "includeAllProxies": MessageLookupByLibrary.simpleMessage("包含所有代理"),
     "includeAllProxiesTip": MessageLookupByLibrary.simpleMessage(
       "引入不包含策略组的所有代理，可在下方额外添加策略组",
@@ -663,6 +658,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir端口"),
     "redo": MessageLookupByLibrary.simpleMessage("重做"),
     "refreshProxyGroups": MessageLookupByLibrary.simpleMessage("刷新代理组"),
+    "regenerateCredentials": MessageLookupByLibrary.simpleMessage("重新生成凭据"),
+    "regenerateCredentialsDesc": MessageLookupByLibrary.simpleMessage(
+      "使用当前用户名和密码配置的应用将无法连接",
+    ),
     "reload": MessageLookupByLibrary.simpleMessage("重新加载"),
     "remote": MessageLookupByLibrary.simpleMessage("远程"),
     "remoteBackupDesc": MessageLookupByLibrary.simpleMessage("备份数据到WebDAV"),

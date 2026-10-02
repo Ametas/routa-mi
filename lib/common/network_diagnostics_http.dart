@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fl_clash/common/http.dart';
 import 'package:fl_clash/common/network_diagnostics_parsers.dart';
 import 'package:fl_clash/models/models.dart';
 
@@ -42,7 +43,8 @@ Future<DiagnosticsHttpResponse?> diagnosticsHttpGet({
 }) async {
   final client = HttpClient()..connectionTimeout = timeout;
   if (mixedPort != null && mixedPort > 0) {
-    client.findProxy = (uri) => 'PROXY 127.0.0.1:$mixedPort';
+    client.findProxy = (uri) =>
+        FlClashHttpOverrides.localProxyDirective(mixedPort, host: '127.0.0.1');
   }
   final watch = Stopwatch()..start();
   HttpClientResponse? response;

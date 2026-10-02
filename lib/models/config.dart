@@ -34,6 +34,7 @@ const defaultAppSettingProps = AppSettingProps(
 );
 const defaultVpnProps = VpnProps();
 const defaultNetworkProps = NetworkProps();
+const defaultAuthenticationProps = AuthenticationProps();
 const defaultProxiesStyleProps = ProxiesStyleProps(
   iconStyle: ProxiesIconStyle.none,
 );
@@ -187,6 +188,23 @@ abstract class VpnProps with _$VpnProps {
       json == null ? defaultVpnProps : _$VpnPropsFromJson(json);
 }
 
+/// Credentials of the local http/socks/mixed listeners (see
+/// `lib/common/local_proxy_auth.dart`). On by default; the values are
+/// generated on first use.
+@freezed
+abstract class AuthenticationProps with _$AuthenticationProps {
+  const factory AuthenticationProps({
+    @Default(true) bool enable,
+    @Default('') String username,
+    @Default('') String password,
+  }) = _AuthenticationProps;
+
+  factory AuthenticationProps.fromJson(Map<String, Object?>? json) =>
+      json == null
+      ? defaultAuthenticationProps
+      : _$AuthenticationPropsFromJson(json);
+}
+
 @freezed
 abstract class NetworkProps with _$NetworkProps {
   const factory NetworkProps({
@@ -195,6 +213,7 @@ abstract class NetworkProps with _$NetworkProps {
     @Default(RouteMode.config) RouteMode routeMode,
     @Default(true) bool autoSetSystemDns,
     @Default(false) bool appendSystemDns,
+    @Default(defaultAuthenticationProps) AuthenticationProps authentication,
   }) = _NetworkProps;
 
   factory NetworkProps.fromJson(Map<String, Object?>? json) =>

@@ -9,6 +9,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/services/mihomo_config/authentication_patch.dart';
 import 'package:fl_clash/services/mihomo_config/runtime_config_patch.dart';
 import 'package:fl_clash/services/settings/settings_contract.dart';
 import 'package:flutter/foundation.dart';
@@ -132,6 +133,7 @@ Future<VM2<String, String>> _makeRealProfileTask(
   rawConfig['tproxy-port'] = realPatchConfig.tproxyPort;
   rawConfig['find-process-mode'] = realPatchConfig.findProcessMode.name;
   rawConfig['allow-lan'] = realPatchConfig.allowLan;
+  applyOwnedAuthenticationPatch(rawConfig, data.authentication);
   rawConfig['mode'] = realPatchConfig.mode.name;
   applyOwnedTunPatch(rawConfig, {
     'enable': realPatchConfig.tun.enable,

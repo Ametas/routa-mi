@@ -17,6 +17,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common/common.dart';
+import 'common/local_proxy_auth.dart';
 import 'database/database.dart';
 import 'enum/enum.dart';
 import 'l10n/l10n.dart';
@@ -125,6 +126,7 @@ class GlobalState {
 
     final config = migratedConfig.copyWith(
       themeProps: normalizeThemeProps(migratedConfig.themeProps),
+      networkProps: ensureLocalProxyCredentials(migratedConfig.networkProps),
     );
     if (config != migratedConfig) {
       await preferences.saveConfig(config);
@@ -134,6 +136,7 @@ class GlobalState {
     container = ProviderContainer(
       overrides: [...appStateOverrides, ...configOverrides],
     );
+    keepLocalProxyCredentials(container);
     final profiles = await database.profilesDao.query().get();
     StartupTrace.mark('database_profiles');
     container.read(profilesProvider.notifier).setAndReorder(profiles);

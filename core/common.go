@@ -227,6 +227,10 @@ func updateConfig(params *UpdateParams) error {
 		})
 	}
 
+	if params.Authentication != nil {
+		applyAuthentication(currentConfig, *params.Authentication)
+	}
+
 	if params.Tun != nil {
 		general.Tun.Enable = params.Tun.Enable
 		general.Tun.AutoRoute = *params.Tun.AutoRoute

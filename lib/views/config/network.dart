@@ -90,9 +90,16 @@ class VpnSystemProxyItem extends ConsumerWidget {
     final systemProxy = ref.watch(
       vpnSettingProvider.select((state) => state.systemProxy),
     );
+    final authenticationEnable = ref.watch(
+      networkSettingProvider.select((state) => state.authentication.enable),
+    );
     return ListItem.switchItem(
       title: Text(appLocalizations.systemProxy),
-      subtitle: Text(appLocalizations.systemProxyDesc),
+      subtitle: Text(
+        authenticationEnable
+            ? appLocalizations.authenticationSystemProxyDesc
+            : appLocalizations.systemProxyDesc,
+      ),
       delegate: SwitchDelegate(
         value: systemProxy,
         onChanged: (bool value) async {
