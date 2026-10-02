@@ -16,7 +16,12 @@ const appChangelogEntries = <AppChangelogEntry>[
   AppChangelogEntry(
     version: 'v0.1.0',
     date: '',
-    changes: ['changelog010Item1', 'changelog010Item2', 'changelog010Item3'],
+    changes: [
+      'changelog010Item1',
+      'changelog010Item2',
+      'changelog010Item3',
+      'changelog010Item4',
+    ],
   ),
 ];
 

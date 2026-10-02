@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:fl_clash/common/app_version.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -115,10 +116,7 @@ class Request {
         final remoteVersion = data['tag_name']?.toString();
         if (remoteVersion == null || remoteVersion.isEmpty) return null;
         final version = globalState.packageInfo.version;
-        final hasUpdate =
-            utils.compareVersions(remoteVersion.replaceAll('v', ''), version) >
-            0;
-        if (!hasUpdate) return null;
+        if (!isNewerAppVersion(remoteVersion, version)) return null;
         return data;
       } catch (_) {
         commonPrint.log(

@@ -35,6 +35,7 @@ jobs:
       version_name: ${{ steps.vars.outputs.version_name }}
       prerelease: ${{ steps.vars.outputs.prerelease }}
       apk_name: ${{ steps.vars.outputs.apk_name }}
+      notes_file: ${{ steps.vars.outputs.notes_file }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -69,6 +70,12 @@ jobs:
           fi
           PRERELEASE=false
           [ -n "${BASH_REMATCH[2]}" ] && PRERELEASE=true
+          # User-facing changes; the in-app update dialog shows its bullets.
+          NOTES_FILE="docs/releases/v${BASH_REMATCH[1]}.md"
+          if [ "$PRERELEASE" = "false" ] && [ ! -f "$NOTES_FILE" ]; then
+            echo "::error::$NOTES_FILE is missing (see docs/RELEASE.md)"
+            exit 1
+          fi
           # Only release commits that are already on main.
           git fetch --quiet origin main
           if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
@@ -82,6 +89,7 @@ jobs:
             echo "version_name=${TAG#v}"
             echo "prerelease=$PRERELEASE"
             echo "apk_name=RoutaMi-${TAG}-arm64-v8a.apk"
+            echo "notes_file=$NOTES_FILE"
           } >> "$GITHUB_OUTPUT"
 
       # Fail in seconds instead of after the CI gate when signing is not set up.
@@ -264,14 +272,22 @@ jobs:
             git push origin "refs/tags/$TAG"
           fi
           NOTES="$RUNNER_TEMP/notes.md"
-          cat > "$NOTES" <<EOF
+          CHANGES="${{ needs.prepare.outputs.notes_file }}"
+          # Only the change list may use "- " bullets: the in-app update
+          # dialog shows every bullet of the body, so build info is a table.
+          {
+            if [ -f "$CHANGES" ]; then cat "$CHANGES"; echo; fi
+            cat <<EOF
           RoutaMi ${{ steps.vars.outputs.version_name }} — Android arm64-v8a.
 
-          - Mihomo core: ${{ steps.core.outputs.mihomo-version }} (${{ steps.core.outputs.mihomo-commit }}), released ${{ steps.core.outputs.mihomo-release-date }}
-          - libclash.so SHA-256: \`${{ steps.core.outputs.core-sha256 }}\`
-          - APK SHA-256: \`${{ steps.verify.outputs.apk_sha256 }}\`
-          - Signing certificate SHA-256: \`${{ steps.verify.outputs.cert_sha256 }}\`
+          | Build | |
+          |---|---|
+          | Mihomo core | ${{ steps.core.outputs.mihomo-version }} (${{ steps.core.outputs.mihomo-commit }}), released ${{ steps.core.outputs.mihomo-release-date }} |
+          | libclash.so SHA-256 | \`${{ steps.core.outputs.core-sha256 }}\` |
+          | APK SHA-256 | \`${{ steps.verify.outputs.apk_sha256 }}\` |
+          | Signing certificate SHA-256 | \`${{ steps.verify.outputs.cert_sha256 }}\` |
           EOF
+          } > "$NOTES"
           PRERELEASE_FLAG=()
           [ "${{ steps.vars.outputs.prerelease }}" = "true" ] && PRERELEASE_FLAG=(--prerelease)
           gh release create "$TAG" \

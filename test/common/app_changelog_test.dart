@@ -8,6 +8,7 @@ void main() {
       'changelog010Item1',
       'changelog010Item2',
       'changelog010Item3',
+      'changelog010Item4',
     ]);
     expect(
       appChangelogEntries.map((entry) => entry.version),

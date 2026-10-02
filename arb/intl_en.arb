@@ -676,6 +676,7 @@
   "changelog010Item1": "First RoutaMi release, built on FlClash and SlClash with the official MetaCubeX Mihomo core.",
   "changelog010Item2": "Redesigned interface on a single design system.",
   "changelog010Item3": "The local proxy port now requires a username and password by default.",
+  "changelog010Item4": "Optional local VLESS inbound with a UUID and a share link.",
   "modeDescription": "{mode} mode",
   "initFailed": "Initialization failed",
   "initFailedDescription": "Critical error on startup. Cannot continue.",
