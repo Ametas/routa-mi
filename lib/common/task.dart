@@ -6,6 +6,7 @@ import 'package:archive/archive_io.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/local_vless.dart';
 import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -134,6 +135,11 @@ Future<VM2<String, String>> _makeRealProfileTask(
   rawConfig['find-process-mode'] = realPatchConfig.findProcessMode.name;
   rawConfig['allow-lan'] = realPatchConfig.allowLan;
   applyOwnedAuthenticationPatch(rawConfig, data.authentication);
+  applyOwnedVlessListenerPatch(
+    rawConfig,
+    data.localVlessListener,
+    LocalVless.listenerName,
+  );
   rawConfig['mode'] = realPatchConfig.mode.name;
   applyOwnedTunPatch(rawConfig, {
     'enable': realPatchConfig.tun.enable,

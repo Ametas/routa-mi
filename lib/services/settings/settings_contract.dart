@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:fl_clash/common/local_proxy_auth.dart';
+import 'package:fl_clash/common/local_vless.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/services/mihomo_config/structural_config_diff.dart';
@@ -91,6 +92,12 @@ Map<String, dynamic> runtimeSettings(Config config) => {
   'routeMode': config.networkProps.routeMode.name,
   'bypassDomain': config.networkProps.bypassDomain,
   'authentication': config.networkProps.authentication.toJson(),
+  'localVless': config.networkProps.localVless.toJson(),
+  // Derived: its listen address follows the hot allow-lan field, but only a
+  // reload rebinds a listener.
+  'localVlessListener': config.networkProps.localVless.listener(
+    allowLan: config.patchClashConfig.allowLan,
+  ),
   'vpn': {
     'enable': config.vpnProps.enable,
     'ipv6': config.vpnProps.ipv6,
@@ -203,6 +210,9 @@ Config rollbackSettings(
       bypassDomain: List<String>.from(data['bypassDomain'] as List),
       authentication: AuthenticationProps.fromJson(
         Map<String, Object?>.from(data['authentication'] as Map),
+      ),
+      localVless: LocalVlessProps.fromJson(
+        Map<String, Object?>.from(data['localVless'] as Map),
       ),
     ),
     vpnProps: VpnProps.fromJson(vpn),

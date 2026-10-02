@@ -591,6 +591,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Save a local backup",
     ),
     "localFile": MessageLookupByLibrary.simpleMessage("Local file"),
+    "localVless": MessageLookupByLibrary.simpleMessage("Local VLESS"),
+    "localVlessDesc": MessageLookupByLibrary.simpleMessage(
+      "Plain VLESS inbound for clients on this device; its UUID is the password",
+    ),
+    "localVlessLinkDesc": MessageLookupByLibrary.simpleMessage(
+      "vless:// link for a client on this device",
+    ),
     "locateCurrentNode": MessageLookupByLibrary.simpleMessage(
       "Locate current node",
     ),
@@ -903,6 +910,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "regenerateCredentialsDesc": MessageLookupByLibrary.simpleMessage(
       "Apps set up with the current username and password will stop connecting",
+    ),
+    "regenerateUuid": MessageLookupByLibrary.simpleMessage("Generate new UUID"),
+    "regenerateUuidDesc": MessageLookupByLibrary.simpleMessage(
+      "Clients set up with the current link will stop connecting",
     ),
     "reload": MessageLookupByLibrary.simpleMessage("Reload"),
     "remote": MessageLookupByLibrary.simpleMessage("Remote"),

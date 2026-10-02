@@ -5663,6 +5663,51 @@ class AppLocalizations {
   String get disable {
     return Intl.message('Disable', name: 'disable', desc: '', args: []);
   }
+
+  /// `Local VLESS`
+  String get localVless {
+    return Intl.message('Local VLESS', name: 'localVless', desc: '', args: []);
+  }
+
+  /// `Plain VLESS inbound for clients on this device; its UUID is the password`
+  String get localVlessDesc {
+    return Intl.message(
+      'Plain VLESS inbound for clients on this device; its UUID is the password',
+      name: 'localVlessDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `vless:// link for a client on this device`
+  String get localVlessLinkDesc {
+    return Intl.message(
+      'vless:// link for a client on this device',
+      name: 'localVlessLinkDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate new UUID`
+  String get regenerateUuid {
+    return Intl.message(
+      'Generate new UUID',
+      name: 'regenerateUuid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clients set up with the current link will stop connecting`
+  String get regenerateUuidDesc {
+    return Intl.message(
+      'Clients set up with the current link will stop connecting',
+      name: 'regenerateUuidDesc',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

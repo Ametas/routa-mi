@@ -441,6 +441,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "local": MessageLookupByLibrary.simpleMessage("本地"),
     "localBackupDesc": MessageLookupByLibrary.simpleMessage("备份数据到本地"),
     "localFile": MessageLookupByLibrary.simpleMessage("本地文件"),
+    "localVless": MessageLookupByLibrary.simpleMessage("本地 VLESS"),
+    "localVlessDesc": MessageLookupByLibrary.simpleMessage(
+      "供本机客户端使用的明文 VLESS 入站，UUID 即密码",
+    ),
+    "localVlessLinkDesc": MessageLookupByLibrary.simpleMessage(
+      "供本机客户端使用的 vless:// 链接",
+    ),
     "locateCurrentNode": MessageLookupByLibrary.simpleMessage("定位当前节点"),
     "locationPermission": MessageLookupByLibrary.simpleMessage("位置权限"),
     "locationPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
@@ -661,6 +668,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "regenerateCredentials": MessageLookupByLibrary.simpleMessage("重新生成凭据"),
     "regenerateCredentialsDesc": MessageLookupByLibrary.simpleMessage(
       "使用当前用户名和密码配置的应用将无法连接",
+    ),
+    "regenerateUuid": MessageLookupByLibrary.simpleMessage("重新生成 UUID"),
+    "regenerateUuidDesc": MessageLookupByLibrary.simpleMessage(
+      "使用当前链接配置的客户端将无法连接",
     ),
     "reload": MessageLookupByLibrary.simpleMessage("重新加载"),
     "remote": MessageLookupByLibrary.simpleMessage("远程"),

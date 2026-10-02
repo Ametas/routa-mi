@@ -692,5 +692,10 @@
   "regenerateCredentialsDesc": "Apps set up with the current username and password will stop connecting",
   "credentialCharactersTip": "Use letters, digits and . _ ~ -",
   "hide": "Hide",
-  "disable": "Disable"
+  "disable": "Disable",
+  "localVless": "Local VLESS",
+  "localVlessDesc": "Plain VLESS inbound for clients on this device; its UUID is the password",
+  "localVlessLinkDesc": "vless:// link for a client on this device",
+  "regenerateUuid": "Generate new UUID",
+  "regenerateUuidDesc": "Clients set up with the current link will stop connecting"
 }

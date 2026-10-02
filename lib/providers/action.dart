@@ -9,6 +9,7 @@ import 'package:path/path.dart';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/local_proxy_auth.dart';
+import 'package:fl_clash/common/local_vless.dart';
 import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -1907,6 +1908,9 @@ class SetupAction extends _$SetupAction {
     final NetworkProps networkProps =
         settingsSnapshot?.networkProps ?? ref.read(networkSettingProvider);
     final localProxyCredentials = networkProps.authentication.credentials;
+    final localVlessListener = networkProps.localVless.listener(
+      allowLan: realPatchConfig.allowLan,
+    );
     final directory = await appPath.profilesPath;
     final res = makeRealProfileTask(
       MakeRealProfileState(
@@ -1921,6 +1925,7 @@ class SetupAction extends _$SetupAction {
         addedRules: addedRules,
         defaultUA: defaultUA,
         authentication: localProxyCredentials,
+        localVlessListener: localVlessListener,
       ),
     );
     return res;
