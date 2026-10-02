@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:fl_clash/common/measure.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/common/local_proxy_auth.dart';
 import 'package:fl_clash/l10n/l10n.dart';
@@ -28,7 +29,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../support/component_catalog.dart';
 
 Future<void> _loadFont(String family, List<String> files) async {
   final loader = FontLoader(family);
@@ -57,6 +61,37 @@ const _heroGroups = [
       Proxy(name: 'HK01', type: 'Vless'),
       Proxy(name: 'SG01', type: 'Trojan'),
     ],
+  ),
+];
+
+const _proxyGroups = [
+  Group(
+    type: GroupType.Selector,
+    name: 'Proxy',
+    now: 'JP01',
+    all: [
+      Proxy(name: 'JP01', type: 'Vless'),
+      Proxy(name: 'HK01', type: 'Vless'),
+      Proxy(name: 'SG01', type: 'Trojan'),
+      Proxy(name: 'US01', type: 'Hysteria2'),
+      Proxy(name: 'DE01', type: 'Shadowsocks'),
+      Proxy(name: 'NL01', type: 'Vmess'),
+    ],
+  ),
+  Group(
+    type: GroupType.URLTest,
+    name: 'Auto',
+    now: 'HK01',
+    all: [
+      Proxy(name: 'HK01', type: 'Vless'),
+      Proxy(name: 'SG01', type: 'Trojan'),
+    ],
+  ),
+  Group(
+    type: GroupType.Selector,
+    name: 'Streaming',
+    now: 'US01',
+    all: [Proxy(name: 'US01', type: 'Hysteria2')],
   ),
 ];
 
@@ -93,6 +128,57 @@ final _dialogs = <String, Future<void> Function(BuildContext)>{
   ),
 };
 
+// Scale styles carry no family; devices fill in Roboto, the test engine
+// draws boxes, and AnimatedDefaultTextStyle does not inherit one.
+SurgeTypography _withFamily(SurgeTypography t, String family) => t.copyWith(
+  rootAppBarTitle: t.rootAppBarTitle.copyWith(fontFamily: family),
+  dialogTitle: t.dialogTitle.copyWith(fontFamily: family),
+  sectionTitle: t.sectionTitle.copyWith(fontFamily: family),
+  mediaCheckTitle: t.mediaCheckTitle.copyWith(fontFamily: family),
+  mediaControlMetricLabel: t.mediaControlMetricLabel.copyWith(
+    fontFamily: family,
+  ),
+  mediaFilterTitle: t.mediaFilterTitle.copyWith(fontFamily: family),
+  mediaObservationInterval: t.mediaObservationInterval.copyWith(
+    fontFamily: family,
+  ),
+  mediaResultTitle: t.mediaResultTitle.copyWith(fontFamily: family),
+  mediaRunButtonLabel: t.mediaRunButtonLabel.copyWith(fontFamily: family),
+  selectedNavigationLabel: t.selectedNavigationLabel.copyWith(
+    fontFamily: family,
+  ),
+  detailLabel: t.detailLabel.copyWith(fontFamily: family),
+  compactRowTitle: t.compactRowTitle.copyWith(fontFamily: family),
+  proxyGroupTitle: t.proxyGroupTitle.copyWith(fontFamily: family),
+  proxySelectorLabel: t.proxySelectorLabel.copyWith(fontFamily: family),
+  proxyCardSubtitle: t.proxyCardSubtitle.copyWith(fontFamily: family),
+  featuredTitle: t.featuredTitle.copyWith(fontFamily: family),
+  pillLabel: t.pillLabel.copyWith(fontFamily: family),
+  itemLabel: t.itemLabel.copyWith(fontFamily: family),
+  previewLabel: t.previewLabel.copyWith(fontFamily: family),
+  sheetRowTitle: t.sheetRowTitle.copyWith(fontFamily: family),
+  sheetLabel: t.sheetLabel.copyWith(fontFamily: family),
+  sheetTitle: t.sheetTitle.copyWith(fontFamily: family),
+  countLabel: t.countLabel.copyWith(fontFamily: family),
+  badgeLabel: t.badgeLabel.copyWith(fontFamily: family),
+  selectedRowTitle: t.selectedRowTitle.copyWith(fontFamily: family),
+  selectorLabel: t.selectorLabel.copyWith(fontFamily: family),
+  metric: t.metric.copyWith(fontFamily: family),
+  compactMetric: t.compactMetric.copyWith(fontFamily: family),
+  toolTileSubtitle: t.toolTileSubtitle.copyWith(fontFamily: family),
+  toolTileTitle: t.toolTileTitle.copyWith(fontFamily: family),
+  compactDescription: t.compactDescription.copyWith(fontFamily: family),
+  modeTabLabel: t.modeTabLabel.copyWith(fontFamily: family),
+  selectedModeTabLabel: t.selectedModeTabLabel.copyWith(fontFamily: family),
+  dashboardMetric: t.dashboardMetric.copyWith(fontFamily: family),
+  dashboardIpValue: t.dashboardIpValue.copyWith(fontFamily: family),
+  dashboardLatencyValue: t.dashboardLatencyValue.copyWith(fontFamily: family),
+  dashboardDetectionValue: t.dashboardDetectionValue.copyWith(
+    fontFamily: family,
+  ),
+  techLabel: t.techLabel.copyWith(fontFamily: family),
+);
+
 void main() {
   final out = Platform.environment['SHOT_DIR'] ?? '';
   final skip = out.isEmpty ? 'set SHOT_DIR to render screenshots' : null;
@@ -103,12 +189,31 @@ void main() {
       '${Platform.environment['FLUTTER_ROOT']}/bin/cache/artifacts/material_fonts';
   setUpAll(() async {
     if (skip != null) return;
-    await _loadFont('Roboto', [
+    final roboto = [
       '$fonts/Roboto-Regular.ttf',
       '$fonts/Roboto-Medium.ttf',
-    ]);
+      '$fonts/Roboto-Bold.ttf',
+    ];
+    await _loadFont('Roboto', roboto);
     await _loadFont('MaterialIcons', ['$fonts/MaterialIcons-Regular.otf']);
+    await _loadFont('JetBrainsMono', [
+      'assets/fonts/JetBrainsMono-Regular.ttf',
+    ]);
+    await _loadFont('Twemoji', ['assets/fonts/Twemoji.Mozilla.ttf']);
     Directory(out).createSync(recursive: true);
+    // Normally read from the platform at startup (About shows the version).
+    globalState.packageInfo = PackageInfo(
+      appName: 'RoutaMi',
+      packageName: 'icu.routaterm.routami',
+      version: '0.1.0',
+      buildNumber: '1',
+    );
+    globalState
+      ..mihomoVersion = 'v1.19.31'
+      ..mihomoCommit = 'ab405bad5bee'
+      ..mihomoReleaseDate = '2026-09-14'
+      ..coreSHA256 = ''
+      ..coreBuildTime = '';
   });
 
   final views = <String, Widget Function()>{
@@ -172,22 +277,49 @@ void main() {
       },
     ),
     for (final name in _dialogs.keys) name: () => const Scaffold(),
+    // Every canonical component of the design system on one sheet.
+    'components': () => Scaffold(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(SurgeSpace.l),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (final entry in componentCatalog) ...[
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: SurgeSpace.l,
+                  bottom: SurgeSpace.xs,
+                ),
+                child: Text(
+                  entry.name,
+                  style: const TextStyle(fontFamily: 'JetBrainsMono'),
+                ),
+              ),
+              Builder(builder: entry.builder),
+            ],
+          ],
+        ),
+      ),
+    ),
   };
 
   for (final MapEntry(key: name, value: build) in views.entries) {
     testWidgets('shot $name', skip: skip != null, (tester) async {
       SharedPreferences.setMockInitialValues({});
-      await tester.binding.setSurfaceSize(const Size(384, 853));
+      final height = name == 'components' ? 3240.0 : 853.0;
+      await tester.binding.setSurfaceSize(Size(384, height));
       tester.view.devicePixelRatio = 2.5;
       final spec = StaticThemeSpec.resolve(
         StaticThemePreset.blueWhite,
         brightness,
       );
-      final textTheme = buildSlclashTextTheme();
+      // Devices fill a missing family with Roboto; the test engine draws
+      // boxes instead, so name it explicitly.
+      final textTheme = buildSlclashTextTheme().apply(fontFamily: 'Roboto');
       final key = GlobalKey();
       final container = ProviderContainer(
         overrides: [
-          viewSizeProvider.overrideWithBuild((_, _) => const Size(384, 853)),
+          viewSizeProvider.overrideWithBuild((_, _) => Size(384, height)),
           if (name == 'config_vless')
             networkSettingProvider.overrideWithBuild(
               (_, _) =>
@@ -198,6 +330,13 @@ void main() {
             currentGroupsStateProvider.overrideWithValue(
               const GroupsState(value: _heroGroups),
             ),
+          ],
+          if (name == 'proxies') ...[
+            groupsProvider.overrideWithBuild((_, _) => _proxyGroups),
+            currentGroupsStateProvider.overrideWithValue(
+              const GroupsState(value: _proxyGroups),
+            ),
+            unfoldSetProvider.overrideWithValue(const {'Proxy'}),
           ],
           if (name == 'profiles_active') ...[
             profilesProvider.overrideWithBuild(
@@ -246,8 +385,21 @@ void main() {
                   spec.colors,
                   stateColors: spec.stateColors,
                 ),
-                typography: SurgeTypography.fromTextTheme(textTheme),
+                typography: _withFamily(
+                  SurgeTypography.fromTextTheme(textTheme),
+                  'Roboto',
+                ),
               ),
+              // Dialogs and sheets sit above any Material, so give the
+              // whole navigator the family too.
+              builder: (context, child) {
+                // ThemeManager sets this in the app (proxy list layout).
+                globalState.measure = Measure.of(context, 1);
+                return DefaultTextStyle.merge(
+                  style: const TextStyle(fontFamily: 'Roboto'),
+                  child: child!,
+                );
+              },
               home: build(),
             ),
           ),
