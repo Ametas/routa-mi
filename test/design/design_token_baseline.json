@@ -37,10 +37,6 @@
     "gap": 1,
     "radius": 2
   },
-  "lib/views/backup_and_restore.dart": {
-    "spacing": 1,
-    "gap": 1
-  },
   "lib/views/config/general.dart": {
     "gap": 1
   },
@@ -79,9 +75,6 @@
     "color": 4
   },
   "lib/views/resources.dart": {
-    "spacing": 2
-  },
-  "lib/views/theme.dart": {
     "spacing": 1
   },
   "lib/views/theme_accent.dart": {

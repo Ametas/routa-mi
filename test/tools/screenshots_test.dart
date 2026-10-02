@@ -16,6 +16,7 @@ import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/views/config/dns.dart';
 import 'package:fl_clash/views/config/network.dart';
 import 'package:fl_clash/views/profiles/media_check.dart';
+import 'package:fl_clash/views/proxies/setting.dart';
 import 'package:fl_clash/views/theme.dart';
 import 'package:fl_clash/views/views.dart';
 import 'package:fl_clash/widgets/input.dart';
@@ -156,6 +157,8 @@ void main() {
     'profiles_active': () => const ProfilesView(),
     'proxies': () => const ProxiesView(),
     'hero_node_sheet': () => const DashboardView(),
+    'proxies_setting': () => const Scaffold(body: ProxiesSetting()),
+    'resources_auto_update': () => const ResourcesView(),
     'media_check': () => ProfileMediaCheckView(
       profiles: _mediaProfiles,
       initialProfile: _mediaProfiles.first,
@@ -253,6 +256,16 @@ void main() {
       if (name == 'hero_node_sheet') {
         final bar = tester.getRect(find.byType(SurgeDualSelectBar));
         await tester.tapAt(Offset(bar.left + bar.width * 0.75, bar.center.dy));
+        for (var i = 0; i < 6; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+      }
+      if (name == 'resources_auto_update') {
+        await tester.tap(find.byIcon(SurgeIcons.moreVertical).first);
+        for (var i = 0; i < 4; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+        await tester.tap(find.byIcon(SurgeIcons.schedule).last);
         for (var i = 0; i < 6; i++) {
           await tester.pump(const Duration(milliseconds: 100));
         }

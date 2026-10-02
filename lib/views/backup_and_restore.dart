@@ -280,8 +280,8 @@ class _BackupAndRestoreState extends ConsumerState<BackupAndRestore>
       appBarActions: const [],
       body: ListView(
         padding: EdgeInsets.only(
-          top: 12,
-          bottom: 32 + MediaQuery.paddingOf(context).bottom,
+          top: SurgeSpace.m,
+          bottom: SurgeSpace.xxxl + MediaQuery.paddingOf(context).bottom,
         ),
         children: [
           SurgeSection(
@@ -325,9 +325,8 @@ class _BackupAndRestoreState extends ConsumerState<BackupAndRestore>
                             return Center(
                               child: FadeThroughBox(
                                 child: isCompleter == null
-                                    ? const SizedBox(
-                                        width: 12,
-                                        height: 12,
+                                    ? const SizedBox.square(
+                                        dimension: SurgeIconSize.micro,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 1,
                                         ),
@@ -587,24 +586,7 @@ class _WebDAVFileItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: SurgeSpace.m),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: SurgeSpace.m,
-                  vertical: SurgeSpace.xs,
-                ),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: SurgeAlpha.a12),
-                  borderRadius: BorderRadius.circular(surge.radii.button),
-                  border: Border.all(
-                    color: color.withValues(alpha: SurgeAlpha.a24),
-                    width: 0.5,
-                  ),
-                ),
-                child: Text(
-                  label,
-                  style: context.typography.badgeLabel.copyWith(color: color),
-                ),
-              ),
+              SurgeTag(label: label, color: color, size: SurgeTagSize.compact),
               const SizedBox(width: SurgeSpace.xs),
               Icon(
                 selected ? SurgeIcons.confirm : SurgeIcons.chevronRight,
