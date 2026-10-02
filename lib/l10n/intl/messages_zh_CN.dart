@@ -139,6 +139,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "appendSystemDnsTip": MessageLookupByLibrary.simpleMessage("强制为配置附加系统DNS"),
     "application": MessageLookupByLibrary.simpleMessage("应用程序"),
     "applicationDesc": MessageLookupByLibrary.simpleMessage("修改应用程序相关设置"),
+    "authentication": MessageLookupByLibrary.simpleMessage("认证"),
+    "authenticationDesc": MessageLookupByLibrary.simpleMessage(
+      "本地代理端口需要用户名和密码，防止本机其他应用借用隧道",
+    ),
+    "authenticationOffWarning": MessageLookupByLibrary.simpleMessage(
+      "关闭认证后，本机任何应用都可以通过本地代理端口发送流量并绕过分应用规则。",
+    ),
+    "authenticationSystemProxyDesc": MessageLookupByLibrary.simpleMessage(
+      "认证开启时不生效：系统代理无法携带凭据",
+    ),
     "authorized": MessageLookupByLibrary.simpleMessage("已授权"),
     "auto": MessageLookupByLibrary.simpleMessage("自动"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage("自动检查更新"),
@@ -245,6 +255,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("创建"),
     "createProfile": MessageLookupByLibrary.simpleMessage("创建配置"),
     "creationTime": MessageLookupByLibrary.simpleMessage("创建时间"),
+    "credentialCharactersTip": MessageLookupByLibrary.simpleMessage(
+      "仅限字母、数字和 . _ ~ -",
+    ),
     "currentProfileHasNoNodes": MessageLookupByLibrary.simpleMessage(
       "当前订阅没有可展示的节点",
     ),
@@ -276,6 +289,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "developerMode": MessageLookupByLibrary.simpleMessage("开发者模式"),
     "developerModeEnableTip": MessageLookupByLibrary.simpleMessage("开发者模式已启用。"),
     "direct": MessageLookupByLibrary.simpleMessage("直连"),
+    "disable": MessageLookupByLibrary.simpleMessage("关闭"),
     "disableUDP": MessageLookupByLibrary.simpleMessage("禁用UDP"),
     "disclaimer": MessageLookupByLibrary.simpleMessage("免责声明"),
     "disclaimerDesc": MessageLookupByLibrary.simpleMessage(
@@ -365,6 +379,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "health": MessageLookupByLibrary.simpleMessage("健康"),
     "healthHistorySummary": m10,
     "healthMonitoring": MessageLookupByLibrary.simpleMessage("健康观测"),
+    "hide": MessageLookupByLibrary.simpleMessage("隐藏"),
     "hideFromList": MessageLookupByLibrary.simpleMessage("从列表中隐藏"),
     "historicallyStable": MessageLookupByLibrary.simpleMessage("历史稳定"),
     "host": MessageLookupByLibrary.simpleMessage("主机"),
@@ -382,6 +397,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "importFile": MessageLookupByLibrary.simpleMessage("通过文件导入"),
     "importFromURL": MessageLookupByLibrary.simpleMessage("从URL导入"),
     "importUrl": MessageLookupByLibrary.simpleMessage("通过URL导入"),
+    "inbound": MessageLookupByLibrary.simpleMessage("入站"),
     "includeAllProxies": MessageLookupByLibrary.simpleMessage("包含所有代理"),
     "includeAllProxiesTip": MessageLookupByLibrary.simpleMessage(
       "引入不包含策略组的所有代理，可在下方额外添加策略组",
@@ -642,6 +658,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir端口"),
     "redo": MessageLookupByLibrary.simpleMessage("重做"),
     "refreshProxyGroups": MessageLookupByLibrary.simpleMessage("刷新代理组"),
+    "regenerateCredentials": MessageLookupByLibrary.simpleMessage("重新生成凭据"),
+    "regenerateCredentialsDesc": MessageLookupByLibrary.simpleMessage(
+      "使用当前用户名和密码配置的应用将无法连接",
+    ),
     "reload": MessageLookupByLibrary.simpleMessage("重新加载"),
     "remote": MessageLookupByLibrary.simpleMessage("远程"),
     "remoteBackupDesc": MessageLookupByLibrary.simpleMessage("备份数据到WebDAV"),

@@ -5578,6 +5578,91 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Inbound`
+  String get inbound {
+    return Intl.message('Inbound', name: 'inbound', desc: '', args: []);
+  }
+
+  /// `Authentication`
+  String get authentication {
+    return Intl.message(
+      'Authentication',
+      name: 'authentication',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Require a username and password on the local proxy port so other apps on this device cannot use the tunnel`
+  String get authenticationDesc {
+    return Intl.message(
+      'Require a username and password on the local proxy port so other apps on this device cannot use the tunnel',
+      name: 'authenticationDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not applied while authentication is on: the system proxy cannot send credentials`
+  String get authenticationSystemProxyDesc {
+    return Intl.message(
+      'Not applied while authentication is on: the system proxy cannot send credentials',
+      name: 'authenticationSystemProxyDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Without authentication any app on this device can send traffic through the local proxy port and bypass per-app rules.`
+  String get authenticationOffWarning {
+    return Intl.message(
+      'Without authentication any app on this device can send traffic through the local proxy port and bypass per-app rules.',
+      name: 'authenticationOffWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate new credentials`
+  String get regenerateCredentials {
+    return Intl.message(
+      'Generate new credentials',
+      name: 'regenerateCredentials',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apps set up with the current username and password will stop connecting`
+  String get regenerateCredentialsDesc {
+    return Intl.message(
+      'Apps set up with the current username and password will stop connecting',
+      name: 'regenerateCredentialsDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use letters, digits and . _ ~ -`
+  String get credentialCharactersTip {
+    return Intl.message(
+      'Use letters, digits and . _ ~ -',
+      name: 'credentialCharactersTip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide`
+  String get hide {
+    return Intl.message('Hide', name: 'hide', desc: '', args: []);
+  }
+
+  /// `Disable`
+  String get disable {
+    return Intl.message('Disable', name: 'disable', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

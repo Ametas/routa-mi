@@ -8,6 +8,7 @@ import 'package:crypto/crypto.dart';
 import 'package:path/path.dart';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/local_proxy_auth.dart';
 import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -1668,6 +1669,7 @@ class SetupAction extends _$SetupAction {
               externalController: patch.externalController,
               unifiedDelay: patch.unifiedDelay,
               mixedPort: patch.mixedPort,
+              authentication: candidate.networkProps.authentication.credentials,
             ));
           } else {
             message = await coreController.setupConfig(params: _setupParams, setupState: setupState);
@@ -1902,6 +1904,9 @@ class SetupAction extends _$SetupAction {
       );
     }
     onDnsSource?.call(rawConfig['dns']?['enable'] == true);
+    final NetworkProps networkProps =
+        settingsSnapshot?.networkProps ?? ref.read(networkSettingProvider);
+    final localProxyCredentials = networkProps.authentication.credentials;
     final directory = await appPath.profilesPath;
     final res = makeRealProfileTask(
       MakeRealProfileState(
@@ -1915,6 +1920,7 @@ class SetupAction extends _$SetupAction {
         appendSystemDns: appendSystemDns,
         addedRules: addedRules,
         defaultUA: defaultUA,
+        authentication: localProxyCredentials,
       ),
     );
     return res;

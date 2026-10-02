@@ -187,7 +187,7 @@ final class UpdateParamsProvider
   }
 }
 
-String _$updateParamsHash() => r'012df72ab0e769a51c573f4692031506d7b1f1b4';
+String _$updateParamsHash() => r'60b9181fcad3cc95275f3c760b80d9465c639a54';
 
 @ProviderFor(vpnState)
 final vpnStateProvider = VpnStateProvider._();
@@ -1757,7 +1757,7 @@ final class GenColorSchemeProvider
   }
 }
 
-String _$genColorSchemeHash() => r'4f121f19ee95b094a07969c2e85c3a2a6a4b5a14';
+String _$genColorSchemeHash() => r'a141c9927c16e597d5b42d5fff5cff94de5bdf47';
 
 final class GenColorSchemeFamily extends $Family
     with

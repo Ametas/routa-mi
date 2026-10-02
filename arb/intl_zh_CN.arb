@@ -682,5 +682,15 @@
   "errorDetails": "错误详情",
   "stackTrace": "堆栈信息",
   "copyDetails": "复制详情",
-  "errorDetailsCopied": "错误详情已复制到剪贴板"
+  "errorDetailsCopied": "错误详情已复制到剪贴板",
+  "inbound": "入站",
+  "authentication": "认证",
+  "authenticationDesc": "本地代理端口需要用户名和密码，防止本机其他应用借用隧道",
+  "authenticationSystemProxyDesc": "认证开启时不生效：系统代理无法携带凭据",
+  "authenticationOffWarning": "关闭认证后，本机任何应用都可以通过本地代理端口发送流量并绕过分应用规则。",
+  "regenerateCredentials": "重新生成凭据",
+  "regenerateCredentialsDesc": "使用当前用户名和密码配置的应用将无法连接",
+  "credentialCharactersTip": "仅限字母、数字和 . _ ~ -",
+  "hide": "隐藏",
+  "disable": "关闭"
 }

@@ -56,6 +56,17 @@ RoutaMi — жёсткий форк [SlClash](https://github.com/songzhengpei/Sl
 | `test/theme/typography/type_scale_test.dart` | `dashboardLatencyValue` height `0` | тест апстрима не обновлён после SlClash `027f90f5` |
 | `.github/workflows/*` | workflows SlClash удалены, свои: `ci.yml`, `release.yml`, `mihomo-core-update.yml` | CI RoutaMi |
 | `README.md`, `README_EN.md` | README переписан, `README_EN.md` (SlClash, ссылки на их загрузки) удалён | описание форка |
+| `lib/models/config.dart`, `lib/models/core.dart`, `lib/models/state.dart`, `lib/common/task.dart`, `lib/state.dart`, `lib/providers/{action,state}.dart`, `lib/common/http.dart`, `core/common.go`, `core/constant.go` | точки подключения авторизации локального порта (`AuthenticationProps`, `authentication` в `UpdateParams`/`MakeRealProfileState`, патч профиля, учётные данные в прокси-строках, Go `applyAuthentication`) | 🔴 бэклога; логика в новых файлах `lib/common/local_proxy_auth.dart`, `lib/services/mihomo_config/authentication_patch.dart`, `core/authentication.go`, `lib/views/config/local_proxy_auth_items.dart` |
+| `arb/*.arb`, `android/**/*.kt` (уведомления, VPN-сессия, `FilesProvider`), `lib/common/app_changelog.dart` | видимые строки «SlClash/FlClash» → RoutaMi, свой changelog с v0.1.0 | ребрендинг до релиза |
+
+### Перенесено из FlClash вручную
+
+FlClash (`chen08209/FlClash`) — прародитель, не апстрим: его код ушёл далеко
+от SlClash, поэтому идеи переносим вручную, а не `cherry-pick`.
+
+| Что | Откуда в FlClash | Отличия RoutaMi |
+|---|---|---|
+| Авторизация локального порта: модель, Go `applyAuthentication` с очисткой `skip-auth-prefixes`, раскладка «Входящие» → «Аутентификация» в основных настройках, подпись системного прокси | `c6eaa0a` (core), `aaf934c` (app), состояние на `c7be702` | включена по умолчанию; логин 16 и пароль 32 символа из CSPRNG (у FlClash выключена, 8/16); показать/скопировать/перегенерировать; подтверждение при выключении; учётные данные дозаполняются после сброса и восстановления старого бэкапа |
 
 ## Как проводить ревизию апстрима
 

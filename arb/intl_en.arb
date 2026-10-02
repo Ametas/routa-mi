@@ -682,5 +682,15 @@
   "errorDetails": "Error details",
   "stackTrace": "Stack trace",
   "copyDetails": "Copy details",
-  "errorDetailsCopied": "Error details copied to clipboard"
+  "errorDetailsCopied": "Error details copied to clipboard",
+  "inbound": "Inbound",
+  "authentication": "Authentication",
+  "authenticationDesc": "Require a username and password on the local proxy port so other apps on this device cannot use the tunnel",
+  "authenticationSystemProxyDesc": "Not applied while authentication is on: the system proxy cannot send credentials",
+  "authenticationOffWarning": "Without authentication any app on this device can send traffic through the local proxy port and bypass per-app rules.",
+  "regenerateCredentials": "Generate new credentials",
+  "regenerateCredentialsDesc": "Apps set up with the current username and password will stop connecting",
+  "credentialCharactersTip": "Use letters, digits and . _ ~ -",
+  "hide": "Hide",
+  "disable": "Disable"
 }

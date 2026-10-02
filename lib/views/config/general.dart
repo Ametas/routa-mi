@@ -462,23 +462,6 @@ class ExternalControllerItem extends ConsumerWidget {
   }
 }
 
-final generalItems = <Widget>[
-  const LogLevelItem(),
-  const UaItem(),
-  if (system.isDesktop) const KeepAliveIntervalItem(),
-  const TestUrlItem(),
-  const PortItem(),
-  const HostsItem(),
-  const Ipv6Item(),
-  const AllowLanItem(),
-  const UnifiedDelayItem(),
-  const AppendSystemDNSItem(),
-  const FindProcessItem(),
-  const TcpConcurrentItem(),
-  const GeodataLoaderItem(),
-  const ExternalControllerItem(),
-].separated(const Divider(height: 0)).toList();
-
 class _PortDialog extends ConsumerStatefulWidget {
   const _PortDialog();
 

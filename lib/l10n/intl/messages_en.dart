@@ -171,6 +171,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "applicationDesc": MessageLookupByLibrary.simpleMessage(
       "Startup and app behavior",
     ),
+    "authentication": MessageLookupByLibrary.simpleMessage("Authentication"),
+    "authenticationDesc": MessageLookupByLibrary.simpleMessage(
+      "Require a username and password on the local proxy port so other apps on this device cannot use the tunnel",
+    ),
+    "authenticationOffWarning": MessageLookupByLibrary.simpleMessage(
+      "Without authentication any app on this device can send traffic through the local proxy port and bypass per-app rules.",
+    ),
+    "authenticationSystemProxyDesc": MessageLookupByLibrary.simpleMessage(
+      "Not applied while authentication is on: the system proxy cannot send credentials",
+    ),
     "authorized": MessageLookupByLibrary.simpleMessage("Authorized"),
     "auto": MessageLookupByLibrary.simpleMessage("Auto"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage("Check updates"),
@@ -323,6 +333,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("Create"),
     "createProfile": MessageLookupByLibrary.simpleMessage("Create Profile"),
     "creationTime": MessageLookupByLibrary.simpleMessage("Creation time"),
+    "credentialCharactersTip": MessageLookupByLibrary.simpleMessage(
+      "Use letters, digits and . _ ~ -",
+    ),
     "currentProfileHasNoNodes": MessageLookupByLibrary.simpleMessage(
       "No nodes to display",
     ),
@@ -370,6 +383,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Developer mode is enabled.",
     ),
     "direct": MessageLookupByLibrary.simpleMessage("Direct"),
+    "disable": MessageLookupByLibrary.simpleMessage("Disable"),
     "disableUDP": MessageLookupByLibrary.simpleMessage("Disable UDP"),
     "disclaimer": MessageLookupByLibrary.simpleMessage("Disclaimer"),
     "disclaimerDesc": MessageLookupByLibrary.simpleMessage(
@@ -487,6 +501,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "health": MessageLookupByLibrary.simpleMessage("Health"),
     "healthHistorySummary": m10,
     "healthMonitoring": MessageLookupByLibrary.simpleMessage("Health monitor"),
+    "hide": MessageLookupByLibrary.simpleMessage("Hide"),
     "hideFromList": MessageLookupByLibrary.simpleMessage("Hide from list"),
     "historicallyStable": MessageLookupByLibrary.simpleMessage("Stable"),
     "host": MessageLookupByLibrary.simpleMessage("Host"),
@@ -510,6 +525,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "importFile": MessageLookupByLibrary.simpleMessage("Import from file"),
     "importFromURL": MessageLookupByLibrary.simpleMessage("Import from URL"),
     "importUrl": MessageLookupByLibrary.simpleMessage("Import from URL"),
+    "inbound": MessageLookupByLibrary.simpleMessage("Inbound"),
     "includeAllProxies": MessageLookupByLibrary.simpleMessage(
       "Include all proxies",
     ),
@@ -881,6 +897,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "redo": MessageLookupByLibrary.simpleMessage("redo"),
     "refreshProxyGroups": MessageLookupByLibrary.simpleMessage(
       "Refresh proxy groups",
+    ),
+    "regenerateCredentials": MessageLookupByLibrary.simpleMessage(
+      "Generate new credentials",
+    ),
+    "regenerateCredentialsDesc": MessageLookupByLibrary.simpleMessage(
+      "Apps set up with the current username and password will stop connecting",
     ),
     "reload": MessageLookupByLibrary.simpleMessage("Reload"),
     "remote": MessageLookupByLibrary.simpleMessage("Remote"),

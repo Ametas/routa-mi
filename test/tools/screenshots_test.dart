@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/common/local_proxy_auth.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/app.dart';
@@ -215,6 +216,8 @@ void main() {
       );
       addTearDown(container.dispose);
       globalState.container = container;
+      // Like the app: credentials exist as soon as settings load.
+      keepLocalProxyCredentials(container);
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,

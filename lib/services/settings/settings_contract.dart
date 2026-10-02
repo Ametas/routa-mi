@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:fl_clash/common/local_proxy_auth.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/services/mihomo_config/structural_config_diff.dart';
@@ -46,7 +47,11 @@ VpnOptions settingsVpnOptions(Config config) {
     dnsHijacking: vpn.dnsHijacking, // legacy storage only
     accessControlProps: vpn.accessControlProps,
     allowBypass: vpn.allowBypass,
-    systemProxy: vpn.systemProxy,
+    // VpnService.setHttpProxy cannot carry credentials: while the local port
+    // requires them the system proxy would only produce failed requests.
+    systemProxy:
+        vpn.systemProxy &&
+        config.networkProps.authentication.credentials.isEmpty,
     bypassDomain: config.networkProps.bypassDomain,
     stack: config.patchClashConfig.tun.stack.name,
     routeAddress: settingsRouteAddresses(config),
@@ -85,6 +90,7 @@ Map<String, dynamic> runtimeSettings(Config config) => {
   'appendSystemDns': config.networkProps.appendSystemDns,
   'routeMode': config.networkProps.routeMode.name,
   'bypassDomain': config.networkProps.bypassDomain,
+  'authentication': config.networkProps.authentication.toJson(),
   'vpn': {
     'enable': config.vpnProps.enable,
     'ipv6': config.vpnProps.ipv6,
@@ -195,6 +201,9 @@ Config rollbackSettings(
       appendSystemDns: data['appendSystemDns'] as bool,
       routeMode: RouteMode.values.byName(data['routeMode'] as String),
       bypassDomain: List<String>.from(data['bypassDomain'] as List),
+      authentication: AuthenticationProps.fromJson(
+        Map<String, Object?>.from(data['authentication'] as Map),
+      ),
     ),
     vpnProps: VpnProps.fromJson(vpn),
   );
