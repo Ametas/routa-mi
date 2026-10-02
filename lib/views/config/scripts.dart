@@ -63,8 +63,8 @@ class _ScriptsViewState extends ConsumerState<ScriptsView> {
       color: SurgeTheme.of(context).background,
       child: ListView(
         padding: EdgeInsets.only(
-          top: 12,
-          bottom: 32 + MediaQuery.paddingOf(context).bottom,
+          top: SurgeSpace.m,
+          bottom: SurgeSpace.xxxl + MediaQuery.paddingOf(context).bottom,
         ),
         children: [
           SurgeSection(

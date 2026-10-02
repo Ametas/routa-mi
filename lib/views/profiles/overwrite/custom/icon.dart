@@ -238,7 +238,9 @@ class _IconEditViewState extends ConsumerState<IconEditView>
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 12 * _state.layoutFactor),
+                                SizedBox(
+                                  width: SurgeSpace.m * _state.layoutFactor,
+                                ),
                               ],
                             );
                           },

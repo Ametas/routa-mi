@@ -770,10 +770,10 @@ class _ListInputPageState extends ConsumerState<ListInputPage> {
             ? NullStatus(label: appLocalizations.noData)
             : ReorderableListView.builder(
                 padding: const EdgeInsets.only(
-                  bottom: 16 + 64,
-                  top: 16,
-                  left: 16,
-                  right: 16,
+                  bottom: SurgeSpace.l + 64,
+                  top: SurgeSpace.l,
+                  left: SurgeSpace.l,
+                  right: SurgeSpace.l,
                 ),
                 buildDefaultDragHandles: false,
                 itemCount: _items.length,
@@ -1035,10 +1035,10 @@ class _MapInputPageState extends ConsumerState<MapInputPage> {
             ? NullStatus(label: appLocalizations.noData)
             : ReorderableListView.builder(
                 padding: const EdgeInsets.only(
-                  bottom: 16 + 64,
-                  top: 16,
-                  left: 16,
-                  right: 16,
+                  bottom: SurgeSpace.l + 64,
+                  top: SurgeSpace.l,
+                  left: SurgeSpace.l,
+                  right: SurgeSpace.l,
                 ),
                 buildDefaultDragHandles: false,
                 itemCount: _items.length,

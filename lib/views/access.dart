@@ -272,10 +272,10 @@ class _AccessViewState extends ConsumerState<AccessView> {
                 child: ListView.separated(
                   controller: _controller,
                   padding: EdgeInsets.fromLTRB(
-                    16,
-                    12,
-                    16,
-                    32 + MediaQuery.paddingOf(context).bottom,
+                    SurgeSpace.l,
+                    SurgeSpace.m,
+                    SurgeSpace.l,
+                    SurgeSpace.xxxl + MediaQuery.paddingOf(context).bottom,
                   ),
                   itemCount: packages.length,
                   separatorBuilder: (_, _) {

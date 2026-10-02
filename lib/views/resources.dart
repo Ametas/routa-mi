@@ -300,7 +300,7 @@ class _ResourcesViewState extends ConsumerState<ResourcesView> {
         builder: (_, updatingItems, _) {
           return ListView(
             padding: EdgeInsets.only(
-              top: 4,
+              top: SurgeSpace.xs,
               bottom: SurgeBottomNavLayout.mainPageBottomPadding(context),
             ),
             children: [
@@ -647,145 +647,36 @@ class _ResourceAutoUpdateSheetState extends State<_ResourceAutoUpdateSheet> {
   @override
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
+    const modes = _ResourceAutoUpdateMode.values;
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(
-        16,
-        8,
-        16,
-        28 + MediaQuery.paddingOf(context).bottom,
+      padding: EdgeInsets.only(
+        top: SurgeSpace.s,
+        bottom: SurgeSpace.xxxl + MediaQuery.paddingOf(context).bottom,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: SurgeSection(
+        title: context.appLocalizations.updateFrequency,
+        footer: context.appLocalizations.resourceUpdateTriggerHint,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              SurgeSpace.xs,
-              0,
-              SurgeSpace.xs,
-              SurgeSpace.s,
-            ),
-            child: Text(
-              context.appLocalizations.updateFrequency,
-              style: context.typography.rowTitle.copyWith(
-                color: surge.textPrimary,
+          for (final mode in modes)
+            SurgeSettingOption(
+              leading: SurgeIconTile(
+                icon: mode == _ResourceAutoUpdateMode.off
+                    ? SurgeIcons.pause
+                    : SurgeIcons.update,
+                color: mode == _value ? surge.primary : surge.textSecondary,
               ),
+              title: mode.title(context),
+              subtitle: mode.subtitle(context),
+              selected: mode == _value,
+              showDivider: mode != modes.last,
+              onTap: () {
+                setState(() {
+                  _value = mode;
+                });
+                widget.onChanged(mode);
+              },
             ),
-          ),
-          Text(
-            context.appLocalizations.resourceUpdateTriggerHint,
-            style: context.typography.supporting.copyWith(
-              color: surge.textSecondary,
-            ),
-          ),
-          const SizedBox(height: SurgeSpace.s),
-          SurgeCard(
-            padding: EdgeInsets.zero,
-            borderRadius: 18,
-            shadow: true,
-            child: Column(
-              children: [
-                for (final mode in _ResourceAutoUpdateMode.values)
-                  _ResourceSheetOption(
-                    icon: mode == _ResourceAutoUpdateMode.off
-                        ? SurgeIcons.pause
-                        : SurgeIcons.update,
-                    title: mode.title(context),
-                    subtitle: mode.subtitle(context),
-                    selected: mode == _value,
-                    onTap: () {
-                      setState(() {
-                        _value = mode;
-                      });
-                      widget.onChanged(mode);
-                    },
-                  ),
-              ],
-            ),
-          ),
         ],
-      ),
-    );
-  }
-}
-
-class _ResourceSheetOption extends StatelessWidget {
-  const _ResourceSheetOption({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final foreground = selected ? surge.textPrimary : surge.textSecondary;
-    return SurgePressable(
-      onTap: onTap,
-      scaleFeedback: false,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SurgeSpace.l,
-          vertical: SurgeSpace.m,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: selected
-                    ? surge.primary.withValues(alpha: SurgeAlpha.a12)
-                    : surge.textSecondary.withValues(alpha: SurgeAlpha.a04),
-                borderRadius: BorderRadius.circular(surge.radii.button),
-                border: Border.all(
-                  color: surge.separator.withValues(alpha: SurgeAlpha.a38),
-                  width: surge.spacing.hairline,
-                ),
-              ),
-              child: Icon(icon, size: SurgeIconSize.inline, color: foreground),
-            ),
-            const SizedBox(width: SurgeSpace.m),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.typography.rowTitle.copyWith(
-                      color: surge.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: SurgeSpace.xs),
-                  Text(
-                    subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.typography.supporting.copyWith(
-                      color: surge.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: SurgeSpace.m),
-            SurgeSelectIndicator(
-              selected: selected,
-              size: 18,
-              iconSize: SurgeIconSize.micro,
-              showCheck: false,
-            ),
-          ],
-        ),
       ),
     );
   }

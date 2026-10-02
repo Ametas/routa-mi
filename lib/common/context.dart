@@ -49,7 +49,11 @@ extension BuildContextExtension on BuildContext {
         left: SurgeSpace.l,
       );
     } else {
-      margin = EdgeInsets.only(bottom: 16, left: 16, right: width - 316);
+      margin = EdgeInsets.only(
+        bottom: SurgeSpace.l,
+        left: SurgeSpace.l,
+        right: width - 316,
+      );
     }
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(

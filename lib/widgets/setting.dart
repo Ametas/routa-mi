@@ -27,22 +27,25 @@ class SurgeSettingOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SurgeListTile(
-      leading: leading,
-      title: title,
-      subtitle: subtitle,
-      enabled: enabled,
-      onTap: onTap,
-      showDivider: showDivider,
-      dense: dense,
-      trailing:
-          trailing ??
-          SurgeSelectIndicator(
-            selected: selected,
-            size: 20,
-            iconSize: SurgeIconSize.micro,
-            showCheck: false,
-          ),
+    return Semantics(
+      selected: selected,
+      child: SurgeListTile(
+        leading: leading,
+        title: title,
+        subtitle: subtitle,
+        enabled: enabled,
+        onTap: onTap,
+        showDivider: showDivider,
+        dense: dense,
+        trailing:
+            trailing ??
+            SurgeSelectIndicator(
+              selected: selected,
+              size: 20,
+              iconSize: SurgeIconSize.micro,
+              showCheck: false,
+            ),
+      ),
     );
   }
 }

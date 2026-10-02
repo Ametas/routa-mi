@@ -1527,9 +1527,8 @@ class _NodeSelectionSheetState extends ConsumerState<_NodeSelectionSheet> {
                     onPressed: _isDelayTesting ? null : _delayTest,
                     iconSize: SurgeIconSize.regular,
                     icon: _isDelayTesting
-                        ? SizedBox(
-                            width: 16,
-                            height: 16,
+                        ? SizedBox.square(
+                            dimension: SurgeIconSize.inline,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               color: surge.textSecondary,

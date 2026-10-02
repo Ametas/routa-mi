@@ -561,8 +561,8 @@ Widget generateListView(List<Widget> items) {
         color: surge.background,
         child: ListView(
           padding: EdgeInsets.only(
-            top: 12,
-            bottom: 32 + MediaQuery.paddingOf(context).bottom,
+            top: SurgeSpace.m,
+            bottom: SurgeSpace.xxxl + MediaQuery.paddingOf(context).bottom,
           ),
           children: [SurgeSection(showDividers: true, children: items)],
         ),

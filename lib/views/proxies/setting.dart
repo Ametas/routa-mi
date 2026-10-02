@@ -1,6 +1,7 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/config.dart';
+import 'package:fl_clash/widgets/setting.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,159 +58,69 @@ class ProxiesSetting extends ConsumerWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) => _setListStyle(ref));
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        SurgeSpace.l,
-        SurgeSpace.s,
-        SurgeSpace.l,
-        SurgeSpace.xxxl,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _SettingSection(
-            title: appLocalizations.sort,
-            children: [
-              for (final item in ProxiesSortType.values)
-                _SettingOption(
-                  icon: _sortIcon(item),
-                  label: _sortLabel(context, item),
-                  selected: state.sortType == item,
-                  onTap: () {
-                    ref.read(proxiesStyleSettingProvider.notifier).update((
-                      state,
-                    ) {
-                      return state.copyWith(sortType: item);
-                    });
-                  },
-                ),
-            ],
-          ),
-          const SizedBox(height: SurgeSpace.l),
-          _SettingSection(
-            title: appLocalizations.iconStyle,
-            children: [
-              for (final item in ProxiesIconStyle.values)
-                _SettingOption(
-                  icon: _iconStyleIcon(item),
-                  label: _iconStyleLabel(context, item),
-                  selected: state.iconStyle == item,
-                  onTap: () {
-                    ref.read(proxiesStyleSettingProvider.notifier).update((
-                      state,
-                    ) {
-                      return state.copyWith(iconStyle: item);
-                    });
-                  },
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SettingSection extends StatelessWidget {
-  const _SettingSection({required this.title, required this.children});
-
-  final String title;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            SurgeSpace.xs,
-            0,
-            SurgeSpace.xs,
-            SurgeSpace.s,
-          ),
-          child: Row(
-            children: [
-              Text(
-                title,
-                style: context.typography.rowTitle.copyWith(
-                  color: surge.textPrimary,
-                ),
-              ),
-            ],
-          ),
+    Widget option({
+      required IconData icon,
+      required String label,
+      required bool selected,
+      required bool last,
+      required VoidCallback onTap,
+    }) {
+      return SurgeSettingOption(
+        leading: SurgeIconTile(
+          icon: icon,
+          color: selected ? surge.primary : surge.textSecondary,
         ),
-        SurgeCard(
-          padding: EdgeInsets.zero,
-          borderRadius: 18,
-          shadow: true,
-          child: Column(children: children),
-        ),
-      ],
-    );
-  }
-}
+        title: label,
+        selected: selected,
+        showDivider: !last,
+        onTap: onTap,
+      );
+    }
 
-class _SettingOption extends StatelessWidget {
-  const _SettingOption({
-    required this.icon,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final foreground = selected ? surge.textPrimary : surge.textSecondary;
-    final selectedFill = surge.selectedFill;
-
-    return SurgePressable(
-      onTap: onTap,
-      scaleFeedback: false,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SurgeSpace.l,
-          vertical: SurgeSpace.m,
-        ),
-        child: Row(
+    const sortTypes = ProxiesSortType.values;
+    const iconStyles = ProxiesIconStyle.values;
+    return SurgeSectionList(
+      sections: [
+        SurgeSection(
+          title: appLocalizations.sort,
           children: [
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: selected ? selectedFill : surge.fill,
-                borderRadius: BorderRadius.circular(surge.radii.input),
+            for (final item in sortTypes)
+              option(
+                icon: _sortIcon(item),
+                label: _sortLabel(context, item),
+                selected: state.sortType == item,
+                last: item == sortTypes.last,
+                onTap: () {
+                  ref.read(proxiesStyleSettingProvider.notifier).update((
+                    state,
+                  ) {
+                    return state.copyWith(sortType: item);
+                  });
+                },
               ),
-              child: Icon(icon, size: SurgeIconSize.compact, color: foreground),
-            ),
-            const SizedBox(width: SurgeSpace.m),
-            Expanded(
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.typography.rowTitle.copyWith(
-                  color: surge.textPrimary,
-                ),
-              ),
-            ),
-            SurgeSelectIndicator(
-              selected: selected,
-              size: 18,
-              iconSize: SurgeIconSize.micro,
-              showCheck: false,
-            ),
           ],
         ),
-      ),
+        SurgeSection(
+          title: appLocalizations.iconStyle,
+          children: [
+            for (final item in iconStyles)
+              option(
+                icon: _iconStyleIcon(item),
+                label: _iconStyleLabel(context, item),
+                selected: state.iconStyle == item,
+                last: item == iconStyles.last,
+                onTap: () {
+                  ref.read(proxiesStyleSettingProvider.notifier).update((
+                    state,
+                  ) {
+                    return state.copyWith(iconStyle: item);
+                  });
+                },
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
