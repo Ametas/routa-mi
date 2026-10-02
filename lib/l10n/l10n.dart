@@ -5514,6 +5514,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Optional local VLESS inbound with a UUID and a share link.`
+  String get changelog010Item4 {
+    return Intl.message(
+      'Optional local VLESS inbound with a UUID and a share link.',
+      name: 'changelog010Item4',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{mode} mode`
   String modeDescription(Object mode) {
     return Intl.message(

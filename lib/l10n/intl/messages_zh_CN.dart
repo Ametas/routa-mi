@@ -202,6 +202,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog010Item3": MessageLookupByLibrary.simpleMessage(
       "本地代理端口默认启用用户名和密码认证。",
     ),
+    "changelog010Item4": MessageLookupByLibrary.simpleMessage(
+      "可选的本地 VLESS 入站，使用 UUID 认证并提供分享链接。",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage("请检查网络后重试。"),
     "checkResultsAppearHere": MessageLookupByLibrary.simpleMessage(
       "检测结果会展示在这里",

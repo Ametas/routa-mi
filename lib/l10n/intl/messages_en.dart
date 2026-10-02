@@ -258,6 +258,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog010Item3": MessageLookupByLibrary.simpleMessage(
       "The local proxy port now requires a username and password by default.",
     ),
+    "changelog010Item4": MessageLookupByLibrary.simpleMessage(
+      "Optional local VLESS inbound with a UUID and a share link.",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage(
       "Check your network and try again.",
     ),

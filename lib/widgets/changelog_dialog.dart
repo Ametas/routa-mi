@@ -98,6 +98,7 @@ class _ChangelogCard extends StatelessWidget {
       'changelog010Item1' => l10n.changelog010Item1,
       'changelog010Item2' => l10n.changelog010Item2,
       'changelog010Item3' => l10n.changelog010Item3,
+      'changelog010Item4' => l10n.changelog010Item4,
       _ => key,
     };
   }

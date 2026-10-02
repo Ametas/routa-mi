@@ -676,6 +676,7 @@
   "changelog010Item1": "RoutaMi 首个版本：基于 FlClash 与 SlClash，采用 MetaCubeX 官方 Mihomo 内核。",
   "changelog010Item2": "基于统一设计系统重新设计界面。",
   "changelog010Item3": "本地代理端口默认启用用户名和密码认证。",
+  "changelog010Item4": "可选的本地 VLESS 入站，使用 UUID 认证并提供分享链接。",
   "modeDescription": "{mode}模式",
   "initFailed": "初始化失败",
   "initFailedDescription": "应用启动时遇到严重错误，无法继续运行。",
