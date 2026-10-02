@@ -342,7 +342,7 @@ class VpnService : SystemVpnService(), IBaseService, CoroutineScope {
                     }
                 }
             }
-            setSession("FlClash")
+            setSession("RoutaMi")
             setBlocking(false)
             if (Build.VERSION.SDK_INT >= 29) {
                 setMetered(false)

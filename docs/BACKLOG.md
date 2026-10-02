@@ -3,41 +3,6 @@
 Записано, но **не реализовано**. Пункты с пометкой 🔴 — обязательно до
 первого публичного релиза.
 
-## 🔴 Ребрендинг видимых строк (обязательно до первого публичного релиза)
-
-Шаг 1 сменил только applicationId, метку приложения, `appName` и имена
-артефактов. Остались строки, которые пользователь видит как «SlClash» или
-«FlClash». Менять их — правкой исходников с последующей перегенерацией
-`lib/l10n/` (`intl_utils`), генерируемые файлы руками не трогать.
-
-ARB-ключи с «SlClash» (`arb/*.arb` → `lib/l10n/`):
-
-| Ключ | `intl_en.arb` | `intl_zh_CN.arb` | Текст (en) |
-|---|---|---|---|
-| `autoLaunchDesc` | стр. 40 | — (без бренда) | Start SlClash when the device starts |
-| `autoRunDesc` | стр. 44 | — (без бренда) | Connect when SlClash opens |
-| `aboutDescription` | стр. 553 | стр. 553 | SlClash: Android proxy client based on FlClash & Mihomo core. |
-| `allowUnknownAppInstall` | стр. 668 | стр. 668 | Allow SlClash to install unknown apps, then tap Install. |
-| `changelog207Item2` | стр. 677 | стр. 677 | Enabled two-way profile backup import between SlClash and Clash Verge Rev. |
-| `changelog205Item1` | стр. 680 | стр. 680 | SlClash and Clash Verge Rev profile backups now support two-way import. |
-| `changelog204Item2` | стр. 684 | стр. 684 | SlClash exports can import into Clash Verge Rev to overwrite profiles. |
-
-Там же решить:
-
-- `lib/common/app_changelog.dart` — встроенный changelog показывает историю
-  релизов SlClash (v2.x); завести свой или скрыть старые записи
-  (`changelog2xx*` выше станут не нужны).
-- Kotlin, строки «FlClash», видимые в системе:
-  `android/common/.../GlobalState.kt` (`NOTIFICATION_CHANNEL`),
-  `android/common/src/main/res/values/strings.xml` (`FlClash`),
-  `android/service/.../VpnService.kt` (`setSession("FlClash")` — имя VPN в
-  настройках Android), `.../modules/NotificationModule.kt`
-  (`setContentTitle`), `.../models/NotificationParams.kt`, `.../FilesProvider.kt`
-  (`COLUMN_TITLE`), `android/app/.../models/State.kt`.
-- **Не менять** схему `flclash://` в `AndroidManifest.xml`: ей пользуются
-  провайдеры подписок для импорта (`flclash://install-config?url=…`).
-  Добавить свою схему можно, старую удалять нельзя.
-
 ## 🔴 Аутентификация локального mixed/socks порта по умолчанию
 
 **Проблема.** SlClash слушает `mixed-port` (по умолчанию 7890) на

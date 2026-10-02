@@ -59,7 +59,7 @@ class NotificationModule(private val service: Service) : Module() {
                 GlobalState.NOTIFICATION_CHANNEL,
             ).apply {
                 setSmallIcon(R.drawable.ic_service)
-                setContentTitle("FlClash")
+                setContentTitle("RoutaMi")
                 setContentText("Starting service…")
                 setContentIntent(intent.toPendingIntent)
                 setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -124,7 +124,7 @@ class NotificationModule(private val service: Service) : Module() {
             service, GlobalState.NOTIFICATION_CHANNEL
         ).apply {
             setSmallIcon(R.drawable.ic_service)
-            setContentTitle("FlClash")
+            setContentTitle("RoutaMi")
             setContentIntent(intent.toPendingIntent)
             setPriority(NotificationCompat.PRIORITY_LOW)
             setCategory(NotificationCompat.CATEGORY_SERVICE)

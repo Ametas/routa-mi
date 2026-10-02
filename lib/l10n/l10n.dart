@@ -314,10 +314,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Start SlClash when the device starts`
+  /// `Start RoutaMi when the device starts`
   String get autoLaunchDesc {
     return Intl.message(
-      'Start SlClash when the device starts',
+      'Start RoutaMi when the device starts',
       name: 'autoLaunchDesc',
       desc: '',
       args: [],
@@ -349,10 +349,10 @@ class AppLocalizations {
     return Intl.message('Auto-connect', name: 'autoRun', desc: '', args: []);
   }
 
-  /// `Connect when SlClash opens`
+  /// `Connect when RoutaMi opens`
   String get autoRunDesc {
     return Intl.message(
-      'Connect when SlClash opens',
+      'Connect when RoutaMi opens',
       name: 'autoRunDesc',
       desc: '',
       args: [],
@@ -4474,10 +4474,10 @@ class AppLocalizations {
     );
   }
 
-  /// `SlClash: Android proxy client based on FlClash & Mihomo core.`
+  /// `RoutaMi: Android proxy client built on FlClash and the Mihomo core.`
   String get aboutDescription {
     return Intl.message(
-      'SlClash: Android proxy client based on FlClash & Mihomo core.',
+      'RoutaMi: Android proxy client built on FlClash and the Mihomo core.',
       name: 'aboutDescription',
       desc: '',
       args: [],
@@ -5409,10 +5409,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Allow SlClash to install unknown apps, then tap Install.`
+  /// `Allow RoutaMi to install unknown apps, then tap Install.`
   String get allowUnknownAppInstall {
     return Intl.message(
-      'Allow SlClash to install unknown apps, then tap Install.',
+      'Allow RoutaMi to install unknown apps, then tap Install.',
       name: 'allowUnknownAppInstall',
       desc: '',
       args: [],
@@ -5484,101 +5484,31 @@ class AppLocalizations {
     );
   }
 
-  /// `Refined the global type hierarchy, text rendering, and information layout.`
-  String get changelog207Item1 {
+  /// `First RoutaMi release, built on FlClash and SlClash with the official MetaCubeX Mihomo core.`
+  String get changelog010Item1 {
     return Intl.message(
-      'Refined the global type hierarchy, text rendering, and information layout.',
-      name: 'changelog207Item1',
+      'First RoutaMi release, built on FlClash and SlClash with the official MetaCubeX Mihomo core.',
+      name: 'changelog010Item1',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enabled two-way profile backup import between SlClash and Clash Verge Rev.`
-  String get changelog207Item2 {
+  /// `Redesigned interface on a single design system.`
+  String get changelog010Item2 {
     return Intl.message(
-      'Enabled two-way profile backup import between SlClash and Clash Verge Rev.',
-      name: 'changelog207Item2',
+      'Redesigned interface on a single design system.',
+      name: 'changelog010Item2',
       desc: '',
       args: [],
     );
   }
 
-  /// `Reduced unnecessary error prompts and interruptions.`
-  String get changelog207Item3 {
+  /// `The local proxy port now requires a username and password by default.`
+  String get changelog010Item3 {
     return Intl.message(
-      'Reduced unnecessary error prompts and interruptions.',
-      name: 'changelog207Item3',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Improved runtime flow and overall stability.`
-  String get changelog207Item4 {
-    return Intl.message(
-      'Improved runtime flow and overall stability.',
-      name: 'changelog207Item4',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `SlClash and Clash Verge Rev profile backups now support two-way import.`
-  String get changelog205Item1 {
-    return Intl.message(
-      'SlClash and Clash Verge Rev profile backups now support two-way import.',
-      name: 'changelog205Item1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Fixed the first backup failing when Unified Profile Center was not used.`
-  String get changelog205Item2 {
-    return Intl.message(
-      'Fixed the first backup failing when Unified Profile Center was not used.',
-      name: 'changelog205Item2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Improved compatibility and overwrite restore to avoid duplicates.`
-  String get changelog205Item3 {
-    return Intl.message(
-      'Improved compatibility and overwrite restore to avoid duplicates.',
-      name: 'changelog205Item3',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Local exports and WebDAV backups now use the native V1 package.`
-  String get changelog204Item1 {
-    return Intl.message(
-      'Local exports and WebDAV backups now use the native V1 package.',
-      name: 'changelog204Item1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `SlClash exports can import into Clash Verge Rev to overwrite profiles.`
-  String get changelog204Item2 {
-    return Intl.message(
-      'SlClash exports can import into Clash Verge Rev to overwrite profiles.',
-      name: 'changelog204Item2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Restore updates profiles only, other settings unchanged.`
-  String get changelog204Item3 {
-    return Intl.message(
-      'Restore updates profiles only, other settings unchanged.',
-      name: 'changelog204Item3',
+      'The local proxy port now requires a username and password by default.',
+      name: 'changelog010Item3',
       desc: '',
       args: [],
     );

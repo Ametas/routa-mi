@@ -90,7 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "about": MessageLookupByLibrary.simpleMessage("About"),
     "aboutDescription": MessageLookupByLibrary.simpleMessage(
-      "SlClash: Android proxy client based on FlClash & Mihomo core.",
+      "RoutaMi: Android proxy client built on FlClash and the Mihomo core.",
     ),
     "accessControl": MessageLookupByLibrary.simpleMessage("Access control"),
     "accessControlAllowDesc": MessageLookupByLibrary.simpleMessage(
@@ -154,7 +154,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Let devices on your LAN use this proxy",
     ),
     "allowUnknownAppInstall": MessageLookupByLibrary.simpleMessage(
-      "Allow SlClash to install unknown apps, then tap Install.",
+      "Allow RoutaMi to install unknown apps, then tap Install.",
     ),
     "apkInstallAfterDownload": MessageLookupByLibrary.simpleMessage(
       "System installer will open after download.",
@@ -185,11 +185,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "autoLaunch": MessageLookupByLibrary.simpleMessage("Start automatically"),
     "autoLaunchDesc": MessageLookupByLibrary.simpleMessage(
-      "Start SlClash when the device starts",
+      "Start RoutaMi when the device starts",
     ),
     "autoRun": MessageLookupByLibrary.simpleMessage("Auto-connect"),
     "autoRunDesc": MessageLookupByLibrary.simpleMessage(
-      "Connect when SlClash opens",
+      "Connect when RoutaMi opens",
     ),
     "autoSetSystemDns": MessageLookupByLibrary.simpleMessage(
       "Auto set system DNS",
@@ -239,35 +239,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Cancel select all",
     ),
     "changelog": MessageLookupByLibrary.simpleMessage("Changelog"),
-    "changelog204Item1": MessageLookupByLibrary.simpleMessage(
-      "Local exports and WebDAV backups now use the native V1 package.",
+    "changelog010Item1": MessageLookupByLibrary.simpleMessage(
+      "First RoutaMi release, built on FlClash and SlClash with the official MetaCubeX Mihomo core.",
     ),
-    "changelog204Item2": MessageLookupByLibrary.simpleMessage(
-      "SlClash exports can import into Clash Verge Rev to overwrite profiles.",
+    "changelog010Item2": MessageLookupByLibrary.simpleMessage(
+      "Redesigned interface on a single design system.",
     ),
-    "changelog204Item3": MessageLookupByLibrary.simpleMessage(
-      "Restore updates profiles only, other settings unchanged.",
-    ),
-    "changelog205Item1": MessageLookupByLibrary.simpleMessage(
-      "SlClash and Clash Verge Rev profile backups now support two-way import.",
-    ),
-    "changelog205Item2": MessageLookupByLibrary.simpleMessage(
-      "Fixed the first backup failing when Unified Profile Center was not used.",
-    ),
-    "changelog205Item3": MessageLookupByLibrary.simpleMessage(
-      "Improved compatibility and overwrite restore to avoid duplicates.",
-    ),
-    "changelog207Item1": MessageLookupByLibrary.simpleMessage(
-      "Refined the global type hierarchy, text rendering, and information layout.",
-    ),
-    "changelog207Item2": MessageLookupByLibrary.simpleMessage(
-      "Enabled two-way profile backup import between SlClash and Clash Verge Rev.",
-    ),
-    "changelog207Item3": MessageLookupByLibrary.simpleMessage(
-      "Reduced unnecessary error prompts and interruptions.",
-    ),
-    "changelog207Item4": MessageLookupByLibrary.simpleMessage(
-      "Improved runtime flow and overall stability.",
+    "changelog010Item3": MessageLookupByLibrary.simpleMessage(
+      "The local proxy port now requires a username and password by default.",
     ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage(
       "Check your network and try again.",
