@@ -100,10 +100,10 @@ class AboutView extends StatelessWidget {
         color: surge.background,
         child: ListView(
           padding: EdgeInsets.fromLTRB(
-            16,
-            16,
-            16,
-            32 + MediaQuery.paddingOf(context).bottom,
+            SurgeSpace.l,
+            SurgeSpace.l,
+            SurgeSpace.l,
+            SurgeSpace.xxxl + MediaQuery.paddingOf(context).bottom,
           ),
           children: [
             SurgeCard(

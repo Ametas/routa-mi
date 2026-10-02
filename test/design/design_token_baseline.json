@@ -21,7 +21,6 @@
     "gap": 1
   },
   "lib/pages/error.dart": {
-    "spacing": 2,
     "gap": 1,
     "radius": 2
   },
@@ -29,26 +28,19 @@
     "radius": 1
   },
   "lib/views/about.dart": {
-    "spacing": 1,
     "gap": 1
   },
   "lib/views/access.dart": {
-    "spacing": 1,
     "gap": 1,
     "radius": 2
   },
   "lib/views/config/general.dart": {
     "gap": 1
   },
-  "lib/views/config/scripts.dart": {
+  "lib/views/dashboard/widgets/surge_dashboard_hero.dart": {
     "spacing": 1
   },
-  "lib/views/dashboard/widgets/surge_dashboard_hero.dart": {
-    "spacing": 1,
-    "gap": 1
-  },
   "lib/views/profiles/edit.dart": {
-    "spacing": 1,
     "gap": 1
   },
   "lib/views/profiles/media_check.dart": {
@@ -58,9 +50,6 @@
   "lib/views/profiles/overwrite/custom/groups.dart": {
     "radius": 1
   },
-  "lib/views/profiles/overwrite/custom/icon.dart": {
-    "gap": 1
-  },
   "lib/views/profiles/overwrite/custom/rules.dart": {
     "radius": 1
   },
@@ -68,27 +57,17 @@
     "spacing": 1,
     "gap": 1
   },
-  "lib/views/proxies/list.dart": {
-    "spacing": 1
-  },
   "lib/views/proxies/scrolling_label.dart": {
     "color": 4
   },
-  "lib/views/resources.dart": {
-    "spacing": 1
-  },
   "lib/views/theme_accent.dart": {
     "gap": 1
-  },
-  "lib/views/tools.dart": {
-    "spacing": 1
   },
   "lib/widgets/input.dart": {
     "spacing": 2,
     "gap": 2
   },
   "lib/widgets/list.dart": {
-    "spacing": 1,
     "radius": 3
   },
   "lib/widgets/null_status.dart": {

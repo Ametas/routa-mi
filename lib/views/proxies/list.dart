@@ -403,9 +403,9 @@ class _ProxiesListViewState extends State<ProxiesListView> {
                     child: ListView.builder(
                       key: proxiesListStoreKey,
                       padding: EdgeInsets.fromLTRB(
-                        16,
-                        16,
-                        16,
+                        SurgeSpace.l,
+                        SurgeSpace.l,
+                        SurgeSpace.l,
                         SurgeBottomNavLayout.mainPageBottomPadding(context),
                       ),
                       controller: _controller,

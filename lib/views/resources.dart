@@ -300,7 +300,7 @@ class _ResourcesViewState extends ConsumerState<ResourcesView> {
         builder: (_, updatingItems, _) {
           return ListView(
             padding: EdgeInsets.only(
-              top: 4,
+              top: SurgeSpace.xs,
               bottom: SurgeBottomNavLayout.mainPageBottomPadding(context),
             ),
             children: [

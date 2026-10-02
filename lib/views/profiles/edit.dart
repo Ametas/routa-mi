@@ -244,10 +244,10 @@ class _EditProfileViewState extends State<EditProfileView> {
           key: _formKey,
           child: ListView(
             padding: EdgeInsets.fromLTRB(
-              20,
-              12,
-              20,
-              20 + MediaQuery.paddingOf(context).bottom,
+              SurgeSpace.xl,
+              SurgeSpace.m,
+              SurgeSpace.xl,
+              SurgeSpace.xl + MediaQuery.paddingOf(context).bottom,
             ),
             children: [
               SurgeField(

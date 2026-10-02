@@ -25,7 +25,7 @@ class InitErrorScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(SurgeSpace.l),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -101,7 +101,7 @@ class InitErrorScreen extends StatelessWidget {
 
   Widget _buildSectionLabel(BuildContext context, String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: SurgeSpace.s),
       child: Text(text, style: context.typography.sectionTitle),
     );
   }
