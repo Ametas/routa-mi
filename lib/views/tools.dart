@@ -22,6 +22,8 @@ import 'theme.dart';
 import 'package:fl_clash/providers/settings_apply.dart';
 import 'package:fl_clash/services/settings/settings_contract.dart';
 import 'package:fl_clash/widgets/settings_apply_status.dart';
+import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/widgets/mihomo_only.dart';
 
 class ToolsView extends ConsumerStatefulWidget {
   const ToolsView({super.key});
@@ -32,7 +34,7 @@ class ToolsView extends ConsumerStatefulWidget {
 
 class _ToolViewState extends ConsumerState<ToolsView> {
   Widget _buildNavigationMenuItem(NavigationItem navigationItem) {
-    return _SurgeOpenTile(
+    final tile = _SurgeOpenTile(
       leading: navigationItem.icon,
       title: Intl.message(navigationItem.label.name),
       subtitle: navigationItem.description != null
@@ -40,6 +42,11 @@ class _ToolViewState extends ConsumerState<ToolsView> {
           : null,
       child: navigationItem.builder(context),
     );
+    // Xray has no connection tracker to list.
+    return switch (navigationItem.label) {
+      PageLabel.requests || PageLabel.connections => MihomoOnly(child: tile),
+      _ => tile,
+    };
   }
 
   List<Widget> _buildNavigationMenu(List<NavigationItem> navigationItems) {
@@ -57,7 +64,7 @@ class _ToolViewState extends ConsumerState<ToolsView> {
       const _LocaleItem(),
       const _ThemeItem(),
       const _NetworkItem(),
-      const _DnsItem(),
+      const MihomoOnly(child: _DnsItem()),
       const _BackupItem(),
       if (system.isDesktop) const _HotkeyItem(),
       const _ConfigItem(),

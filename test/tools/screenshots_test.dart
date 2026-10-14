@@ -228,6 +228,7 @@ void main() {
     'access': () => const AccessView(),
     'config': () => const ConfigView(),
     'config_vless': () => const ConfigView(),
+    'config_xray': () => const ConfigView(),
     'network': () => const Scaffold(body: NetworkListView()),
     'dns': () => const Scaffold(body: DnsListView()),
     'profiles_manage': () => const Scaffold(
@@ -321,6 +322,19 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           viewSizeProvider.overrideWithBuild((_, _) => Size(384, height)),
+          if (name == 'config_xray') ...[
+            profilesProvider.overrideWithBuild(
+              (_, _) => const [
+                Profile(
+                  id: 1,
+                  label: 'Xray',
+                  autoUpdateDuration: Duration.zero,
+                  core: ProfileCore.xray,
+                ),
+              ],
+            ),
+            currentProfileIdProvider.overrideWithBuild((_, _) => 1),
+          ],
           if (name == 'config_vless')
             networkSettingProvider.overrideWithBuild(
               (_, _) =>
@@ -433,7 +447,7 @@ void main() {
           await tester.pump(const Duration(milliseconds: 100));
         }
       }
-      if (name == 'config_vless') {
+      if (name == 'config_vless' || name == 'config_xray') {
         await tester.drag(find.byType(Scrollable).first, const Offset(0, -400));
         for (var i = 0; i < 6; i++) {
           await tester.pump(const Duration(milliseconds: 100));

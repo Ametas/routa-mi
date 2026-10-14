@@ -52,5 +52,13 @@ Go 1.26 (требование Xray 26.x) и Xray: `libclash.so` arm64 64,3 → 9
      в `xray-assets/`.
    - Смена ядра при работающем VPN пересоздаёт TUN (`reconfigureSettings`).
    - Трафик на главном экране — из счётчиков Xray (`getTrafficSnapshot`).
-5. Несовместимые с Xray настройки — тусклые, по нажатию объясняют почему.
-6. Задержка и медиа-проверка для Xray, фикстуры конфигов для `go test`.
+5. Несовместимые с Xray настройки — тусклые, по нажатию объясняют почему
+   (`MihomoOnly`) — сделано: hosts, IPv6 ядра, unified-delay, append-system-DNS,
+   find-process, tcp-concurrent, geodata-loader, external-controller, стек
+   TUN, экран DNS, соединения и запросы, добавленные правила, скрипты,
+   медиа-проверка.
+6. Задержка для Xray — сделано: замер через работающий экземпляр с
+   принудительным выходом (`session.SetForcedOutboundTagToContext`, как
+   observatory Xray), без второго экземпляра. Фикстура конфига приложения
+   проверяется настоящим Xray (`core/configfixture/xray_runtime_test.go`).
+   Медиа-проверка для Xray — позже (сейчас тусклая).

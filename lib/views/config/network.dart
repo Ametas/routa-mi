@@ -4,6 +4,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
+import 'package:fl_clash/widgets/mihomo_only.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -434,7 +435,7 @@ class NetworkListView extends StatelessWidget {
           children: [
             if (system.isDesktop) const TUNItem(),
             if (system.isMacOS) const AutoSetSystemDnsItem(),
-            const TunStackItem(),
+            const MihomoOnly(child: TunStackItem()),
             if (!system.isDesktop) ...[
               const RouteModeItem(),
               const RouteAddressItem(),

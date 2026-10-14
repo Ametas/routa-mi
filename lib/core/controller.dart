@@ -321,8 +321,13 @@ class CoreController {
   }
 
   Future<Delay> getDelay(String url, String proxyName) async {
-    final data = await _interface.asyncTestDelay(url, proxyName);
-    return Delay.fromJson(json.decode(data));
+    // Xray nodes are tested by outbound tag; the result keeps the name.
+    final xrayTag = xrayRuntime.isActive
+        ? xrayRuntime.tagOf(XrayRuntimeConfig.groupName, proxyName)
+        : null;
+    final data = await _interface.asyncTestDelay(url, xrayTag ?? proxyName);
+    final delay = Delay.fromJson(json.decode(data));
+    return xrayTag == null ? delay : delay.copyWith(name: proxyName);
   }
 
   Future<String> mediaCheck(

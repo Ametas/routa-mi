@@ -1,6 +1,7 @@
 package xray
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net"
@@ -163,5 +164,29 @@ func TestStopReleasesTheInstance(t *testing.T) {
 	l.Close()
 	if err := Start([]byte("{"), 0); err == nil || Running() {
 		t.Fatal("a broken config must not leave an instance behind")
+	}
+}
+
+func TestDelayGoesThroughTheChosenNode(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+	if err := Start([]byte(config(freePort(t))), 0); err != nil {
+		t.Fatal(err)
+	}
+	defer Stop()
+	// The balancer points at the dead node; the test still reaches each.
+	if err := SelectOutbound("routami-select", "node-dead"); err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	delay, err := TestDelay(ctx, "node-ok", server.URL)
+	if err != nil || delay <= 0 {
+		t.Fatalf("delay through the working node: %v, %v", delay, err)
+	}
+	if _, err := TestDelay(ctx, "node-dead", server.URL); err == nil {
+		t.Fatal("the blackholed node must fail the test")
 	}
 }

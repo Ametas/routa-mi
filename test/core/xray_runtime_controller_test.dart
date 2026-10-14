@@ -117,4 +117,14 @@ void main() {
     expect(message, isEmpty);
     verifyNever(() => mock.updateConfig(any()));
   });
+
+  test('delay is measured by tag and reported by node name', () async {
+    when(() => mock.asyncTestDelay(any(), any())).thenAnswer(
+      (_) async => '{"name": "n001-proxy", "url": "https://x", "value": 120}',
+    );
+    final delay = await controller.getDelay('https://x', 'DE');
+    verify(() => mock.asyncTestDelay('https://x', 'n001-proxy')).called(1);
+    expect(delay.name, 'DE');
+    expect(delay.value, 120);
+  });
 }

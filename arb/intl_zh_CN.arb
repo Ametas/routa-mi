@@ -99,6 +99,7 @@
   "project": "项目",
   "core": "内核",
   "profileCoreDesc": "服务器根据内核选择订阅格式。JSON 订阅始终使用 Xray 运行。",
+  "mihomoOnlySetting": "Xray 配置不可用：此设置仅适用于 mihomo。",
   "tabAnimation": "选项卡动画",
   "desc": "基于ClashMeta的多平台代理客户端，简单易用，开源无广告。",
   "startVpn": "正在启动VPN...",

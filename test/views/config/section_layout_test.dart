@@ -1,3 +1,4 @@
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/views/config/dns.dart';
 import 'package:fl_clash/views/config/network.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -17,6 +18,8 @@ void main() {
       catalogApp(
         brightness: Brightness.light,
         textScale: 1,
+        // Mihomo-only rows read the current profile; no database here.
+        overrides: [profilesProvider.overrideWithBuild((_, _) => const [])],
         child: SizedBox(height: 2300, child: page),
       ),
     );

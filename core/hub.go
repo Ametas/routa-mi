@@ -355,6 +355,10 @@ func handleResetTraffic() {
 }
 
 func handleAsyncTestDelay(paramsString string, fn func(string)) {
+	if activeEngine() == engineXray {
+		go xrayTestDelay(paramsString, fn)
+		return
+	}
 	mBatch.Go(paramsString, func() (bool, error) {
 		var params = &TestDelayParams{}
 		err := json.Unmarshal([]byte(paramsString), params)
