@@ -54,7 +54,7 @@ runs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: "1.24.13"
+        go-version: "1.26.9"
         cache-dependency-path: core/go.sum
 
     - name: Pin Go toolchain

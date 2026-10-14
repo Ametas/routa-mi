@@ -13,7 +13,7 @@ set -euo pipefail
 
 # Keep these in sync with .github/workflows/*.yml.
 FLUTTER_VERSION="3.41.9"
-GO_VERSION="1.24.13"
+GO_VERSION="1.26.9"
 JDK_MAJOR="21"
 ANDROID_CMDLINE_TOOLS_BUILD="16111833"
 ANDROID_PLATFORM="android-36"
