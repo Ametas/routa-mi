@@ -118,9 +118,18 @@ func TestNodeSwitchWithoutRestartAndTraffic(t *testing.T) {
 		t.Fatalf("the working node must reach the server: %v", err)
 	}
 
-	up, down, err := OutboundTraffic("node-ok")
-	if err != nil {
-		t.Fatal(err)
+	// Counters settle when Xray finishes copying, after the client is done.
+	var up, down int64
+	for deadline := time.Now().Add(3 * time.Second); ; {
+		var err error
+		up, down, err = OutboundTraffic("node-ok")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if (up > 0 && down > 0) || time.Now().After(deadline) {
+			break
+		}
+		time.Sleep(20 * time.Millisecond)
 	}
 	if up == 0 || down == 0 {
 		t.Fatalf("traffic not counted: up=%d down=%d", up, down)
