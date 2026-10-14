@@ -5544,6 +5544,56 @@ class AppLocalizations {
     );
   }
 
+  /// `Xray-core is a second core: a profile runs on mihomo or Xray, and JSON subscriptions run on Xray.`
+  String get changelog020Item1 {
+    return Intl.message(
+      'Xray-core is a second core: a profile runs on mihomo or Xray, and JSON subscriptions run on Xray.',
+      name: 'changelog020Item1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose the core when adding a profile by URL; a badge shows each profile's core.`
+  String get changelog020Item2 {
+    return Intl.message(
+      'Choose the core when adding a profile by URL; a badge shows each profile\'s core.',
+      name: 'changelog020Item2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Xray nodes switch without a restart; delay tests and traffic work for Xray profiles.`
+  String get changelog020Item3 {
+    return Intl.message(
+      'Xray nodes switch without a restart; delay tests and traffic work for Xray profiles.',
+      name: 'changelog020Item3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Settings that only mihomo has stay visible but dimmed for Xray profiles and explain why.`
+  String get changelog020Item4 {
+    return Intl.message(
+      'Settings that only mihomo has stay visible but dimmed for Xray profiles and explain why.',
+      name: 'changelog020Item4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscriptions are requested as RoutaMi with the profile's core, and non-Clash responses are explained.`
+  String get changelog020Item5 {
+    return Intl.message(
+      'Subscriptions are requested as RoutaMi with the profile\'s core, and non-Clash responses are explained.',
+      name: 'changelog020Item5',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{mode} mode`
   String modeDescription(Object mode) {
     return Intl.message(
