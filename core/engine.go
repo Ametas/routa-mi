@@ -3,10 +3,12 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"path/filepath"
 	"sync"
 
 	"core/xray"
 
+	"github.com/metacubex/mihomo/constant"
 	"github.com/metacubex/mihomo/hub/executor"
 	"github.com/metacubex/mihomo/log"
 )
@@ -32,6 +34,11 @@ var (
 	engineLock sync.Mutex
 	engine     = engineMihomo
 	xrayConfig []byte
+	// xraySelection is the node the user picked; it is applied after every
+	// start, so a restart or a new TUN keeps it.
+	xraySelection xraySelectParams
+	// lastInitParams lets setupConfig bring mihomo back after Xray.
+	lastInitParams string
 )
 
 func activeEngine() engineKind {
@@ -46,6 +53,11 @@ var xrayTunActive bool
 type xraySelectParams struct {
 	Balancer string `json:"balancer"`
 	Target   string `json:"target"`
+}
+
+type xraySetupParams struct {
+	Path string `json:"path"`
+	xraySelectParams
 }
 
 type xrayTraffic struct {
@@ -68,7 +80,7 @@ func handleXrayAction(action *Action, result ActionResult) bool {
 			result.success(err.Error())
 			return true
 		}
-		result.success(errorText(xray.SelectOutbound(params.Balancer, params.Target)))
+		result.success(errorText(handleXraySelect(params)))
 	case xrayTrafficMethod:
 		up, down, err := xray.OutboundTraffic(action.Data.(string))
 		if err != nil {
@@ -89,7 +101,16 @@ func errorText(err error) string {
 	return err.Error()
 }
 
+// prepareXrayAssets lets Xray rules use mihomo's GeoIP/GeoSite files.
+func prepareXrayAssets() {
+	home := constant.Path.HomeDir()
+	if err := xray.UseGeoData(filepath.Join(home, "xray-assets"), constant.Path.GeoIP(), constant.Path.GeoSite()); err != nil {
+		log.Warnln("[Xray] geo data: %v", err)
+	}
+}
+
 func handleXrayValidate(path string) string {
+	prepareXrayAssets()
 	buf, err := readFile(path)
 	if err != nil {
 		return err.Error()
@@ -97,11 +118,17 @@ func handleXrayValidate(path string) string {
 	return errorText(xray.Validate(buf))
 }
 
-// handleXraySetup makes Xray the active core with the config at path. It
-// shuts mihomo down first. A config with a `tun` inbound waits for the
-// VpnService descriptor (startTUN), unless Xray already owns one.
-func handleXraySetup(path string) string {
-	buf, err := readFile(path)
+// handleXraySetup makes Xray the active core with the config at params.Path
+// and the node in params. It shuts mihomo down first. A config with a `tun`
+// inbound waits for the VpnService descriptor (startTUN), unless Xray
+// already owns one.
+func handleXraySetup(paramsString string) string {
+	var params xraySetupParams
+	if err := json.Unmarshal([]byte(paramsString), &params); err != nil {
+		return err.Error()
+	}
+	prepareXrayAssets()
+	buf, err := readFile(params.Path)
 	if err != nil {
 		return err.Error()
 	}
@@ -112,17 +139,43 @@ func handleXraySetup(path string) string {
 	engineLock.Lock()
 	engine = engineXray
 	xrayConfig = buf
+	xraySelection = params.xraySelectParams
 	tunActive := xrayTunActive
 	engineLock.Unlock()
+	setXrayProxyTags(buf, params.Balancer)
 	switch {
 	case tunActive:
 		err = xray.Reload(buf)
 	case xray.HasTun(buf):
 		xray.Stop()
+		return ""
 	default:
 		err = xray.Start(buf, 0)
 	}
-	return errorText(err)
+	if err != nil {
+		return err.Error()
+	}
+	return errorText(applyXraySelection())
+}
+
+func handleXraySelect(params xraySelectParams) error {
+	engineLock.Lock()
+	xraySelection = params
+	engineLock.Unlock()
+	if !xray.Running() {
+		return nil // applied when Xray starts
+	}
+	return applyXraySelection()
+}
+
+func applyXraySelection() error {
+	engineLock.Lock()
+	selection := xraySelection
+	engineLock.Unlock()
+	if selection.Balancer == "" || selection.Target == "" {
+		return nil
+	}
+	return xray.SelectOutbound(selection.Balancer, selection.Target)
 }
 
 // handleXrayStop hands the device back to mihomo; the app sets mihomo up
@@ -132,7 +185,22 @@ func handleXrayStop() {
 	engineLock.Lock()
 	engine = engineMihomo
 	xrayConfig = nil
+	xraySelection = xraySelectParams{}
 	engineLock.Unlock()
+}
+
+// switchBackToMihomoLocked runs before every mihomo setup (runLock held):
+// a mihomo profile after an Xray one stops Xray and initialises mihomo
+// again with the app's last init params.
+func switchBackToMihomoLocked() {
+	if activeEngine() != engineXray {
+		return
+	}
+	log.Infoln("[APP] switching back to mihomo")
+	handleXrayStop()
+	if !isInit && lastInitParams != "" {
+		initClashLocked(lastInitParams)
+	}
 }
 
 func shutdownMihomoForXray() {
@@ -164,6 +232,9 @@ func startXrayTun(fd int) error {
 	engineLock.Lock()
 	xrayTunActive = true
 	engineLock.Unlock()
+	if err := applyXraySelection(); err != nil {
+		log.Warnln("[Xray] node selection: %v", err)
+	}
 	return nil
 }
 

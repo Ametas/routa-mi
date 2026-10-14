@@ -7,6 +7,8 @@ import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/core/interface.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/enum/profile_core.dart';
+import 'package:fl_clash/core/xray_runtime.dart';
+import 'package:fl_clash/services/xray_config/xray_runtime_config.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart';
@@ -120,14 +122,31 @@ class CoreController {
     final file = File(path);
     try {
       await file.safeWriteAsString(data);
-      return await _interface.validateConfig(path);
+      return await validateProfileSource(path);
     } finally {
       await file.safeDelete();
     }
   }
 
   Future<String> updateConfig(UpdateParams updateParams) async {
+    // Xray takes settings as a whole new config, not mihomo's hot patch.
+    if (xrayRuntime.isActive) {
+      final xray = xrayRuntime.pending;
+      return xray == null ? '' : _setupXray(xray);
+    }
     return _interface.updateConfig(updateParams);
+  }
+
+  Future<String> _setupXray(XrayRuntimeConfig runtime) async {
+    final path = join(await appPath.homeDirPath, 'xray.json');
+    await File(path).safeWriteAsString(runtime.json);
+    final message = await _interface.xraySetup(
+      path,
+      XrayRuntimeConfig.balancerTag,
+      runtime.selectedTag,
+    );
+    if (message.isEmpty) xrayRuntime.active = runtime;
+    return message;
   }
 
   /// Establish TUN / startListener only after native setupConfig **confirmed** empty success.
@@ -140,7 +159,11 @@ class CoreController {
     required SetupState setupState,
     FutureOr<void> Function()? preloadInvoke,
   }) async {
-    final message = await _interface.setupConfig(params);
+    final xray = xrayRuntime.pending;
+    final message = xray != null
+        ? await _setupXray(xray)
+        : await _interface.setupConfig(params);
+    if (xray == null && message.isEmpty) xrayRuntime.active = null;
     if (shouldPreloadVpnAfterSetup(message)) {
       await preloadInvoke?.call();
     }
@@ -153,6 +176,7 @@ class CoreController {
     required Map<String, String> selectedMap,
     required String defaultTestUrl,
   }) async {
+    if (xrayRuntime.isActive) return xrayRuntime.groups();
     final proxiesData = await _interface.getProxies();
     return toGroupsTask(
       ComputeGroupsState(
@@ -172,6 +196,8 @@ class CoreController {
     required DelayMap delayMap,
     required String defaultTestUrl,
   }) async {
+    final xrayGroups = await xrayProfileGroups(profilePath, selectedMap);
+    if (xrayGroups != null) return xrayGroups;
     final proxiesData = await _interface.materializeProfileSnapshot(
       profilePath: profilePath,
       selectedMap: selectedMap,
@@ -201,6 +227,19 @@ class CoreController {
   }
 
   FutureOr<String> changeProxy(ChangeProxyParams changeProxyParams) async {
+    if (xrayRuntime.isActive) {
+      final tag = xrayRuntime.tagOf(
+        changeProxyParams.groupName,
+        changeProxyParams.proxyName,
+      );
+      if (tag == null) return 'Unknown Xray node';
+      final message = await _interface.xraySelect(
+        XrayRuntimeConfig.balancerTag,
+        tag,
+      );
+      if (message.isEmpty) xrayRuntime.select(tag);
+      return message;
+    }
     return await _interface.changeProxy(changeProxyParams);
   }
 
