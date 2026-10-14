@@ -1,17 +1,15 @@
-/// User-Agent for subscription downloads.
-///
-/// Subscription panels (Marzban, Remnawave and similar) pick the response
-/// format by matching the User-Agent, usually from its start (`^mihomo`,
-/// `^clash…`). An unrecognised client gets share links or Xray JSON, which
-/// the core cannot load, so the core's name comes first and the brand last.
+/// User-Agent for subscription downloads: the app, then the core the
+/// profile runs on, e.g. `RoutaMi/0.1.0 mihomo/1.19.31`. Panels pick the
+/// response format by it (Clash YAML for mihomo).
 String subscriptionUserAgent({
-  required String appName,
   required String appVersion,
-  required String platform,
-  String mihomoVersion = const String.fromEnvironment('MIHOMO_VERSION'),
-}) => [
-  mihomoVersion.isEmpty ? 'mihomo' : 'mihomo/$mihomoVersion',
-  'clash-verge',
-  '$appName/v$appVersion',
-  'Platform/$platform',
-].join(' ');
+  String coreName = 'mihomo',
+  String coreVersion = const String.fromEnvironment('MIHOMO_VERSION'),
+}) {
+  String bare(String version) =>
+      version.startsWith('v') ? version.substring(1) : version;
+  final core = coreVersion.isEmpty
+      ? coreName
+      : '$coreName/${bare(coreVersion)}';
+  return 'RoutaMi/${bare(appVersion)} $core';
+}

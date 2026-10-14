@@ -2,26 +2,25 @@ import 'package:fl_clash/common/user_agent.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('panels recognise the client from the start of the User-Agent', () {
-    final ua = subscriptionUserAgent(
-      appName: 'RoutaMi',
-      appVersion: '0.1.0',
-      platform: 'android',
-      mihomoVersion: 'v1.19.31',
+  test('the app comes first, then the active core', () {
+    expect(
+      subscriptionUserAgent(appVersion: '0.1.0', coreVersion: 'v1.19.31'),
+      'RoutaMi/0.1.0 mihomo/1.19.31',
     );
-    expect(ua, 'mihomo/v1.19.31 clash-verge RoutaMi/v0.1.0 Platform/android');
-    // Typical panel rules (Marzban, Remnawave) are anchored at the start.
-    expect(RegExp(r'^([Cc]lash-verge|[Mm]ihomo)').hasMatch(ua), isTrue);
-    expect(ua, contains('clash'));
+    expect(
+      subscriptionUserAgent(
+        appVersion: '0.1.0',
+        coreName: 'xray',
+        coreVersion: '25.10.15',
+      ),
+      'RoutaMi/0.1.0 xray/25.10.15',
+    );
   });
 
   test('a build without the core version still names the core', () {
-    final ua = subscriptionUserAgent(
-      appName: 'RoutaMi',
-      appVersion: '0.1.0',
-      platform: 'android',
-      mihomoVersion: '',
+    expect(
+      subscriptionUserAgent(appVersion: '0.1.0', coreVersion: ''),
+      'RoutaMi/0.1.0 mihomo',
     );
-    expect(ua, startsWith('mihomo clash-verge RoutaMi/v0.1.0'));
   });
 }
