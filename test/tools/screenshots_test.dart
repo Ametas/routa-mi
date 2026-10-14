@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:fl_clash/common/measure.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/enum/profile_core.dart';
 import 'package:fl_clash/common/local_proxy_auth.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
@@ -352,6 +353,7 @@ void main() {
                   label: 'Work',
                   url: 'https://example.com/work',
                   autoUpdateDuration: Duration(hours: 12),
+                  core: ProfileCore.xray,
                 ),
               ],
             ),

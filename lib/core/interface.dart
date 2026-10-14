@@ -212,6 +212,11 @@ abstract class CoreHandlerInterface with CoreInterface {
     );
   }
 
+  /// Empty when [path] is an Xray JSON config Xray-core accepts.
+  Future<String> xrayValidate(String path) async {
+    return _invokeCommandString(method: ActionMethod.xrayValidate, data: path);
+  }
+
   @override
   Future<String> updateConfig(UpdateParams updateParams) async {
     return _invokeCommandString(

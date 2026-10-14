@@ -5,12 +5,14 @@ import 'dart:math' as math;
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/enum/profile_core.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/pages/scan.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/theme/typography/type_scale.dart';
 import 'package:fl_clash/views/profiles/overwrite/overwrite.dart';
+import 'package:fl_clash/views/profiles/profile_core_widgets.dart';
 import 'package:fl_clash/views/proxies/common.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -310,6 +312,7 @@ class _ProfilesManageSheetState extends State<ProfilesManageSheet> {
     String? label,
     bool autoUpdate = true,
     Duration autoUpdateDuration = defaultUpdateDuration,
+    ProfileCore core = ProfileCore.mihomo,
   }) async {
     await globalState.container
         .read(profilesActionProvider.notifier)
@@ -318,6 +321,7 @@ class _ProfilesManageSheetState extends State<ProfilesManageSheet> {
           label: label,
           autoUpdate: autoUpdate,
           autoUpdateDuration: autoUpdateDuration,
+          core: core,
         );
   }
 
@@ -353,6 +357,7 @@ class _ProfilesManageSheetState extends State<ProfilesManageSheet> {
         label: result.label,
         autoUpdate: result.autoUpdate,
         autoUpdateDuration: result.autoUpdateDuration,
+        core: result.core,
       );
     }
   }
@@ -454,6 +459,7 @@ class _AddUrlProfileResult {
     required this.url,
     required this.autoUpdate,
     required this.autoUpdateDuration,
+    required this.core,
     this.label,
   });
 
@@ -461,6 +467,7 @@ class _AddUrlProfileResult {
   final String? label;
   final bool autoUpdate;
   final Duration autoUpdateDuration;
+  final ProfileCore core;
 }
 
 class _AddUrlProfileSheet extends StatefulWidget {
@@ -478,6 +485,7 @@ class _AddUrlProfileSheetState extends State<_AddUrlProfileSheet> {
     text: defaultUpdateDuration.inMinutes.toString(),
   );
   bool _autoUpdate = false;
+  ProfileCore _core = ProfileCore.mihomo;
 
   void _handleSubmit() {
     if (_formKey.currentState?.validate() == false) return;
@@ -489,6 +497,7 @@ class _AddUrlProfileSheetState extends State<_AddUrlProfileSheet> {
         autoUpdateDuration: Duration(
           minutes: int.parse(_autoUpdateDurationController.text),
         ),
+        core: _core,
       ),
     );
   }
@@ -567,6 +576,11 @@ class _AddUrlProfileSheetState extends State<_AddUrlProfileSheet> {
                   return null;
                 },
               ),
+            ),
+            const SizedBox(height: SurgeSpace.l),
+            ProfileCoreField(
+              value: _core,
+              onChanged: (core) => setState(() => _core = core),
             ),
             const SizedBox(height: SurgeSpace.xl),
             SurgeToggleFieldRow(
@@ -724,6 +738,8 @@ class _CurrentProfileSummaryState extends State<_CurrentProfileSummary> {
                           ),
                         ),
                         const SizedBox(width: SurgeSpace.m),
+                        ProfileCoreTag(core: widget.profile.core),
+                        const SizedBox(width: SurgeSpace.xs),
                         _CurrentProfileStatusPill(profileId: widget.profile.id),
                       ],
                     ),
@@ -1554,11 +1570,7 @@ class ProfileItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: SurgeSpace.m),
-                    SurgeTag(
-                      label: profile.type.name,
-                      minWidth: 48,
-                      maxWidth: 64,
-                    ),
+                    ProfileCoreTag(core: profile.core),
                     const SizedBox(width: SurgeSpace.xs),
                     SizedBox(
                       height: 40,
@@ -1759,6 +1771,8 @@ class _ProfileTextBlock extends StatelessWidget {
             if (showTypePill) ...[
               const SizedBox(width: SurgeSpace.s),
               _ProfileTypeLabel(type: profile.type),
+              const SizedBox(width: SurgeSpace.xs),
+              ProfileCoreMark(core: profile.core),
             ],
           ],
         ),

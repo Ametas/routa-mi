@@ -6,6 +6,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/core/interface.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/enum/profile_core.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart';
@@ -104,6 +105,14 @@ class CoreController {
   Future<String> validateConfig(String path) async {
     final res = await _interface.validateConfig(path);
     return res;
+  }
+
+  /// Validates a profile source with the core its content is written for.
+  Future<String> validateProfileSource(String path) async {
+    final core = detectProfileCore(await File(path).readAsBytes());
+    return core == ProfileCore.xray
+        ? _interface.xrayValidate(path)
+        : _interface.validateConfig(path);
   }
 
   Future<String> validateConfigWithData(String data) async {

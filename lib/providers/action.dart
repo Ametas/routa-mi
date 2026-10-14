@@ -13,6 +13,7 @@ import 'package:fl_clash/common/local_vless.dart';
 import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/enum/profile_core.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/plugins/service.dart';
@@ -3933,7 +3934,7 @@ class ProfilesAction extends _$ProfilesAction {
       );
 
   Future<String> _validateSource(String path) =>
-      _withSourceCore(() => coreController.validateConfig(path));
+      _withSourceCore(() => coreController.validateProfileSource(path));
   @override
   void build() {}
 
@@ -4193,6 +4194,7 @@ class ProfilesAction extends _$ProfilesAction {
     String? label,
     bool autoUpdate = true,
     Duration autoUpdateDuration = defaultUpdateDuration,
+    ProfileCore core = ProfileCore.mihomo,
   }) async {
     if (globalState.navigatorKey.currentState?.canPop() ?? false) {
       globalState.navigatorKey.currentState?.popUntil((route) => route.isFirst);
@@ -4211,6 +4213,7 @@ class ProfilesAction extends _$ProfilesAction {
             ).copyWith(
               autoUpdate: autoUpdate,
               autoUpdateDuration: autoUpdateDuration,
+              core: core,
             );
         return _withSourceCore(profile.update);
       },

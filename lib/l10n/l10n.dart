@@ -764,6 +764,16 @@ class AppLocalizations {
     return Intl.message('Core', name: 'core', desc: '', args: []);
   }
 
+  /// `The server picks the subscription format by the core. A JSON subscription always runs on Xray.`
+  String get profileCoreDesc {
+    return Intl.message(
+      'The server picks the subscription format by the core. A JSON subscription always runs on Xray.',
+      name: 'profileCoreDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Tab animation`
   String get tabAnimation {
     return Intl.message(

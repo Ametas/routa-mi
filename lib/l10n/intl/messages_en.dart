@@ -807,6 +807,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("Invalid interval format"),
     "profileAutoUpdateIntervalNullValidationDesc":
         MessageLookupByLibrary.simpleMessage("Enter interval time (min)"),
+    "profileCoreDesc": MessageLookupByLibrary.simpleMessage(
+      "The server picks the subscription format by the core. A JSON subscription always runs on Xray.",
+    ),
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "Profile modified. Disable auto update?",
     ),

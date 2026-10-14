@@ -98,6 +98,7 @@
   "systemProxy": "System proxy",
   "project": "Project",
   "core": "Core",
+  "profileCoreDesc": "The server picks the subscription format by the core. A JSON subscription always runs on Xray.",
   "tabAnimation": "Tab animation",
   "desc": "Multi-platform proxy client based on ClashMeta. Simple, open-source, ad-free.",
   "startVpn": "Starting VPN...",
