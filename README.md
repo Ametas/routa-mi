@@ -27,7 +27,7 @@ v2.2.3, который в свою очередь ответвился от
 
 ## Сборка
 
-Требуются Flutter 3.41.9, Go 1.24, JDK 21, Android SDK 36 и NDK r28c —
+Требуются Flutter 3.41.9, Go 1.26, JDK 21, Android SDK 36 и NDK r28c —
 `scripts/cloud-setup.sh` ставит их на Linux. Команды сборки и тестов — в
 [`CLAUDE.md`](CLAUDE.md), выпуск релиза — в [`docs/RELEASE.md`](docs/RELEASE.md).
 

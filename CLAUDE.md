@@ -56,7 +56,7 @@ RoutaMi — Android-клиент (arm64-v8a) на ядре mihomo, жёстки�
 ## Окружение
 
 Облачная сессия: `bash scripts/cloud-setup.sh`, затем
-`source /opt/routami-tools/env.sh`. Версии: Flutter 3.41.9, Go 1.24.13,
+`source /opt/routami-tools/env.sh`. Версии: Flutter 3.41.9, Go 1.26.9,
 JDK 21, NDK r28c (28.2.13676358), Android SDK 36. Rust не нужен.
 Версии синхронны с `.github/actions/setup-toolchain/action.yml`.
 
