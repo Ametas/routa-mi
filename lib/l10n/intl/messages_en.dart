@@ -261,6 +261,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog010Item4": MessageLookupByLibrary.simpleMessage(
       "Optional local VLESS inbound with a UUID and a share link.",
     ),
+    "changelog020Item1": MessageLookupByLibrary.simpleMessage(
+      "Xray-core is a second core: a profile runs on mihomo or Xray, and JSON subscriptions run on Xray.",
+    ),
+    "changelog020Item2": MessageLookupByLibrary.simpleMessage(
+      "Choose the core when adding a profile by URL; a badge shows each profile\'s core.",
+    ),
+    "changelog020Item3": MessageLookupByLibrary.simpleMessage(
+      "Xray nodes switch without a restart; delay tests and traffic work for Xray profiles.",
+    ),
+    "changelog020Item4": MessageLookupByLibrary.simpleMessage(
+      "Settings that only mihomo has stay visible but dimmed for Xray profiles and explain why.",
+    ),
+    "changelog020Item5": MessageLookupByLibrary.simpleMessage(
+      "Subscriptions are requested as RoutaMi with the profile\'s core, and non-Clash responses are explained.",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage(
       "Check your network and try again.",
     ),

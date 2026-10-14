@@ -205,6 +205,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog010Item4": MessageLookupByLibrary.simpleMessage(
       "可选的本地 VLESS 入站，使用 UUID 认证并提供分享链接。",
     ),
+    "changelog020Item1": MessageLookupByLibrary.simpleMessage(
+      "新增第二个内核 Xray-core：配置可运行于 mihomo 或 Xray，JSON 订阅使用 Xray 运行。",
+    ),
+    "changelog020Item2": MessageLookupByLibrary.simpleMessage(
+      "通过 URL 添加配置时可选择内核；每个配置都显示其内核标记。",
+    ),
+    "changelog020Item3": MessageLookupByLibrary.simpleMessage(
+      "Xray 节点切换无需重启；Xray 配置支持延迟测试和流量统计。",
+    ),
+    "changelog020Item4": MessageLookupByLibrary.simpleMessage(
+      "仅适用于 mihomo 的设置在 Xray 配置下变暗显示，并说明原因。",
+    ),
+    "changelog020Item5": MessageLookupByLibrary.simpleMessage(
+      "订阅请求以 RoutaMi 及配置内核标识发送，非 Clash 响应会给出说明。",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage("请检查网络后重试。"),
     "checkResultsAppearHere": MessageLookupByLibrary.simpleMessage(
       "检测结果会展示在这里",
