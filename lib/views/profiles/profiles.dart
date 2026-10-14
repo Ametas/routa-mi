@@ -13,6 +13,7 @@ import 'package:fl_clash/state.dart';
 import 'package:fl_clash/theme/typography/type_scale.dart';
 import 'package:fl_clash/views/profiles/overwrite/overwrite.dart';
 import 'package:fl_clash/views/profiles/profile_core_widgets.dart';
+import 'package:fl_clash/widgets/mihomo_only.dart';
 import 'package:fl_clash/views/proxies/common.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -754,9 +755,12 @@ class _CurrentProfileSummaryState extends State<_CurrentProfileSummary> {
                   ],
                 ),
               ),
-              _MediaCheckCompactRow(
-                profile: widget.profile,
-                profiles: widget.profiles,
+              // Media checks dial through mihomo's proxy adapters.
+              MihomoOnly(
+                child: _MediaCheckCompactRow(
+                  profile: widget.profile,
+                  profiles: widget.profiles,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l),

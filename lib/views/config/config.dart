@@ -3,6 +3,7 @@ import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/views/config/general.dart';
 import 'package:fl_clash/views/config/local_proxy_auth_items.dart';
 import 'package:fl_clash/views/config/local_vless_items.dart';
+import 'package:fl_clash/widgets/mihomo_only.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class ConfigView extends ConsumerWidget {
             children: const [
               PortItem(),
               AllowLanItem(),
-              ExternalControllerItem(),
+              MihomoOnly(child: ExternalControllerItem()),
               AuthenticationItem(),
               LocalVlessItem(),
             ],
@@ -65,15 +66,17 @@ class ConfigView extends ConsumerWidget {
             children: [
               const LogLevelItem(),
               const UaItem(),
-              if (system.isDesktop) const KeepAliveIntervalItem(),
+              if (system.isDesktop)
+                const MihomoOnly(child: KeepAliveIntervalItem()),
               const TestUrlItem(),
-              const HostsItem(),
-              const Ipv6Item(),
-              const UnifiedDelayItem(),
-              const AppendSystemDNSItem(),
-              const FindProcessItem(),
-              const TcpConcurrentItem(),
-              const GeodataLoaderItem(),
+              // Xray takes these from the profile or has no such option.
+              const MihomoOnly(child: HostsItem()),
+              const MihomoOnly(child: Ipv6Item()),
+              const MihomoOnly(child: UnifiedDelayItem()),
+              const MihomoOnly(child: AppendSystemDNSItem()),
+              const MihomoOnly(child: FindProcessItem()),
+              const MihomoOnly(child: TcpConcurrentItem()),
+              const MihomoOnly(child: GeodataLoaderItem()),
             ],
           ),
         ],

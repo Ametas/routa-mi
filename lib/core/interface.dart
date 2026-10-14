@@ -212,6 +212,22 @@ abstract class CoreHandlerInterface with CoreInterface {
     );
   }
 
+  /// Makes Xray the running core with the config at [path] routed through
+  /// [target] of [balancer]; empty on success.
+  Future<String> xraySetup(String path, String balancer, String target) {
+    return _invokeCommandString(
+      method: ActionMethod.xraySetup,
+      data: json.encode({'path': path, 'balancer': balancer, 'target': target}),
+    );
+  }
+
+  Future<String> xraySelect(String balancer, String target) {
+    return _invokeCommandString(
+      method: ActionMethod.xraySelect,
+      data: json.encode({'balancer': balancer, 'target': target}),
+    );
+  }
+
   /// Empty when [path] is an Xray JSON config Xray-core accepts.
   Future<String> xrayValidate(String path) async {
     return _invokeCommandString(method: ActionMethod.xrayValidate, data: path);

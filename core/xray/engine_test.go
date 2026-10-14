@@ -1,6 +1,7 @@
 package xray
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net"
@@ -118,9 +119,18 @@ func TestNodeSwitchWithoutRestartAndTraffic(t *testing.T) {
 		t.Fatalf("the working node must reach the server: %v", err)
 	}
 
-	up, down, err := OutboundTraffic("node-ok")
-	if err != nil {
-		t.Fatal(err)
+	// Counters settle when Xray finishes copying, after the client is done.
+	var up, down int64
+	for deadline := time.Now().Add(3 * time.Second); ; {
+		var err error
+		up, down, err = OutboundTraffic("node-ok")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if (up > 0 && down > 0) || time.Now().After(deadline) {
+			break
+		}
+		time.Sleep(20 * time.Millisecond)
 	}
 	if up == 0 || down == 0 {
 		t.Fatalf("traffic not counted: up=%d down=%d", up, down)
@@ -154,5 +164,29 @@ func TestStopReleasesTheInstance(t *testing.T) {
 	l.Close()
 	if err := Start([]byte("{"), 0); err == nil || Running() {
 		t.Fatal("a broken config must not leave an instance behind")
+	}
+}
+
+func TestDelayGoesThroughTheChosenNode(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+	if err := Start([]byte(config(freePort(t))), 0); err != nil {
+		t.Fatal(err)
+	}
+	defer Stop()
+	// The balancer points at the dead node; the test still reaches each.
+	if err := SelectOutbound("routami-select", "node-dead"); err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	delay, err := TestDelay(ctx, "node-ok", server.URL)
+	if err != nil || delay <= 0 {
+		t.Fatalf("delay through the working node: %v, %v", delay, err)
+	}
+	if _, err := TestDelay(ctx, "node-dead", server.URL); err == nil {
+		t.Fatal("the blackholed node must fail the test")
 	}
 }

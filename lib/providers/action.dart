@@ -14,6 +14,8 @@ import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/enum/profile_core.dart';
+import 'package:fl_clash/core/xray_runtime.dart';
+import 'package:fl_clash/services/xray_config/xray_profile.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/plugins/service.dart';
@@ -1819,6 +1821,12 @@ class SetupAction extends _$SetupAction {
     final realPatchConfig = patchConfig.copyWith(
       tun: patchConfig.tun.getRealTun(routeMode),
     );
+    final xray = await materializeXrayProfile(
+      profile: ref.read(profilesProvider).getProfile(profileId),
+      patch: realPatchConfig,
+      config: settingsSnapshot ?? ref.read(configProvider),
+    );
+    if (xray != null) return xray;
     final usesScript = setupState.overwriteType == OverwriteType.script;
     final Map<String, dynamic> rawConfig;
     // Both Script and non-Script profiles read ONE snapshot whose bytes feed
@@ -2081,12 +2089,16 @@ class SetupAction extends _$SetupAction {
               return;
             }
             await File(configFilePath).safeWriteAsString(yamlString);
+            final wasXray = xrayRuntime.isActive;
             final message = await coreController.setupConfig(
               setupState: setupState,
               params: _setupParams,
               preloadInvoke: preloadInvoke,
             );
             StartupTrace.mark('setupConfig');
+            if (message.isEmpty && wasXray != xrayRuntime.isActive) {
+              await reconnectVpnAfterCoreSwitch(settingsSnapshot);
+            }
 
             if (message.isNotEmpty) {
               commonPrint.log(

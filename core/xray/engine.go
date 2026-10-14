@@ -6,6 +6,7 @@ package xray
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"os"
 	"runtime"
 	"runtime/debug"
@@ -16,6 +17,7 @@ import (
 
 	"github.com/xtls/xray-core/common/platform"
 	"github.com/xtls/xray-core/core"
+	"github.com/xtls/xray-core/features/outbound"
 	"github.com/xtls/xray-core/features/routing"
 	"github.com/xtls/xray-core/features/stats"
 	"github.com/xtls/xray-core/infra/conf/serial"
@@ -156,6 +158,11 @@ func SelectOutbound(balancer, target string) error {
 	if instance == nil {
 		return ErrNotRunning
 	}
+	// The router takes any tag and an unknown one would drop all traffic.
+	if manager, ok := instance.GetFeature(outbound.ManagerType()).(outbound.Manager); !ok ||
+		manager.GetHandler(target) == nil {
+		return fmt.Errorf("no outbound %q", target)
+	}
 	overrider, ok := instance.GetFeature(routing.RouterType()).(routing.BalancerOverrider)
 	if !ok {
 		return errors.New("xray router does not support balancer overrides")
@@ -182,6 +189,39 @@ func OutboundTraffic(tag string) (up, down int64, err error) {
 	if counter := manager.GetCounter("outbound>>>" + tag + ">>>traffic>>>downlink"); counter != nil {
 		down = counter.Value()
 	}
+	return up, down, nil
+}
+
+// Traffic sums the outbound counters whose tag include accepts (all when
+// include is nil) since start.
+func Traffic(include func(tag string) bool) (up, down int64, err error) {
+	mu.Lock()
+	defer mu.Unlock()
+	if instance == nil {
+		return 0, 0, ErrNotRunning
+	}
+	visitor, ok := instance.GetFeature(stats.ManagerType()).(interface {
+		VisitCounters(func(string, stats.Counter) bool)
+	})
+	if !ok {
+		return 0, 0, errors.New("xray stats are not enabled")
+	}
+	visitor.VisitCounters(func(name string, counter stats.Counter) bool {
+		parts := strings.Split(name, ">>>")
+		if len(parts) != 4 || parts[0] != "outbound" || parts[2] != "traffic" {
+			return true
+		}
+		if include != nil && !include(parts[1]) {
+			return true
+		}
+		switch parts[3] {
+		case "uplink":
+			up += counter.Value()
+		case "downlink":
+			down += counter.Value()
+		}
+		return true
+	})
 	return up, down, nil
 }
 

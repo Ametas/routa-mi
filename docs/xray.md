@@ -39,7 +39,26 @@ Go 1.26 (требование Xray 26.x) и Xray: `libclash.so` arm64 64,3 → 9
    ссылки — выбранное ядро), проверка профиля его ядром, UA
    `RoutaMi/<версия> xray/<версия>`, бейдж ядра. Запуск Xray-профиля —
    этап 4.
-4. Сборщик Xray-конфига в Dart: свои входы (TUN, HTTP/SOCKS с
-   авторизацией, локальный VLESS), логи, DNS, режимы, статистика, узлы.
-5. Несовместимые с Xray настройки — тусклые, по нажатию объясняют почему.
-6. Задержка и медиа-проверка для Xray, фикстуры конфигов для `go test`.
+4. Запуск Xray-профиля — сделано.
+   - `lib/services/xray_config/xray_runtime_config.dart` собирает конфиг:
+     все узлы (элементы JSON-массива) с тегами `nNNN-*` под балансировщиком
+     `routami-select`, цепочки `dialerProxy`/`proxySettings` переименованы;
+     маршрутизация и DNS из первого элемента, правила на узел ведут в
+     балансировщик; свои входы (TUN, mixed-порт = SOCKS с HTTP-фолбэком и
+     авторизацией, локальный VLESS); режимы Rule/Global/Direct; статистика.
+   - Узлы — группа `Proxy` на экране прокси; выбор — `xraySelect`, без
+     перезапуска; сохраняется в `selectedMap` профиля.
+   - Гео-правила Xray берут `GeoIP.dat`/`GeoSite.dat` mihomo через симлинки
+     в `xray-assets/`.
+   - Смена ядра при работающем VPN пересоздаёт TUN (`reconfigureSettings`).
+   - Трафик на главном экране — из счётчиков Xray (`getTrafficSnapshot`).
+5. Несовместимые с Xray настройки — тусклые, по нажатию объясняют почему
+   (`MihomoOnly`) — сделано: hosts, IPv6 ядра, unified-delay, append-system-DNS,
+   find-process, tcp-concurrent, geodata-loader, external-controller, стек
+   TUN, экран DNS, соединения и запросы, добавленные правила, скрипты,
+   медиа-проверка.
+6. Задержка для Xray — сделано: замер через работающий экземпляр с
+   принудительным выходом (`session.SetForcedOutboundTagToContext`, как
+   observatory Xray), без второго экземпляра. Фикстура конфига приложения
+   проверяется настоящим Xray (`core/configfixture/xray_runtime_test.go`).
+   Медиа-проверка для Xray — позже (сейчас тусклая).

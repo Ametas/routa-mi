@@ -68,12 +68,16 @@ func initClashLocked(paramsString string) bool {
 	version = params.Version
 	constant.SetHomeDir(params.HomeDir)
 	isInit = true
+	lastInitParams = paramsString
 	return isInit
 }
 
 func handleStartListener() bool {
 	runLock.Lock()
 	defer runLock.Unlock()
+	if activeEngine() == engineXray {
+		return true // Xray's own inbounds listen
+	}
 	isRunning = true
 	updateListeners()
 	resolver.ResetConnection()
@@ -323,6 +327,9 @@ func handleGetTotalTraffic(onlyStatisticsProxy bool) string {
 }
 
 func handleGetTrafficSnapshot(onlyStatisticsProxy bool) string {
+	if activeEngine() == engineXray {
+		return xrayTrafficSnapshot(onlyStatisticsProxy)
+	}
 	up, down := statistic.DefaultManager.Now()
 	totalUp, totalDown := statistic.DefaultManager.Total()
 	if onlyStatisticsProxy {
@@ -348,6 +355,10 @@ func handleResetTraffic() {
 }
 
 func handleAsyncTestDelay(paramsString string, fn func(string)) {
+	if activeEngine() == engineXray {
+		go xrayTestDelay(paramsString, fn)
+		return
+	}
 	mBatch.Go(paramsString, func() (bool, error) {
 		var params = &TestDelayParams{}
 		err := json.Unmarshal([]byte(paramsString), params)
@@ -689,6 +700,9 @@ func handleCrash() {
 }
 
 func handleUpdateConfig(bytes []byte) string {
+	if activeEngine() == engineXray {
+		return "" // settings reach Xray through a new xraySetup
+	}
 	var params = &UpdateParams{}
 	err := json.Unmarshal(bytes, params)
 	if err != nil {
@@ -744,6 +758,7 @@ func handleSetupConfig(bytes []byte) string {
 }
 
 func setupConfigLocked(bytes []byte) string {
+	switchBackToMihomoLocked()
 	if !isInit {
 		return "not initialized"
 	}

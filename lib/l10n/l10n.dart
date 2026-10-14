@@ -774,6 +774,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Not available for Xray profiles: this setting belongs to mihomo.`
+  String get mihomoOnlySetting {
+    return Intl.message(
+      'Not available for Xray profiles: this setting belongs to mihomo.',
+      name: 'mihomoOnlySetting',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Tab animation`
   String get tabAnimation {
     return Intl.message(
