@@ -98,6 +98,7 @@
   "systemProxy": "系统代理",
   "project": "项目",
   "core": "内核",
+  "profileCoreDesc": "服务器根据内核选择订阅格式。JSON 订阅始终使用 Xray 运行。",
   "tabAnimation": "选项卡动画",
   "desc": "基于ClashMeta的多平台代理客户端，简单易用，开源无广告。",
   "startVpn": "正在启动VPN...",

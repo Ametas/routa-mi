@@ -18,8 +18,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'common/common.dart';
 import 'common/local_proxy_auth.dart';
+import 'common/user_agent.dart';
 import 'database/database.dart';
 import 'enum/enum.dart';
+import 'enum/profile_core.dart';
 import 'l10n/l10n.dart';
 import 'models/models.dart';
 import 'providers/providers.dart';
@@ -85,6 +87,13 @@ class GlobalState {
   String get ua => container
       .read(patchClashConfigProvider.select((state) => state.globalUa))
       .takeFirstValid([packageInfo.ua]);
+
+  /// Subscription User-Agent for a profile on [core]; a custom UA wins.
+  String uaFor(ProfileCore core) => container
+      .read(patchClashConfigProvider.select((state) => state.globalUa))
+      .takeFirstValid([
+        subscriptionUserAgent(appVersion: packageInfo.version, core: core),
+      ]);
 
   BuildContext get _context => navigatorKey.currentContext!;
 

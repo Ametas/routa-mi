@@ -154,6 +154,16 @@ class $ProfilesTable extends Profiles
     requiredDuringInsert: false,
   );
   @override
+  late final GeneratedColumnWithTypeConverter<ProfileCore, String> core =
+      GeneratedColumn<String>(
+        'core',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(ProfileCore.mihomo.name),
+      ).withConverter<ProfileCore>($ProfilesTable.$convertercore);
+  @override
   List<GeneratedColumn> get $columns => [
     id,
     label,
@@ -169,6 +179,7 @@ class $ProfilesTable extends Profiles
     computedSelectedMap,
     unfoldSet,
     order,
+    core,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -325,6 +336,12 @@ class $ProfilesTable extends Profiles
         DriftSqlType.int,
         data['${effectivePrefix}order'],
       ),
+      core: $ProfilesTable.$convertercore.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}core'],
+        )!,
+      ),
     );
   }
 
@@ -345,6 +362,8 @@ class $ProfilesTable extends Profiles
   $convertercomputedSelectedMap = const StringMapConverter();
   static TypeConverter<Set<String>, String> $converterunfoldSet =
       const StringSetConverter();
+  static JsonTypeConverter2<ProfileCore, String, String> $convertercore =
+      const EnumNameConverter<ProfileCore>(ProfileCore.values);
 }
 
 class RawProfile extends DataClass implements Insertable<RawProfile> {
@@ -362,6 +381,7 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
   final Map<String, String> computedSelectedMap;
   final Set<String> unfoldSet;
   final int? order;
+  final ProfileCore core;
   const RawProfile({
     required this.id,
     required this.label,
@@ -377,6 +397,7 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
     required this.computedSelectedMap,
     required this.unfoldSet,
     this.order,
+    required this.core,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -425,6 +446,9 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
     if (!nullToAbsent || order != null) {
       map['order'] = Variable<int>(order);
     }
+    {
+      map['core'] = Variable<String>($ProfilesTable.$convertercore.toSql(core));
+    }
     return map;
   }
 
@@ -454,6 +478,7 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
       order: order == null && nullToAbsent
           ? const Value.absent()
           : Value(order),
+      core: Value(core),
     );
   }
 
@@ -487,6 +512,9 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
       ),
       unfoldSet: serializer.fromJson<Set<String>>(json['unfoldSet']),
       order: serializer.fromJson<int?>(json['order']),
+      core: $ProfilesTable.$convertercore.fromJson(
+        serializer.fromJson<String>(json['core']),
+      ),
     );
   }
   @override
@@ -515,6 +543,9 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
       ),
       'unfoldSet': serializer.toJson<Set<String>>(unfoldSet),
       'order': serializer.toJson<int?>(order),
+      'core': serializer.toJson<String>(
+        $ProfilesTable.$convertercore.toJson(core),
+      ),
     };
   }
 
@@ -533,6 +564,7 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
     Map<String, String>? computedSelectedMap,
     Set<String>? unfoldSet,
     Value<int?> order = const Value.absent(),
+    ProfileCore? core,
   }) => RawProfile(
     id: id ?? this.id,
     label: label ?? this.label,
@@ -555,6 +587,7 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
     computedSelectedMap: computedSelectedMap ?? this.computedSelectedMap,
     unfoldSet: unfoldSet ?? this.unfoldSet,
     order: order.present ? order.value : this.order,
+    core: core ?? this.core,
   );
   RawProfile copyWithCompanion(ProfilesCompanion data) {
     return RawProfile(
@@ -588,6 +621,7 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
           : this.computedSelectedMap,
       unfoldSet: data.unfoldSet.present ? data.unfoldSet.value : this.unfoldSet,
       order: data.order.present ? data.order.value : this.order,
+      core: data.core.present ? data.core.value : this.core,
     );
   }
 
@@ -607,7 +641,8 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
           ..write('selectedMap: $selectedMap, ')
           ..write('computedSelectedMap: $computedSelectedMap, ')
           ..write('unfoldSet: $unfoldSet, ')
-          ..write('order: $order')
+          ..write('order: $order, ')
+          ..write('core: $core')
           ..write(')'))
         .toString();
   }
@@ -628,6 +663,7 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
     computedSelectedMap,
     unfoldSet,
     order,
+    core,
   );
   @override
   bool operator ==(Object other) =>
@@ -646,7 +682,8 @@ class RawProfile extends DataClass implements Insertable<RawProfile> {
           other.selectedMap == this.selectedMap &&
           other.computedSelectedMap == this.computedSelectedMap &&
           other.unfoldSet == this.unfoldSet &&
-          other.order == this.order);
+          other.order == this.order &&
+          other.core == this.core);
 }
 
 class ProfilesCompanion extends UpdateCompanion<RawProfile> {
@@ -664,6 +701,7 @@ class ProfilesCompanion extends UpdateCompanion<RawProfile> {
   final Value<Map<String, String>> computedSelectedMap;
   final Value<Set<String>> unfoldSet;
   final Value<int?> order;
+  final Value<ProfileCore> core;
   const ProfilesCompanion({
     this.id = const Value.absent(),
     this.label = const Value.absent(),
@@ -679,6 +717,7 @@ class ProfilesCompanion extends UpdateCompanion<RawProfile> {
     this.computedSelectedMap = const Value.absent(),
     this.unfoldSet = const Value.absent(),
     this.order = const Value.absent(),
+    this.core = const Value.absent(),
   });
   ProfilesCompanion.insert({
     this.id = const Value.absent(),
@@ -695,6 +734,7 @@ class ProfilesCompanion extends UpdateCompanion<RawProfile> {
     this.computedSelectedMap = const Value.absent(),
     required Set<String> unfoldSet,
     this.order = const Value.absent(),
+    this.core = const Value.absent(),
   }) : label = Value(label),
        url = Value(url),
        overwriteType = Value(overwriteType),
@@ -717,6 +757,7 @@ class ProfilesCompanion extends UpdateCompanion<RawProfile> {
     Expression<String>? computedSelectedMap,
     Expression<String>? unfoldSet,
     Expression<int>? order,
+    Expression<String>? core,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -735,6 +776,7 @@ class ProfilesCompanion extends UpdateCompanion<RawProfile> {
         'computed_selected_map': computedSelectedMap,
       if (unfoldSet != null) 'unfold_set': unfoldSet,
       if (order != null) 'order': order,
+      if (core != null) 'core': core,
     });
   }
 
@@ -753,6 +795,7 @@ class ProfilesCompanion extends UpdateCompanion<RawProfile> {
     Value<Map<String, String>>? computedSelectedMap,
     Value<Set<String>>? unfoldSet,
     Value<int?>? order,
+    Value<ProfileCore>? core,
   }) {
     return ProfilesCompanion(
       id: id ?? this.id,
@@ -770,6 +813,7 @@ class ProfilesCompanion extends UpdateCompanion<RawProfile> {
       computedSelectedMap: computedSelectedMap ?? this.computedSelectedMap,
       unfoldSet: unfoldSet ?? this.unfoldSet,
       order: order ?? this.order,
+      core: core ?? this.core,
     );
   }
 
@@ -832,6 +876,11 @@ class ProfilesCompanion extends UpdateCompanion<RawProfile> {
     if (order.present) {
       map['order'] = Variable<int>(order.value);
     }
+    if (core.present) {
+      map['core'] = Variable<String>(
+        $ProfilesTable.$convertercore.toSql(core.value),
+      );
+    }
     return map;
   }
 
@@ -851,7 +900,8 @@ class ProfilesCompanion extends UpdateCompanion<RawProfile> {
           ..write('selectedMap: $selectedMap, ')
           ..write('computedSelectedMap: $computedSelectedMap, ')
           ..write('unfoldSet: $unfoldSet, ')
-          ..write('order: $order')
+          ..write('order: $order, ')
+          ..write('core: $core')
           ..write(')'))
         .toString();
   }
@@ -3931,6 +3981,7 @@ typedef $$ProfilesTableCreateCompanionBuilder =
       Value<Map<String, String>> computedSelectedMap,
       required Set<String> unfoldSet,
       Value<int?> order,
+      Value<ProfileCore> core,
     });
 typedef $$ProfilesTableUpdateCompanionBuilder =
     ProfilesCompanion Function({
@@ -3948,6 +3999,7 @@ typedef $$ProfilesTableUpdateCompanionBuilder =
       Value<Map<String, String>> computedSelectedMap,
       Value<Set<String>> unfoldSet,
       Value<int?> order,
+      Value<ProfileCore> core,
     });
 
 final class $$ProfilesTableReferences
@@ -4116,6 +4168,12 @@ class $$ProfilesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnWithTypeConverterFilters<ProfileCore, ProfileCore, String> get core =>
+      $composableBuilder(
+        column: $table.core,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
   Expression<bool> profileRuleLinksRefs(
     Expression<bool> Function($$ProfileRuleLinksTableFilterComposer f) f,
   ) {
@@ -4270,6 +4328,11 @@ class $$ProfilesTableOrderingComposer
     column: $table.order,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get core => $composableBuilder(
+    column: $table.core,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ProfilesTableAnnotationComposer
@@ -4342,6 +4405,9 @@ class $$ProfilesTableAnnotationComposer
 
   GeneratedColumn<int> get order =>
       $composableBuilder(column: $table.order, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<ProfileCore, String> get core =>
+      $composableBuilder(column: $table.core, builder: (column) => column);
 
   Expression<T> profileRuleLinksRefs<T extends Object>(
     Expression<T> Function($$ProfileRuleLinksTableAnnotationComposer a) f,
@@ -4468,6 +4534,7 @@ class $$ProfilesTableTableManager
                     const Value.absent(),
                 Value<Set<String>> unfoldSet = const Value.absent(),
                 Value<int?> order = const Value.absent(),
+                Value<ProfileCore> core = const Value.absent(),
               }) => ProfilesCompanion(
                 id: id,
                 label: label,
@@ -4483,6 +4550,7 @@ class $$ProfilesTableTableManager
                 computedSelectedMap: computedSelectedMap,
                 unfoldSet: unfoldSet,
                 order: order,
+                core: core,
               ),
           createCompanionCallback:
               ({
@@ -4502,6 +4570,7 @@ class $$ProfilesTableTableManager
                     const Value.absent(),
                 required Set<String> unfoldSet,
                 Value<int?> order = const Value.absent(),
+                Value<ProfileCore> core = const Value.absent(),
               }) => ProfilesCompanion.insert(
                 id: id,
                 label: label,
@@ -4517,6 +4586,7 @@ class $$ProfilesTableTableManager
                 computedSelectedMap: computedSelectedMap,
                 unfoldSet: unfoldSet,
                 order: order,
+                core: core,
               ),
           withReferenceMapper: (p0) => p0
               .map(

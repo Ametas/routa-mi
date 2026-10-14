@@ -5,7 +5,9 @@ import 'dart:typed_data';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/enum/profile_core.dart';
 import 'package:fl_clash/services/profile_source_mutation.dart';
+import 'package:fl_clash/state.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
 
@@ -58,6 +60,7 @@ abstract class Profile with _$Profile {
     @Default(OverwriteType.standard) OverwriteType overwriteType,
     int? scriptId,
     int? order,
+    @Default(ProfileCore.mihomo) ProfileCore core,
   }) = _Profile;
 
   factory Profile.fromJson(Map<String, Object?> json) =>
@@ -155,7 +158,10 @@ extension ProfileExtension on Profile {
   Future<bool> get sourceExists async => (await _getFile()).exists();
 
   Future<ProfileSourceResponse> downloadSource() async {
-    final response = await request.getFileResponseForUrl(url);
+    final response = await request.getFileResponseForUrl(
+      url,
+      userAgent: globalState.uaFor(core),
+    );
     final disposition = response.headers.value('content-disposition');
     final userinfo = response.headers.value('subscription-userinfo');
     return ProfileSourceResponse(
@@ -181,7 +187,7 @@ extension ProfileExtension on Profile {
       staged = await stageProfileFile(
         targetPath: mFile.path,
         bytes: bytes,
-        validate: coreController.validateConfig,
+        validate: coreController.validateProfileSource,
       );
     } catch (_) {
       if (!profileSourceMutationOwner.isCurrent(token)) {
@@ -200,7 +206,10 @@ extension ProfileExtension on Profile {
     } finally {
       await staged.dispose();
     }
-    return copyWith(lastUpdateDate: DateTime.now());
+    return copyWith(
+      lastUpdateDate: DateTime.now(),
+      core: detectProfileCore(bytes) ?? core,
+    );
   }
 
   Future<Profile> saveFileWithPath(String path) async {
@@ -242,6 +251,8 @@ Profile mergeRemoteProfileResponse(
     ]),
     subscriptionInfo: response.subscriptionInfo,
     lastUpdateDate: updatedAt,
+    // A panel may switch formats; the content decides the core.
+    core: detectProfileCore(response.bytes) ?? latest.core,
   );
 }
 

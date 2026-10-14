@@ -35,6 +35,10 @@ class Profiles extends Table {
 
   IntColumn get order => integer().nullable()();
 
+  TextColumn get core => textEnum<ProfileCore>().withDefault(
+    Constant(ProfileCore.mihomo.name),
+  )();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -134,6 +138,7 @@ extension RawProfilExt on RawProfile {
       overwriteType: overwriteType,
       scriptId: scriptId,
       order: order,
+      core: core,
     );
   }
 }
@@ -155,6 +160,7 @@ extension ProfilesCompanionExt on Profile {
       overwriteType: overwriteType,
       scriptId: Value(scriptId),
       order: Value(order ?? this.order),
+      core: Value(core),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/enum/profile_core.dart';
 import 'package:fl_clash/models/models.dart';
 
 part 'converter.dart';
@@ -43,7 +44,7 @@ class Database extends _$Database {
   Database([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   static LazyDatabase _openConnection() {
     return LazyDatabase(() async {
@@ -67,6 +68,9 @@ class Database extends _$Database {
         }
         if (from < 4) {
           await m.createTable(proxyGroupsSnapshots);
+        }
+        if (from < 5) {
+          await m.addColumn(profiles, profiles.core);
         }
       },
       beforeOpen: (details) async {

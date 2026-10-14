@@ -215,6 +215,12 @@ enum ActionMethod {
   forceGc,
   shutdown,
   validateConfig,
+  // Xray-core, the second core (core/engine.go).
+  xrayValidate,
+  xraySetup,
+  xrayStop,
+  xraySelect,
+  xrayTraffic,
   updateConfig,
   getConfig,
   getProxies,
