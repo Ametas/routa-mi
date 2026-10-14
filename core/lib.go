@@ -36,6 +36,7 @@ var (
 type TunHandler struct {
 	listener *sing_tun.Listener
 	callback unsafe.Pointer
+	xray     bool // Xray owns the fd (tun_xray.go)
 
 	limit *semaphore.Weighted
 }
@@ -58,12 +59,16 @@ func (th *TunHandler) start(fd int, stack, address, dns string) bool {
 }
 
 func (th *TunHandler) close() {
+	// Before the semaphore: stopping Xray may wait on a dial that is
+	// blocked in handleProtect.
+	th.stopXray()
 	_ = th.limit.Acquire(context.TODO(), 4)
 	defer th.limit.Release(4)
 	th.clear()
 }
 
 func (th *TunHandler) clear() {
+	th.stopXray()
 	th.removeHook()
 	if th.listener != nil {
 		_ = th.listener.Close()
@@ -79,7 +84,7 @@ func (th *TunHandler) handleProtect(fd int) {
 	_ = th.limit.Acquire(context.Background(), 1)
 	defer th.limit.Release(1)
 
-	if th.listener == nil || th.callback == nil {
+	if (th.listener == nil && !th.xray) || th.callback == nil {
 		return
 	}
 
@@ -168,7 +173,11 @@ func handleStartTun(callback unsafe.Pointer, fd int, stack, address, dns string)
 		callback: callback,
 		limit:    semaphore.NewWeighted(4),
 	}
-	if !handler.start(fd, stack, address, dns) {
+	if activeEngine() == engineXray {
+		if !handler.startXray(fd) {
+			return false
+		}
+	} else if !handler.start(fd, stack, address, dns) {
 		return false
 	}
 	tunHandler = handler
@@ -231,6 +240,9 @@ func invokeAction(callback unsafe.Pointer, paramsChar *C.char) {
 func startTUN(callback unsafe.Pointer, fd C.int, stackChar, addressChar, dnsChar *C.char) bool {
 	if !handleStartTun(callback, int(fd), takeCString(stackChar), takeCString(addressChar), takeCString(dnsChar)) {
 		return false
+	}
+	if activeEngine() == engineXray {
+		return true
 	}
 	if !isRunning {
 		handleStartListener()

@@ -228,7 +228,7 @@ func handleAction(action *Action, result ActionResult) {
 		handleDelFile(path, result)
 		return
 	default:
-		if !nextHandle(action, result) {
+		if !handleXrayAction(action, result) && !nextHandle(action, result) {
 			result.error(fmt.Sprintf("unsupported action method: %s", action.Method))
 		}
 	}
