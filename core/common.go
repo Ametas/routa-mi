@@ -279,7 +279,7 @@ func validateConfigFile(path string) error {
 	}
 	raw, err := config.UnmarshalRawConfig(buf)
 	if err != nil {
-		return err
+		return explainSubscriptionFormat(buf, err)
 	}
 	if raw.DNS.Enable && raw.DNS.Listen != "" {
 		if err := validateDNSListen(raw.DNS.Listen); err != nil {
