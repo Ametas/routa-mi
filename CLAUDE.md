@@ -68,6 +68,7 @@ bash plugins/setup/buildkit/run_build_tool.sh patch-mihomo
 flutter analyze --no-fatal-infos
 flutter test                          # ДО go test: генерирует build/mihomo-runtime-fixtures
 (cd core && CGO_ENABLED=0 go test -tags=with_gvisor,cmfa ./...)
+(cd core && CGO_ENABLED=0 go test -tags=with_gvisor,cmfa,with_naive,with_purego ./naive/)
 (cd core/Clash.Meta && go test ./tunnel/statistic)
 
 # debug APK (icu.routaterm.routami.dev)

@@ -15,6 +15,7 @@ order matters (`10-foo.patch`, `20-bar.patch`).
 
 | Patch | Purpose | Required |
 |---|---|---|
+| `naive-outbound.patch` | NaiveProxy outbound (`type: naive`) on Chromium's network stack via SagerNet/cronet-go, ported from Herta-Network/mihomo; `naive+https://` / `naive+quic://` links. Compiled only with `with_naive`; see `docs/naive.md` | yes |
 | `proxy-only-traffic.patch` | SlClash's proxy-only upload/download counters (`statistic.DefaultManager.ProxyNow/ProxyTotal`, used by `core/hub.go`) | yes |
 
 ## Workflow

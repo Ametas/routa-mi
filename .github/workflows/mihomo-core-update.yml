@@ -160,6 +160,7 @@ jobs:
             echo "## flutter test"; flutter test --reporter=compact
             echo "## go mod tidy check"; (cd core && go mod tidy && git diff --exit-code go.mod go.sum)
             echo "## go test (core)"; (cd core && CGO_ENABLED=0 go test -tags=with_gvisor,cmfa ./...)
+            echo "## go test (naive)"; (cd core && CGO_ENABLED=0 go test -tags=with_gvisor,cmfa,with_naive,with_purego ./naive/)
             echo "## go test (mihomo statistic)"; (cd core/Clash.Meta && go test ./tunnel/statistic)
             echo "## debug APK"
             bash plugins/setup/buildkit/run_build_tool.sh android --arch arm64
