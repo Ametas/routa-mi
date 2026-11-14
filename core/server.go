@@ -66,7 +66,7 @@ func send(data []byte) {
 
 func startServer(arg string) {
 	var err error
-	conn, err = dial(arg)
+	conn, err = dialCore(arg)
 	if err != nil {
 		panic(err.Error())
 	}
