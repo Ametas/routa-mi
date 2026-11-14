@@ -276,6 +276,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog020Item5": MessageLookupByLibrary.simpleMessage(
       "Subscriptions are requested as RoutaMi with the profile\'s core, and non-Clash responses are explained.",
     ),
+    "changelog030Item1": MessageLookupByLibrary.simpleMessage(
+      "NaiveProxy nodes: type: naive in Clash profiles and naive+https:// / naive+quic:// subscription links, with Chrome\'s network stack.",
+    ),
+    "changelog030Item2": MessageLookupByLibrary.simpleMessage("New app icon."),
+    "changelog030Item3": MessageLookupByLibrary.simpleMessage(
+      "Mihomo core updated to v1.19.33, including a crypto/tls security fix.",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage(
       "Check your network and try again.",
     ),

@@ -220,6 +220,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog020Item5": MessageLookupByLibrary.simpleMessage(
       "订阅请求以 RoutaMi 及配置内核标识发送，非 Clash 响应会给出说明。",
     ),
+    "changelog030Item1": MessageLookupByLibrary.simpleMessage(
+      "支持 NaiveProxy 节点：Clash 配置中的 type: naive 以及 naive+https:// / naive+quic:// 订阅链接，使用 Chrome 网络栈。",
+    ),
+    "changelog030Item2": MessageLookupByLibrary.simpleMessage("全新应用图标。"),
+    "changelog030Item3": MessageLookupByLibrary.simpleMessage(
+      "Mihomo 内核更新至 v1.19.33，包含 crypto/tls 安全修复。",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage("请检查网络后重试。"),
     "checkResultsAppearHere": MessageLookupByLibrary.simpleMessage(
       "检测结果会展示在这里",
