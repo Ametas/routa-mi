@@ -61,11 +61,24 @@ Write-Host 'helper refuses other callers'
 
 # The app itself: with the helper installed it must start the core through
 # it, which only works if the helper recognises RoutaMi.exe as its caller.
+# A first launch waits for the disclaimer before it connects the core, so
+# the preferences say it was accepted (shared_preferences_windows keeps them
+# under %APPDATA%\<CompanyName>\<ProductName>).
+$prefsDir = Join-Path $env:APPDATA 'RoutaTerm\RoutaMi'
+New-Item -ItemType Directory -Force $prefsDir | Out-Null
+@{
+  'flutter.version' = 1
+  'flutter.config'  = '{"appSettingProps":{"disclaimerAccepted":true}}'
+} | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $prefsDir 'shared_preferences.json')
 $app = Start-Process (Join-Path $dir 'RoutaMi.exe') -PassThru
 $deadline = (Get-Date).AddSeconds(60)
 while (-not (Get-Process RoutaMiCore -ErrorAction SilentlyContinue)) {
   if ($app.HasExited) { Fail "RoutaMi.exe exited with $($app.ExitCode)" }
-  if ((Get-Date) -gt $deadline) { Fail 'RoutaMi.exe did not start the core' }
+  if ((Get-Date) -gt $deadline) {
+    Get-Process RoutaMi* | Format-Table Id, ProcessName, StartTime | Out-String | Write-Host
+    Get-ChildItem -Recurse $prefsDir -ErrorAction SilentlyContinue | Select-Object FullName, Length | Out-String | Write-Host
+    Fail 'RoutaMi.exe did not start the core'
+  }
   Start-Sleep -Seconds 1
 }
 $owner = (Get-CimInstance Win32_Process -Filter "Name = 'RoutaMiCore.exe'").ParentProcessId
