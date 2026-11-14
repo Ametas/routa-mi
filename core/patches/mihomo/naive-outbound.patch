@@ -1,0 +1,590 @@
+diff --git a/adapter/outbound/naive.go b/adapter/outbound/naive.go
+new file mode 100644
+index 0000000..b17f392
+--- /dev/null
++++ b/adapter/outbound/naive.go
+@@ -0,0 +1,209 @@
++//go:build with_naive
++
++package outbound
++
++import (
++	"context"
++	"fmt"
++	"net"
++	"strconv"
++	"strings"
++	"sync"
++
++	N "github.com/metacubex/mihomo/common/net"
++	C "github.com/metacubex/mihomo/constant"
++	"github.com/metacubex/mihomo/log"
++
++	M "github.com/metacubex/sing/common/metadata"
++	"github.com/metacubex/sing/common/uot"
++	cronet "github.com/sagernet/cronet-go"
++	SM "github.com/sagernet/sing/common/metadata"
++	SN "github.com/sagernet/sing/common/network"
++)
++
++type Naive struct {
++	*Base
++	option NaiveOption
++	client *cronet.NaiveClient
++	cancel context.CancelFunc
++	mu     sync.Mutex
++	closed bool
++	// The Chromium engine starts on first use: a subscription may carry many
++	// Naive nodes, and an idle engine still holds threads and memory.
++	started  bool
++	startErr error
++}
++
++func NewNaive(option NaiveOption) (*Naive, error) {
++	if err := option.validate(); err != nil {
++		return nil, err
++	}
++	certificates, err := option.trustedCertificates()
++	if err != nil {
++		return nil, err
++	}
++	echConfig, err := option.echConfig()
++	if err != nil {
++		return nil, err
++	}
++	if option.UDPOverTCPVersion == 0 {
++		option.UDPOverTCPVersion = uot.Version
++	}
++	// Do not retain a mutable map supplied by an API caller.
++	headers := make(map[string]string, len(option.Headers))
++	for key, value := range option.Headers {
++		headers[strings.ToLower(key)] = value
++	}
++	option.Headers = headers
++	n := &Naive{
++		Base: NewBase(BaseOption{
++			Name:         option.Name,
++			Addr:         net.JoinHostPort(option.Server, strconv.Itoa(option.Port)),
++			Type:         C.Naive,
++			ProviderName: option.ProviderName,
++			UDP:          option.UDPOverTCP,
++			TFO:          option.TFO,
++			MPTCP:        option.MPTCP,
++			Interface:    option.Interface,
++			RoutingMark:  option.RoutingMark,
++			Prefer:       option.IPVersion,
++		}),
++		option: option,
++	}
++	n.dialer = option.NewDialer(n.DialOptions())
++	ctx, cancel := context.WithCancel(context.Background())
++	n.cancel = cancel
++	congestion := map[string]cronet.QUICCongestionControl{
++		"":      cronet.QUICCongestionControlDefault,
++		"bbr":   cronet.QUICCongestionControlBBR,
++		"bbr2":  cronet.QUICCongestionControlBBRv2,
++		"cubic": cronet.QUICCongestionControlCubic,
++		"reno":  cronet.QUICCongestionControlReno,
++	}[option.QUICCongestionControl]
++	n.client, err = cronet.NewNaiveClient(cronet.NaiveClientOptions{
++		Context:                  ctx,
++		Logger:                   log.SingInfoToDebugLogger,
++		ServerAddress:            SM.ParseSocksaddrHostPort(option.Server, uint16(option.Port)),
++		ServerName:               option.SNI,
++		Username:                 option.Username,
++		Password:                 option.Password,
++		InsecureConcurrency:      option.InsecureConcurrency,
++		ExtraHeaders:             headers,
++		ReceiveWindow:            option.StreamReceiveWindow,
++		TrustedRootCertificates:  certificates,
++		Dialer:                   naiveDialer{n.dialer},
++		DNSResolver:              naiveDNSResolver(option.IPVersion),
++		ECHEnabled:               option.ECHOpts.Enable,
++		ECHConfigList:            echConfig,
++		ECHQueryServerName:       option.ECHOpts.QueryServerName,
++		QUIC:                     option.QUIC,
++		QUICCongestionControl:    congestion,
++		QUICSessionReceiveWindow: option.QUICSessionReceiveWindow,
++	})
++	if err != nil {
++		cancel()
++		return nil, fmt.Errorf("naive: create client: %w", err)
++	}
++	return n, nil
++}
++
++// start must be called with n.mu held.
++func (n *Naive) start() error {
++	if !n.started {
++		n.started = true
++		if err := n.client.Start(); err != nil {
++			n.startErr = fmt.Errorf("naive: start client: %w", err)
++		}
++	}
++	return n.startErr
++}
++
++func (n *Naive) dial(ctx context.Context, destination SM.Socksaddr) (net.Conn, error) {
++	if err := ctx.Err(); err != nil {
++		return nil, err
++	}
++	// Cronet tracks active streams in a WaitGroup. Serialize stream creation
++	// against Close so its Add cannot race the engine's shutdown/Wait.
++	n.mu.Lock()
++	if n.closed {
++		n.mu.Unlock()
++		return nil, net.ErrClosed
++	}
++	if err := n.start(); err != nil {
++		n.mu.Unlock()
++		return nil, err
++	}
++	conn, err := n.client.DialEarly(ctx, destination)
++	n.mu.Unlock()
++	if err != nil {
++		return nil, err
++	}
++	if err = conn.HandshakeContext(ctx); err != nil {
++		_ = conn.Close()
++		return nil, err
++	}
++	return conn, nil
++}
++
++func (n *Naive) DialContext(ctx context.Context, metadata *C.Metadata) (C.Conn, error) {
++	conn, err := n.dial(ctx, SM.ParseSocksaddrHostPort(metadata.String(), metadata.DstPort))
++	if err != nil {
++		return nil, err
++	}
++	return NewConn(conn, n), nil
++}
++
++func (n *Naive) ListenPacketContext(ctx context.Context, metadata *C.Metadata) (C.PacketConn, error) {
++	if !n.option.UDPOverTCP {
++		return nil, C.ErrNotSupport
++	}
++	if err := n.ResolveUDP(ctx, metadata); err != nil {
++		return nil, err
++	}
++	version := uint8(n.option.UDPOverTCPVersion)
++	requestDestination := uot.RequestDestination(version)
++	conn, err := n.dial(ctx, SM.ParseSocksaddr(requestDestination.String()))
++	if err != nil {
++		return nil, err
++	}
++	var packetConn net.PacketConn
++	if version == uot.LegacyVersion {
++		packetConn = uot.NewConn(conn, uot.Request{})
++	} else {
++		packetConn = uot.NewLazyConn(conn, uot.Request{Destination: M.SocksaddrFromNet(metadata.UDPAddr())})
++	}
++	return NewPacketConn(N.NewThreadSafePacketConn(packetConn), n), nil
++}
++
++func (n *Naive) SupportUOT() bool { return n.option.UDPOverTCP }
++
++func (n *Naive) ProxyInfo() C.ProxyInfo {
++	info := n.Base.ProxyInfo()
++	info.DialerProxy = n.option.DialerProxy
++	return info
++}
++
++func (n *Naive) Close() error {
++	n.mu.Lock()
++	defer n.mu.Unlock()
++	if n.closed {
++		return nil
++	}
++	n.closed = true
++	n.cancel()
++	return n.client.Close()
++}
++
++// SagerNet and MetaCubeX's Socksaddr are distinct Go types; bridge only the
++// standard net.Conn/net.PacketConn boundary, preserving mihomo's socket policy.
++type naiveDialer struct{ C.Dialer }
++
++var _ SN.Dialer = naiveDialer{}
++
++func (d naiveDialer) DialContext(ctx context.Context, network string, destination SM.Socksaddr) (net.Conn, error) {
++	return d.Dialer.DialContext(ctx, network, destination.String())
++}
++
++func (d naiveDialer) ListenPacket(ctx context.Context, destination SM.Socksaddr) (net.PacketConn, error) {
++	return d.Dialer.ListenPacket(ctx, "udp", "", destination.AddrPort())
++}
+diff --git a/adapter/outbound/naive_dns.go b/adapter/outbound/naive_dns.go
+new file mode 100644
+index 0000000..480bbf8
+--- /dev/null
++++ b/adapter/outbound/naive_dns.go
+@@ -0,0 +1,82 @@
++//go:build with_naive
++
++package outbound
++
++import (
++	"context"
++	"net"
++	"strings"
++
++	"github.com/metacubex/mihomo/component/resolver"
++	C "github.com/metacubex/mihomo/constant"
++	"github.com/metacubex/mihomo/log"
++
++	"github.com/miekg/dns"
++)
++
++func naiveDNSResolver(prefer C.DNSPrefer) func(context.Context, *dns.Msg) *dns.Msg {
++	return func(ctx context.Context, request *dns.Msg) *dns.Msg {
++		response := new(dns.Msg).SetReply(request)
++		if len(request.Question) != 1 {
++			response.Rcode = dns.RcodeFormatError
++			return response
++		}
++		question := request.Question[0]
++		if question.Qclass != dns.ClassINET {
++			response.Rcode = dns.RcodeNotImplemented
++			return response
++		}
++		if question.Qtype == dns.TypeAAAA && (resolver.DisableIPv6 || prefer == C.IPv4Only) || question.Qtype == dns.TypeA && prefer == C.IPv6Only {
++			return response
++		}
++		domain := strings.TrimSuffix(question.Name, ".")
++		query := request.Copy()
++		var alias string
++		if question.Qtype == dns.TypeA || question.Qtype == dns.TypeAAAA {
++			if host, ok := resolver.DefaultHosts.Search(domain, false); ok {
++				for _, address := range host.IPs {
++					address = address.Unmap()
++					header := dns.RR_Header{Name: question.Name, Rrtype: question.Qtype, Class: dns.ClassINET, Ttl: 60}
++					if question.Qtype == dns.TypeA && address.Is4() {
++						response.Answer = append(response.Answer, &dns.A{Hdr: header, A: net.IP(address.AsSlice())})
++					} else if question.Qtype == dns.TypeAAAA && address.Is6() {
++						response.Answer = append(response.Answer, &dns.AAAA{Hdr: header, AAAA: net.IP(address.AsSlice())})
++					}
++				}
++				return response
++			}
++			if host, ok := resolver.DefaultHosts.Search(domain, true); ok {
++				alias = dns.Fqdn(host.Domain)
++				query.Question[0].Name = alias
++			}
++		}
++		// Resolve proxy hosts through the proxy resolver, never the DNS service
++		// that returns Fake-IP addresses to applications. Read it at query time
++		// because config loading constructs outbounds before replacing DNS state.
++		r := resolver.ProxyServerHostResolver
++		if r == nil || !r.Invalid() {
++			r = resolver.SystemResolver
++		}
++		if r == nil {
++			response.Rcode = dns.RcodeServerFailure
++			return response
++		}
++		ctx, cancel := context.WithTimeout(ctx, resolver.DefaultDNSTimeout)
++		defer cancel()
++		answer, err := r.ExchangeContext(ctx, query)
++		if err != nil || answer == nil {
++			log.Debugln("[Naive] DNS lookup for %s failed: %v", question.Name, err)
++			response.Rcode = dns.RcodeServerFailure
++			return response
++		}
++		answer = answer.Copy() // resolver responses may be shared with its cache
++		answer.Id = request.Id
++		answer.Question = append([]dns.Question(nil), request.Question...)
++		if alias != "" && answer.Rcode == dns.RcodeSuccess {
++			answer.Answer = append([]dns.RR{&dns.CNAME{
++				Hdr: dns.RR_Header{Name: question.Name, Rrtype: dns.TypeCNAME, Class: dns.ClassINET, Ttl: 60}, Target: alias,
++			}}, answer.Answer...)
++		}
++		return answer
++	}
++}
+diff --git a/adapter/outbound/naive_options.go b/adapter/outbound/naive_options.go
+new file mode 100644
+index 0000000..47e959b
+--- /dev/null
++++ b/adapter/outbound/naive_options.go
+@@ -0,0 +1,163 @@
++package outbound
++
++import (
++	"crypto/x509"
++	"encoding/base64"
++	"errors"
++	"fmt"
++	"net/netip"
++	"os"
++	"strings"
++
++	"github.com/metacubex/mihomo/component/ech/echparser"
++	C "github.com/metacubex/mihomo/constant"
++)
++
++// NaiveOption uses Chromium's TLS stack. Certificate contains trusted CA PEM
++// data (or a file path), not a client certificate as in some other outbounds.
++type NaiveOption struct {
++	BasicOption
++	Name                     string            `proxy:"name"`
++	Server                   string            `proxy:"server"`
++	Port                     int               `proxy:"port"`
++	Username                 string            `proxy:"username,omitempty"`
++	Password                 string            `proxy:"password,omitempty"`
++	SNI                      string            `proxy:"sni,omitempty"`
++	Certificate              string            `proxy:"certificate,omitempty"`
++	ECHOpts                  ECHOptions        `proxy:"ech-opts,omitempty"`
++	Headers                  map[string]string `proxy:"headers,omitempty"`
++	InsecureConcurrency      int               `proxy:"insecure-concurrency,omitempty"`
++	StreamReceiveWindow      uint64            `proxy:"stream-receive-window,omitempty"`
++	QUIC                     bool              `proxy:"quic,omitempty"`
++	QUICCongestionControl    string            `proxy:"quic-congestion-control,omitempty"`
++	QUICSessionReceiveWindow uint64            `proxy:"quic-session-receive-window,omitempty"`
++	UDP                      bool              `proxy:"udp,omitempty"`
++	UDPOverTCP               bool              `proxy:"udp-over-tcp,omitempty"`
++	UDPOverTCPVersion        int               `proxy:"udp-over-tcp-version,omitempty"`
++
++	// Decode unsupported TLS options so they fail explicitly instead of being ignored.
++	SkipCertVerify    bool     `proxy:"skip-cert-verify,omitempty"`
++	ClientFingerprint string   `proxy:"client-fingerprint,omitempty"`
++	Fingerprint       string   `proxy:"fingerprint,omitempty"`
++	NameCertVerify    string   `proxy:"name-cert-verify,omitempty"`
++	PrivateKey        string   `proxy:"private-key,omitempty"`
++	ALPN              []string `proxy:"alpn,omitempty"`
++}
++
++func (o NaiveOption) validate() error {
++	if o.Server == "" || strings.TrimSpace(o.Server) != o.Server || strings.ContainsAny(o.Server, "/\\@?#\x00\r\n") {
++		return errors.New("naive: server must be a hostname or IP address")
++	}
++	if strings.Contains(o.Server, ":") {
++		if _, err := netip.ParseAddr(o.Server); err != nil {
++			return errors.New("naive: server must not contain a port or URL scheme")
++		}
++	}
++	if o.Port < 1 || o.Port > 65535 {
++		return errors.New("naive: port must be between 1 and 65535")
++	}
++	if strings.ContainsAny(o.SNI, "/\\@?#\x00\r\n\t ") {
++		return errors.New("naive: sni must be a hostname or IP address")
++	}
++	if strings.Contains(o.Username, ":") {
++		return errors.New("naive: username must not contain ':' in HTTP Basic authentication")
++	}
++	if o.SkipCertVerify || o.ClientFingerprint != "" || o.Fingerprint != "" || o.NameCertVerify != "" || o.PrivateKey != "" || len(o.ALPN) != 0 {
++		return errors.New("naive: skip-cert-verify, client-fingerprint, fingerprint, name-cert-verify, private-key and alpn are unsupported by Chromium TLS")
++	}
++	if o.InsecureConcurrency < 0 {
++		return errors.New("naive: insecure-concurrency must not be negative")
++	}
++	if !o.QUIC && (o.QUICCongestionControl != "" || o.QUICSessionReceiveWindow != 0) {
++		return errors.New("naive: QUIC options require quic: true")
++	}
++	switch o.QUICCongestionControl {
++	case "", "bbr", "bbr2", "cubic", "reno":
++	default:
++		return fmt.Errorf("naive: unknown QUIC congestion control %q", o.QUICCongestionControl)
++	}
++	if !o.QUIC && o.StreamReceiveWindow > 1<<31-1 {
++		return errors.New("naive: HTTP/2 stream-receive-window must not exceed 2147483647")
++	}
++	if o.QUIC && (o.StreamReceiveWindow > 1<<62-1 || o.QUICSessionReceiveWindow > 1<<62-1) {
++		return errors.New("naive: QUIC receive windows must fit in a 62-bit unsigned integer")
++	}
++	if o.UDP && !o.UDPOverTCP {
++		return errors.New("naive: UDP requires udp-over-tcp: true and a compatible server")
++	}
++	if o.UDPOverTCPVersion != 0 && !o.UDPOverTCP {
++		return errors.New("naive: udp-over-tcp-version requires udp-over-tcp: true")
++	}
++	switch o.UDPOverTCPVersion {
++	case 0, 1, 2:
++	default:
++		return errors.New("naive: udp-over-tcp-version must be 1 or 2")
++	}
++	headerNames := make(map[string]bool, len(o.Headers))
++	for key, value := range o.Headers {
++		if !validNaiveHeaderName(key) || strings.ContainsAny(value, "\r\n\x00") {
++			return fmt.Errorf("naive: invalid header %q", key)
++		}
++		lowerKey := strings.ToLower(key)
++		if headerNames[lowerKey] {
++			return fmt.Errorf("naive: duplicate header %q", key)
++		}
++		headerNames[lowerKey] = true
++		switch strings.ToLower(key) {
++		case "padding", "proxy-authorization", "host", "connection", "proxy-connection", "transfer-encoding", "content-length", "upgrade":
++			return fmt.Errorf("naive: header %q is managed by the transport", key)
++		}
++	}
++	return nil
++}
++
++func validNaiveHeaderName(key string) bool {
++	// Leading '-' names are private Cronet controls (e.g. -connect-authority).
++	if key == "" || key[0] == '-' {
++		return false
++	}
++	for _, ch := range key {
++		if ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9' || strings.ContainsRune("!#$%&'*+-.^_`|~", ch) {
++			continue
++		}
++		return false
++	}
++	return true
++}
++
++func (o NaiveOption) echConfig() ([]byte, error) {
++	if !o.ECHOpts.Enable || o.ECHOpts.Config == "" {
++		return nil, nil
++	}
++	config, err := base64.StdEncoding.DecodeString(o.ECHOpts.Config)
++	if err != nil {
++		return nil, fmt.Errorf("naive: decode ECH config: %w", err)
++	}
++	configs, err := echparser.ParseECHConfigList(config)
++	if err != nil || len(configs) == 0 {
++		return nil, errors.New("naive: invalid ECH config list")
++	}
++	return config, nil
++}
++
++func (o NaiveOption) trustedCertificates() (string, error) {
++	if o.Certificate == "" {
++		return "", nil
++	}
++	certificates := []byte(o.Certificate)
++	if !strings.Contains(o.Certificate, "-----BEGIN CERTIFICATE-----") {
++		path := C.Path.Resolve(o.Certificate)
++		if !C.Path.IsSafePath(path) {
++			return "", C.Path.ErrNotSafePath(path)
++		}
++		var err error
++		certificates, err = os.ReadFile(path)
++		if err != nil {
++			return "", fmt.Errorf("naive: read CA certificate: %w", err)
++		}
++	}
++	if !x509.NewCertPool().AppendCertsFromPEM(certificates) {
++		return "", errors.New("naive: certificate must contain PEM encoded CA certificates")
++	}
++	return string(certificates), nil
++}
+diff --git a/adapter/outbound/naive_stub.go b/adapter/outbound/naive_stub.go
+new file mode 100644
+index 0000000..613ada5
+--- /dev/null
++++ b/adapter/outbound/naive_stub.go
+@@ -0,0 +1,13 @@
++//go:build !with_naive
++
++package outbound
++
++import "errors"
++
++type Naive struct {
++	*Base
++}
++
++func NewNaive(NaiveOption) (*Naive, error) {
++	return nil, errors.New("naive support is not included; rebuild with the with_naive tag and a matching Cronet library")
++}
+diff --git a/adapter/parser.go b/adapter/parser.go
+index 68bccdb..1b16431 100644
+--- a/adapter/parser.go
++++ b/adapter/parser.go
+@@ -55,6 +55,13 @@ func ParseProxy(mapping map[string]any, options ...ProxyOption) (C.Proxy, error)
+ 			break
+ 		}
+ 		proxy, err = outbound.NewHttp(*httpOption)
++	case "naive":
++		naiveOption := &outbound.NaiveOption{BasicOption: basicOption}
++		err = decoder.Decode(mapping, naiveOption)
++		if err != nil {
++			break
++		}
++		proxy, err = outbound.NewNaive(*naiveOption)
+ 	case "vmess":
+ 		vmessOption := &outbound.VmessOption{BasicOption: basicOption}
+ 		err = decoder.Decode(mapping, vmessOption)
+@@ -230,6 +237,13 @@ func ParseProxy(mapping map[string]any, options ...ProxyOption) (C.Proxy, error)
+ 	if err != nil {
+ 		return nil, err
+ 	}
++	// Naive allocates native resources while it is constructed; a later
++	// smux error must not leave them behind.
++	defer func(initial outbound.ProxyAdapter) {
++		if err != nil {
++			_ = initial.Close()
++		}
++	}(proxy)
+ 
+ 	if muxMapping, muxExist := mapping["smux"].(map[string]any); muxExist {
+ 		muxOption := &outbound.SingMuxOption{}
+diff --git a/common/convert/converter.go b/common/convert/converter.go
+index 2db43ca..d5f1852 100644
+--- a/common/convert/converter.go
++++ b/common/convert/converter.go
+@@ -595,6 +595,41 @@ func ConvertsV2Ray(buf []byte) ([]map[string]any, error) {
+ 
+ 			proxies = append(proxies, socks)
+ 
++		case "naive+https", "naive+quic":
++			// https://github.com/klzgrad/naiveproxy/discussions/270
++			link, err := url.Parse(line)
++			if err != nil || link.Hostname() == "" {
++				continue
++			}
++			server, portStr := link.Hostname(), link.Port()
++			if portStr == "" {
++				portStr = "443"
++			}
++			password, _ := link.User.Password()
++			remarks := link.Fragment
++			if remarks == "" {
++				remarks = fmt.Sprintf("%s:%s", server, portStr)
++			}
++			naive := make(map[string]any, 8)
++			naive["name"] = uniqueName(names, remarks)
++			naive["type"] = "naive"
++			naive["server"] = server
++			naive["port"] = portStr
++			naive["username"] = link.User.Username()
++			naive["password"] = password
++			naive["quic"] = scheme == "naive+quic"
++			if raw := link.Query().Get("extra-headers"); raw != "" {
++				headers := make(map[string]any)
++				for _, header := range strings.Split(raw, "\r\n") {
++					if key, value, ok := strings.Cut(header, ":"); ok {
++						headers[strings.TrimSpace(key)] = strings.TrimSpace(value)
++					}
++				}
++				naive["headers"] = headers
++			}
++
++			proxies = append(proxies, naive)
++
+ 		case "anytls":
+ 			// https://github.com/anytls/anytls-go/blob/main/docs/uri_scheme.md
+ 			link, err := url.Parse(line)
+diff --git a/constant/adapters.go b/constant/adapters.go
+index 9b0b70c..e66e799 100644
+--- a/constant/adapters.go
++++ b/constant/adapters.go
+@@ -55,6 +55,7 @@ const (
+ 	ZeroTier
+ 	EasyTier
+ 	GostRelay
++	Naive
+ )
+ 
+ const (
+@@ -204,6 +205,8 @@ func (at AdapterType) String() string {
+ 		return "Socks5"
+ 	case Http:
+ 		return "Http"
++	case Naive:
++		return "Naive"
+ 	case Vmess:
+ 		return "Vmess"
+ 	case Vless:

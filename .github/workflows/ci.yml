@@ -66,6 +66,14 @@ jobs:
           CGO_ENABLED: "0"
         run: go test -tags=with_gvisor,cmfa ./...
 
+      # The Naive outbound only compiles with with_naive; purego loads the
+      # prebuilt Cronet (libcronet.so) so the host test uses the real stack.
+      - name: Go test (Naive outbound)
+        working-directory: core
+        env:
+          CGO_ENABLED: "0"
+        run: go test -tags=with_gvisor,cmfa,with_naive,with_purego ./naive/
+
       - name: Go test (patched Mihomo statistic)
         working-directory: core/Clash.Meta
         run: go test ./tunnel/statistic

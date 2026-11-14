@@ -22,7 +22,7 @@ class BuildConfig {
   });
 
   static const _defaults = BuildConfig(
-    tags: 'with_gvisor,cmfa',
+    tags: 'with_gvisor,cmfa,with_naive',
     goLdflags: '-w -s',
     coreDir: 'core',
     libName: 'libclash',
