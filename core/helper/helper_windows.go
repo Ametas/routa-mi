@@ -18,17 +18,115 @@ import (
 
 	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/svc"
+	"golang.org/x/sys/windows/svc/mgr"
 )
 
 const serviceName = "RoutaMiHelperService" // appHelperService in lib/common/constant.dart
 
 func main() {
-	isService, err := svc.IsWindowsService()
-	if err != nil || !isService {
-		fmt.Fprintln(os.Stderr, "RoutaMiHelperService runs as a Windows service; the app registers it.")
+	if isService, err := svc.IsWindowsService(); err == nil && isService {
+		_ = svc.Run(serviceName, &service{})
+		return
+	}
+	// The app runs "install" elevated (one UAC prompt); the uninstaller runs
+	// "uninstall".
+	var err error
+	switch arg := strings.Join(os.Args[1:], " "); arg {
+	case "install":
+		err = install()
+	case "uninstall":
+		err = uninstall()
+	default:
+		err = fmt.Errorf("usage: %s install|uninstall", filepath.Base(os.Args[0]))
+	}
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	_ = svc.Run(serviceName, &service{})
+}
+
+func install() error {
+	executable, err := installDir()
+	if err != nil {
+		return err
+	}
+	m, err := mgr.Connect()
+	if err != nil {
+		return err
+	}
+	defer m.Disconnect()
+	if s, err := m.OpenService(serviceName); err == nil {
+		stopService(s)
+		err = s.Delete()
+		s.Close()
+		if err != nil {
+			return err
+		}
+		waitDeleted(m)
+	}
+	// CreateService quotes the path, so a directory with spaces is safe.
+	s, err := m.CreateService(serviceName, executable, mgr.Config{
+		DisplayName: "RoutaMi Helper Service",
+		Description: "Runs the RoutaMi core with the rights TUN mode needs.",
+		StartType:   mgr.StartAutomatic,
+	})
+	if err != nil {
+		return err
+	}
+	defer s.Close()
+	return s.Start()
+}
+
+func uninstall() error {
+	m, err := mgr.Connect()
+	if err != nil {
+		return err
+	}
+	defer m.Disconnect()
+	s, err := m.OpenService(serviceName)
+	if err != nil {
+		return nil
+	}
+	defer s.Close()
+	stopService(s)
+	return s.Delete()
+}
+
+func stopService(s *mgr.Service) {
+	status, err := s.Control(svc.Stop)
+	for i := 0; err == nil && status.State != svc.Stopped && i < 50; i++ {
+		time.Sleep(100 * time.Millisecond)
+		status, err = s.Query()
+	}
+}
+
+// waitDeleted waits until a deleted service is gone, or CreateService fails
+// with ERROR_SERVICE_MARKED_FOR_DELETE.
+func waitDeleted(m *mgr.Mgr) {
+	for i := 0; i < 50; i++ {
+		s, err := m.OpenService(serviceName)
+		if err != nil {
+			return
+		}
+		s.Close()
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+
+// installDir returns the helper executable if it is installed under Program
+// Files: a LocalSystem service must not run from a directory a user can
+// write to, or whoever replaced the files next to it would run as SYSTEM.
+func installDir() (string, error) {
+	executable, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	programFiles := os.Getenv("ProgramFiles")
+	dir := strings.ToLower(filepath.Dir(executable)) + `\`
+	if programFiles == "" || !strings.HasPrefix(dir, strings.ToLower(filepath.Clean(programFiles))+`\`) {
+		return "", errors.New("TUN mode needs RoutaMi installed in Program Files")
+	}
+	return executable, nil
 }
 
 type service struct{}
@@ -63,18 +161,11 @@ func (*service) Execute(_ []string, requests <-chan svc.ChangeRequest, status ch
 }
 
 func newHelper() (*helper, error) {
-	executable, err := os.Executable()
+	executable, err := installDir()
 	if err != nil {
 		return nil, err
 	}
-	dir := filepath.Dir(executable)
-	// A LocalSystem service must not run from a directory a user can write
-	// to: whoever could replace the files next to it would run as SYSTEM.
-	programFiles := os.Getenv("ProgramFiles")
-	if programFiles == "" || !strings.HasPrefix(strings.ToLower(dir)+`\`, strings.ToLower(filepath.Clean(programFiles))+`\`) {
-		return nil, errors.New("the helper only runs from Program Files")
-	}
-	return &helper{dir: dir, callerPath: callerPath, spawn: spawn}, nil
+	return &helper{dir: filepath.Dir(executable), callerPath: callerPath, spawn: spawn}, nil
 }
 
 type childProcess struct{ cmd *exec.Cmd }
