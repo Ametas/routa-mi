@@ -21,7 +21,7 @@ RoutaMi — жёсткий форк [SlClash](https://github.com/songzhengpei/Sl
 | | Значение |
 |---|---|
 | Submodule | `core/Clash.Meta` → `https://github.com/MetaCubeX/mihomo.git` |
-| Версия | `v1.19.31` (`ab405bad5beeeac8b003bb01f60f134f6df54471`) |
+| Версия | `v1.19.33` (`3f27ef39f8c96bbfbc8b0b9bb10f5c9ef60149d8`) |
 | У SlClash было | `songzhengpei/Clash.Meta` ветка `FlClash`, `ac017cd` = mihomo `v1.19.30` |
 | Патчи | `core/patches/mihomo/*.patch` (накладываются по алфавиту) |
 
@@ -29,6 +29,7 @@ RoutaMi — жёсткий форк [SlClash](https://github.com/songzhengpei/Sl
 
 | Дата | Версия | Коммит | Изменения патчей / фикстур |
 |---|---|---|---|
+| 2026-11-14 | v1.19.33 | `3f27ef39` | `proxy-only-traffic.patch` перенесён на новые `NewConn`/`NewPacketConn` в `adapter/outbound/base.go` (апстрим исключил ipstack-соединения из deadline-обёртки), суть патча прежняя. `naive-outbound.patch` наложился без правок. В `RawTun` новые `dns-mode` и `congestion-controller`; стек TUN по умолчанию теперь `mips` — на Android не влияет, приложение передаёт стек явно. Фикстуры `test/fixtures/mihomo/e2e/*/rawconfig.json`: `dns-mode`, в `bridge_contract` стек `Mips`. |
 | 2026-09-27 | v1.19.31 | `ab405bad` | `proxy-only-traffic.patch` наложился без правок (смещение 2 строки в `constant/adapters.go`). В `RawTun` появилось непубличное поле `processors-per-channel` (по умолчанию 1, апстрим `92433dba`) — добавлено в `test/fixtures/mihomo/e2e/*/rawconfig.json`. |
 
 ## Решения по коммитам SlClash
@@ -50,8 +51,8 @@ RoutaMi — жёсткий форк [SlClash](https://github.com/songzhengpei/Sl
 | `android/app/src/main/AndroidManifest.xml` | `android:label` | ребрендинг |
 | `lib/common/constant.dart` | `appName`, `packageName`, `repository` | ребрендинг, апдейтер смотрит в наш репозиторий |
 | `plugins/setup/buildkit/build_tool/lib/src/mihomo_patcher.dart` | накладывает все `*.patch`, а не один файл | механизм патчей ядра |
-| `.gitmodules`, `core/Clash.Meta`, `core/go.mod`, `core/go.sum` | ядро с MetaCubeX, v1.19.31 | официальное ядро |
-| `test/fixtures/mihomo/e2e/*/rawconfig.json` | `processors-per-channel` | контракт RawConfig v1.19.31 |
+| `.gitmodules`, `core/Clash.Meta`, `core/go.mod`, `core/go.sum` | ядро с MetaCubeX, v1.19.33 | официальное ядро |
+| `test/fixtures/mihomo/e2e/*/rawconfig.json` | `processors-per-channel`, `dns-mode`, стек TUN по умолчанию `Mips` | контракт RawConfig v1.19.33 |
 | `test/widgets/changelog_dialog_test.dart` | проверяет первую запись changelog вместо `v2.0.7` | тест апстрима устарел (падает и в SlClash v2.2.3) |
 | `test/theme/typography/type_scale_test.dart` | `dashboardLatencyValue` height `0` | тест апстрима не обновлён после SlClash `027f90f5` |
 | `.github/workflows/*` | workflows SlClash удалены, свои: `ci.yml`, `release.yml`, `mihomo-core-update.yml` | CI RoutaMi |

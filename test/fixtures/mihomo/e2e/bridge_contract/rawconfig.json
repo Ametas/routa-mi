@@ -121,7 +121,8 @@
   "tun": {
     "enable": true,
     "device": "",
-    "stack": "gVisor",
+    "stack": "Mips",
+    "dns-mode": "",
     "dns-hijack": [
       "0.0.0.0:53"
     ],
