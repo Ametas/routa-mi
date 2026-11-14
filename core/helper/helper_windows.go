@@ -165,7 +165,7 @@ func newHelper() (*helper, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &helper{dir: filepath.Dir(executable), callerPath: callerPath, spawn: spawn}, nil
+	return &helper{dir: filepath.Dir(executable), callerPath: callerPath, spawn: spawn, file: logFile()}, nil
 }
 
 type childProcess struct{ cmd *exec.Cmd }
@@ -176,20 +176,47 @@ func (p childProcess) Wait() error { return p.cmd.Wait() }
 func spawn(path, arg string, log func(string)) (process, error) {
 	cmd := exec.Command(path, arg)
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, CreationFlags: windows.CREATE_NO_WINDOW}
-	stderr, err := cmd.StderrPipe()
+	reader, writer, err := os.Pipe()
 	if err != nil {
 		return nil, err
 	}
-	if err := cmd.Start(); err != nil {
+	cmd.Stdout, cmd.Stderr = writer, writer
+	err = cmd.Start()
+	writer.Close()
+	if err != nil {
+		reader.Close()
 		return nil, err
 	}
+	// Read to the end whatever the line length: a full pipe would block the core.
 	go func() {
-		scanner := bufio.NewScanner(stderr)
-		for scanner.Scan() {
-			log(scanner.Text())
+		defer reader.Close()
+		lines := bufio.NewReaderSize(reader, 64<<10)
+		for {
+			line, err := lines.ReadString('\n')
+			if line != "" {
+				log(strings.TrimRight(line, "\r\n"))
+			}
+			if err != nil {
+				return
+			}
 		}
 	}()
 	return childProcess{cmd}, nil
+}
+
+// logFile keeps the helper's and the core's output in
+// %ProgramData%\RoutaMi\helper.log (rewritten on every service start), for
+// support and for CI when the core does not come up.
+func logFile() *os.File {
+	dir := filepath.Join(os.Getenv("ProgramData"), "RoutaMi")
+	if os.MkdirAll(dir, 0o755) != nil {
+		return nil
+	}
+	f, err := os.Create(filepath.Join(dir, "helper.log"))
+	if err != nil {
+		return nil
+	}
+	return f
 }
 
 var getExtendedTcpTable = windows.NewLazySystemDLL("iphlpapi.dll").NewProc("GetExtendedTcpTable")

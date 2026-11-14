@@ -81,7 +81,7 @@ while (-not (Get-Process RoutaMiCore -ErrorAction SilentlyContinue)) {
     Get-Process RoutaMi* | Format-Table Id, ProcessName, StartTime | Out-String | Write-Host
     Get-ChildItem -Recurse $prefsDir -ErrorAction SilentlyContinue | Select-Object FullName, Length | Out-String | Write-Host
     sc.exe query RoutaMiHelperService | Out-String | Write-Host
-    foreach ($log in $appLog, $appErr) {
+    foreach ($log in $appLog, $appErr, (Join-Path $env:ProgramData 'RoutaMi\helper.log')) {
       Write-Host "--- $log"
       Get-Content $log -Tail 200 -ErrorAction SilentlyContinue | Write-Host
     }

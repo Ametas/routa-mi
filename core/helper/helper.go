@@ -19,6 +19,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 )
 
 const (
@@ -50,6 +51,8 @@ type helper struct {
 	// spawn starts the core; its stderr lines go to log.
 	spawn func(path, arg string, log func(string)) (process, error)
 
+	file io.Writer // optional copy of the log
+
 	mu   sync.Mutex
 	core process
 	logs []string
@@ -79,6 +82,9 @@ func (h *helper) log(line string) {
 		h.logs = h.logs[1:]
 	}
 	h.logs = append(h.logs, line)
+	if h.file != nil {
+		fmt.Fprintf(h.file, "%s %s\n", time.Now().Format(time.RFC3339), line)
+	}
 }
 
 func (h *helper) authorize(r *http.Request) error {
@@ -108,6 +114,7 @@ func (h *helper) start(params startParams) error {
 		return fmt.Errorf("core hash %s does not match %s", sum, coreSHA256)
 	}
 	h.stop()
+	h.log("starting the core")
 	core, err := h.spawn(corePath, params.Arg, h.log)
 	if err != nil {
 		return err
