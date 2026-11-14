@@ -70,13 +70,21 @@ New-Item -ItemType Directory -Force $prefsDir | Out-Null
   'flutter.version' = 1
   'flutter.config'  = '{"appSettingProps":{"disclaimerAccepted":true,"autoRun":true}}'
 } | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $prefsDir 'shared_preferences.json')
-$app = Start-Process (Join-Path $dir 'RoutaMi.exe') -PassThru
+$appLog = Join-Path $env:RUNNER_TEMP 'routami-app.log'
+$appErr = Join-Path $env:RUNNER_TEMP 'routami-app.err'
+$app = Start-Process (Join-Path $dir 'RoutaMi.exe') -PassThru `
+  -RedirectStandardOutput $appLog -RedirectStandardError $appErr
 $deadline = (Get-Date).AddSeconds(60)
 while (-not (Get-Process RoutaMiCore -ErrorAction SilentlyContinue)) {
   if ($app.HasExited) { Fail "RoutaMi.exe exited with $($app.ExitCode)" }
   if ((Get-Date) -gt $deadline) {
     Get-Process RoutaMi* | Format-Table Id, ProcessName, StartTime | Out-String | Write-Host
     Get-ChildItem -Recurse $prefsDir -ErrorAction SilentlyContinue | Select-Object FullName, Length | Out-String | Write-Host
+    sc.exe query RoutaMiHelperService | Out-String | Write-Host
+    foreach ($log in $appLog, $appErr) {
+      Write-Host "--- $log"
+      Get-Content $log -Tail 200 -ErrorAction SilentlyContinue | Write-Host
+    }
     Fail 'RoutaMi.exe did not start the core'
   }
   Start-Sleep -Seconds 1
