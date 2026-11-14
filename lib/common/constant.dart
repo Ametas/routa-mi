@@ -11,12 +11,14 @@ import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
 const appName = 'RoutaMi';
-const appHelperService = 'FlClashHelperService';
+const appHelperService = 'RoutaMiHelperService';
+// Must match core/helper (coreExeName, listenAddr) and the build tool.
+const coreExecutableName = 'RoutaMiCore';
 const browserUa =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const packageName = 'icu.routaterm.routami';
 const methodChannelPrefix = 'com.follow.clash';
-const helperPort = 47890;
+const helperPort = 47990;
 const maxTextScale = 1.2;
 const minTextScale = 0.9;
 const baseInfoEdgeInsets = EdgeInsets.symmetric(
