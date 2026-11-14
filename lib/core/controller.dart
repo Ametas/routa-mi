@@ -42,7 +42,7 @@ class CoreController {
   late CoreHandlerInterface _interface;
 
   CoreController._internal() {
-    _interface = coreLib!;
+    _interface = system.isWindows ? coreService! : coreLib!;
   }
 
   @visibleForTesting

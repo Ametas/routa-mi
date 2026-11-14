@@ -154,6 +154,7 @@ class GlobalState {
           WidgetsBinding.instance.platformDispatcher.locale,
     );
     StartupTrace.mark('localization');
+    await window?.init(config.windowProps);
     return container;
   }
 
@@ -427,6 +428,11 @@ class GlobalState {
     container.read(profilesActionProvider.notifier).autoUpdateProfiles();
     container.read(commonActionProvider.notifier).autoCheckUpdate();
     autoLaunch?.updateStatus(container.read(appSettingProvider).autoLaunch);
+    if (container.read(appSettingProvider).silentLaunch) {
+      await window?.hide();
+    } else {
+      await window?.show();
+    }
     await _handleFailedPreference();
     await _handlerDisclaimer();
     // Hydrate proxy groups snapshot before core init for instant first paint

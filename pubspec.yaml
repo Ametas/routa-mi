@@ -61,6 +61,14 @@ dependencies:
   smooth_sheets: ^1.0.2
   setup:
     path: plugins/setup
+  window_manager: ^0.5.2
+  tray_manager: ^0.5.3
+  launch_at_startup: ^0.5.1
+  hotkey_manager: ^0.2.3
+  screen_retriever: ^0.2.2
+  win32_registry: ^2.1.0
+  proxy:
+    path: plugins/proxy
 dev_dependencies:
   flutter_test:
     sdk: flutter

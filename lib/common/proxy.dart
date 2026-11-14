@@ -1,7 +1,15 @@
-class SystemProxy {
-  Future<bool?> startProxy(int port, String bassDomain) async => false;
+import 'dart:io';
 
-  Future<void> stopProxy() async {}
+import 'package:proxy/proxy.dart' as plugin;
+
+/// The Windows system proxy (WinINet, `plugins/proxy` from FlClash).
+class SystemProxy {
+  final _proxy = plugin.Proxy();
+
+  Future<bool?> startProxy(int port, List<String> bypassDomain) =>
+      _proxy.startProxy(port, bypassDomain);
+
+  Future<bool?> stopProxy() => _proxy.stopProxy();
 }
 
-const SystemProxy? proxy = null;
+final proxy = Platform.isWindows ? SystemProxy() : null;

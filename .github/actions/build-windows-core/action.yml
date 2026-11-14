@@ -1,0 +1,56 @@
+name: Build RoutaMi Windows core
+description: >
+  Applies core/patches/mihomo/*.patch and builds RoutaMiCore.exe,
+  RoutaMiHelperService.exe (pinned to the core's SHA-256) and libcronet.dll
+  into libclash/windows, then resolves core metadata for --dart-define.
+  Requires setup-toolchain to have run first.
+
+outputs:
+  core-sha256:
+    value: ${{ steps.meta.outputs.core_sha256 }}
+  mihomo-version:
+    value: ${{ steps.meta.outputs.mihomo_version }}
+  dart-defines:
+    description: Ready-to-use --dart-define flags carrying the core metadata
+    value: ${{ steps.meta.outputs.dart_defines }}
+
+runs:
+  using: composite
+  steps:
+    - name: Fetch Mihomo tags
+      shell: bash
+      run: git -C core/Clash.Meta fetch --quiet --tags --force origin
+
+    - name: Build Windows core and helper
+      shell: cmd
+      run: call plugins\setup\buildkit\run_build_tool.cmd windows
+
+    - name: Resolve core metadata
+      id: meta
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+        for f in RoutaMiCore.exe RoutaMiHelperService.exe libcronet.dll; do
+          if [ ! -f "libclash/windows/$f" ]; then
+            echo "::error::Expected libclash/windows/$f"
+            exit 1
+          fi
+        done
+        CORE_SHA256="$(sha256sum libclash/windows/RoutaMiCore.exe | awk '{print $1}')"
+        if ! grep -q "$CORE_SHA256" core_sha256.json; then
+          echo "::error::core_sha256.json does not match RoutaMiCore.exe"
+          exit 1
+        fi
+        MIHOMO_VERSION="$(git -C core/Clash.Meta describe --tags --abbrev=0)"
+        MIHOMO_COMMIT="$(git -C core/Clash.Meta rev-parse --short=12 HEAD)"
+        CORE_BUILD_TIME="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+        MIHOMO_RELEASE_DATE="$(gh api "repos/MetaCubeX/mihomo/releases/tags/$MIHOMO_VERSION" --jq '.published_at' 2>/dev/null || true)"
+        MIHOMO_RELEASE_DATE="${MIHOMO_RELEASE_DATE:-$CORE_BUILD_TIME}"
+        {
+          echo "core_sha256=$CORE_SHA256"
+          echo "mihomo_version=$MIHOMO_VERSION"
+          echo "dart_defines=--dart-define=CORE_SHA256=$CORE_SHA256 --dart-define=MIHOMO_VERSION=$MIHOMO_VERSION --dart-define=MIHOMO_COMMIT=$MIHOMO_COMMIT --dart-define=MIHOMO_RELEASE_DATE=$MIHOMO_RELEASE_DATE --dart-define=CORE_BUILD_TIME=$CORE_BUILD_TIME"
+        } >> "$GITHUB_OUTPUT"
+        echo "- RoutaMiCore.exe SHA-256: \`$CORE_SHA256\`" >> "$GITHUB_STEP_SUMMARY"

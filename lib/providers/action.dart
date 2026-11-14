@@ -2619,6 +2619,7 @@ class SystemAction extends _$SystemAction {
       await Future.wait([
         if (needSave) preferences.saveConfig(ref.read(configProvider)),
         if (proxy != null) proxy!.stopProxy(),
+        if (tray != null) tray!.destroy(),
       ]);
       await coreController.destroy();
       StartupTrace.mark(
@@ -2634,6 +2635,9 @@ class SystemAction extends _$SystemAction {
   Future<void> handleBackOrExit() async {
     if (ref.read(backBlockProvider)) return;
     if (ref.read(appSettingProvider).minimizeOnExit) {
+      if (system.isWindows) {
+        await preferences.saveConfig(ref.read(configProvider));
+      }
       await system.back();
     } else {
       await handleExit();
