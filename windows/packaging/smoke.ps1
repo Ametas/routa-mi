@@ -61,14 +61,14 @@ Write-Host 'helper refuses other callers'
 
 # The app itself: with the helper installed it must start the core through
 # it, which only works if the helper recognises RoutaMi.exe as its caller.
-# A first launch waits for the disclaimer before it connects the core, so
-# the preferences say it was accepted (shared_preferences_windows keeps them
-# under %APPDATA%\<CompanyName>\<ProductName>).
+# The core starts with the proxy, after a first launch's disclaimer: the
+# preferences accept it and turn on autoRun (shared_preferences_windows keeps
+# them under %APPDATA%\<CompanyName>\<ProductName>).
 $prefsDir = Join-Path $env:APPDATA 'RoutaTerm\RoutaMi'
 New-Item -ItemType Directory -Force $prefsDir | Out-Null
 @{
   'flutter.version' = 1
-  'flutter.config'  = '{"appSettingProps":{"disclaimerAccepted":true}}'
+  'flutter.config'  = '{"appSettingProps":{"disclaimerAccepted":true,"autoRun":true}}'
 } | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $prefsDir 'shared_preferences.json')
 $app = Start-Process (Join-Path $dir 'RoutaMi.exe') -PassThru
 $deadline = (Get-Date).AddSeconds(60)
