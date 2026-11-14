@@ -92,6 +92,10 @@ while (-not (Get-Process RoutaMiCore -ErrorAction SilentlyContinue)) {
 $owner = (Get-CimInstance Win32_Process -Filter "Name = 'RoutaMiCore.exe'").ParentProcessId
 $parent = (Get-Process -Id $owner -ErrorAction SilentlyContinue).ProcessName
 Write-Host "RoutaMi.exe started the core (parent: $parent)"
+Start-Sleep -Seconds 5
+Write-Host '--- helper.log'
+Get-Content (Join-Path $env:ProgramData 'RoutaMi\helper.log') -Tail 60 -ErrorAction SilentlyContinue | Write-Host
+if (-not (Get-Process RoutaMiCore -ErrorAction SilentlyContinue)) { Fail 'the core exited after starting' }
 if ($parent -ne 'RoutaMiHelperService') { Fail 'the core was not started by the helper service' }
 Stop-Process -Id $app.Id -Force
 Start-Sleep -Seconds 2
