@@ -118,6 +118,14 @@ jobs:
           name: RoutaMi-debug-${{ github.sha }}-windows-x64-setup
           version: 0.0.0
 
+      # GitHub's Windows runners are administrators: install for real.
+      - name: Smoke test installer and helper service
+        shell: pwsh
+        run: >
+          ./windows/packaging/smoke.ps1
+          -Installer "${{ steps.pack.outputs.path }}"
+          -CoreSha256 "${{ steps.core.outputs.core-sha256 }}"
+
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:

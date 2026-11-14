@@ -1,0 +1,65 @@
+# CI smoke test on a Windows runner (administrator): installs RoutaMi,
+# registers the helper service and checks the parts a GUI test cannot reach.
+param(
+  [Parameter(Mandatory)] [string] $Installer,
+  [Parameter(Mandatory)] [string] $CoreSha256
+)
+$ErrorActionPreference = 'Stop'
+function Fail($message) { Write-Error $message; exit 1 }
+
+$dir = Join-Path $env:ProgramFiles 'RoutaMi'
+Start-Process $Installer -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -Wait
+foreach ($file in 'RoutaMi.exe', 'RoutaMiCore.exe', 'RoutaMiHelperService.exe', 'libcronet.dll') {
+  if (-not (Test-Path (Join-Path $dir $file))) { Fail "installer did not place $file" }
+}
+Write-Host 'installed into Program Files'
+
+# The core talks to the app over loopback: the first frame is the token.
+$listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, 0)
+$listener.Start()
+$port = $listener.LocalEndpoint.Port
+$core = Start-Process (Join-Path $dir 'RoutaMiCore.exe') -ArgumentList "tcp:${port}:smoke-token" -PassThru
+$accept = $listener.AcceptTcpClientAsync()
+if (-not $accept.Wait(15000)) { Fail 'the core did not connect back' }
+$stream = $accept.Result.GetStream()
+$header = New-Object byte[] 4
+$read = 0
+while ($read -lt 4) { $read += $stream.Read($header, $read, 4 - $read) }
+$length = [BitConverter]::ToUInt32($header, 0)
+$payload = New-Object byte[] $length
+$read = 0
+while ($read -lt $length) { $read += $stream.Read($payload, $read, $length - $read) }
+$token = [Text.Encoding]::UTF8.GetString($payload)
+if ($token -ne 'smoke-token') { Fail "first frame was '$token'" }
+Stop-Process -Id $core.Id -Force
+$listener.Stop()
+Write-Host 'core process connected with the token'
+
+& (Join-Path $dir 'RoutaMiHelperService.exe') install
+if ($LASTEXITCODE -ne 0) { Fail "helper install exited with $LASTEXITCODE" }
+Start-Sleep -Seconds 2
+$service = Get-Service RoutaMiHelperService
+if ($service.Status -ne 'Running') { Fail "helper service is $($service.Status)" }
+$config = sc.exe qc RoutaMiHelperService | Out-String
+if ($config -notmatch [regex]::Escape("`"$dir\RoutaMiHelperService.exe`"")) {
+  Fail "service path is not quoted: $config"
+}
+$ping = (Invoke-WebRequest -UseBasicParsing http://127.0.0.1:47990/ping).Content
+if ($ping -ne $CoreSha256) { Fail "ping returned '$ping', want $CoreSha256" }
+Write-Host 'helper service runs from Program Files and reports the core hash'
+
+$body = @{ path = (Join-Path $dir 'RoutaMiCore.exe'); arg = 'tcp:1:x' } | ConvertTo-Json
+try {
+  Invoke-WebRequest -UseBasicParsing -Method Post -Body $body http://127.0.0.1:47990/start | Out-Null
+  Fail 'the helper accepted a caller that is not RoutaMi.exe'
+} catch [System.Net.WebException] {
+  if ([int]$_.Exception.Response.StatusCode -ne 403) { throw }
+} catch {
+  if ($_.Exception.Response.StatusCode.value__ -ne 403) { throw }
+}
+Write-Host 'helper refuses other callers'
+
+Start-Process (Join-Path $dir 'unins000.exe') -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -Wait
+Start-Sleep -Seconds 3
+if (Get-Service RoutaMiHelperService -ErrorAction SilentlyContinue) { Fail 'uninstall left the helper service' }
+Write-Host 'uninstall removed the helper service'
