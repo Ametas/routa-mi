@@ -126,6 +126,13 @@ jobs:
           -Installer "${{ steps.pack.outputs.path }}"
           -CoreSha256 "${{ steps.core.outputs.core-sha256 }}"
 
+      # The core alone, as the helper would run it: TUN must bring up the
+      # Wintun adapter and carry a real request.
+      - name: Smoke test TUN
+        working-directory: core
+        shell: bash
+        run: go run ./tools/tunsmoke -core "$GITHUB_WORKSPACE/libclash/windows/RoutaMiCore.exe"
+
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:
