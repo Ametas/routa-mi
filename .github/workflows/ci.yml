@@ -112,28 +112,17 @@ jobs:
         run: flutter build windows --release ${{ steps.core.outputs.dart-defines }}
 
       - name: Package
-        id: zip
-        shell: bash
-        run: |
-          set -euo pipefail
-          OUT=build/windows/x64/runner/Release
-          for f in RoutaMi.exe RoutaMiCore.exe RoutaMiHelperService.exe libcronet.dll; do
-            if [ ! -f "$OUT/$f" ]; then
-              echo "::error::$f is missing from the Windows bundle"
-              ls -la "$OUT"
-              exit 1
-            fi
-          done
-          NAME="RoutaMi-debug-${GITHUB_SHA::8}-windows-x64"
-          mkdir -p dist
-          (cd "$OUT" && 7z a -tzip "$GITHUB_WORKSPACE/dist/$NAME.zip" . >/dev/null)
-          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+        id: pack
+        uses: ./.github/actions/package-windows
+        with:
+          name: RoutaMi-debug-${{ github.sha }}-windows-x64-setup
+          version: 0.0.0
 
-      - name: Upload Windows build
+      - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.zip.outputs.name }}
-          path: dist/${{ steps.zip.outputs.name }}.zip
+          name: RoutaMi-debug-windows-x64-setup
+          path: dist/*.exe
           if-no-files-found: error
 
   debug-apk:

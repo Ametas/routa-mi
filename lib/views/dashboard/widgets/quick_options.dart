@@ -2,6 +2,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/views/config/network.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
+import 'package:fl_clash/widgets/mihomo_only.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +26,8 @@ class TUNButton extends StatelessWidget {
                 builder: (context) {
                   return AdaptiveSheetScaffold(
                     body: generateListView([
-                      if (system.isDesktop) const TUNItem(),
+                      if (system.isDesktop)
+                        const MihomoOnly(child: TUNItem()),
                       if (system.isMacOS) const AutoSetSystemDnsItem(),
                       const TunStackItem(),
                     ]),

@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:fl_clash/common/app_localizations.dart';
 import 'package:fl_clash/common/windows.dart';
 import 'package:fl_clash/common/window.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/plugins/app.dart';
+import 'package:fl_clash/state.dart';
 import 'package:flutter/services.dart';
 
 /// RoutaMi ships for Android and Windows. Anything that is not Windows takes
@@ -45,9 +47,11 @@ class System {
   Future<AuthorizeCode> authorizeCore() async {
     if (!isWindows) return AuthorizeCode.error;
     if (await checkIsAdmin()) return AuthorizeCode.none;
-    return await windows?.registerService() == true
-        ? AuthorizeCode.success
-        : AuthorizeCode.error;
+    if (await windows?.registerService() == true) {
+      return AuthorizeCode.success;
+    }
+    globalState.showNotifier(currentAppLocalizations.windowsTunUnavailable);
+    return AuthorizeCode.error;
   }
 
   Future<void> back() async {

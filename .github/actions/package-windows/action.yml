@@ -1,0 +1,49 @@
+name: Package RoutaMi for Windows
+description: >
+  Builds the Inno Setup installer (windows/packaging/routami.iss) from the
+  flutter build windows output into dist/<name>.exe, plus <name>.exe.sha256.
+
+inputs:
+  name:
+    description: Installer file name without .exe
+    required: true
+  version:
+    description: Version shown by the installer, e.g. 0.4.0
+    required: true
+
+outputs:
+  path:
+    value: ${{ steps.pack.outputs.path }}
+  sha256:
+    value: ${{ steps.pack.outputs.sha256 }}
+
+runs:
+  using: composite
+  steps:
+    - name: Build installer
+      id: pack
+      shell: bash
+      run: |
+        set -euo pipefail
+        OUT=build/windows/x64/runner/Release
+        for f in RoutaMi.exe RoutaMiCore.exe RoutaMiHelperService.exe libcronet.dll; do
+          if [ ! -f "$OUT/$f" ]; then
+            echo "::error::$f is missing from the Windows bundle"
+            ls -la "$OUT"
+            exit 1
+          fi
+        done
+        ISCC="/c/Program Files (x86)/Inno Setup 6/ISCC.exe"
+        if [ ! -f "$ISCC" ]; then
+          choco install innosetup --no-progress -y >/dev/null
+        fi
+        mkdir -p dist
+        "$ISCC" -Q "-DAppVersion=${{ inputs.version }}" \
+          "-DSourceDir=$(cygpath -w "$PWD/$OUT")" \
+          "-DOutputName=${{ inputs.name }}" windows/packaging/routami.iss
+        EXE="dist/${{ inputs.name }}.exe"
+        SHA="$(sha256sum "$EXE" | awk '{print $1}')"
+        printf '%s  %s\n' "$SHA" "$(basename "$EXE")" > "$EXE.sha256"
+        echo "path=$EXE" >> "$GITHUB_OUTPUT"
+        echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+        echo "- \`$(basename "$EXE")\` SHA-256: \`$SHA\`" >> "$GITHUB_STEP_SUMMARY"

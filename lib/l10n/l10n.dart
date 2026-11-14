@@ -5544,6 +5544,16 @@ class AppLocalizations {
     );
   }
 
+  /// `TUN mode needs RoutaMi installed in Program Files and administrator approval for its helper service.`
+  String get windowsTunUnavailable {
+    return Intl.message(
+      'TUN mode needs RoutaMi installed in Program Files and administrator approval for its helper service.',
+      name: 'windowsTunUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `NaiveProxy nodes: type: naive in Clash profiles and naive+https:// / naive+quic:// subscription links, with Chrome's network stack.`
   String get changelog030Item1 {
     return Intl.message(

@@ -1337,6 +1337,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "WebDAV configuration",
     ),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("Whitelist mode"),
+    "windowsTunUnavailable": MessageLookupByLibrary.simpleMessage(
+      "TUN mode needs RoutaMi installed in Program Files and administrator approval for its helper service.",
+    ),
     "yearsAgo": m29,
     "youtubeRoutedToChina": MessageLookupByLibrary.simpleMessage(
       "YouTube via China",

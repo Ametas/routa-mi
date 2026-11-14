@@ -433,7 +433,9 @@ class NetworkListView extends StatelessWidget {
           title: appLocalizations.options,
           showDividers: true,
           children: [
-            if (system.isDesktop) const TUNItem(),
+            // Xray on Windows has no routing for its TUN; Xray profiles use
+            // the system proxy there.
+            if (system.isDesktop) const MihomoOnly(child: TUNItem()),
             if (system.isMacOS) const AutoSetSystemDnsItem(),
             const MihomoOnly(child: TunStackItem()),
             if (!system.isDesktop) ...[

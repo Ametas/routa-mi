@@ -507,24 +507,8 @@ class CommonAction extends _$CommonAction {
     }
   }
 
-  Map<String, dynamic>? _resolveAndroidApkAsset(Map<String, dynamic> data) {
-    final assets = data['assets'];
-    if (assets is! List) return null;
-    final apkAssets = assets.whereType<Map<String, dynamic>>().where((asset) {
-      final name = asset['name']?.toString().toLowerCase() ?? '';
-      final url = asset['browser_download_url']?.toString() ?? '';
-      return name.endsWith('.apk') && url.isNotEmpty;
-    }).toList();
-    if (apkAssets.isEmpty) return null;
-    return apkAssets.firstWhere(
-      (asset) =>
-          asset['name']?.toString().toLowerCase().contains('arm64-v8a') == true,
-      orElse: () => apkAssets.first,
-    );
-  }
-
   Future<void> _downloadAndInstallUpdate(Map<String, dynamic> data) async {
-    final asset = _resolveAndroidApkAsset(data);
+    final asset = resolveUpdateAsset(data, windows: system.isWindows);
     if (asset == null) {
       launchUrl(Uri.parse('https://github.com/$repository/releases/latest'));
       return;
@@ -563,7 +547,8 @@ class CommonAction extends _$CommonAction {
           updateDir.createSync(recursive: true);
         }
         for (final file in updateDir.listSync()) {
-          if (file is File && file.path.endsWith('.apk')) {
+          if (file is File &&
+              (file.path.endsWith('.apk') || file.path.endsWith('.exe'))) {
             file.deleteSync();
           }
         }
@@ -583,6 +568,17 @@ class CommonAction extends _$CommonAction {
         );
         progress.value = 1;
         closeProgressDialog();
+        if (system.isWindows) {
+          // The installer stops the helper service and RoutaMi, then
+          // replaces the files in Program Files.
+          await Process.start(
+            apkPath,
+            const [],
+            mode: ProcessStartMode.detached,
+          );
+          await ref.read(systemActionProvider.notifier).handleExit();
+          return;
+        }
         final installed = await app?.installApk(apkPath) ?? false;
         if (!installed) {
           throw currentAppLocalizations.allowUnknownAppInstall;
