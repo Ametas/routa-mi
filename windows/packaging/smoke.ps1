@@ -59,6 +59,22 @@ try {
 }
 Write-Host 'helper refuses other callers'
 
+# The app itself: with the helper installed it must start the core through
+# it, which only works if the helper recognises RoutaMi.exe as its caller.
+$app = Start-Process (Join-Path $dir 'RoutaMi.exe') -PassThru
+$deadline = (Get-Date).AddSeconds(60)
+while (-not (Get-Process RoutaMiCore -ErrorAction SilentlyContinue)) {
+  if ($app.HasExited) { Fail "RoutaMi.exe exited with $($app.ExitCode)" }
+  if ((Get-Date) -gt $deadline) { Fail 'RoutaMi.exe did not start the core' }
+  Start-Sleep -Seconds 1
+}
+$owner = (Get-CimInstance Win32_Process -Filter "Name = 'RoutaMiCore.exe'").ParentProcessId
+$parent = (Get-Process -Id $owner -ErrorAction SilentlyContinue).ProcessName
+Write-Host "RoutaMi.exe started the core (parent: $parent)"
+if ($parent -ne 'RoutaMiHelperService') { Fail 'the core was not started by the helper service' }
+Stop-Process -Id $app.Id -Force
+Start-Sleep -Seconds 2
+
 Start-Process (Join-Path $dir 'unins000.exe') -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -Wait
 Start-Sleep -Seconds 3
 if (Get-Service RoutaMiHelperService -ErrorAction SilentlyContinue) { Fail 'uninstall left the helper service' }

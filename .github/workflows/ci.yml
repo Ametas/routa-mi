@@ -100,12 +100,14 @@ jobs:
         id: core
         uses: ./.github/actions/build-windows-core
 
-      - name: Go test (helper service)
+      - name: Go test (helper service, Naive on Windows Cronet)
         working-directory: core
         shell: bash
         env:
           CGO_ENABLED: "0"
-        run: go test ./helper/
+        run: |
+          go test ./helper/
+          go test -tags=with_gvisor,with_naive,with_purego ./naive/
 
       - name: Build Windows app
         shell: bash
