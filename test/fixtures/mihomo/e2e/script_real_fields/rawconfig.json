@@ -132,6 +132,7 @@
     "enable": false,
     "device": "",
     "stack": "Mixed",
+    "dns-mode": "",
     "dns-hijack": [
       "0.0.0.0:53"
     ],

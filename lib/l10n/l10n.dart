@@ -5544,6 +5544,36 @@ class AppLocalizations {
     );
   }
 
+  /// `NaiveProxy nodes: type: naive in Clash profiles and naive+https:// / naive+quic:// subscription links, with Chrome's network stack.`
+  String get changelog030Item1 {
+    return Intl.message(
+      'NaiveProxy nodes: type: naive in Clash profiles and naive+https:// / naive+quic:// subscription links, with Chrome\'s network stack.',
+      name: 'changelog030Item1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New app icon.`
+  String get changelog030Item2 {
+    return Intl.message(
+      'New app icon.',
+      name: 'changelog030Item2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mihomo core updated to v1.19.33, including a crypto/tls security fix.`
+  String get changelog030Item3 {
+    return Intl.message(
+      'Mihomo core updated to v1.19.33, including a crypto/tls security fix.',
+      name: 'changelog030Item3',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Xray-core is a second core: a profile runs on mihomo or Xray, and JSON subscriptions run on Xray.`
   String get changelog020Item1 {
     return Intl.message(

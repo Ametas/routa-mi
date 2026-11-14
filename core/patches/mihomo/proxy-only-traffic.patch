@@ -1,5 +1,5 @@
 diff --git a/adapter/outbound/base.go b/adapter/outbound/base.go
-index 01e00798..5565f7ac 100644
+index d6942ba..18c1f79 100644
 --- a/adapter/outbound/base.go
 +++ b/adapter/outbound/base.go
 @@ -227,6 +227,7 @@ type conn struct {
@@ -21,8 +21,8 @@ index 01e00798..5565f7ac 100644
  // AppendToChains implements C.Connection
  func (c *conn) AppendToChains(a C.ProxyAdapter) {
  	c.chain = append(c.chain, a.Name())
-@@ -278,7 +283,11 @@ func NewConn(c net.Conn, a C.ProxyAdapter) C.Conn {
- 	if _, ok := c.(syscall.Conn); !ok { // exclusion system conn like *net.TCPConn
+@@ -290,7 +295,11 @@ func NewConn(c net.Conn, a C.ProxyAdapter) C.Conn {
+ 	default:
  		c = N.NewDeadlineConn(c) // most conn from outbound can't handle readDeadline correctly
  	}
 -	cc := &conn{N.NewExtendedConn(c), nil, nil, a.Addr()}
@@ -34,7 +34,7 @@ index 01e00798..5565f7ac 100644
  	cc.AppendToChains(a)
  	return cc
  }
-@@ -288,6 +297,7 @@ type packetConn struct {
+@@ -300,6 +309,7 @@ type packetConn struct {
  	chain       C.Chain
  	pdChain     C.Chain
  	adapterName string
@@ -42,7 +42,7 @@ index 01e00798..5565f7ac 100644
  	connID      string
  	adapterAddr string
  	resolveUDP  func(ctx context.Context, metadata *C.Metadata) error
-@@ -312,6 +322,10 @@ func (c *packetConn) ProviderChains() C.Chain {
+@@ -324,6 +334,10 @@ func (c *packetConn) ProviderChains() C.Chain {
  	return c.pdChain
  }
  
@@ -53,8 +53,8 @@ index 01e00798..5565f7ac 100644
  // AppendToChains implements C.Connection
  func (c *packetConn) AppendToChains(a C.ProxyAdapter) {
  	c.chain = append(c.chain, a.Name())
-@@ -344,7 +358,14 @@ func NewPacketConn(pc net.PacketConn, a ProxyAdapter) C.PacketConn {
- 	if _, ok := pc.(syscall.Conn); !ok { // exclusion system conn like *net.UDPConn
+@@ -361,7 +375,14 @@ func NewPacketConn(pc net.PacketConn, a ProxyAdapter) C.PacketConn {
+ 	default:
  		epc = N.NewDeadlineEnhancePacketConn(epc) // most conn from outbound can't handle readDeadline correctly
  	}
 -	cpc := &packetConn{epc, nil, nil, a.Name(), utils.NewUUIDV4().String(), a.Addr(), a.ResolveUDP}
@@ -70,10 +70,10 @@ index 01e00798..5565f7ac 100644
  	return cpc
  }
 diff --git a/constant/adapters.go b/constant/adapters.go
-index ddcdbead..6daaa417 100644
+index 9b0b70c..af87e7e 100644
 --- a/constant/adapters.go
 +++ b/constant/adapters.go
-@@ -68,6 +68,7 @@ var ErrNotSupport = errors.New("no support")
+@@ -70,6 +70,7 @@ var ErrNotSupport = errors.New("no support")
  type Connection interface {
  	Chains() Chain
  	ProviderChains() Chain
@@ -82,7 +82,7 @@ index ddcdbead..6daaa417 100644
  	RemoteDestination() string
  }
 diff --git a/tunnel/statistic/manager.go b/tunnel/statistic/manager.go
-index c69746db..7157948a 100644
+index c69746d..7157948 100644
 --- a/tunnel/statistic/manager.go
 +++ b/tunnel/statistic/manager.go
 @@ -7,34 +7,47 @@ import (
@@ -211,7 +211,7 @@ index c69746db..7157948a 100644
  
 diff --git a/tunnel/statistic/manager_proxy_test.go b/tunnel/statistic/manager_proxy_test.go
 new file mode 100644
-index 00000000..817460a9
+index 0000000..817460a
 --- /dev/null
 +++ b/tunnel/statistic/manager_proxy_test.go
 @@ -0,0 +1,35 @@
@@ -251,7 +251,7 @@ index 00000000..817460a9
 +	}
 +}
 diff --git a/tunnel/statistic/tracker.go b/tunnel/statistic/tracker.go
-index 2fbb1cf9..706d0ef1 100644
+index 2fbb1cf..706d0ef 100644
 --- a/tunnel/statistic/tracker.go
 +++ b/tunnel/statistic/tracker.go
 @@ -53,7 +53,7 @@ func (tt *tcpTracker) Read(b []byte) (int, error) {
