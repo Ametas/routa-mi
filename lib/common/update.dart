@@ -31,3 +31,29 @@ Future<bool> fileMatchesSha256(String path, String expectedSha256) async {
   final actual = await sha256.bind(File(path).openRead()).first;
   return actual.toString().toLowerCase() == expectedSha256.toLowerCase();
 }
+
+/// Suffix of the Windows installer in a RoutaMi release.
+const windowsInstallerSuffix = '-windows-x64-setup.exe';
+
+/// The release asset this platform installs: the Windows installer, or the
+/// arm64 APK on Android.
+Map<String, dynamic>? resolveUpdateAsset(
+  Map<String, dynamic> release, {
+  required bool windows,
+}) {
+  final assets = release['assets'];
+  if (assets is! List) return null;
+  bool hasUrl(Map<String, dynamic> asset) =>
+      asset['browser_download_url']?.toString().isNotEmpty == true;
+  String name(Map<String, dynamic> asset) =>
+      asset['name']?.toString().toLowerCase() ?? '';
+  final candidates = assets.whereType<Map<String, dynamic>>().where(hasUrl);
+  if (windows) {
+    return candidates
+        .where((asset) => name(asset).endsWith(windowsInstallerSuffix))
+        .firstOrNull;
+  }
+  final apks = candidates.where((asset) => name(asset).endsWith('.apk'));
+  return apks.where((asset) => name(asset).contains('arm64-v8a')).firstOrNull ??
+      apks.firstOrNull;
+}

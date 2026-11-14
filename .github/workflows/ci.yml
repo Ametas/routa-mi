@@ -78,6 +78,70 @@ jobs:
         working-directory: core/Clash.Meta
         run: go test ./tunnel/statistic
 
+  windows-app:
+    name: Windows app (x64)
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up toolchain
+        uses: ./.github/actions/setup-toolchain
+        with:
+          android: "false"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build core and helper
+        id: core
+        uses: ./.github/actions/build-windows-core
+
+      - name: Go test (helper service, Naive on Windows Cronet)
+        working-directory: core
+        shell: bash
+        env:
+          CGO_ENABLED: "0"
+        run: |
+          go test ./helper/
+          go test -tags=with_gvisor,with_naive,with_purego ./naive/
+
+      - name: Build Windows app
+        shell: bash
+        run: flutter build windows --release ${{ steps.core.outputs.dart-defines }}
+
+      - name: Package
+        id: pack
+        uses: ./.github/actions/package-windows
+        with:
+          name: RoutaMi-debug-${{ github.sha }}-windows-x64-setup
+          version: 0.0.0
+
+      # GitHub's Windows runners are administrators: install for real.
+      - name: Smoke test installer and helper service
+        shell: pwsh
+        run: >
+          ./windows/packaging/smoke.ps1
+          -Installer "${{ steps.pack.outputs.path }}"
+          -CoreSha256 "${{ steps.core.outputs.core-sha256 }}"
+
+      # The core alone, as the helper would run it: TUN must bring up the
+      # Wintun adapter and carry a real request.
+      - name: Smoke test TUN
+        working-directory: core
+        shell: bash
+        run: go run ./tools/tunsmoke -core "$GITHUB_WORKSPACE/libclash/windows/RoutaMiCore.exe"
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: RoutaMi-debug-windows-x64-setup
+          path: dist/*.exe
+          if-no-files-found: error
+
   debug-apk:
     name: Debug APK (arm64-v8a)
     runs-on: ubuntu-latest

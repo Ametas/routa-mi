@@ -679,6 +679,7 @@
   "changelog010Item2": "基于统一设计系统重新设计界面。",
   "changelog010Item3": "本地代理端口默认启用用户名和密码认证。",
   "changelog010Item4": "可选的本地 VLESS 入站，使用 UUID 认证并提供分享链接。",
+  "windowsTunUnavailable": "TUN 模式需要将 RoutaMi 安装到 Program Files，并以管理员身份批准其辅助服务。",
   "changelog030Item1": "支持 NaiveProxy 节点：Clash 配置中的 type: naive 以及 naive+https:// / naive+quic:// 订阅链接，使用 Chrome 网络栈。",
   "changelog030Item2": "全新应用图标。",
   "changelog030Item3": "Mihomo 内核更新至 v1.19.33，包含 crypto/tls 安全修复。",

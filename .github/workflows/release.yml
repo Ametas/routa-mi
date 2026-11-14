@@ -117,9 +117,69 @@ jobs:
     # The gate's debug APK uses ANDROID_DEBUG_KEYSTORE_BASE64 like any CI run.
     secrets: inherit
 
+  windows:
+    name: Windows installer
+    needs: [prepare, ci]
+    runs-on: windows-latest
+    timeout-minutes: 60
+    outputs:
+      name: ${{ steps.vars.outputs.name }}
+      sha256: ${{ steps.pack.outputs.sha256 }}
+      core-sha256: ${{ steps.core.outputs.core-sha256 }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+          submodules: recursive
+
+      - name: Resolve name
+        id: vars
+        shell: bash
+        run: echo "name=RoutaMi-${{ needs.prepare.outputs.tag }}-windows-x64-setup" >> "$GITHUB_OUTPUT"
+
+      - name: Set up toolchain
+        uses: ./.github/actions/setup-toolchain
+        with:
+          android: "false"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build core and helper
+        id: core
+        uses: ./.github/actions/build-windows-core
+
+      # Windows file versions are 16-bit per part, so the build number is the
+      # run number rather than the APK's timestamp.
+      - name: Build Windows app
+        shell: bash
+        run: |
+          flutter build windows --release \
+            --build-name "${{ needs.prepare.outputs.version_name }}" \
+            --build-number "${{ github.run_number }}" \
+            --dart-define=APP_ENV=stable \
+            ${{ steps.core.outputs.dart-defines }}
+
+      - name: Package
+        id: pack
+        uses: ./.github/actions/package-windows
+        with:
+          name: ${{ steps.vars.outputs.name }}
+          version: ${{ needs.prepare.outputs.version_name }}
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: |
+            dist/${{ steps.vars.outputs.name }}.exe
+            dist/${{ steps.vars.outputs.name }}.exe.sha256
+          if-no-files-found: error
+
   release:
     name: Signed release APK
-    needs: [prepare, ci]
+    needs: [prepare, ci, windows]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
@@ -251,6 +311,12 @@ jobs:
             dist/${{ steps.vars.outputs.apk_name }}.sha256
           if-no-files-found: error
 
+      - name: Download Windows installer
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-installer
+          path: dist
+
       - name: Publish GitHub Release
         shell: bash
         env:
@@ -278,7 +344,7 @@ jobs:
           {
             if [ -f "$CHANGES" ]; then cat "$CHANGES"; echo; fi
             cat <<EOF
-          RoutaMi ${{ steps.vars.outputs.version_name }} — Android arm64-v8a.
+          RoutaMi ${{ steps.vars.outputs.version_name }} — Android arm64-v8a and Windows x64.
 
           | Build | |
           |---|---|
@@ -286,6 +352,8 @@ jobs:
           | libclash.so SHA-256 | \`${{ steps.core.outputs.core-sha256 }}\` |
           | APK SHA-256 | \`${{ steps.verify.outputs.apk_sha256 }}\` |
           | Signing certificate SHA-256 | \`${{ steps.verify.outputs.cert_sha256 }}\` |
+          | Windows installer SHA-256 | \`${{ needs.windows.outputs.sha256 }}\` |
+          | RoutaMiCore.exe SHA-256 | \`${{ needs.windows.outputs.core-sha256 }}\` |
           EOF
           } > "$NOTES"
           PRERELEASE_FLAG=()
@@ -293,6 +361,8 @@ jobs:
           gh release create "$TAG" \
             "dist/${{ steps.vars.outputs.apk_name }}" \
             "dist/${{ steps.vars.outputs.apk_name }}.sha256" \
+            "dist/${{ needs.windows.outputs.name }}.exe" \
+            "dist/${{ needs.windows.outputs.name }}.exe.sha256" \
             --verify-tag \
             --title "RoutaMi ${{ steps.vars.outputs.version_name }}" \
             --notes-file "$NOTES" \

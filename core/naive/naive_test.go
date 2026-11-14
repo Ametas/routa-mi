@@ -23,6 +23,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -41,14 +42,19 @@ const (
 	testSNI      = "naive.test"
 )
 
-// Host tests load the prebuilt libcronet.so through purego; Android links
-// the static library instead (lib_android_arm64.go).
+// Host tests load the prebuilt libcronet.so/.dll through purego; Android
+// links the static library instead (lib_android_arm64.go).
 func TestMain(m *testing.M) {
-	out, err := exec.Command("go", "list", "-m", "-f", "{{.Dir}}", "github.com/sagernet/cronet-go/lib/linux_amd64").Output()
+	module := "github.com/sagernet/cronet-go/lib/" + runtime.GOOS + "_" + runtime.GOARCH
+	library := "libcronet.so"
+	if runtime.GOOS == "windows" {
+		library = "libcronet.dll"
+	}
+	out, err := exec.Command("go", "list", "-m", "-f", "{{.Dir}}", module).Output()
 	if err != nil {
 		panic(err)
 	}
-	if err := cronet.LoadLibrary(filepath.Join(strings.TrimSpace(string(out)), "libcronet.so")); err != nil {
+	if err := cronet.LoadLibrary(filepath.Join(strings.TrimSpace(string(out)), library)); err != nil {
 		panic(err)
 	}
 	os.Exit(m.Run())

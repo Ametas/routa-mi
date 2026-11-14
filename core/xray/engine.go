@@ -13,7 +13,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"syscall"
 
 	"github.com/xtls/xray-core/common/platform"
 	"github.com/xtls/xray-core/core"
@@ -223,10 +222,4 @@ func Traffic(include func(tag string) bool) (up, down int64, err error) {
 		return true
 	})
 	return up, down, nil
-}
-
-func closeFd(fd int) {
-	if fd > 0 {
-		_ = syscall.Close(fd)
-	}
 }

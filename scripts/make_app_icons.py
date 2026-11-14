@@ -58,6 +58,22 @@ def masked(image: Image.Image, shape: str, inset: float = 0) -> Image.Image:
     return out
 
 
+def tray_states(disc: Image.Image) -> list[Image.Image]:
+    """Stopped (grey), running, and TUN (running with a cyan dot)."""
+    grey = disc.convert('LA').convert('RGBA')
+    grey.putalpha(disc.getchannel('A').point(lambda a: a * 3 // 5))
+    tun = disc.copy()
+    draw = ImageDraw.Draw(tun)
+    size = tun.width
+    dot = size * 0.36
+    box = (size - dot, size - dot, size - 1, size - 1)
+    draw.ellipse(box, fill=BACKGROUND)
+    inset = size * 0.05
+    draw.ellipse((box[0] + inset, box[1] + inset, box[2] - inset, box[3] - inset),
+                 fill=(32, 214, 255, 255))
+    return [grey, disc, tun]
+
+
 def main() -> None:
     # Adaptive icon: 108 dp layer, the inner 72 dp is what launchers show.
     crop(VIEW_RADIUS * 1.5, 432).save(RES / 'drawable/ic_launcher_foreground.png', optimize=True)
@@ -73,6 +89,17 @@ def main() -> None:
     icon = masked(crop(VIEW_RADIUS, 550), 'square')
     icon.save(ROOT / 'assets/images/icon.png', optimize=True)
     icon.resize((256, 256), Image.LANCZOS).save(ROOT / 'assets/images/icon.ico')
+
+    # Windows: the .exe icon and the tray states (off, on, TUN).
+    ico_sizes = [(n, n) for n in (16, 20, 24, 32, 40, 48, 64, 128, 256)]
+    masked(crop(VIEW_RADIUS, 256), 'square').save(
+        ROOT / 'windows/runner/resources/app_icon.ico', sizes=ico_sizes)
+    disc = masked(crop(VIEW_RADIUS, 256), 'circle')
+    tray_sizes = [(n, n) for n in (16, 20, 24, 32, 48, 64)]
+    for index, state in enumerate(tray_states(disc), start=1):
+        base = ROOT / f'assets/images/icon/status_{index}'
+        state.resize((108, 108), Image.LANCZOS).save(f'{base}.png', optimize=True)
+        state.save(f'{base}.ico', sizes=tray_sizes)
 
     # Android TV banner.
     banner = Image.new('RGBA', (320, 180), BACKGROUND)

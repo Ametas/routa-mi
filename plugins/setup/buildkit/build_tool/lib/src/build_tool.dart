@@ -10,6 +10,7 @@ import 'logging.dart';
 import 'mihomo_patcher.dart';
 import 'options.dart';
 import 'target.dart';
+import 'windows_builder.dart';
 
 final _log = Logger('build_tool');
 
@@ -76,6 +77,19 @@ class BuildAndroidCommand extends BuildCommand {
   }
 }
 
+class BuildWindowsCommand extends BuildCommand {
+  @override
+  final name = 'windows';
+
+  @override
+  final description = 'Build the Windows core, helper service and Cronet DLL';
+
+  @override
+  Future<void> runBuildCommand() async {
+    await WindowsBuilder(rootDir: _rootDir).build();
+  }
+}
+
 class PatchMihomoCommand extends BuildCommand {
   @override
   final name = 'patch-mihomo';
@@ -100,6 +114,7 @@ Future<void> runMain(List<String> args) async {
         help: 'Project root directory (default: auto-detect)',
       )
       ..addCommand(BuildAndroidCommand())
+      ..addCommand(BuildWindowsCommand())
       ..addCommand(PatchMihomoCommand());
 
     final topResults = runner.parse(args);

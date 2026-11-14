@@ -991,6 +991,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "vpnTip": MessageLookupByLibrary.simpleMessage("重启VPN后改变生效"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage("WebDAV配置"),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("白名单模式"),
+    "windowsTunUnavailable": MessageLookupByLibrary.simpleMessage(
+      "TUN 模式需要将 RoutaMi 安装到 Program Files，并以管理员身份批准其辅助服务。",
+    ),
     "yearsAgo": m29,
     "youtubeRoutedToChina": MessageLookupByLibrary.simpleMessage("YouTube 送中"),
     "zh_CN": MessageLookupByLibrary.simpleMessage("中文简体"),

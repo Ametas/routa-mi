@@ -60,4 +60,35 @@ void main() {
     );
     expect(await fileMatchesSha256(file.path, '0' * 64), isFalse);
   });
+
+  test('each platform picks its own release asset', () {
+    Map<String, dynamic> asset(String name) => {
+      'name': name,
+      'browser_download_url': 'https://github.com/x/$name',
+    };
+    final release = {
+      'assets': [
+        asset('RoutaMi-v0.4.0-arm64-v8a.apk.sha256'),
+        asset('RoutaMi-v0.4.0-windows-x64-setup.exe.sha256'),
+        asset('RoutaMi-v0.4.0-windows-x64.zip'),
+        asset('RoutaMi-v0.4.0-windows-x64-setup.exe'),
+        asset('RoutaMi-v0.4.0-arm64-v8a.apk'),
+      ],
+    };
+    expect(
+      resolveUpdateAsset(release, windows: true)?['name'],
+      'RoutaMi-v0.4.0-windows-x64-setup.exe',
+    );
+    expect(
+      resolveUpdateAsset(release, windows: false)?['name'],
+      'RoutaMi-v0.4.0-arm64-v8a.apk',
+    );
+    expect(
+      resolveUpdateAsset({
+        'assets': [asset('RoutaMi-v0.3.0-arm64-v8a.apk')],
+      }, windows: true),
+      isNull,
+      reason: 'a release without a Windows installer offers no update',
+    );
+  });
 }

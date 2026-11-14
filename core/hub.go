@@ -666,6 +666,13 @@ func handleGetCountryCode(ip string, fn func(value string)) {
 	go func() {
 		runLock.Lock()
 		defer runLock.Unlock()
+		// Before initClash the home directory, and so the MMDB path, is unset:
+		// mihomo would exit on the failed load. The Windows app can ask that
+		// early, since its core process connects before initClash.
+		if !isInit {
+			fn("")
+			return
+		}
 		codes := mmdb.IPInstance().LookupCode(net.ParseIP(ip))
 		if len(codes) == 0 {
 			fn("")

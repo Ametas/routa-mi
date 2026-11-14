@@ -266,6 +266,7 @@ class ApplicationState extends ConsumerState<Application> {
   }
 
   Widget _buildPlatformState({required Widget child}) {
+    if (system.isWindows) return DesktopManager(child: child);
     return AndroidManager(child: TileManager(child: child));
   }
 
@@ -323,6 +324,7 @@ class ApplicationState extends ConsumerState<Application> {
   }
 
   Widget _buildPlatformApp({required Widget child}) {
+    if (system.isWindows) return child;
     return VpnManager(child: child);
   }
 

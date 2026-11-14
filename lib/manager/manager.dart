@@ -2,6 +2,7 @@ export 'android_manager.dart';
 export 'app_manager.dart';
 export 'connectivity_manager.dart';
 export 'core_manager.dart';
+export 'desktop_manager.dart';
 export 'status_manager.dart';
 export 'theme_manager.dart';
 export 'tile_manager.dart';

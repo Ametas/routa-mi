@@ -75,6 +75,10 @@ flutter test                          # ДО go test: генерирует build
 bash plugins/setup/buildkit/run_build_tool.sh android --arch arm64
 flutter build apk --debug --target-platform android-arm64 \
   --android-project-arg=slclashSkipGoCoreBuild=true
+
+# Windows (docs/windows.md): ядро, служба и libcronet.dll кросс-сборкой;
+# само приложение и установщик собирает CI на windows-latest
+bash plugins/setup/buildkit/run_build_tool.sh windows
 ```
 
 `dart run build_runner build --delete-conflicting-outputs` — только после
@@ -82,7 +86,8 @@ flutter build apk --debug --target-platform android-arm64 \
 
 ## CI
 
-- `ci.yml` — каждый push в любую ветку: тесты + debug APK (артефакт).
+- `ci.yml` — каждый push в любую ветку: тесты + debug APK + Windows-установщик
+  (артефакты); на Windows-раннере — установка, служба, запуск приложения, TUN.
 - `release.yml` — тег `vX.Y.Z` на коммите из `main` или ручной запуск на
   `main` с полем tag (тег создаётся после сборки): CI, подпись, GitHub Release.
 - `mihomo-core-update.yml` — еженедельно: PR с новым релизом MetaCubeX.

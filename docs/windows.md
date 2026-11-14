@@ -1,0 +1,55 @@
+# RoutaMi для Windows
+
+Windows x64 (10/11). Десктопный слой взят из FlClash (форк-точка
+`ac2f6b9`) и оставлен только для Windows; macOS и Linux не собираются.
+
+## Устройство
+
+- **Ядро — отдельный процесс** `RoutaMiCore.exe` (сборка `core/` без cgo,
+  теги `with_gvisor,with_naive,with_purego`). Приложение слушает
+  `127.0.0.1:<порт>`, ядро подключается с аргументом `tcp:PORT:TOKEN` и
+  первым кадром шлёт токен (`core/ipc.go`, `lib/core/transport.dart`).
+  Кадр — 4 байта длины (little-endian) и JSON. В FlClash здесь был named
+  pipe через Rust-плагин; у нас чистый Dart.
+- **TUN — через службу** `RoutaMiHelperService` (`core/helper`, Go,
+  LocalSystem). Создать Wintun-адаптер и маршруты может только
+  администратор, поэтому ядро для TUN запускает служба:
+  - ставится один раз из приложения по запросу UAC
+    (`RoutaMiHelperService.exe install`, путь кавычится `svc/mgr`);
+  - работает только из Program Files: из папки, куда пишет пользователь,
+    подмена файлов рядом со SYSTEM-службой дала бы права SYSTEM;
+  - принимает запросы только от `RoutaMi.exe` из своей папки (владелец
+    TCP-соединения через `GetExtendedTcpTable`);
+  - запускает только `RoutaMiCore.exe` из своей папки с SHA-256 сборки
+    (`-X main.coreSHA256`); тот же хеш приложение получает из
+    `CORE_SHA256` и сверяет по `/ping`, иначе ставит службу заново.
+  Без службы ядро работает от пользователя: системный прокси есть, TUN нет.
+  Вывод ядра и ошибки службы — `%ProgramData%\RoutaMi\helper.log`.
+- **Wintun** встроен в ядро (sing-tun), отдельная DLL не нужна.
+- **Naive**: Cronet грузится из `libcronet.dll` рядом с ядром (purego).
+- **Окно, трей, автозапуск, горячие клавиши, системный прокси (WinINet)** —
+  `lib/manager/desktop_manager.dart`, `lib/common/{window,tray,launch,proxy}.dart`,
+  плагин `plugins/proxy` из FlClash. Окно открывается узким (440×860):
+  интерфейс рассчитан на телефон; шире — боковая навигация.
+- Как и на Android, системный прокси не включается, пока локальный порт
+  требует логин и пароль: WinINet не передаёт учётные данные.
+
+## Ограничения
+
+- **Xray-профили в TUN не работают**: Xray поднимает TUN-адаптер, но
+  маршруты оставляет ОС, и его собственные соединения ушли бы в петлю.
+  Для Xray-профилей переключатель TUN тусклый; работает системный прокси.
+- Установщик неподписанный: SmartScreen предупреждает при первом запуске.
+
+## Сборка
+
+```bash
+bash plugins/setup/buildkit/run_build_tool.sh windows   # кросс-сборка в libclash/windows
+```
+
+`flutter build windows` вызывает тот же шаг через CMake
+(`plugins/setup/windows`). Установщик — Inno Setup
+(`windows/packaging/routami.iss`, действие `.github/actions/package-windows`).
+CI (`ci.yml`, задача «Windows app») собирает установщик на `windows-latest`;
+релиз кладёт `RoutaMi-vX.Y.Z-windows-x64-setup.exe` рядом с APK, и
+встроенный апдейтер на Windows скачивает его и запускает.
