@@ -150,7 +150,7 @@ class _SurgeThemeModeControl extends StatelessWidget {
 }
 
 /// Choice shown when Material You is off: a curated preset or own accent.
-enum _StaticChoice { blueWhite, grayBlack, accent }
+enum _StaticChoice { routa, blueWhite, grayBlack, accent }
 
 class _DynamicColorItem extends ConsumerWidget {
   const _DynamicColorItem();
@@ -163,9 +163,11 @@ class _DynamicColorItem extends ConsumerWidget {
     final colorSource = theme.colorSource;
     final staticChoice = colorSource == AppColorSource.accent
         ? _StaticChoice.accent
-        : theme.staticPreset == StaticThemePreset.grayBlack
-        ? _StaticChoice.grayBlack
-        : _StaticChoice.blueWhite;
+        : switch (theme.staticPreset) {
+            StaticThemePreset.routa => _StaticChoice.routa,
+            StaticThemePreset.grayBlack => _StaticChoice.grayBlack,
+            StaticThemePreset.blueWhite => _StaticChoice.blueWhite,
+          };
     final schemeVariant = normalizeDynamicSchemeVariant(theme.schemeVariant);
 
     return Column(
@@ -182,6 +184,8 @@ class _DynamicColorItem extends ConsumerWidget {
                     _schemeVariantLabel(context, schemeVariant),
                   )
                 : switch (staticChoice) {
+                    _StaticChoice.routa =>
+                      context.appLocalizations.routaStyle,
                     _StaticChoice.grayBlack =>
                       context.appLocalizations.darkMonochromeStyle,
                     _StaticChoice.blueWhite =>
@@ -257,6 +261,11 @@ class _DynamicColorItem extends ConsumerWidget {
                       height: 48,
                       items: [
                         SurgeSegmentedItem(
+                          value: _StaticChoice.routa,
+                          icon: SurgeIcons.appearance,
+                          label: context.appLocalizations.routaPreset,
+                        ),
+                        SurgeSegmentedItem(
                           value: _StaticChoice.blueWhite,
                           icon: SurgeIcons.water,
                           label: context.appLocalizations.blueWhiteMonochrome,
@@ -277,13 +286,17 @@ class _DynamicColorItem extends ConsumerWidget {
                             .read(themeSettingProvider.notifier)
                             .update(
                               (state) => switch (value) {
+                                _StaticChoice.routa => state.copyWith(
+                                  dynamicColor: false,
+                                  primaryColor: routaPresetColor,
+                                ),
                                 _StaticChoice.blueWhite => state.copyWith(
                                   dynamicColor: false,
                                   primaryColor: null,
                                 ),
                                 _StaticChoice.grayBlack => state.copyWith(
                                   dynamicColor: false,
-                                  primaryColor: legacyGraySeedColor,
+                                  primaryColor: grayBlackPresetColor,
                                 ),
                                 _StaticChoice.accent => state.copyWith(
                                   dynamicColor: false,

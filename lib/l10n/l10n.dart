@@ -5923,6 +5923,21 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `RoutaMi`
+  String get routaPreset {
+    return Intl.message('RoutaMi', name: 'routaPreset', desc: '', args: []);
+  }
+
+  /// `RoutaMi violet`
+  String get routaStyle {
+    return Intl.message(
+      'RoutaMi violet',
+      name: 'routaStyle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

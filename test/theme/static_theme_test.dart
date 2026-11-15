@@ -69,6 +69,48 @@ void _expectContrast(Color foreground, Color background, double minimum) {
 void main() {
   const expectedRoleValues = <List<int>>[
     [
+      0xFFF3F0FA,
+      0xFFFFFFFF,
+      0xFFFBFAFE,
+      0xFF6D28D9,
+      0xFFFFFFFF,
+      0xFF086B41,
+      0xFFA3199F,
+      0xFF984400,
+      0xFFB8133B,
+      0xFF191230,
+      0xFF5C5279,
+      0xFFE2DBF0,
+      0xFFECE7F7,
+      0xFFE4D7FD,
+      0xFFFFFFFF,
+      0xFFDCD4EC,
+      0x142B1A5C,
+      0xFF7A7096,
+      0xFFA69DBF,
+    ],
+    [
+      0xFF0A0713,
+      0xFF130E20,
+      0xFF1B1530,
+      0xFFB48CFF,
+      0xFF140A26,
+      0xFF3EE29B,
+      0xFFF07EEB,
+      0xFFFFB35C,
+      0xFFFF7A93,
+      0xFFF0EBFF,
+      0xFFABA0CF,
+      0xFF2A2142,
+      0xFF211A38,
+      0xFF2B1F4C,
+      0xFF171126,
+      0xFF2A2142,
+      0x6B000000,
+      0xFF7D72A3,
+      0xFF9A90BF,
+    ],
+    [
       0xFFF2F3F7,
       0xFFFFFFFF,
       0xFFF8F9FC,
@@ -154,8 +196,8 @@ void main() {
     ],
   ];
 
-  test('four static specs freeze all 19 roles through one resolver', () {
-    expect(StaticThemeSpec.values, hasLength(4));
+  test('six static specs freeze all 19 roles through one resolver', () {
+    expect(StaticThemeSpec.values, hasLength(6));
     for (var index = 0; index < StaticThemeSpec.values.length; index++) {
       final spec = StaticThemeSpec.values[index];
       final roles = _roles(spec.colors);
@@ -171,8 +213,26 @@ void main() {
     }
   });
 
-  test('static control states freeze four paired mappings', () {
+  test('static control states freeze six paired mappings', () {
     const expected = <List<int>>[
+      [
+        0xFF6D28D9,
+        0xFFFFFFFF,
+        0xFF34C759,
+        0xFFFF9500,
+        0xFFBA1A1A,
+        0xFFFFFFFF,
+        0xFF34C759,
+      ],
+      [
+        0xFFB48CFF,
+        0xFF140A26,
+        0xFF30D158,
+        0xFFFF9F0A,
+        0xFFFF453A,
+        0xFFFFFFFF,
+        0xFF30D158,
+      ],
       [
         0xFF0065CC,
         0xFFFFFFFF,

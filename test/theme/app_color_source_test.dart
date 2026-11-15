@@ -12,16 +12,30 @@ void main() {
       expect(props.colorSource, AppColorSource.dynamicColor);
     });
 
-    test('null or the gray sentinel select a curated preset', () {
+    test('null and the preset sentinels select a curated preset', () {
       const blue = ThemeProps(dynamicColor: false, primaryColor: null);
+      const routa = ThemeProps(
+        dynamicColor: false,
+        primaryColor: routaPresetColor,
+      );
       const gray = ThemeProps(
         dynamicColor: false,
-        primaryColor: legacyGraySeedColor,
+        primaryColor: grayBlackPresetColor,
       );
       expect(blue.colorSource, AppColorSource.preset);
       expect(blue.staticPreset, StaticThemePreset.blueWhite);
+      expect(routa.colorSource, AppColorSource.preset);
+      expect(routa.staticPreset, StaticThemePreset.routa);
       expect(gray.colorSource, AppColorSource.preset);
       expect(gray.staticPreset, StaticThemePreset.grayBlack);
+    });
+
+    test('installs that kept the SlClash default move to Routa', () {
+      const stored = ThemeProps(
+        dynamicColor: false,
+        primaryColor: legacyGraySeedColor,
+      );
+      expect(stored.staticPreset, StaticThemePreset.routa);
     });
 
     test('any other colour with dynamic off is a user accent', () {
@@ -29,9 +43,9 @@ void main() {
       expect(props.colorSource, AppColorSource.accent);
     });
 
-    test('the default theme stays the gray/black preset', () {
+    test('the default theme is the Routa preset', () {
       expect(defaultThemeProps.colorSource, AppColorSource.preset);
-      expect(defaultThemeProps.staticPreset, StaticThemePreset.grayBlack);
+      expect(defaultThemeProps.staticPreset, StaticThemePreset.routa);
     });
   });
 
@@ -39,7 +53,12 @@ void main() {
     'accent palette starts with the default accent and hides the sentinel',
     () {
       const props = ThemeProps(
-        primaryColors: [0xFF795548, legacyGraySeedColor, defaultAccentColor],
+        primaryColors: [
+          0xFF795548,
+          routaPresetColor,
+          grayBlackPresetColor,
+          defaultAccentColor,
+        ],
       );
       expect(props.accentPalette, [defaultAccentColor, 0xFF795548]);
     },

@@ -1,7 +1,7 @@
 import 'package:fl_clash/widgets/surge/surge_tokens.dart';
 import 'package:flutter/material.dart';
 
-enum StaticThemePreset { blueWhite, grayBlack }
+enum StaticThemePreset { routa, blueWhite, grayBlack }
 
 @immutable
 class StaticThemeSpec {
@@ -18,6 +18,8 @@ class StaticThemeSpec {
   final SurgeStateColors stateColors;
 
   static const values = <StaticThemeSpec>[
+    routaLight,
+    routaDark,
     blueWhiteLight,
     blueWhiteDark,
     grayBlackLight,
@@ -85,6 +87,76 @@ class StaticThemeSpec {
       surfaceTint: colors.primary,
     );
   }
+
+  /// RoutaMi's own palette (design system 3.0): a night violet base with a
+  /// lavender light twin and one violet accent.
+  static const routaLight = StaticThemeSpec(
+    preset: StaticThemePreset.routa,
+    brightness: Brightness.light,
+    colors: SurgeColors(
+      background: Color(0xFFF3F0FA),
+      card: Color(0xFFFFFFFF),
+      elevatedCard: Color(0xFFFBFAFE),
+      primary: Color(0xFF6D28D9),
+      onPrimary: Color(0xFFFFFFFF),
+      green: Color(0xFF086B41),
+      purple: Color(0xFFA3199F),
+      orange: Color(0xFF984400),
+      red: Color(0xFFB8133B),
+      textPrimary: Color(0xFF191230),
+      textSecondary: Color(0xFF5C5279),
+      separator: Color(0xFFE2DBF0),
+      fill: Color(0xFFECE7F7),
+      selectedFill: Color(0xFFE4D7FD),
+      navBar: Color(0xFFFFFFFF),
+      navBorder: Color(0xFFDCD4EC),
+      shadow: Color(0x142B1A5C),
+      inactive: Color(0xFF7A7096),
+      inactiveVariant: Color(0xFFA69DBF),
+    ),
+    stateColors: SurgeStateColors(
+      toggleActive: Color(0xFF6D28D9),
+      onToggleActive: Color(0xFFFFFFFF),
+      heroStart: Color(0xFF34C759),
+      heroPause: Color(0xFFFF9500),
+      heroStop: Color(0xFFBA1A1A),
+      onHeroAction: Color(0xFFFFFFFF),
+    ),
+  );
+
+  static const routaDark = StaticThemeSpec(
+    preset: StaticThemePreset.routa,
+    brightness: Brightness.dark,
+    colors: SurgeColors(
+      background: Color(0xFF0A0713),
+      card: Color(0xFF130E20),
+      elevatedCard: Color(0xFF1B1530),
+      primary: Color(0xFFB48CFF),
+      onPrimary: Color(0xFF140A26),
+      green: Color(0xFF3EE29B),
+      purple: Color(0xFFF07EEB),
+      orange: Color(0xFFFFB35C),
+      red: Color(0xFFFF7A93),
+      textPrimary: Color(0xFFF0EBFF),
+      textSecondary: Color(0xFFABA0CF),
+      separator: Color(0xFF2A2142),
+      fill: Color(0xFF211A38),
+      selectedFill: Color(0xFF2B1F4C),
+      navBar: Color(0xFF171126),
+      navBorder: Color(0xFF2A2142),
+      shadow: Color(0x6B000000),
+      inactive: Color(0xFF7D72A3),
+      inactiveVariant: Color(0xFF9A90BF),
+    ),
+    stateColors: SurgeStateColors(
+      toggleActive: Color(0xFFB48CFF),
+      onToggleActive: Color(0xFF140A26),
+      heroStart: Color(0xFF30D158),
+      heroPause: Color(0xFFFF9F0A),
+      heroStop: Color(0xFFFF453A),
+      onHeroAction: Color(0xFFFFFFFF),
+    ),
+  );
 
   static const blueWhiteLight = StaticThemeSpec(
     preset: StaticThemePreset.blueWhite,
