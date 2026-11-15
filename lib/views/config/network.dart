@@ -1,3 +1,4 @@
+import 'package:fl_clash/services/mihomo_config/tun_congestion.dart';
 import 'package:fl_clash/services/settings/settings_contract.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -146,9 +147,11 @@ class Ipv6Item extends ConsumerWidget {
     final ipv6 = ref.watch(vpnSettingProvider.select((state) => state.ipv6));
     return ListItem.switchItem(
       title: const Text('IPv6'),
-      subtitle: Text(Localizations.localeOf(context).languageCode == 'zh'
-          ? '允许 IPv6 入站，接管应用 IPv6 流量'
-          : 'Accept and capture app IPv6 traffic'),
+      subtitle: Text(
+        Localizations.localeOf(context).languageCode == 'zh'
+            ? '允许 IPv6 入站，接管应用 IPv6 流量'
+            : 'Accept and capture app IPv6 traffic',
+      ),
       delegate: SwitchDelegate(
         value: ipv6,
         onChanged: (bool value) async {
@@ -254,9 +257,11 @@ class DNSHijackingItem extends ConsumerWidget {
     final appLocalizations = context.appLocalizations;
     return ListItem(
       title: Text(appLocalizations.dnsHijacking),
-      subtitle: Text(Localizations.localeOf(context).languageCode == 'zh'
-          ? '自动接管 · VPN 运行时接管常规 DNS'
-          : 'Automatic · captures ordinary DNS while VPN is active'),
+      subtitle: Text(
+        Localizations.localeOf(context).languageCode == 'zh'
+            ? '自动接管 · VPN 运行时接管常规 DNS'
+            : 'Automatic · captures ordinary DNS while VPN is active',
+      ),
     );
   }
 }
@@ -401,12 +406,54 @@ class SmartAutoStopNetworksItem extends ConsumerWidget {
   }
 }
 
-class NetworkListView extends StatelessWidget {
+class CongestionControllerItem extends ConsumerWidget {
+  const CongestionControllerItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final appLocalizations = context.appLocalizations;
+    // '' stands for "not set": a dismissed dialog also returns null.
+    final value = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => state.tun.congestionController ?? '',
+      ),
+    );
+    String text(String value) =>
+        value.isEmpty ? appLocalizations.defaultText : value;
+    return ListItem.options(
+      title: Text(appLocalizations.congestionController),
+      subtitle: Text(text(value)),
+      delegate: OptionsDelegate<String>(
+        value: value,
+        options: const ['', ...tunCongestionControllers],
+        textBuilder: text,
+        onChanged: (value) {
+          if (value == null) return;
+          ref
+              .read(patchClashConfigProvider.notifier)
+              .update(
+                (state) => state.copyWith.tun(
+                  congestionController: value.isEmpty ? null : value,
+                ),
+              );
+        },
+        title: appLocalizations.congestionController,
+      ),
+    );
+  }
+}
+
+class NetworkListView extends ConsumerWidget {
   const NetworkListView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final appLocalizations = context.appLocalizations;
+    final isMips = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => state.tun.stack == TunStack.mips,
+      ),
+    );
     return SurgeSectionList(
       sections: [
         if (system.isAndroid)
@@ -438,6 +485,7 @@ class NetworkListView extends StatelessWidget {
             if (system.isDesktop) const MihomoOnly(child: TUNItem()),
             if (system.isMacOS) const AutoSetSystemDnsItem(),
             const MihomoOnly(child: TunStackItem()),
+            if (isMips) const MihomoOnly(child: CongestionControllerItem()),
             if (!system.isDesktop) ...[
               const RouteModeItem(),
               const RouteAddressItem(),

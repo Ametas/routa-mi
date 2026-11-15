@@ -5828,6 +5828,26 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `TCP congestion control`
+  String get congestionController {
+    return Intl.message(
+      'TCP congestion control',
+      name: 'congestionController',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used by the mips stack; Default keeps the profile's value`
+  String get congestionControllerDesc {
+    return Intl.message(
+      'Used by the mips stack; Default keeps the profile\'s value',
+      name: 'congestionControllerDesc',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

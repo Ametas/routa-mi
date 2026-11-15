@@ -14,7 +14,8 @@ import (
 	"syscall"
 )
 
-func Start(fd int, stack string, address, dns string) (listener *sing_tun.Listener, err error) {
+// congestion is the mips stack's TCP congestion control ("" is its default).
+func Start(fd int, stack, congestion string, address, dns string) (listener *sing_tun.Listener, err error) {
 	ownsFD := true
 	defer func() {
 		if err != nil && ownsFD {
@@ -42,16 +43,17 @@ func Start(fd int, stack string, address, dns string) (listener *sing_tun.Listen
 	}
 
 	options := LC.Tun{
-		Enable:              true,
-		Device:              "FlClash",
-		Stack:               tunStack,
-		DNSHijack:           dnsHijack,
-		AutoRoute:           false,
-		AutoDetectInterface: false,
-		Inet4Address:        prefix4,
-		Inet6Address:        prefix6,
-		MTU:                 9000,
-		FileDescriptor:      fd,
+		Enable:               true,
+		Device:               "FlClash",
+		Stack:                tunStack,
+		CongestionController: congestion,
+		DNSHijack:            dnsHijack,
+		AutoRoute:            false,
+		AutoDetectInterface:  false,
+		Inet4Address:         prefix4,
+		Inet6Address:         prefix6,
+		MTU:                  9000,
+		FileDescriptor:       fd,
 	}
 
 	listener, err = sing_tun.New(options, tunnel.Tunnel)

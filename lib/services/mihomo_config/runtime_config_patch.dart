@@ -20,6 +20,7 @@ const Set<String> slclashOwnedTunFields = {
   'stack',
   'route-address',
   'auto-route',
+  'congestion-controller',
 };
 
 /// Applies Slclash-owned TUN values onto [config]'s tun section. Slclash

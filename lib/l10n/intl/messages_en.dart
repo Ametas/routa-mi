@@ -326,6 +326,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "confirmOverwriteTip": MessageLookupByLibrary.simpleMessage(
       "Existing data will be overwritten",
     ),
+    "congestionController": MessageLookupByLibrary.simpleMessage(
+      "TCP congestion control",
+    ),
+    "congestionControllerDesc": MessageLookupByLibrary.simpleMessage(
+      "Used by the mips stack; Default keeps the profile\'s value",
+    ),
     "connected": MessageLookupByLibrary.simpleMessage("Connected"),
     "connecting": MessageLookupByLibrary.simpleMessage("Connecting..."),
     "connection": MessageLookupByLibrary.simpleMessage("Connection"),

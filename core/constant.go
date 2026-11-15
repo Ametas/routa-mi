@@ -44,6 +44,8 @@ type tunSchema struct {
 	DNSHijack    *[]string          `yaml:"dns-hijack" json:"dns-hijack"`
 	AutoRoute    *bool              `yaml:"auto-route" json:"auto-route"`
 	RouteAddress *[]netip.Prefix    `yaml:"route-address" json:"route-address,omitempty"`
+	// Read by the mips stack only; nil keeps the current value.
+	CongestionController *string `yaml:"congestion-controller" json:"congestion-controller"`
 }
 
 type ChangeProxyParams struct {

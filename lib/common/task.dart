@@ -12,6 +12,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/services/mihomo_config/authentication_patch.dart';
 import 'package:fl_clash/services/mihomo_config/runtime_config_patch.dart';
+import 'package:fl_clash/services/mihomo_config/tun_congestion.dart';
 import 'package:fl_clash/services/settings/settings_contract.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -148,6 +149,7 @@ Future<VM2<String, String>> _makeRealProfileTask(
     'stack': realPatchConfig.tun.stack.name,
     'route-address': realPatchConfig.tun.routeAddress,
     'auto-route': realPatchConfig.tun.autoRoute,
+    ...tunCongestionPatch(realPatchConfig.tun),
   });
   rawConfig['geodata-loader'] = realPatchConfig.geodataLoader.name;
   if (rawConfig['sniffer']?['sniff'] != null) {

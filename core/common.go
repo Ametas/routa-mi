@@ -238,6 +238,9 @@ func updateConfig(params *UpdateParams) error {
 		general.Tun.RouteAddress = *params.Tun.RouteAddress
 		general.Tun.DNSHijack = *params.Tun.DNSHijack
 		general.Tun.Stack = *params.Tun.Stack
+		if params.Tun.CongestionController != nil {
+			general.Tun.CongestionController = *params.Tun.CongestionController
+		}
 	}
 
 	updateListeners()

@@ -47,7 +47,7 @@ func (th *TunHandler) start(fd int, stack, address, dns string) bool {
 	_ = th.limit.Acquire(context.TODO(), 4)
 	defer th.limit.Release(4)
 	th.initHook()
-	tunListener, err := t.Start(fd, stack, address, dns)
+	tunListener, err := t.Start(fd, stack, tunCongestionController(), address, dns)
 	if err == nil && tunListener != nil {
 		log.Infoln("TUN address: %v", tunListener.Address())
 		th.listener = tunListener
