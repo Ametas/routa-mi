@@ -5993,6 +5993,36 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Windows: TUN switched on in a running app now reaches the core, and other settings changes no longer turn it off.`
+  String get changelog051Item1 {
+    return Intl.message(
+      'Windows: TUN switched on in a running app now reaches the core, and other settings changes no longer turn it off.',
+      name: 'changelog051Item1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Windows: when the helper service cannot start the core, TUN stays off and the reason is shown.`
+  String get changelog051Item2 {
+    return Intl.message(
+      'Windows: when the helper service cannot start the core, TUN stays off and the reason is shown.',
+      name: 'changelog051Item2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Windows: side menu labels use the app's text style again.`
+  String get changelog051Item3 {
+    return Intl.message(
+      'Windows: side menu labels use the app\'s text style again.',
+      name: 'changelog051Item3',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
