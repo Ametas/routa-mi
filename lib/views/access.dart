@@ -429,9 +429,7 @@ class _AccessViewState extends ConsumerState<AccessView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.l, vertical: SurgeSpace.s),
                 child: Text(
-                  Localizations.localeOf(context).languageCode == 'zh'
-                    ? '已保留 ${hiddenAccessSelectionCount(accessControl, viewPackageNameList)} 个未显示的已选应用'
-                    : '${hiddenAccessSelectionCount(accessControl, viewPackageNameList)} hidden selections retained',
+                  '${hiddenAccessSelectionCount(accessControl, viewPackageNameList)} hidden selections retained',
                 ),
               ),
             const SizedBox(height: SurgeSpace.s),

@@ -7,7 +7,6 @@ import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_clash/widgets/settings_apply_status.dart';
 
 class LogLevelItem extends ConsumerWidget {
   const LogLevelItem({super.key});
@@ -248,7 +247,7 @@ class Ipv6Item extends ConsumerWidget {
     return ListItem.switchItem(
       leading: const Icon(SurgeIcons.water),
       title: const Text('IPv6'),
-      subtitle: Text(settingsText(context, '允许内核使用 IPv6，使用 IPv6 节点时开启', 'Allow core IPv6; enable for IPv6 nodes')),
+      subtitle: Text('Allow core IPv6; enable for IPv6 nodes'),
       delegate: SwitchDelegate(
         value: ipv6,
         onChanged: (bool value) async {
@@ -273,7 +272,7 @@ class AppendSystemDNSItem extends ConsumerWidget {
     return ListItem.switchItem(
       leading: const Icon(SurgeIcons.dns),
       title: Text(appLocalizations.appendSystemDns),
-      subtitle: Text(settingsText(context, '向最终 DNS 追加系统解析器', 'Append the system resolver to the final DNS configuration')),
+      subtitle: Text('Append the system resolver to the final DNS configuration'),
       delegate: SwitchDelegate(
         value: appendSystemDNS,
         onChanged: (bool value) async {

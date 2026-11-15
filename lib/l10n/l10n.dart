@@ -5929,10 +5929,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationDelegate();
 
   List<Locale> get supportedLocales {
-    return const <Locale>[
-      Locale.fromSubtags(languageCode: 'en'),
-      Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'),
-    ];
+    return const <Locale>[Locale.fromSubtags(languageCode: 'en')];
   }
 
   @override
