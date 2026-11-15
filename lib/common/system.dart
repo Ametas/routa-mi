@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fl_clash/common/app_localizations.dart';
 import 'package:fl_clash/common/windows.dart';
+import 'package:fl_clash/common/windows_tun.dart';
+import 'package:fl_clash/core/service.dart';
 import 'package:fl_clash/common/window.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/plugins/app.dart';
@@ -46,7 +48,20 @@ class System {
 
   Future<AuthorizeCode> authorizeCore() async {
     if (!isWindows) return AuthorizeCode.error;
-    if (await checkIsAdmin()) return AuthorizeCode.none;
+    if (await checkIsAdmin()) {
+      final code = tunAuthorizationWithService(
+        coreUnderHelper: coreService?.startedByHelper ?? false,
+        helperError: coreService?.helperError,
+      );
+      if (code == AuthorizeCode.error) {
+        globalState.showNotifier(
+          currentAppLocalizations.windowsTunHelperFailed(
+            coreService?.helperError ?? '',
+          ),
+        );
+      }
+      return code;
+    }
     if (await windows?.registerService() == true) {
       return AuthorizeCode.success;
     }

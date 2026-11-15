@@ -679,6 +679,7 @@
   "changelog010Item2": "Redesigned interface on a single design system.",
   "changelog010Item3": "The local proxy port now requires a username and password by default.",
   "changelog010Item4": "Optional local VLESS inbound with a UUID and a share link.",
+  "windowsTunHelperFailed": "TUN stays off: the helper service did not start the core ({error}). Reinstall RoutaMi to repair it.",
   "windowsTunUnavailable": "TUN mode needs RoutaMi installed in Program Files and administrator approval for its helper service.",
   "changelog030Item1": "NaiveProxy nodes: type: naive in Clash profiles and naive+https:// / naive+quic:// subscription links, with Chrome's network stack.",
   "changelog030Item2": "New app icon.",

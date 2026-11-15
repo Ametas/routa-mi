@@ -5544,6 +5544,16 @@ class AppLocalizations {
     );
   }
 
+  /// `TUN stays off: the helper service did not start the core ({error}). Reinstall RoutaMi to repair it.`
+  String windowsTunHelperFailed(Object error) {
+    return Intl.message(
+      'TUN stays off: the helper service did not start the core ($error). Reinstall RoutaMi to repair it.',
+      name: 'windowsTunHelperFailed',
+      desc: '',
+      args: [error],
+    );
+  }
+
   /// `TUN mode needs RoutaMi installed in Program Files and administrator approval for its helper service.`
   String get windowsTunUnavailable {
     return Intl.message(

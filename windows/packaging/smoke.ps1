@@ -63,13 +63,23 @@ Write-Host 'helper refuses other callers'
 # it, which only works if the helper recognises RoutaMi.exe as its caller.
 # The core starts with the proxy, after a first launch's disclaimer: the
 # preferences accept it and turn on autoRun (shared_preferences_windows keeps
-# them under %APPDATA%\<CompanyName>\<ProductName>).
+# them under %APPDATA%\<CompanyName>\<ProductName>). They come in the
+# pre-database format (no version), which the app migrates: that is the only
+# way to hand it a profile without the UI. TUN is on, as a user would switch
+# it: the app must bring up the Wintun adapter through the core the helper
+# runs.
 $prefsDir = Join-Path $env:APPDATA 'RoutaTerm\RoutaMi'
-New-Item -ItemType Directory -Force $prefsDir | Out-Null
-@{
-  'flutter.version' = 1
-  'flutter.config'  = '{"appSettingProps":{"disclaimerAccepted":true,"autoRun":true}}'
-} | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $prefsDir 'shared_preferences.json')
+New-Item -ItemType Directory -Force (Join-Path $prefsDir 'profiles') | Out-Null
+"mode: direct`nproxies: []`nrules:`n  - MATCH,DIRECT`n" |
+  Set-Content -Encoding utf8 -NoNewline (Join-Path $prefsDir 'profiles\smoke.yaml')
+$config = @{
+  appSetting       = @{ disclaimerAccepted = $true; autoRun = $true }
+  profiles         = @(@{ id = 'smoke'; label = 'smoke'; autoUpdateDuration = 86400000000; autoUpdate = $false })
+  currentProfileId = 'smoke'
+  patchClashConfig = @{ mode = 'direct'; tun = @{ enable = $true } }
+} | ConvertTo-Json -Depth 5 -Compress
+@{ 'flutter.config' = $config } | ConvertTo-Json |
+  Set-Content -Encoding utf8 (Join-Path $prefsDir 'shared_preferences.json')
 $appLog = Join-Path $env:RUNNER_TEMP 'routami-app.log'
 $appErr = Join-Path $env:RUNNER_TEMP 'routami-app.err'
 $app = Start-Process (Join-Path $dir 'RoutaMi.exe') -PassThru `
@@ -97,6 +107,19 @@ Write-Host '--- helper.log'
 Get-Content (Join-Path $env:ProgramData 'RoutaMi\helper.log') -Tail 60 -ErrorAction SilentlyContinue | Write-Host
 if (-not (Get-Process RoutaMiCore -ErrorAction SilentlyContinue)) { Fail 'the core exited after starting' }
 if ($parent -ne 'RoutaMiHelperService') { Fail 'the core was not started by the helper service' }
+$deadline = (Get-Date).AddSeconds(60)
+while (-not (Get-NetAdapter -Name RoutaMi -ErrorAction SilentlyContinue)) {
+  if ((Get-Date) -gt $deadline) {
+    Get-NetAdapter | Format-Table Name, InterfaceDescription, Status | Out-String | Write-Host
+    foreach ($log in $appLog, $appErr) {
+      Write-Host "--- $log"
+      Get-Content $log -Tail 200 -ErrorAction SilentlyContinue | Write-Host
+    }
+    Fail 'the app turned TUN on but no RoutaMi adapter came up'
+  }
+  Start-Sleep -Seconds 1
+}
+Write-Host "the app brought up the TUN adapter: $((Get-NetAdapter -Name RoutaMi).InterfaceDescription)"
 Stop-Process -Id $app.Id -Force
 $deadline = (Get-Date).AddSeconds(15)
 while (Get-Process RoutaMiCore -ErrorAction SilentlyContinue) {

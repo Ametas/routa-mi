@@ -89,6 +89,37 @@ void main() {
     expect(tapped, 2);
   });
 
+  testWidgets('labels get the theme text style outside a Scaffold', (
+    tester,
+  ) async {
+    // AppSidebarContainer puts the menu in a bare Row next to the page.
+    final textTheme = buildSlclashTextTheme();
+    for (final nav in [
+      SurgeNavRail(items: _items, currentIndex: 0, onTap: (_) {}),
+      SurgeSideMenu(items: _items, currentIndex: 0, onTap: (_) {}),
+    ]) {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            textTheme: textTheme,
+            extensions: [
+              SurgeTheme.dark(),
+              SurgeTypography.fromTextTheme(textTheme),
+            ],
+          ),
+          home: Row(children: [nav]),
+        ),
+      );
+      final label = tester.widget<RichText>(
+        find.descendant(
+          of: find.text('Proxies'),
+          matching: find.byType(RichText),
+        ),
+      );
+      expect(label.text.style?.decoration, isNot(TextDecoration.underline));
+    }
+  });
+
   test('the Activity heading opens the desktop-only pages', () {
     Widget page(BuildContext _) => const SizedBox();
     final items = AppSideNav.itemsFor([

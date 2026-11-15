@@ -86,7 +86,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m29(label) => "${label} must be a url";
 
-  static String m30(count) => "${count}y ago";
+  static String m30(error) =>
+      "TUN stays off: the helper service did not start the core (${error}). Reinstall RoutaMi to repair it.";
+
+  static String m31(count) => "${count}y ago";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1376,10 +1379,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "WebDAV configuration",
     ),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("Whitelist mode"),
+    "windowsTunHelperFailed": m30,
     "windowsTunUnavailable": MessageLookupByLibrary.simpleMessage(
       "TUN mode needs RoutaMi installed in Program Files and administrator approval for its helper service.",
     ),
-    "yearsAgo": m30,
+    "yearsAgo": m31,
     "youtubeRoutedToChina": MessageLookupByLibrary.simpleMessage(
       "YouTube via China",
     ),

@@ -67,5 +67,6 @@ export 'update.dart';
 export 'utils.dart';
 export 'window.dart';
 export 'windows.dart';
+export 'windows_tun.dart';
 export 'yaml.dart';
 export '../theme/typography/typography_context.dart';

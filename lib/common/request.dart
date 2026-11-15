@@ -249,22 +249,27 @@ class Request {
     }
   }
 
-  Future<bool> startCoreByHelper(String arg) async {
+  /// Starts the core under the helper service: '' when it did, otherwise
+  /// why not (the helper answers errors as plain text).
+  Future<String> startCoreByHelper(String arg) async {
     try {
       final response = await dio
           .post(
             'http://$localhost:$helperPort/start',
             data: json.encode({'path': appPath.corePath, 'arg': arg}),
-            options: Options(responseType: ResponseType.plain),
+            options: Options(
+              responseType: ResponseType.plain,
+              validateStatus: (_) => true,
+            ),
           )
-          .timeout(const Duration(milliseconds: 2000));
-      if (response.statusCode != HttpStatus.ok) {
-        return false;
+          .timeout(helperStartTimeout);
+      final data = (response.data as String? ?? '').trim();
+      if (response.statusCode != HttpStatus.ok && data.isEmpty) {
+        return 'HTTP ${response.statusCode}';
       }
-      final data = response.data as String;
-      return data.isEmpty;
-    } catch (_) {
-      return false;
+      return data;
+    } catch (e) {
+      return '$e';
     }
   }
 
