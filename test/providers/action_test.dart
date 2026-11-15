@@ -32,6 +32,19 @@ void main() {
     });
   });
 
+  test('a settings change keeps the desktop TUN the user switched on', () {
+    // It used to apply every change with the core's TUN off: on Windows TUN
+    // switched on in a running app never reached the core.
+    final source = File('lib/providers/action.dart').readAsStringSync();
+    final start = source.indexOf('Future<void> applySettingsSnapshot');
+    final end = source.indexOf('Future<void> applyProfileForDisplay', start);
+    final method = source.substring(start, end);
+    expect(method, isNot(contains('tun(enable: false)')));
+    expect(method, isNot(contains('copyWith(enable: false)')));
+    expect(method, contains('await _settingsTunEnable(candidate)'));
+    expect(method, contains('if (system.isAndroid) return false;'));
+  });
+
   group('runtime projection scheduling', () {
     test('production schedules preheat only after setup commit returns', () {
       final source = File('lib/providers/action.dart').readAsStringSync();

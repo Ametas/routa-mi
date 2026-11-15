@@ -20,6 +20,7 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/plugins/service.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/providers/settings_apply.dart';
 import 'package:fl_clash/services/lifecycle_intent.dart';
 import 'package:fl_clash/services/settings/settings_contract.dart';
 import 'package:fl_clash/services/settings/settings_runtime.dart';
@@ -1630,9 +1631,10 @@ class SetupAction extends _$SetupAction {
       final error = validateRouteCidr(route);
       if (error != null) throw SettingsApplyFailure(error);
     }
+    final tunEnable = await _settingsTunEnable(candidate);
     final materialized = await getProfile(
       setupState: setupState,
-      patchConfig: candidate.patchClashConfig.copyWith.tun(enable: false),
+      patchConfig: candidate.patchClashConfig.copyWith.tun(enable: tunEnable),
       settingsSnapshot: candidate,
     );
     final validation = await coreController.validateConfigWithData(materialized.a);
@@ -1664,7 +1666,7 @@ class SetupAction extends _$SetupAction {
           if (kind == SettingsApplyKind.hot) {
             final patch = candidate.patchClashConfig;
             message = await coreController.updateConfig(UpdateParams(
-              tun: patch.tun.getRealTun(candidate.networkProps.routeMode).copyWith(enable: false),
+              tun: patch.tun.getRealTun(candidate.networkProps.routeMode).copyWith(enable: tunEnable),
               allowLan: patch.allowLan,
               findProcessMode: patch.findProcessMode,
               mode: patch.mode,
@@ -1741,6 +1743,21 @@ class SetupAction extends _$SetupAction {
     if (result == RuntimeConfigCommitOutcome.superseded) {
       throw const SettingsApplyCancelled();
     }
+  }
+
+  /// The core's own TUN for a settings change: never on Android (the VPN
+  /// service is the TUN there); on the desktop it follows the setting once
+  /// the core runs where it may create the adapter.
+  Future<bool> _settingsTunEnable(Config candidate) async {
+    if (system.isAndroid) return false;
+    final res = await _requestAdmin(candidate.patchClashConfig.tun.enable);
+    if (res.isError) {
+      // The core restarted under the helper service just installed: apply
+      // the change again on the new core.
+      ref.read(settingsApplyProvider.notifier).retry();
+      throw const SettingsApplyCancelled();
+    }
+    return ref.read(realTunEnableProvider);
   }
 
   Future<void> applyProfileForDisplay({bool silence = true}) async {

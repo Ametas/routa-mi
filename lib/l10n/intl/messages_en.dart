@@ -313,6 +313,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog050Item4": MessageLookupByLibrary.simpleMessage(
       "The app is English only.",
     ),
+    "changelog051Item1": MessageLookupByLibrary.simpleMessage(
+      "Windows: TUN switched on in a running app now reaches the core, and other settings changes no longer turn it off.",
+    ),
+    "changelog051Item2": MessageLookupByLibrary.simpleMessage(
+      "Windows: when the helper service cannot start the core, TUN stays off and the reason is shown.",
+    ),
+    "changelog051Item3": MessageLookupByLibrary.simpleMessage(
+      "Windows: side menu labels use the app\'s text style again.",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage(
       "Check your network and try again.",
     ),
