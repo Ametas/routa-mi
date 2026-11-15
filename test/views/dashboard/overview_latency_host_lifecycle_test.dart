@@ -28,7 +28,7 @@ Widget _app(DashboardResponsiveLayout layout) {
       currentPageLabelProvider.overrideWithValue(PageLabel.dashboard),
     ],
     child: MaterialApp(
-      locale: const Locale('zh', 'CN'),
+      locale: const Locale('en'),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

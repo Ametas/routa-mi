@@ -148,9 +148,7 @@ class Ipv6Item extends ConsumerWidget {
     return ListItem.switchItem(
       title: const Text('IPv6'),
       subtitle: Text(
-        Localizations.localeOf(context).languageCode == 'zh'
-            ? '允许 IPv6 入站，接管应用 IPv6 流量'
-            : 'Accept and capture app IPv6 traffic',
+        'Accept and capture app IPv6 traffic',
       ),
       delegate: SwitchDelegate(
         value: ipv6,
@@ -258,9 +256,7 @@ class DNSHijackingItem extends ConsumerWidget {
     return ListItem(
       title: Text(appLocalizations.dnsHijacking),
       subtitle: Text(
-        Localizations.localeOf(context).languageCode == 'zh'
-            ? '自动接管 · VPN 运行时接管常规 DNS'
-            : 'Automatic · captures ordinary DNS while VPN is active',
+        'Automatic · captures ordinary DNS while VPN is active',
       ),
     );
   }

@@ -718,6 +718,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "nameserverPolicyDesc": MessageLookupByLibrary.simpleMessage(
       "Set nameserver policy",
     ),
+    "navActivity": MessageLookupByLibrary.simpleMessage("Activity"),
     "network": MessageLookupByLibrary.simpleMessage("Network"),
     "networkAddress": MessageLookupByLibrary.simpleMessage("Network Address"),
     "networkAddressHint": MessageLookupByLibrary.simpleMessage(
@@ -1064,6 +1065,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "restoreSuccess": MessageLookupByLibrary.simpleMessage("Restore success"),
     "resume": MessageLookupByLibrary.simpleMessage("Resume"),
     "resuming": MessageLookupByLibrary.simpleMessage("Resuming"),
+    "routaPreset": MessageLookupByLibrary.simpleMessage("RoutaMi"),
+    "routaStyle": MessageLookupByLibrary.simpleMessage("RoutaMi violet"),
     "routeAddress": MessageLookupByLibrary.simpleMessage("Route address"),
     "routeAddressDesc": MessageLookupByLibrary.simpleMessage(
       "Set listen route address",

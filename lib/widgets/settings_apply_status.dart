@@ -8,9 +8,6 @@ import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/services/settings/settings_apply_queue.dart';
 import 'package:fl_clash/state.dart';
 
-String settingsText(BuildContext context, String zh, String en) =>
-    Localizations.localeOf(context).languageCode == 'zh' ? zh : en;
-
 /// Uses the app's transient notification and error-dialog system. No page row.
 class SettingsApplyFeedback extends ConsumerWidget {
   const SettingsApplyFeedback({super.key, required this.child, this.onMessage});
@@ -25,22 +22,13 @@ class SettingsApplyFeedback extends ConsumerWidget {
           previous?.phase == status.phase) {
         return;
       }
-      final localContext = globalState.navigatorKey.currentContext ?? context;
-      final zh =
-          Localizations.maybeLocaleOf(localContext)?.languageCode == 'zh';
-      String text(String cn, String en) => zh ? cn : en;
       final message = switch (status.phase) {
-        SettingsApplyPhase.applied => text('设置已生效', 'Settings applied'),
-        SettingsApplyPhase.deferred => text(
-          '设置已保存，下次启动或恢复时生效',
-          'Saved; applies on next start or resume',
-        ),
+        SettingsApplyPhase.applied => 'Settings applied',
+        SettingsApplyPhase.deferred => 'Saved; applies on next start or resume',
         SettingsApplyPhase.failed =>
-          "${text('设置应用失败', 'Settings application failed')}\n${status.error ?? ''}",
-        SettingsApplyPhase.applying when status.reconnect => text(
-          '正在应用设置，VPN 将短暂重连',
+          "Settings application failed\n${status.error ?? ''}",
+        SettingsApplyPhase.applying when status.reconnect =>
           'Applying settings; VPN will briefly reconnect',
-        ),
         _ => null,
       };
       if (message == null) return;
@@ -79,14 +67,14 @@ class SettingsApplyFailureDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => CommonDialog(
-    title: settingsText(context, '设置应用失败', 'Settings application failed'),
+    title: 'Settings application failed',
     actions: [
       SurgeDialogActionButton(
-        label: settingsText(context, '关闭', 'Close'),
+        label: 'Close',
         onPressed: () => Navigator.of(context).pop(false),
       ),
       SurgeDialogActionButton(
-        label: settingsText(context, '重试', 'Retry'),
+        label: 'Retry',
         primary: true,
         onPressed: () => Navigator.of(context).pop(true),
       ),

@@ -24,7 +24,7 @@ void main() {
           viewSizeProvider.overrideWithBuild((_, _) => const Size(360, 720)),
         ],
         child: MaterialApp(
-          locale: const Locale('zh', 'CN'),
+          locale: const Locale('en'),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -41,10 +41,10 @@ void main() {
       ),
     );
 
-    expect(find.text('更新日志'), findsOneWidget);
+    expect(find.text('Changelog'), findsOneWidget);
     // The newest release is always the first card in view.
     expect(find.text(appChangelogEntries.first.version), findsOneWidget);
-    expect(find.text('确定'), findsOneWidget);
+    expect(find.text('Confirm'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

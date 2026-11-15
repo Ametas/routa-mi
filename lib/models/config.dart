@@ -28,10 +28,7 @@ const defaultBypassDomain = [
   '192.168.*',
 ];
 
-const defaultAppSettingProps = AppSettingProps(
-  locale: 'zh_CN',
-  onlyStatisticsProxy: true,
-);
+const defaultAppSettingProps = AppSettingProps(onlyStatisticsProxy: true);
 const defaultVpnProps = VpnProps();
 const defaultNetworkProps = NetworkProps();
 const defaultAuthenticationProps = AuthenticationProps();

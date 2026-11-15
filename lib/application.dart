@@ -73,7 +73,11 @@ class ApplicationState extends ConsumerState<Application> {
       return SurgeTheme.fromColorScheme(colorScheme);
     }
     final spec = StaticThemeSpec.resolve(themeProps.staticPreset, brightness);
-    return SurgeTheme.fromColors(spec.colors, stateColors: spec.stateColors);
+    return SurgeTheme.fromColors(
+      spec.colors,
+      stateColors: spec.stateColors,
+      dashboard: spec.dashboard,
+    );
   }
 
   SystemUiOverlayStyle _getSystemUiOverlayStyle(SurgeTheme surge) {

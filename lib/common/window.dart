@@ -18,7 +18,7 @@ class Window {
     return _instance!;
   }
 
-  static const defaultSize = Size(440, 860);
+  static const defaultSize = Size(1100, 720);
 
   Future<void> init(WindowProps props) async {
     if (!await singleInstanceLock.acquire()) {
@@ -30,7 +30,7 @@ class Window {
     await windowManager.ensureInitialized();
     final options = WindowOptions(
       size: props.width == 0 || props.height == 0 ? defaultSize : props.size,
-      minimumSize: const Size(380, 560),
+      minimumSize: const Size(400, 600),
       title: appName,
     );
     await _restorePosition(props);

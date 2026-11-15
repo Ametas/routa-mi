@@ -311,10 +311,7 @@ void main() {
       final height = name == 'components' ? 3240.0 : 853.0;
       await tester.binding.setSurfaceSize(Size(384, height));
       tester.view.devicePixelRatio = 2.5;
-      final spec = StaticThemeSpec.resolve(
-        StaticThemePreset.blueWhite,
-        brightness,
-      );
+      final spec = StaticThemeSpec.resolve(StaticThemePreset.routa, brightness);
       // Devices fill a missing family with Roboto; the test engine draws
       // boxes instead, so name it explicitly.
       final textTheme = buildSlclashTextTheme().apply(fontFamily: 'Roboto');
@@ -400,6 +397,7 @@ void main() {
                 surge: SurgeTheme.fromColors(
                   spec.colors,
                   stateColors: spec.stateColors,
+                  dashboard: spec.dashboard,
                 ),
                 typography: _withFamily(
                   SurgeTypography.fromTextTheme(textTheme),

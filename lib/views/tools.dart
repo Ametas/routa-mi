@@ -1,5 +1,4 @@
 import 'package:fl_clash/common/common.dart';
-import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
@@ -21,7 +20,6 @@ import 'developer.dart';
 import 'theme.dart';
 import 'package:fl_clash/providers/settings_apply.dart';
 import 'package:fl_clash/services/settings/settings_contract.dart';
-import 'package:fl_clash/widgets/settings_apply_status.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/widgets/mihomo_only.dart';
 
@@ -61,7 +59,6 @@ class _ToolViewState extends ConsumerState<ToolsView> {
 
   Widget _getSettingList(bool enableDeveloperMode) {
     final items = [
-      const _LocaleItem(),
       const _ThemeItem(),
       const _NetworkItem(),
       const MihomoOnly(child: _DnsItem()),
@@ -194,72 +191,6 @@ class _SurgeOpenTile extends StatelessWidget {
   }
 }
 
-class _SurgeActionTile extends StatelessWidget {
-  const _SurgeActionTile({
-    required this.leading,
-    required this.title,
-    required this.onTap,
-    this.subtitle,
-  });
-
-  final Widget leading;
-  final String title;
-  final String? subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SurgeListTile(
-      leading: leading,
-      title: title,
-      subtitle: subtitle,
-      showDivider: _SurgeTileDividerProvider.of(context),
-      titleTextStyle: context.typography.toolTileTitle,
-      subtitleTextStyle: context.typography.toolTileSubtitle,
-      onTap: onTap,
-    );
-  }
-}
-
-class _LocaleItem extends ConsumerWidget {
-  const _LocaleItem();
-
-  String _getLocaleString(BuildContext context, Locale? locale) {
-    if (locale == null) return context.appLocalizations.defaultText;
-    return switch (locale.toString()) {
-      'zh_CN' => context.appLocalizations.zh_CN,
-      _ => context.appLocalizations.en,
-    };
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(
-      appSettingProvider.select((state) => state.locale),
-    );
-    final subTitle = locale ?? context.appLocalizations.defaultText;
-    final currentLocale = utils.getLocaleForString(locale);
-    return _SurgeActionTile(
-      leading: const Icon(SurgeIcons.language),
-      title: context.appLocalizations.language,
-      subtitle: Intl.message(subTitle),
-      onTap: () async {
-        final locale = await globalState.showCommonDialog<Locale?>(
-          child: OptionsDialog<Locale?>(
-            title: context.appLocalizations.language,
-            options: [null, ...AppLocalizations.delegate.supportedLocales],
-            textBuilder: (locale) => _getLocaleString(context, locale),
-            value: currentLocale,
-          ),
-        );
-        ref
-            .read(appSettingProvider.notifier)
-            .update((state) => state.copyWith(locale: locale?.toString()));
-      },
-    );
-  }
-}
-
 class _ThemeItem extends StatelessWidget {
   const _ThemeItem();
 
@@ -340,9 +271,7 @@ class _DnsItem extends StatelessWidget {
               final container = ProviderScope.containerOf(context);
               final source = container.read(dnsSettingsSourceProvider).asData?.value;
               if (source == null || source == DnsSettingsSource.subscription) {
-                globalState.showNotifier(settingsText(context,
-                  '当前未采用 APP DNS，请先确认来源或开启覆写。',
-                  'APP DNS is not active; resolve the source or enable override first.'));
+                globalState.showNotifier('APP DNS is not active; resolve the source or enable override first.');
                 return;
               }
               final res = await globalState.showMessage(

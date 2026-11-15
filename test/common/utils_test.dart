@@ -115,7 +115,7 @@ void main() {
     });
 
     test('desktop for large width', () {
-      expect(utils.getViewMode(1000).name, 'desktop');
+      expect(utils.getViewMode(1024).name, 'desktop');
     });
   });
 

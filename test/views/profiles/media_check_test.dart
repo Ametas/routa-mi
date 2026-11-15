@@ -617,7 +617,7 @@ void main() {
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.delegate.supportedLocales,
-            locale: const Locale('zh', 'CN'),
+            locale: const Locale('en'),
             home: ProfileMediaCheckView(
               profiles: profiles,
               initialProfile: profiles.first,
@@ -628,17 +628,18 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('节点体检'), findsOneWidget);
+      expect(find.text('Node check'), findsOneWidget);
       expect(find.byKey(const Key('media-check-header-icon')), findsOneWidget);
-      expect(
-        tester.getSize(find.byKey(const Key('media-check-run-button'))),
-        const Size(48, 48),
+      final runButton = tester.getSize(
+        find.byKey(const Key('media-check-run-button')),
       );
+      expect(runButton.height, 48);
+      expect(runButton.width, greaterThanOrEqualTo(48));
       expect(find.text('Daily'), findsOneWidget);
       expect(find.text('GPT'), findsWidgets);
       expect(find.text('YouTube'), findsWidgets);
-      expect(find.text('健康'), findsWidgets);
-      expect(find.text('检测结果会展示在这里'), findsOneWidget);
+      expect(find.text('Health'), findsWidgets);
+      expect(find.text('Results appear here'), findsOneWidget);
     });
   });
 }

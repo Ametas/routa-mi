@@ -260,7 +260,7 @@ class UnifiedV1Exporter {
       '${yaml.encode(configMap).trimRight()}\n',
     );
     files['verge.yaml'] = standalone
-        ? utf8.encode('language: zh\n')
+        ? utf8.encode('language: en\n')
         : trusted.files['verge.yaml']!;
     files['profiles.yaml'] = utf8.encode(
       '${yaml.encode({'current': currentIdentity, 'items': profileItems}).trimRight()}\n',
