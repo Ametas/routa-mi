@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fl_clash/common/delay_queue.dart';
 import 'package:fl_clash/core/command_outcome.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/core/interface.dart';
@@ -160,10 +161,10 @@ void main() {
     CoreController.resetInstance();
   });
 
-  test('asyncTestDelay still uses the declared 6s timeout', () async {
+  test('asyncTestDelay waits longer than the core may test', () async {
     final core = FakeCoreHandler(invokeResult: '{"name":"A","value":1}');
     await core.asyncTestDelay('http://x', 'A');
-    expect(core.lastTimeout, const Duration(seconds: 6));
+    expect(core.lastTimeout, delayTestTimeout + delayTestAnswerGrace);
     expect(core.lastMethod, ActionMethod.asyncTestDelay);
   });
 
