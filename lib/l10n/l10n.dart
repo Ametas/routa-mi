@@ -5848,6 +5848,31 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Restart core`
+  String get restartCore {
+    return Intl.message(
+      'Restart core',
+      name: 'restartCore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lite mode`
+  String get liteMode {
+    return Intl.message('Lite mode', name: 'liteMode', desc: '', args: []);
+  }
+
+  /// `Lite mode could not start: {error}`
+  String liteModeFailed(Object error) {
+    return Intl.message(
+      'Lite mode could not start: $error',
+      name: 'liteModeFailed',
+      desc: '',
+      args: [error],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

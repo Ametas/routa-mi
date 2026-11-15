@@ -1298,9 +1298,12 @@ class SetupAction extends _$SetupAction {
       await reconcileNativeSession();
       return;
     }
+    // A core kept by lite mode's tray is taken back in its own state.
+    final lite = system.isWindows ? await liteMode.find() : null;
+    final liteRunning = lite != null && await liteMode.isRunning(lite);
     final shouldFullSetup = shouldFullSetupOnInit(
-      isRunning: isStart || sessionRequiresFullSetup(sessionState),
-      autoRun: sessionState != 'PAUSED' && ref.read(appSettingProvider).autoRun,
+      isRunning: isStart || sessionRequiresFullSetup(sessionState) || liteRunning,
+      autoRun: lite == null && sessionState != 'PAUSED' && ref.read(appSettingProvider).autoRun,
     );
     if (shouldFullSetup) {
       final coreAction = ref.read(coreActionProvider.notifier);
@@ -1339,7 +1342,7 @@ class SetupAction extends _$SetupAction {
         ref.read(isSmartStoppedProvider.notifier).set(true);
         StartupTrace.mark('smart_paused_restored');
       }
-      if (shouldAttachCoreWithoutVpnSetup(sessionState)) {
+      if (shouldAttachCoreWithoutVpnSetup(sessionState) || lite != null) {
         final coreAction = ref.read(coreActionProvider.notifier);
         final connected = await coreAction.connectCore(minDelay: Duration.zero);
         if (connected) {

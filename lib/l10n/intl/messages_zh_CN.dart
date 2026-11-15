@@ -55,32 +55,34 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m16(time) => "上次 ${time}";
 
-  static String m17(appName) =>
+  static String m17(error) => "无法进入轻量模式：${error}";
+
+  static String m18(appName) =>
       "1. 打开 系统设置 > 隐私与安全性\n2. 选择 定位服务\n3. 在右侧列表中找到并勾选 ${appName}\n\n完成设置后，返回应用即可正常使用。感谢您的配合。";
 
-  static String m18(count) => "${count} 分钟前";
+  static String m19(count) => "${count} 分钟前";
 
-  static String m19(mode) => "${mode}模式";
+  static String m20(mode) => "${mode}模式";
 
-  static String m20(count) => "${count} 个月前";
+  static String m21(count) => "${count} 个月前";
 
-  static String m21(filter) => "暂无${filter}结果";
+  static String m22(filter) => "暂无${filter}结果";
 
-  static String m22(label) => "暂无${label}";
+  static String m23(label) => "暂无${label}";
 
-  static String m23(label) => "${label}必须为数字";
+  static String m24(label) => "${label}必须为数字";
 
-  static String m24(label) => "${label} 必须在 1024 到 49151 之间";
+  static String m25(label) => "${label} 必须在 1024 到 49151 之间";
 
-  static String m25(name) => "恢复 ${name}";
+  static String m26(name) => "恢复 ${name}";
 
-  static String m26(count) => "已选择 ${count} 项";
+  static String m27(count) => "已选择 ${count} 项";
 
-  static String m27(region) => "解锁(${region})";
+  static String m28(region) => "解锁(${region})";
 
-  static String m28(label) => "${label}必须为URL";
+  static String m29(label) => "${label}必须为URL";
 
-  static String m29(count) => "${count} 年前";
+  static String m30(count) => "${count} 年前";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -465,6 +467,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "light": MessageLookupByLibrary.simpleMessage("浅色"),
     "list": MessageLookupByLibrary.simpleMessage("列表"),
     "listen": MessageLookupByLibrary.simpleMessage("监听"),
+    "liteMode": MessageLookupByLibrary.simpleMessage("轻量模式"),
+    "liteModeFailed": m17,
     "loadTest": MessageLookupByLibrary.simpleMessage("加载测试"),
     "loading": MessageLookupByLibrary.simpleMessage("加载中..."),
     "local": MessageLookupByLibrary.simpleMessage("本地"),
@@ -485,7 +489,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "locationPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "根据系统要求，获取Wi-Fi名称需要您授予位置权限。",
     ),
-    "locationPermissionGuide": m17,
+    "locationPermissionGuide": m18,
     "locationPermissionRequired": MessageLookupByLibrary.simpleMessage(
       "需要位置权限",
     ),
@@ -516,13 +520,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "min": MessageLookupByLibrary.simpleMessage("最小"),
     "minimizeOnExit": MessageLookupByLibrary.simpleMessage("退出时最小化"),
     "minimizeOnExitDesc": MessageLookupByLibrary.simpleMessage("修改系统默认退出事件"),
-    "minutesAgo": m18,
+    "minutesAgo": m19,
     "mixedPort": MessageLookupByLibrary.simpleMessage("混合端口"),
     "mode": MessageLookupByLibrary.simpleMessage("模式"),
-    "modeDescription": m19,
+    "modeDescription": m20,
     "monochrome": MessageLookupByLibrary.simpleMessage("单色"),
     "monochromeScheme": MessageLookupByLibrary.simpleMessage("单色"),
-    "monthsAgo": m20,
+    "monthsAgo": m21,
     "more": MessageLookupByLibrary.simpleMessage("更多"),
     "name": MessageLookupByLibrary.simpleMessage("名称"),
     "nameserver": MessageLookupByLibrary.simpleMessage("域名服务器"),
@@ -550,7 +554,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "noCache": MessageLookupByLibrary.simpleMessage("无缓存"),
     "noData": MessageLookupByLibrary.simpleMessage("暂无数据"),
-    "noFilteredResults": m21,
+    "noFilteredResults": m22,
     "noHistory": MessageLookupByLibrary.simpleMessage("暂无历史"),
     "noHotKey": MessageLookupByLibrary.simpleMessage("暂无快捷键"),
     "noInfo": MessageLookupByLibrary.simpleMessage("暂无信息"),
@@ -573,8 +577,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "notReady": MessageLookupByLibrary.simpleMessage("未就绪"),
     "notSelectedTip": MessageLookupByLibrary.simpleMessage("当前代理组无法选中"),
     "nullProfileDesc": MessageLookupByLibrary.simpleMessage("没有配置文件,请先添加配置文件"),
-    "nullTip": m22,
-    "numberTip": m23,
+    "nullTip": m23,
+    "numberTip": m24,
     "onDemand": MessageLookupByLibrary.simpleMessage("按需运行"),
     "onDemandDesc": MessageLookupByLibrary.simpleMessage("配置程序特定场景运行状态"),
     "onlyIcon": MessageLookupByLibrary.simpleMessage("仅图标"),
@@ -614,7 +618,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "port": MessageLookupByLibrary.simpleMessage("端口"),
     "portConflictTip": MessageLookupByLibrary.simpleMessage("请输入不同的端口"),
-    "portTip": m24,
+    "portTip": m25,
     "possiblyRoutedToChina": MessageLookupByLibrary.simpleMessage("疑似送中"),
     "preferH3Desc": MessageLookupByLibrary.simpleMessage("优先使用DOH的http/3"),
     "prerequisites": MessageLookupByLibrary.simpleMessage("前置条件"),
@@ -752,6 +756,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "DNS连接跟随rules,需配置proxy-server-nameserver",
     ),
     "restart": MessageLookupByLibrary.simpleMessage("重启"),
+    "restartCore": MessageLookupByLibrary.simpleMessage("重启核心"),
     "restartCoreTip": MessageLookupByLibrary.simpleMessage("您确定要重启核心吗？"),
     "restore": MessageLookupByLibrary.simpleMessage("恢复"),
     "restoreAllData": MessageLookupByLibrary.simpleMessage("恢复所有数据"),
@@ -760,7 +765,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "restoreFromWebDAVDesc": MessageLookupByLibrary.simpleMessage(
       "通过WebDAV恢复数据",
     ),
-    "restoreNamedBackup": m25,
+    "restoreNamedBackup": m26,
     "restoreOnlyConfig": MessageLookupByLibrary.simpleMessage("仅恢复配置文件"),
     "restoreProfilesOnlyDesc": MessageLookupByLibrary.simpleMessage(
       "将只恢复订阅和节点数据，不会恢复应用设置、主题、WebDAV、脚本、规则和自定义代理组。",
@@ -877,7 +882,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectSubRule": MessageLookupByLibrary.simpleMessage("请选择子规则"),
     "selectTestItem": MessageLookupByLibrary.simpleMessage("选择测试项"),
     "selected": MessageLookupByLibrary.simpleMessage("已选择"),
-    "selectedCountTitle": m26,
+    "selectedCountTitle": m27,
     "settings": MessageLookupByLibrary.simpleMessage("设置"),
     "show": MessageLookupByLibrary.simpleMessage("显示"),
     "shrink": MessageLookupByLibrary.simpleMessage("紧凑"),
@@ -971,7 +976,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unknownNetworkError": MessageLookupByLibrary.simpleMessage("未知网络错误"),
     "unlocked": MessageLookupByLibrary.simpleMessage("解锁"),
     "unlockedRegions": MessageLookupByLibrary.simpleMessage("解锁地区"),
-    "unlockedWithRegion": m27,
+    "unlockedWithRegion": m28,
     "unnamed": MessageLookupByLibrary.simpleMessage("未命名"),
     "update": MessageLookupByLibrary.simpleMessage("更新"),
     "updateFrequency": MessageLookupByLibrary.simpleMessage("更新频率"),
@@ -979,7 +984,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upstreamProject": MessageLookupByLibrary.simpleMessage("原生项目"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("通过URL获取配置文件"),
-    "urlTip": m28,
+    "urlTip": m29,
     "useHosts": MessageLookupByLibrary.simpleMessage("使用Hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("使用系统Hosts"),
     "value": MessageLookupByLibrary.simpleMessage("值"),
@@ -998,7 +1003,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "windowsTunUnavailable": MessageLookupByLibrary.simpleMessage(
       "TUN 模式需要将 RoutaMi 安装到 Program Files，并以管理员身份批准其辅助服务。",
     ),
-    "yearsAgo": m29,
+    "yearsAgo": m30,
     "youtubeRoutedToChina": MessageLookupByLibrary.simpleMessage("YouTube 送中"),
     "zh_CN": MessageLookupByLibrary.simpleMessage("中文简体"),
   };

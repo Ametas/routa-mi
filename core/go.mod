@@ -5,6 +5,7 @@ go 1.26
 replace github.com/metacubex/mihomo => ./Clash.Meta
 
 require (
+	fyne.io/systray v1.12.2
 	github.com/Microsoft/go-winio v0.6.2
 	github.com/metacubex/mihomo v0.0.0-00010101000000-000000000000
 	github.com/sagernet/cronet-go v0.0.0-20261023060337-b3c2ed82ac97
@@ -49,6 +50,7 @@ require (
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gobwas/ws v1.4.0 // indirect
+	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/gofrs/uuid/v5 v5.4.0 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/golang/snappy v1.0.0 // indirect

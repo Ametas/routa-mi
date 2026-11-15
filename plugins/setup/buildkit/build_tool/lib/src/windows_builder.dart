@@ -13,7 +13,8 @@ final _log = Logger('windows_builder');
 /// Builds the Windows side of RoutaMi into `libclash/windows/`:
 /// `RoutaMiCore.exe` (the core as a separate process), the
 /// `RoutaMiHelperService.exe` that runs it as LocalSystem for TUN (pinned to
-/// the core's SHA-256), and Cronet's `libcronet.dll` for Naive. The core hash
+/// the core's SHA-256), `RoutaMiTray.exe` that keeps the core in lite mode,
+/// and Cronet's `libcronet.dll` for Naive. The core hash
 /// also goes to `core_sha256.json` for `--dart-define-from-file`, so the app
 /// can tell whether the installed helper belongs to this build.
 class WindowsBuilder {
@@ -24,6 +25,7 @@ class WindowsBuilder {
 
   static const coreName = 'RoutaMiCore.exe';
   static const helperName = 'RoutaMiHelperService.exe';
+  static const trayName = 'RoutaMiTray.exe';
   static const cronetName = 'libcronet.dll';
   static const tags = 'with_gvisor,with_naive,with_purego';
 
@@ -66,6 +68,14 @@ class WindowsBuilder {
       '-o',
       p.join(outputDir, helperName),
       './helper',
+    ], workingDirectory: _coreDir, environment: _env);
+
+    await runCommandStream('go', [
+      'build',
+      '-ldflags=-w -s -H=windowsgui',
+      '-o',
+      p.join(outputDir, trayName),
+      './tray',
     ], workingDirectory: _coreDir, environment: _env);
 
     final cronetDir = (runCommand('go', [

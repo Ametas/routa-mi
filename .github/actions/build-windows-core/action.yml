@@ -32,7 +32,7 @@ runs:
         GH_TOKEN: ${{ github.token }}
       run: |
         set -euo pipefail
-        for f in RoutaMiCore.exe RoutaMiHelperService.exe libcronet.dll; do
+        for f in RoutaMiCore.exe RoutaMiHelperService.exe RoutaMiTray.exe libcronet.dll; do
           if [ ! -f "libclash/windows/$f" ]; then
             echo "::error::Expected libclash/windows/$f"
             exit 1

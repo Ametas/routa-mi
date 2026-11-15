@@ -11,7 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'application.dart';
 import 'common/common.dart';
 
-Future<void> main() async {
+Future<void> main(List<String> args) async {
+  liteMode.launchRequested = args.contains('--lite');
   try {
     StartupTrace.beginProcess();
     WidgetsFlutterBinding.ensureInitialized();

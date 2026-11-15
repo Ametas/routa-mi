@@ -122,6 +122,18 @@ func TestOnlyTheAppNextToTheHelperMayCall(t *testing.T) {
 	}
 }
 
+func TestTheLiteTrayNextToTheHelperMayCall(t *testing.T) {
+	f := newFixture(t)
+	f.caller = filepath.Join(f.h.dir, trayExeName)
+	if status, body := f.post(t, "/stop", ""); status != http.StatusOK {
+		t.Fatalf("stop from the tray: %d %s", status, body)
+	}
+	f.caller = filepath.Join(t.TempDir(), trayExeName)
+	if status, _ := f.post(t, "/stop", ""); status != http.StatusForbidden {
+		t.Fatalf("stop from another RoutaMiTray.exe: status %d", status)
+	}
+}
+
 func TestOnlyTheVerifiedCoreStarts(t *testing.T) {
 	f := newFixture(t)
 	other := filepath.Join(t.TempDir(), coreExeName)

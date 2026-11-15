@@ -221,6 +221,7 @@ enum ActionMethod {
   xrayStop,
   xraySelect,
   xrayTraffic,
+  handover,
   updateConfig,
   getConfig,
   getProxies,

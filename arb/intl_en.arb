@@ -711,5 +711,8 @@
   "regenerateUuid": "Generate new UUID",
   "regenerateUuidDesc": "Clients set up with the current link will stop connecting",
   "congestionController": "TCP congestion control",
-  "congestionControllerDesc": "Used by the mips stack; Default keeps the profile's value"
+  "congestionControllerDesc": "Used by the mips stack; Default keeps the profile's value",
+  "restartCore": "Restart core",
+  "liteMode": "Lite mode",
+  "liteModeFailed": "Lite mode could not start: {error}"
 }

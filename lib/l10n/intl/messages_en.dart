@@ -59,32 +59,34 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m16(time) => "Last ${time}";
 
-  static String m17(appName) =>
+  static String m17(error) => "Lite mode could not start: ${error}";
+
+  static String m18(appName) =>
       "1. Open Settings > Privacy & Security\n2. Choose Location Services\n3. Enable ${appName}\n\nReturn to app after setup.";
 
-  static String m18(count) => "${count}m ago";
+  static String m19(count) => "${count}m ago";
 
-  static String m19(mode) => "${mode} mode";
+  static String m20(mode) => "${mode} mode";
 
-  static String m20(count) => "${count}mo ago";
+  static String m21(count) => "${count}mo ago";
 
-  static String m21(filter) => "No ${filter} results";
+  static String m22(filter) => "No ${filter} results";
 
-  static String m22(label) => "No ${label} yet";
+  static String m23(label) => "No ${label} yet";
 
-  static String m23(label) => "${label} must be a number";
+  static String m24(label) => "${label} must be a number";
 
-  static String m24(label) => "${label} must be between 1024 and 49151";
+  static String m25(label) => "${label} must be between 1024 and 49151";
 
-  static String m25(name) => "Restore ${name}";
+  static String m26(name) => "Restore ${name}";
 
-  static String m26(count) => "${count} items have been selected";
+  static String m27(count) => "${count} items have been selected";
 
-  static String m27(region) => "Unlocked (${region})";
+  static String m28(region) => "Unlocked (${region})";
 
-  static String m28(label) => "${label} must be a url";
+  static String m29(label) => "${label} must be a url";
 
-  static String m29(count) => "${count}y ago";
+  static String m30(count) => "${count}y ago";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -615,6 +617,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "light": MessageLookupByLibrary.simpleMessage("Light"),
     "list": MessageLookupByLibrary.simpleMessage("List"),
     "listen": MessageLookupByLibrary.simpleMessage("Listen"),
+    "liteMode": MessageLookupByLibrary.simpleMessage("Lite mode"),
+    "liteModeFailed": m17,
     "loadTest": MessageLookupByLibrary.simpleMessage("Load test"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "local": MessageLookupByLibrary.simpleMessage("Local"),
@@ -641,7 +645,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "locationPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Wi-Fi name requires location permission.",
     ),
-    "locationPermissionGuide": m17,
+    "locationPermissionGuide": m18,
     "locationPermissionRequired": MessageLookupByLibrary.simpleMessage(
       "Location Permission Required",
     ),
@@ -682,13 +686,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "minimizeOnExitDesc": MessageLookupByLibrary.simpleMessage(
       "Modify the default system exit event",
     ),
-    "minutesAgo": m18,
+    "minutesAgo": m19,
     "mixedPort": MessageLookupByLibrary.simpleMessage("Mixed Port"),
     "mode": MessageLookupByLibrary.simpleMessage("Mode"),
-    "modeDescription": m19,
+    "modeDescription": m20,
     "monochrome": MessageLookupByLibrary.simpleMessage("Mono"),
     "monochromeScheme": MessageLookupByLibrary.simpleMessage("Monochrome"),
-    "monthsAgo": m20,
+    "monthsAgo": m21,
     "more": MessageLookupByLibrary.simpleMessage("More"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
     "nameserver": MessageLookupByLibrary.simpleMessage("Nameserver"),
@@ -730,7 +734,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "noCache": MessageLookupByLibrary.simpleMessage("No cache"),
     "noData": MessageLookupByLibrary.simpleMessage("No data"),
-    "noFilteredResults": m21,
+    "noFilteredResults": m22,
     "noHistory": MessageLookupByLibrary.simpleMessage("No history"),
     "noHotKey": MessageLookupByLibrary.simpleMessage("No HotKey"),
     "noInfo": MessageLookupByLibrary.simpleMessage("No info"),
@@ -765,8 +769,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "nullProfileDesc": MessageLookupByLibrary.simpleMessage(
       "No profiles yet. Add one to get started.",
     ),
-    "nullTip": m22,
-    "numberTip": m23,
+    "nullTip": m23,
+    "numberTip": m24,
     "onDemand": MessageLookupByLibrary.simpleMessage("On Demand"),
     "onDemandDesc": MessageLookupByLibrary.simpleMessage(
       "Configure running state for scenarios",
@@ -820,7 +824,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "portConflictTip": MessageLookupByLibrary.simpleMessage(
       "Please enter a different port",
     ),
-    "portTip": m24,
+    "portTip": m25,
     "possiblyRoutedToChina": MessageLookupByLibrary.simpleMessage(
       "Possibly routed to China",
     ),
@@ -1012,6 +1016,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Follow rules; requires proxy nameserver",
     ),
     "restart": MessageLookupByLibrary.simpleMessage("Restart"),
+    "restartCore": MessageLookupByLibrary.simpleMessage("Restart core"),
     "restartCoreTip": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to restart the core?",
     ),
@@ -1026,7 +1031,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "restoreFromWebDAVDesc": MessageLookupByLibrary.simpleMessage(
       "Restore via WebDAV",
     ),
-    "restoreNamedBackup": m25,
+    "restoreNamedBackup": m26,
     "restoreOnlyConfig": MessageLookupByLibrary.simpleMessage(
       "Restore config files only",
     ),
@@ -1191,7 +1196,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "selectTestItem": MessageLookupByLibrary.simpleMessage("Select check"),
     "selected": MessageLookupByLibrary.simpleMessage("Selected"),
-    "selectedCountTitle": m26,
+    "selectedCountTitle": m27,
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
     "show": MessageLookupByLibrary.simpleMessage("Show"),
     "shrink": MessageLookupByLibrary.simpleMessage("Shrink"),
@@ -1311,7 +1316,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "unlocked": MessageLookupByLibrary.simpleMessage("Unlocked"),
     "unlockedRegions": MessageLookupByLibrary.simpleMessage("Unlocked"),
-    "unlockedWithRegion": m27,
+    "unlockedWithRegion": m28,
     "unnamed": MessageLookupByLibrary.simpleMessage("Unnamed"),
     "update": MessageLookupByLibrary.simpleMessage("Update"),
     "updateFrequency": MessageLookupByLibrary.simpleMessage("Update frequency"),
@@ -1321,7 +1326,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "urlDesc": MessageLookupByLibrary.simpleMessage(
       "Obtain profile through URL",
     ),
-    "urlTip": m28,
+    "urlTip": m29,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "value": MessageLookupByLibrary.simpleMessage("Value"),
@@ -1346,7 +1351,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "windowsTunUnavailable": MessageLookupByLibrary.simpleMessage(
       "TUN mode needs RoutaMi installed in Program Files and administrator approval for its helper service.",
     ),
-    "yearsAgo": m29,
+    "yearsAgo": m30,
     "youtubeRoutedToChina": MessageLookupByLibrary.simpleMessage(
       "YouTube via China",
     ),

@@ -711,5 +711,8 @@
   "regenerateUuid": "重新生成 UUID",
   "regenerateUuidDesc": "使用当前链接配置的客户端将无法连接",
   "congestionController": "TCP 拥塞控制",
-  "congestionControllerDesc": "仅 mips 栈使用；默认保留配置文件中的值"
+  "congestionControllerDesc": "仅 mips 栈使用；默认保留配置文件中的值",
+  "restartCore": "重启核心",
+  "liteMode": "轻量模式",
+  "liteModeFailed": "无法进入轻量模式：{error}"
 }
