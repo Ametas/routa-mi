@@ -38,6 +38,12 @@ class CoreService extends CoreHandlerInterface {
 
   bool get startedByHelper => _helper;
 
+  // Why the running helper service did not start the core (TUN then cannot
+  // work); null when it did or was not asked.
+  String? _helperError;
+
+  String? get helperError => _helperError;
+
   factory CoreService() {
     _instance ??= CoreService._internal();
     return _instance!;
@@ -93,6 +99,7 @@ class CoreService extends CoreHandlerInterface {
     }
     final address = _transport.address;
     // A core left running in lite mode comes back from the tray.
+    _helperError = null;
     final attached = await liteMode.attach(address);
     if (attached != null) {
       _helper = attached.helper;
@@ -100,11 +107,17 @@ class CoreService extends CoreHandlerInterface {
       return;
     }
     if (await system.checkIsAdmin()) {
-      if (await request.startCoreByHelper(address)) {
+      final error = await request.startCoreByHelper(address);
+      if (error.isEmpty) {
         _helper = true;
         await _transport.connectionCompleter.future;
         return;
       }
+      _helperError = error;
+      commonPrint.log(
+        'The helper service did not start the core: $error',
+        logLevel: LogLevel.warning,
+      );
     }
     _helper = false;
     try {
