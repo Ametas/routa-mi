@@ -138,20 +138,24 @@ Wait-Until 'RoutaMi.exe --lite went to the tray' 90 {
 $litePid = Core-Pid
 if (-not $litePid) { Fail 'no core after RoutaMi.exe left for the tray' }
 $status = Lite GET /status
-if (-not ($status.connected -and $status.running)) { Fail "tray status: $($status | ConvertTo-Json -Compress)" }
-Write-Host "lite mode: RoutaMi.exe exited, the tray holds core $litePid"
+if (-not $status.connected) { Fail "tray status: $($status | ConvertTo-Json -Compress)" }
+# CI has no profile, so the app may not have started the proxy: the tray
+# keeps whatever state it was handed, and toggles flip it.
+$initial = [bool]$status.running
+Write-Host "lite mode: RoutaMi.exe exited, the tray holds core $litePid (running: $initial)"
 
 Lite POST /toggle | Out-Null
-if ((Lite GET /status).running) { Fail 'the tray did not stop the core' }
+if ([bool](Lite GET /status).running -eq $initial) { Fail 'the tray did not toggle the core' }
 Lite POST /toggle | Out-Null
-if (-not (Lite GET /status).running) { Fail 'the tray did not start the core' }
+if ([bool](Lite GET /status).running -ne $initial) { Fail 'the tray did not toggle the core back' }
 
 Lite POST /restart | Out-Null
 Wait-Until 'the tray restarted the core' 30 { (Core-Pid) -and (Core-Pid) -ne $litePid }
 $restartedPid = Core-Pid
 $owner = (Get-CimInstance Win32_Process -Filter "ProcessId = $restartedPid").ParentProcessId
 if ((Get-Process -Id $owner).ProcessName -ne 'RoutaMiHelperService') { Fail 'the tray restarted the core outside the helper' }
-if (-not (Lite GET /status).running) { Fail 'the restarted core is not running' }
+$status = Lite GET /status
+if (-not $status.connected -or [bool]$status.running -ne $initial) { Fail "after restart: $($status | ConvertTo-Json -Compress)" }
 Write-Host "lite mode: the tray restarted the core through the helper ($restartedPid)"
 
 $app = Start-Process (Join-Path $dir 'RoutaMi.exe') -PassThru `
