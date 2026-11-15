@@ -1,7 +1,8 @@
 // Command tunsmoke plays the RoutaMi app against RoutaMiCore.exe on a CI
 // Windows runner (an administrator): it starts the core over the loopback
 // transport, loads a direct-mode config with TUN on, and checks that the
-// Wintun adapter comes up and carries traffic.
+// Wintun adapter comes up and carries traffic, once for every TUN stack the
+// app offers.
 package main
 
 import (
@@ -21,6 +22,9 @@ import (
 	"time"
 )
 
+// stacks the app offers (lib/enum/enum.dart TunStack); mixed is its default.
+var stacks = []string{"mixed", "gvisor", "system", "mips"}
+
 const config = `mixed-port: 7899
 mode: direct
 log-level: info
@@ -32,7 +36,7 @@ dns:
 tun:
   enable: true
   device: RoutaMi
-  stack: gvisor
+  stack: %s
   auto-route: true
   auto-detect-interface: true
   dns-hijack: ["any:53"]
@@ -88,31 +92,59 @@ func (s *session) call(method string, data any) (json.RawMessage, error) {
 func main() {
 	corePath := flag.String("core", "", "RoutaMiCore.exe")
 	flag.Parse()
-	if err := run(*corePath); err != nil {
-		log.Fatal(err)
+	var failed []string
+	for _, stack := range stacks {
+		log.Printf("--- stack %s", stack)
+		if err := run(*corePath, stack); err != nil {
+			log.Printf("stack %s FAILED: %v", stack, err)
+			failed = append(failed, stack)
+		} else {
+			log.Printf("stack %s passed", stack)
+		}
+		waitAdapterGone()
+	}
+	if len(failed) > 0 {
+		log.Fatalf("TUN failed with stacks %v", failed)
 	}
 	log.Print("TUN smoke test passed")
 }
 
-func run(corePath string) error {
+// waitAdapterGone lets the stopped core remove its adapter before the next
+// stack creates one with the same name.
+func waitAdapterGone() {
+	deadline := time.Now().Add(15 * time.Second)
+	for time.Now().Before(deadline) {
+		if _, err := net.InterfaceByName("RoutaMi"); err != nil {
+			return
+		}
+		time.Sleep(500 * time.Millisecond)
+	}
+}
+
+func run(corePath, stack string) error {
 	home, err := os.MkdirTemp("", "routami-tun")
 	if err != nil {
 		return err
 	}
-	if err := os.WriteFile(filepath.Join(home, "config.yaml"), []byte(config), 0o644); err != nil {
+	yaml := fmt.Sprintf(config, stack)
+	if err := os.WriteFile(filepath.Join(home, "config.yaml"), []byte(yaml), 0o644); err != nil {
 		return err
 	}
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		return err
 	}
+	defer listener.Close()
 	port := listener.Addr().(*net.TCPAddr).Port
 	core := exec.Command(corePath, fmt.Sprintf("tcp:%d:smoke", port))
 	core.Stderr = os.Stderr
 	if err := core.Start(); err != nil {
 		return err
 	}
-	defer core.Process.Kill()
+	defer func() {
+		_ = core.Process.Kill()
+		_ = core.Wait()
+	}()
 	conn, err := listener.Accept()
 	if err != nil {
 		return err
