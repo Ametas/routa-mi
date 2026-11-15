@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('the changelog is RoutaMi\'s own, starting at v0.1.0', () {
-    expect(appChangelogEntries.first.version, 'v0.4.0');
+    expect(appChangelogEntries.first.version, 'v0.5.0');
     expect(appChangelogEntries.last.version, 'v0.1.0');
     expect(appChangelogEntries.last.changes, [
       'changelog010Item1',
