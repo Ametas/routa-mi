@@ -1303,7 +1303,9 @@ class SetupAction extends _$SetupAction {
     final liteRunning = lite != null && await liteMode.isRunning(lite);
     final shouldFullSetup = shouldFullSetupOnInit(
       isRunning: isStart || sessionRequiresFullSetup(sessionState) || liteRunning,
-      autoRun: lite == null && sessionState != 'PAUSED' && ref.read(appSettingProvider).autoRun,
+      // RoutaMi.exe --lite starts the proxy before it goes to the tray.
+      autoRun: lite == null && sessionState != 'PAUSED' &&
+          (ref.read(appSettingProvider).autoRun || liteMode.launchRequested),
     );
     if (shouldFullSetup) {
       final coreAction = ref.read(coreActionProvider.notifier);

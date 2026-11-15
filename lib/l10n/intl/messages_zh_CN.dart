@@ -161,6 +161,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "autoLaunch": MessageLookupByLibrary.simpleMessage("自启动"),
     "autoLaunchDesc": MessageLookupByLibrary.simpleMessage("跟随系统自启动"),
+    "autoLaunchToTray": MessageLookupByLibrary.simpleMessage("开机启动到托盘"),
+    "autoLaunchToTrayDesc": MessageLookupByLibrary.simpleMessage(
+      "登录后直接以轻量模式进入托盘：内存中只保留核心和图标",
+    ),
     "autoRun": MessageLookupByLibrary.simpleMessage("自动运行"),
     "autoRunDesc": MessageLookupByLibrary.simpleMessage("应用打开时自动运行"),
     "autoSetSystemDns": MessageLookupByLibrary.simpleMessage("自动设置系统DNS"),
@@ -228,6 +232,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog030Item2": MessageLookupByLibrary.simpleMessage("全新应用图标。"),
     "changelog030Item3": MessageLookupByLibrary.simpleMessage(
       "Mihomo 内核更新至 v1.19.33，包含 crypto/tls 安全修复。",
+    ),
+    "changelog040Item1": MessageLookupByLibrary.simpleMessage(
+      "RoutaMi Windows x64 版：安装程序、系统代理、通过辅助服务实现的 TUN 以及内置更新。",
+    ),
+    "changelog040Item2": MessageLookupByLibrary.simpleMessage(
+      "Windows 托盘：重启核心和轻量模式（卸载窗口，仅保留核心和托盘图标）；开机启动，可直接进入托盘。",
+    ),
+    "changelog040Item3": MessageLookupByLibrary.simpleMessage(
+      "TUN：mips 栈，可选择 TCP 拥塞控制（cubic、reno、bbr、bbr3）。",
     ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage("请检查网络后重试。"),
     "checkResultsAppearHere": MessageLookupByLibrary.simpleMessage(

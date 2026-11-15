@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:fl_clash/common/lite.dart';
+import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
 
@@ -78,6 +81,13 @@ void main() {
     }
     for (final route in ['GET /status', 'POST /attach']) {
       expect(tray, contains(route));
+    }
+  });
+
+  test('every core action encodes, handover included', () {
+    for (final method in ActionMethod.values) {
+      final frame = jsonEncode(Action(id: '1', method: method, data: 'x'));
+      expect(frame, contains('"method":"${method.name}"'));
     }
   });
 }

@@ -427,7 +427,11 @@ class GlobalState {
     };
     container.read(profilesActionProvider.notifier).autoUpdateProfiles();
     container.read(commonActionProvider.notifier).autoCheckUpdate();
-    autoLaunch?.updateStatus(container.read(appSettingProvider).autoLaunch);
+    final appSetting = container.read(appSettingProvider);
+    autoLaunch?.updateStatus(
+      appSetting.autoLaunch,
+      toTray: appSetting.autoLaunchToTray,
+    );
     if (container.read(appSettingProvider).silentLaunch ||
         liteMode.launchRequested) {
       await window?.hide();

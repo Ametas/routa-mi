@@ -199,6 +199,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "autoLaunchDesc": MessageLookupByLibrary.simpleMessage(
       "Start RoutaMi when the device starts",
     ),
+    "autoLaunchToTray": MessageLookupByLibrary.simpleMessage("Start to tray"),
+    "autoLaunchToTrayDesc": MessageLookupByLibrary.simpleMessage(
+      "At sign-in RoutaMi goes straight to the tray in lite mode: only the core and the icon stay in memory",
+    ),
     "autoRun": MessageLookupByLibrary.simpleMessage("Auto-connect"),
     "autoRunDesc": MessageLookupByLibrary.simpleMessage(
       "Connect when RoutaMi opens",
@@ -284,6 +288,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog030Item2": MessageLookupByLibrary.simpleMessage("New app icon."),
     "changelog030Item3": MessageLookupByLibrary.simpleMessage(
       "Mihomo core updated to v1.19.33, including a crypto/tls security fix.",
+    ),
+    "changelog040Item1": MessageLookupByLibrary.simpleMessage(
+      "RoutaMi for Windows x64: installer, system proxy, TUN through a helper service and the built-in updater.",
+    ),
+    "changelog040Item2": MessageLookupByLibrary.simpleMessage(
+      "Windows tray: restart the core and lite mode, which unloads the window and keeps only the core and the tray icon; start with Windows, optionally straight to the tray.",
+    ),
+    "changelog040Item3": MessageLookupByLibrary.simpleMessage(
+      "TUN: the mips stack with a TCP congestion control choice (cubic, reno, bbr, bbr3).",
     ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage(
       "Check your network and try again.",
