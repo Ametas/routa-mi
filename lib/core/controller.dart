@@ -325,7 +325,11 @@ class CoreController {
     final xrayTag = xrayRuntime.isActive
         ? xrayRuntime.tagOf(XrayRuntimeConfig.groupName, proxyName)
         : null;
-    final data = await _interface.asyncTestDelay(url, xrayTag ?? proxyName);
+    final name = xrayTag ?? proxyName;
+    final data = await delayTestQueue.run(
+      '$url\n$name',
+      () => _interface.asyncTestDelay(url, name),
+    );
     final delay = Delay.fromJson(json.decode(data));
     return xrayTag == null ? delay : delay.copyWith(name: proxyName);
   }

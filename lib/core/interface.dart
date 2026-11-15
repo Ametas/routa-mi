@@ -457,13 +457,13 @@ abstract class CoreHandlerInterface with CoreInterface {
   Future<String> asyncTestDelay(String url, String proxyName) async {
     final delayParams = {
       'proxy-name': proxyName,
-      'timeout': httpTimeoutDuration.inMilliseconds,
+      'timeout': delayTestTimeout.inMilliseconds,
       'test-url': url,
     };
     return await _invoke<String>(
           method: ActionMethod.asyncTestDelay,
           data: json.encode(delayParams),
-          timeout: const Duration(seconds: 6),
+          timeout: delayTestTimeout + delayTestAnswerGrace,
         ) ??
         json.encode(Delay(name: proxyName, value: -1, url: url));
   }
