@@ -66,6 +66,8 @@ Map<String, dynamic> vpnInstanceKey(Config config) {
   return {
     'enable': true,
     'stack': options.stack,
+    // The VPN's mips stack reads it only when the TUN starts.
+    'congestion': config.patchClashConfig.tun.congestionController,
     'ipv6': options.ipv6,
     'allowBypass': options.allowBypass,
     'routes': options.routeAddress,

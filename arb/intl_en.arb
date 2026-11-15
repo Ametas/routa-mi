@@ -709,5 +709,7 @@
   "localVlessDesc": "Plain VLESS inbound for clients on this device; its UUID is the password",
   "localVlessLinkDesc": "vless:// link for a client on this device",
   "regenerateUuid": "Generate new UUID",
-  "regenerateUuidDesc": "Clients set up with the current link will stop connecting"
+  "regenerateUuidDesc": "Clients set up with the current link will stop connecting",
+  "congestionController": "TCP congestion control",
+  "congestionControllerDesc": "Used by the mips stack; Default keeps the profile's value"
 }
