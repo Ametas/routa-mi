@@ -281,6 +281,7 @@ const _$ActionMethodEnumMap = {
   ActionMethod.xrayStop: 'xrayStop',
   ActionMethod.xraySelect: 'xraySelect',
   ActionMethod.xrayTraffic: 'xrayTraffic',
+  ActionMethod.handover: 'handover',
   ActionMethod.updateConfig: 'updateConfig',
   ActionMethod.getConfig: 'getConfig',
   ActionMethod.getProxies: 'getProxies',

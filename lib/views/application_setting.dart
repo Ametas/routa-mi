@@ -100,6 +100,34 @@ class AutoLaunchItem extends ConsumerWidget {
   }
 }
 
+class AutoLaunchToTrayItem extends ConsumerWidget {
+  const AutoLaunchToTrayItem({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final setting = ref.watch(
+      appSettingProvider.select(
+        (state) => (state.autoLaunch, state.autoLaunchToTray),
+      ),
+    );
+    return ListItem.switchItem(
+      title: Text(appLocalizations.autoLaunchToTray),
+      subtitle: Text(appLocalizations.autoLaunchToTrayDesc),
+      delegate: SwitchDelegate(
+        value: setting.$2,
+        onChanged: setting.$1
+            ? (bool value) {
+                ref
+                    .read(appSettingProvider.notifier)
+                    .update((state) => state.copyWith(autoLaunchToTray: value));
+              }
+            : null,
+      ),
+    );
+  }
+}
+
 class SilentLaunchItem extends ConsumerWidget {
   const SilentLaunchItem({super.key});
 
@@ -229,6 +257,7 @@ class ApplicationSettingView extends StatelessWidget {
       const MinimizeItem(),
       if (system.isDesktop) ...[
         const AutoLaunchItem(),
+        const AutoLaunchToTrayItem(),
         const SilentLaunchItem(),
       ],
       const AutoRunItem(),

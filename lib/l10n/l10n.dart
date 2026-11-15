@@ -5848,6 +5848,81 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Restart core`
+  String get restartCore {
+    return Intl.message(
+      'Restart core',
+      name: 'restartCore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lite mode`
+  String get liteMode {
+    return Intl.message('Lite mode', name: 'liteMode', desc: '', args: []);
+  }
+
+  /// `Lite mode could not start: {error}`
+  String liteModeFailed(Object error) {
+    return Intl.message(
+      'Lite mode could not start: $error',
+      name: 'liteModeFailed',
+      desc: '',
+      args: [error],
+    );
+  }
+
+  /// `Start to tray`
+  String get autoLaunchToTray {
+    return Intl.message(
+      'Start to tray',
+      name: 'autoLaunchToTray',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `At sign-in RoutaMi goes straight to the tray in lite mode: only the core and the icon stay in memory`
+  String get autoLaunchToTrayDesc {
+    return Intl.message(
+      'At sign-in RoutaMi goes straight to the tray in lite mode: only the core and the icon stay in memory',
+      name: 'autoLaunchToTrayDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `RoutaMi for Windows x64: installer, system proxy, TUN through a helper service and the built-in updater.`
+  String get changelog040Item1 {
+    return Intl.message(
+      'RoutaMi for Windows x64: installer, system proxy, TUN through a helper service and the built-in updater.',
+      name: 'changelog040Item1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Windows tray: restart the core and lite mode, which unloads the window and keeps only the core and the tray icon; start with Windows, optionally straight to the tray.`
+  String get changelog040Item2 {
+    return Intl.message(
+      'Windows tray: restart the core and lite mode, which unloads the window and keeps only the core and the tray icon; start with Windows, optionally straight to the tray.',
+      name: 'changelog040Item2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TUN: the mips stack with a TCP congestion control choice (cubic, reno, bbr, bbr3).`
+  String get changelog040Item3 {
+    return Intl.message(
+      'TUN: the mips stack with a TCP congestion control choice (cubic, reno, bbr, bbr3).',
+      name: 'changelog040Item3',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

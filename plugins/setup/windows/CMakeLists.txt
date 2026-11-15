@@ -13,6 +13,7 @@ get_filename_component(PROJECT_ROOT "${CMAKE_SOURCE_DIR}" DIRECTORY)
 set(setup_bundled_libraries
   "${PROJECT_ROOT}/libclash/windows/RoutaMiCore.exe"
   "${PROJECT_ROOT}/libclash/windows/RoutaMiHelperService.exe"
+  "${PROJECT_ROOT}/libclash/windows/RoutaMiTray.exe"
   "${PROJECT_ROOT}/libclash/windows/libcronet.dll"
   PARENT_SCOPE
 )

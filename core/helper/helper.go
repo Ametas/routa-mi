@@ -3,8 +3,9 @@
 // routes for TUN. The app registers it once through UAC (lib/common/system.dart)
 // and then asks it over 127.0.0.1 to start and stop the core.
 //
-// Only the RoutaMi.exe installed next to the helper may call it, and it only
-// starts the RoutaMiCore.exe next to it whose SHA-256 matches the build.
+// Only RoutaMi.exe and its lite-mode tray RoutaMiTray.exe installed next to
+// the helper may call it, and it only starts the RoutaMiCore.exe next to it
+// whose SHA-256 matches the build.
 package main
 
 import (
@@ -25,6 +26,7 @@ import (
 const (
 	listenAddr  = "127.0.0.1:47990" // helperPort in lib/common/constant.dart
 	appExeName  = "RoutaMi.exe"
+	trayExeName = "RoutaMiTray.exe" // core/tray, lite mode
 	coreExeName = "RoutaMiCore.exe"
 	maxLogLines = 100
 )
@@ -92,10 +94,12 @@ func (h *helper) authorize(r *http.Request) error {
 	if err != nil {
 		return fmt.Errorf("unknown caller: %w", err)
 	}
-	if !sameFile(caller, filepath.Join(h.dir, appExeName)) {
-		return fmt.Errorf("caller %s is not %s next to the helper", caller, appExeName)
+	for _, name := range []string{appExeName, trayExeName} {
+		if sameFile(caller, filepath.Join(h.dir, name)) {
+			return nil
+		}
 	}
-	return nil
+	return fmt.Errorf("caller %s is not %s or %s next to the helper", caller, appExeName, trayExeName)
 }
 
 func (h *helper) start(params startParams) error {

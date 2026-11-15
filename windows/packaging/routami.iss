@@ -56,6 +56,8 @@ Filename: "{app}\RoutaMiHelperService.exe"; Parameters: "install"; Flags: runhid
 Filename: "{app}\RoutaMi.exe"; Description: "{cm:LaunchProgram,RoutaMi}"; Flags: nowait postinstall skipifsilent
 
 [UninstallRun]
+; Lite mode's tray keeps the core and its own files open.
+Filename: "{sys}\taskkill.exe"; Parameters: "/F /IM RoutaMiTray.exe"; Flags: runhidden waituntilterminated; RunOnceId: "StopLiteTray"
 Filename: "{app}\RoutaMiHelperService.exe"; Parameters: "uninstall"; Flags: runhidden waituntilterminated; RunOnceId: "RemoveHelper"
 
 [Code]
@@ -82,6 +84,8 @@ begin
     Sleep(1500);
   end;
   Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM RoutaMi.exe', '', SW_HIDE,
+    ewWaitUntilTerminated, ResultCode);
+  Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM RoutaMiTray.exe', '', SW_HIDE,
     ewWaitUntilTerminated, ResultCode);
   Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM RoutaMiCore.exe', '', SW_HIDE,
     ewWaitUntilTerminated, ResultCode);

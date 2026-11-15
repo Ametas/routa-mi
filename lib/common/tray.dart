@@ -10,6 +10,7 @@ import 'package:tray_manager/tray_manager.dart';
 
 import 'app_localizations.dart';
 import 'constant.dart';
+import 'lite.dart';
 import 'window.dart';
 
 /// The Windows notification-area icon and menu (ported from FlClash).
@@ -48,6 +49,12 @@ class Tray {
         label: trayState.isStart ? l10n.stop : l10n.start,
         onClick: (_) => commonAction.updateStart(),
       ),
+      MenuItem(
+        label: l10n.restartCore,
+        onClick: (_) =>
+            container.read(coreActionProvider.notifier).restartCore(),
+      ),
+      MenuItem(label: l10n.liteMode, onClick: (_) => liteMode.enter()),
       MenuItem.separator(),
       for (final mode in Mode.values)
         MenuItem.checkbox(

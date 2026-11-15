@@ -26,6 +26,18 @@ class CoreService extends CoreHandlerInterface {
 
   Process? _process;
 
+  // The core runs under the helper service (TUN); lite mode needs to know.
+  bool _helper = false;
+
+  // Set while the core moves to RoutaMiTray.exe: the dropped connection is
+  // the handover, not a crash.
+  bool _handingOver = false;
+
+  // The core belongs to RoutaMiTray.exe now: never stop it from here.
+  bool _handedOver = false;
+
+  bool get startedByHelper => _helper;
+
   factory CoreService() {
     _instance ??= CoreService._internal();
     return _instance!;
@@ -38,7 +50,7 @@ class CoreService extends CoreHandlerInterface {
   Future<void> _initServer() async {
     await _transport.init();
     _transport.onDisconnect = () {
-      _handleCrash();
+      if (!_handingOver) _handleCrash();
       if (!_shutdownCompleter.isCompleted) {
         _shutdownCompleter.complete(true);
       }
@@ -80,12 +92,21 @@ class CoreService extends CoreHandlerInterface {
       await shutdown(false);
     }
     final address = _transport.address;
+    // A core left running in lite mode comes back from the tray.
+    final attached = await liteMode.attach(address);
+    if (attached != null) {
+      _helper = attached.helper;
+      await _transport.connectionCompleter.future;
+      return;
+    }
     if (await system.checkIsAdmin()) {
       if (await request.startCoreByHelper(address)) {
+        _helper = true;
         await _transport.connectionCompleter.future;
         return;
       }
     }
+    _helper = false;
     try {
       _process = await Process.start(appPath.corePath, [address]);
     } catch (e) {
@@ -103,6 +124,23 @@ class CoreService extends CoreHandlerInterface {
     await _transport.connectionCompleter.future;
   }
 
+  /// Moves the core to the controller at [address] (RoutaMiTray.exe);
+  /// '' when the core has connected there.
+  Future<String> handover(String address) async {
+    _handingOver = true;
+    final message = await invoke<String>(
+      method: ActionMethod.handover,
+      data: address,
+      timeout: const Duration(seconds: 10),
+    );
+    if (message == '') {
+      _handedOver = true;
+    } else {
+      _handingOver = false;
+    }
+    return message ?? 'the core did not answer';
+  }
+
   @override
   FutureOr<bool> destroy() async {
     await shutdown(false);
@@ -113,6 +151,7 @@ class CoreService extends CoreHandlerInterface {
   @override
   Future<bool> shutdown(bool isUser) async {
     _shutdownCompleter = Completer();
+    if (_handedOver) return true;
     await request.stopCoreByHelper();
     _transport.disconnected();
     _process?.kill();

@@ -96,6 +96,8 @@ abstract class AppSettingProps with _$AppSettingProps {
     List<DashboardWidget> dashboardWidgets,
     @Default(true) bool onlyStatisticsProxy,
     @Default(false) bool autoLaunch,
+    // Windows: autostart goes straight to lite mode's tray.
+    @Default(false) bool autoLaunchToTray,
     @Default(false) bool silentLaunch,
     @Default(false) bool autoRun,
     @Default(false) bool openLogs,

@@ -71,36 +71,32 @@ func startServer(arg string) {
 		panic(err.Error())
 	}
 
-	defer func(conn io.Closer) {
-		_ = conn.Close()
-	}(conn)
-
-	for {
-		data, err := readFrame(conn)
-		if err != nil {
-			if err != io.EOF {
-				logError("server read error: %v", err)
+	serveConns(func(c io.ReadWriteCloser) error {
+		for {
+			data, err := readFrame(c)
+			if err != nil {
+				return err
 			}
-			return
+			var action = &Action{}
+
+			err = json.Unmarshal(data, action)
+
+			if err != nil {
+				logError("server unmarshal error: %v (data: %q)", err, data)
+				continue
+			}
+			journal.record(action)
+
+			result := ActionResult{
+				Id:     action.Id,
+				Method: action.Method,
+			}
+
+			go handleAction(action, result)
 		}
-		var action = &Action{}
-
-		err = json.Unmarshal(data, action)
-
-		if err != nil {
-			logError("server unmarshal error: %v (data: %q)", err, data)
-			continue
-		}
-
-		result := ActionResult{
-			Id:     action.Id,
-			Method: action.Method,
-		}
-
-		go handleAction(action, result)
-	}
+	})
 }
 
 func nextHandle(action *Action, result ActionResult) bool {
-	return false
+	return handleDesktopAction(action, result)
 }

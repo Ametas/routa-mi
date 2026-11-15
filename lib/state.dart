@@ -427,8 +427,13 @@ class GlobalState {
     };
     container.read(profilesActionProvider.notifier).autoUpdateProfiles();
     container.read(commonActionProvider.notifier).autoCheckUpdate();
-    autoLaunch?.updateStatus(container.read(appSettingProvider).autoLaunch);
-    if (container.read(appSettingProvider).silentLaunch) {
+    final appSetting = container.read(appSettingProvider);
+    autoLaunch?.updateStatus(
+      appSetting.autoLaunch,
+      toTray: appSetting.autoLaunchToTray,
+    );
+    if (container.read(appSettingProvider).silentLaunch ||
+        liteMode.launchRequested) {
       await window?.hide();
     } else {
       await window?.show();
@@ -444,6 +449,7 @@ class GlobalState {
     StartupTrace.mark('setupAction.initStatus');
     container.read(initProvider.notifier).value = true;
     StartupTrace.finish('main_ready');
+    unawaited(liteMode.enterIfRequested());
   }
 
   Future<void> _handleFailedPreference() async {

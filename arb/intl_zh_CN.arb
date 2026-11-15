@@ -711,5 +711,13 @@
   "regenerateUuid": "重新生成 UUID",
   "regenerateUuidDesc": "使用当前链接配置的客户端将无法连接",
   "congestionController": "TCP 拥塞控制",
-  "congestionControllerDesc": "仅 mips 栈使用；默认保留配置文件中的值"
+  "congestionControllerDesc": "仅 mips 栈使用；默认保留配置文件中的值",
+  "restartCore": "重启核心",
+  "liteMode": "轻量模式",
+  "liteModeFailed": "无法进入轻量模式：{error}",
+  "autoLaunchToTray": "开机启动到托盘",
+  "autoLaunchToTrayDesc": "登录后直接以轻量模式进入托盘：内存中只保留核心和图标",
+  "changelog040Item1": "RoutaMi Windows x64 版：安装程序、系统代理、通过辅助服务实现的 TUN 以及内置更新。",
+  "changelog040Item2": "Windows 托盘：重启核心和轻量模式（卸载窗口，仅保留核心和托盘图标）；开机启动，可直接进入托盘。",
+  "changelog040Item3": "TUN：mips 栈，可选择 TCP 拥塞控制（cubic、reno、bbr、bbr3）。"
 }

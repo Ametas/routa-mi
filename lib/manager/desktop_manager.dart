@@ -41,16 +41,18 @@ class _WindowManagerState extends ConsumerState<_WindowManager>
   @override
   void initState() {
     super.initState();
-    ref.listenManual(appSettingProvider.select((state) => state.autoLaunch), (
-      prev,
-      next,
-    ) {
-      if (prev != next) {
-        debouncer.call(FunctionTag.autoLaunch, () {
-          autoLaunch?.updateStatus(next);
-        });
-      }
-    });
+    ref.listenManual(
+      appSettingProvider.select(
+        (state) => (state.autoLaunch, state.autoLaunchToTray),
+      ),
+      (prev, next) {
+        if (prev != next) {
+          debouncer.call(FunctionTag.autoLaunch, () {
+            autoLaunch?.updateStatus(next.$1, toTray: next.$2);
+          });
+        }
+      },
+    );
     windowManager.addListener(this);
   }
 

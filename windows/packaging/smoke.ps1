@@ -9,7 +9,7 @@ function Fail($message) { Write-Error $message; exit 1 }
 
 $dir = Join-Path $env:ProgramFiles 'RoutaMi'
 Start-Process $Installer -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -Wait
-foreach ($file in 'RoutaMi.exe', 'RoutaMiCore.exe', 'RoutaMiHelperService.exe', 'libcronet.dll') {
+foreach ($file in 'RoutaMi.exe', 'RoutaMiCore.exe', 'RoutaMiHelperService.exe', 'RoutaMiTray.exe', 'libcronet.dll') {
   if (-not (Test-Path (Join-Path $dir $file))) { Fail "installer did not place $file" }
 }
 Write-Host 'installed into Program Files'
@@ -97,6 +97,77 @@ Write-Host '--- helper.log'
 Get-Content (Join-Path $env:ProgramData 'RoutaMi\helper.log') -Tail 60 -ErrorAction SilentlyContinue | Write-Host
 if (-not (Get-Process RoutaMiCore -ErrorAction SilentlyContinue)) { Fail 'the core exited after starting' }
 if ($parent -ne 'RoutaMiHelperService') { Fail 'the core was not started by the helper service' }
+Stop-Process -Id $app.Id -Force
+$deadline = (Get-Date).AddSeconds(15)
+while (Get-Process RoutaMiCore -ErrorAction SilentlyContinue) {
+  if ((Get-Date) -gt $deadline) { Fail 'the core outlived the app' }
+  Start-Sleep -Milliseconds 500
+}
+
+# Lite mode: RoutaMi.exe --lite starts, hands the core to RoutaMiTray.exe and
+# exits; the tray restarts the core through the helper; RoutaMi.exe takes the
+# core back without starting a new one.
+function Wait-Until($what, $seconds, [scriptblock] $condition) {
+  $deadline = (Get-Date).AddSeconds($seconds)
+  while (-not (& $condition)) {
+    if ((Get-Date) -gt $deadline) {
+      Get-Process RoutaMi* -ErrorAction SilentlyContinue | Format-Table Id, ProcessName | Out-String | Write-Host
+      foreach ($log in $appLog, $appErr, (Get-ChildItem $env:APPDATA -Recurse -Filter lite.log -ErrorAction SilentlyContinue | Select-Object -First 1).FullName, (Join-Path $env:ProgramData 'RoutaMi\helper.log')) {
+        Write-Host "--- $log"
+        Get-Content $log -Tail 80 -ErrorAction SilentlyContinue | Write-Host
+      }
+      Fail "timed out: $what"
+    }
+    Start-Sleep -Milliseconds 500
+  }
+}
+# lite.json sits in the app's data directory (path_provider), next to the prefs.
+function Lite-State { Get-ChildItem $env:APPDATA -Recurse -Filter lite.json -ErrorAction SilentlyContinue | Select-Object -First 1 }
+function Core-Pid { (Get-Process RoutaMiCore -ErrorAction SilentlyContinue | Select-Object -First 1).Id }
+function Lite($method, $path) {
+  $state = Get-Content (Lite-State).FullName -Raw | ConvertFrom-Json
+  $headers = @{ Authorization = "Bearer $($state.token)" }
+  Invoke-RestMethod -Method $method -Headers $headers -TimeoutSec 60 "http://127.0.0.1:$($state.port)$path"
+}
+
+$app = Start-Process (Join-Path $dir 'RoutaMi.exe') -ArgumentList '--lite' -PassThru `
+  -RedirectStandardOutput $appLog -RedirectStandardError $appErr
+Wait-Until 'RoutaMi.exe --lite went to the tray' 90 {
+  $app.HasExited -and (Get-Process RoutaMiTray -ErrorAction SilentlyContinue) -and (Lite-State)
+}
+$litePid = Core-Pid
+if (-not $litePid) { Fail 'no core after RoutaMi.exe left for the tray' }
+# The app's exit must not take the core with it (the helper's /stop).
+Start-Sleep -Seconds 5
+if ((Core-Pid) -ne $litePid) { Fail "the core $litePid did not survive RoutaMi.exe leaving for the tray" }
+$status = Lite GET /status
+if (-not $status.connected) { Fail "tray status: $($status | ConvertTo-Json -Compress)" }
+# CI has no profile, so the app may not have started the proxy: the tray
+# keeps whatever state it was handed, and toggles flip it.
+$initial = [bool]$status.running
+Write-Host "lite mode: RoutaMi.exe exited, the tray holds core $litePid (running: $initial)"
+
+Lite POST /toggle | Out-Null
+if ([bool](Lite GET /status).running -eq $initial) { Fail 'the tray did not toggle the core' }
+Lite POST /toggle | Out-Null
+if ([bool](Lite GET /status).running -ne $initial) { Fail 'the tray did not toggle the core back' }
+
+Lite POST /restart | Out-Null
+Wait-Until 'the tray restarted the core' 30 { (Core-Pid) -and (Core-Pid) -ne $litePid }
+$restartedPid = Core-Pid
+$owner = (Get-CimInstance Win32_Process -Filter "ProcessId = $restartedPid").ParentProcessId
+if ((Get-Process -Id $owner).ProcessName -ne 'RoutaMiHelperService') { Fail 'the tray restarted the core outside the helper' }
+$status = Lite GET /status
+if (-not $status.connected -or [bool]$status.running -ne $initial) { Fail "after restart: $($status | ConvertTo-Json -Compress)" }
+Write-Host "lite mode: the tray restarted the core through the helper ($restartedPid)"
+
+$app = Start-Process (Join-Path $dir 'RoutaMi.exe') -PassThru `
+  -RedirectStandardOutput $appLog -RedirectStandardError $appErr
+Wait-Until 'RoutaMi.exe took the core back' 90 { -not (Get-Process RoutaMiTray -ErrorAction SilentlyContinue) }
+Start-Sleep -Seconds 5
+if ($app.HasExited) { Fail "RoutaMi.exe exited with $($app.ExitCode) after taking the core" }
+if ((Core-Pid) -ne $restartedPid) { Fail "RoutaMi.exe started a new core instead of taking $restartedPid" }
+Write-Host 'lite mode: RoutaMi.exe took the running core back'
 Stop-Process -Id $app.Id -Force
 Start-Sleep -Seconds 2
 
