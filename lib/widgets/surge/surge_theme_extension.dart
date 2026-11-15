@@ -52,6 +52,7 @@ class SurgeTheme extends ThemeExtension<SurgeTheme> {
   factory SurgeTheme.fromColors(
     SurgeColors colors, {
     SurgeStateColors? stateColors,
+    SurgeDashboardTones? dashboard,
   }) {
     return SurgeTheme(
       background: colors.background,
@@ -75,7 +76,11 @@ class SurgeTheme extends ThemeExtension<SurgeTheme> {
       inactiveVariant: colors.inactiveVariant,
       radii: SurgeRadii.regular(),
       spacing: SurgeSpacing.regular(),
-      semantic: SurgeSemanticColors.regular(colors, state: stateColors),
+      semantic: SurgeSemanticColors.regular(
+        colors,
+        state: stateColors,
+        dashboard: dashboard,
+      ),
       controls: SurgeControlSizes.regular(),
       opacity: SurgeOpacity.regular(),
     );

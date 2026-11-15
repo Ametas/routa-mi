@@ -10,12 +10,23 @@ class StaticThemeSpec {
     required this.brightness,
     required this.colors,
     required this.stateColors,
+    this.dashboard,
   });
 
   final StaticThemePreset preset;
   final Brightness brightness;
   final SurgeColors colors;
   final SurgeStateColors stateColors;
+
+  /// Dashboard fills; null keeps SlClash's warm gray and brown.
+  final SurgeDashboardTones? dashboard;
+
+  static const _routaDashboard = SurgeDashboardTones(
+    inactive: Color(0xFF5A4E86),
+    inactiveVariant: Color(0xFF7D72A3),
+    active: Color(0xFF6D28D9),
+    activeSecondary: Color(0xFF177A5A),
+  );
 
   static const values = <StaticThemeSpec>[
     routaLight,
@@ -89,7 +100,8 @@ class StaticThemeSpec {
   }
 
   /// RoutaMi's own palette (design system 3.0): a night violet base with a
-  /// lavender light twin and one violet accent.
+  /// lavender light twin and one violet accent, which also starts the proxy
+  /// (SlClash's presets start it in green).
   static const routaLight = StaticThemeSpec(
     preset: StaticThemePreset.routa,
     brightness: Brightness.light,
@@ -117,11 +129,12 @@ class StaticThemeSpec {
     stateColors: SurgeStateColors(
       toggleActive: Color(0xFF6D28D9),
       onToggleActive: Color(0xFFFFFFFF),
-      heroStart: Color(0xFF34C759),
+      heroStart: Color(0xFF6D28D9),
       heroPause: Color(0xFFFF9500),
       heroStop: Color(0xFFBA1A1A),
       onHeroAction: Color(0xFFFFFFFF),
     ),
+    dashboard: _routaDashboard,
   );
 
   static const routaDark = StaticThemeSpec(
@@ -151,11 +164,12 @@ class StaticThemeSpec {
     stateColors: SurgeStateColors(
       toggleActive: Color(0xFFB48CFF),
       onToggleActive: Color(0xFF140A26),
-      heroStart: Color(0xFF30D158),
+      heroStart: Color(0xFF7C3AED),
       heroPause: Color(0xFFFF9F0A),
       heroStop: Color(0xFFFF453A),
       onHeroAction: Color(0xFFFFFFFF),
     ),
+    dashboard: _routaDashboard,
   );
 
   static const blueWhiteLight = StaticThemeSpec(

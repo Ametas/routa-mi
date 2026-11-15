@@ -218,20 +218,20 @@ void main() {
       [
         0xFF6D28D9,
         0xFFFFFFFF,
-        0xFF34C759,
+        0xFF6D28D9,
         0xFFFF9500,
         0xFFBA1A1A,
         0xFFFFFFFF,
-        0xFF34C759,
+        0xFF6D28D9,
       ],
       [
         0xFFB48CFF,
         0xFF140A26,
-        0xFF30D158,
+        0xFF7C3AED,
         0xFFFF9F0A,
         0xFFFF453A,
         0xFFFFFFFF,
-        0xFF30D158,
+        0xFF7C3AED,
       ],
       [
         0xFF0065CC,
@@ -284,6 +284,9 @@ void main() {
       ];
       expect(values.map((color) => color.toARGB32()), expected[index]);
       _expectContrast(state.onToggleActive, state.toggleActive, 4.5);
+      if (StaticThemeSpec.values[index].preset == StaticThemePreset.routa) {
+        _expectContrast(state.onHeroAction, state.heroStart, 4.5);
+      }
     }
   });
 
@@ -298,11 +301,14 @@ void main() {
             dynamicSchemeVariant: variant,
           ),
         ).semantic.state;
-        expect(state.heroStart, dynamic.heroStart);
+        // Routa starts in its own violet; the rest keep SlClash's green.
+        if (spec.preset != StaticThemePreset.routa) {
+          expect(state.heroStart, dynamic.heroStart);
+          expect(state.profileActive, dynamic.profileActive);
+        }
         expect(state.heroPause, dynamic.heroPause);
         expect(state.heroStop, dynamic.heroStop);
         expect(state.onHeroAction, dynamic.onHeroAction);
-        expect(state.profileActive, dynamic.profileActive);
       }
     }
   });

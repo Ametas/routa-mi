@@ -289,6 +289,23 @@ class SurgeSpacing {
 /// Named state, traffic, and dashboard colors which previously lived in page
 /// constants.  Keeping the original values makes this a rendering-equivalent
 /// refactor for fixed and dynamic themes.
+/// The filled dashboard surfaces (mode hero, traffic chart) of a preset that
+/// replaces SlClash's warm gray and brown. White text sits on them.
+@immutable
+class SurgeDashboardTones {
+  const SurgeDashboardTones({
+    required this.inactive,
+    required this.inactiveVariant,
+    required this.active,
+    required this.activeSecondary,
+  });
+
+  final Color inactive;
+  final Color inactiveVariant;
+  final Color active;
+  final Color activeSecondary;
+}
+
 @immutable
 class SurgeStateColors {
   const SurgeStateColors({
@@ -351,6 +368,7 @@ class SurgeSemanticColors {
   factory SurgeSemanticColors.regular(
     SurgeColors colors, {
     SurgeStateColors? state,
+    SurgeDashboardTones? dashboard,
   }) {
     return SurgeSemanticColors(
       connected: const Color(0xFF2FAA67),
@@ -358,10 +376,13 @@ class SurgeSemanticColors {
       disconnected: colors.textSecondary,
       paused: const Color(0xFFDC851B),
       error: colors.red,
-      dashboardDynamicActive: const Color(0xFFA06B3B),
-      dashboardActiveGreen: const Color(0xFF5BA66A),
-      dashboardInactive: const Color(0xFF858681),
-      dashboardInactiveVariant: const Color(0xFFA5A6A1),
+      dashboardDynamicActive:
+          dashboard?.active ?? const Color(0xFFA06B3B),
+      dashboardActiveGreen:
+          dashboard?.activeSecondary ?? const Color(0xFF5BA66A),
+      dashboardInactive: dashboard?.inactive ?? const Color(0xFF858681),
+      dashboardInactiveVariant:
+          dashboard?.inactiveVariant ?? const Color(0xFFA5A6A1),
       latencyGood: const Color(0xFFADDFAD),
       latencyMedium: const Color(0xFFF1C892),
       latencyBad: const Color(0xFFFFBBBD),
