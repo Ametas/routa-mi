@@ -5943,6 +5943,46 @@ class AppLocalizations {
   String get navActivity {
     return Intl.message('Activity', name: 'navActivity', desc: '', args: []);
   }
+
+  /// `New RoutaMi look: a violet palette is now the default theme, with violet start button and dashboard.`
+  String get changelog050Item1 {
+    return Intl.message(
+      'New RoutaMi look: a violet palette is now the default theme, with violet start button and dashboard.',
+      name: 'changelog050Item1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Windows: a side menu in wide windows and a navigation rail in medium ones; the window opens larger.`
+  String get changelog050Item2 {
+    return Intl.message(
+      'Windows: a side menu in wide windows and a navigation rail in medium ones; the window opens larger.',
+      name: 'changelog050Item2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delay tests run 10 at a time with a 10 s limit, so nodes no longer show Timeout while the core is busy.`
+  String get changelog050Item3 {
+    return Intl.message(
+      'Delay tests run 10 at a time with a 10 s limit, so nodes no longer show Timeout while the core is busy.',
+      name: 'changelog050Item3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The app is English only.`
+  String get changelog050Item4 {
+    return Intl.message(
+      'The app is English only.',
+      name: 'changelog050Item4',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

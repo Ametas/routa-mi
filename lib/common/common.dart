@@ -17,6 +17,7 @@ export 'indexing.dart';
 export 'iterable.dart';
 export 'javascript.dart';
 export 'launch.dart';
+export 'delay_queue.dart';
 export 'lite.dart';
 export 'lock.dart';
 export 'link.dart';

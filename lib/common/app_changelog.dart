@@ -14,6 +14,16 @@ class AppChangelogEntry {
 /// `AppChangelogDialog`; the SlClash history (v2.x) is not carried over.
 const appChangelogEntries = <AppChangelogEntry>[
   AppChangelogEntry(
+    version: 'v0.5.0',
+    date: '',
+    changes: [
+      'changelog050Item1',
+      'changelog050Item2',
+      'changelog050Item3',
+      'changelog050Item4',
+    ],
+  ),
+  AppChangelogEntry(
     version: 'v0.4.0',
     date: '',
     changes: ['changelog040Item1', 'changelog040Item2', 'changelog040Item3'],

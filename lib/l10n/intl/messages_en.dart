@@ -298,6 +298,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog040Item3": MessageLookupByLibrary.simpleMessage(
       "TUN: the mips stack with a TCP congestion control choice (cubic, reno, bbr, bbr3).",
     ),
+    "changelog050Item1": MessageLookupByLibrary.simpleMessage(
+      "New RoutaMi look: a violet palette is now the default theme, with violet start button and dashboard.",
+    ),
+    "changelog050Item2": MessageLookupByLibrary.simpleMessage(
+      "Windows: a side menu in wide windows and a navigation rail in medium ones; the window opens larger.",
+    ),
+    "changelog050Item3": MessageLookupByLibrary.simpleMessage(
+      "Delay tests run 10 at a time with a 10 s limit, so nodes no longer show Timeout while the core is busy.",
+    ),
+    "changelog050Item4": MessageLookupByLibrary.simpleMessage(
+      "The app is English only.",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage(
       "Check your network and try again.",
     ),

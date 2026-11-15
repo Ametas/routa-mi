@@ -95,6 +95,10 @@ class _ChangelogCard extends StatelessWidget {
   String _localizedChange(BuildContext context, String key) {
     final l10n = context.appLocalizations;
     return switch (key) {
+      'changelog050Item1' => l10n.changelog050Item1,
+      'changelog050Item2' => l10n.changelog050Item2,
+      'changelog050Item3' => l10n.changelog050Item3,
+      'changelog050Item4' => l10n.changelog050Item4,
       'changelog040Item1' => l10n.changelog040Item1,
       'changelog040Item2' => l10n.changelog040Item2,
       'changelog040Item3' => l10n.changelog040Item3,
