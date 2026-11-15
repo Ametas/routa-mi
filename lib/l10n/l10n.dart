@@ -5938,6 +5938,11 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Activity`
+  String get navActivity {
+    return Intl.message('Activity', name: 'navActivity', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

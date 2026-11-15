@@ -718,6 +718,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "nameserverPolicyDesc": MessageLookupByLibrary.simpleMessage(
       "Set nameserver policy",
     ),
+    "navActivity": MessageLookupByLibrary.simpleMessage("Activity"),
     "network": MessageLookupByLibrary.simpleMessage("Network"),
     "networkAddress": MessageLookupByLibrary.simpleMessage("Network Address"),
     "networkAddressHint": MessageLookupByLibrary.simpleMessage(

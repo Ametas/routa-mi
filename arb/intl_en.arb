@@ -721,5 +721,6 @@
   "changelog040Item2": "Windows tray: restart the core and lite mode, which unloads the window and keeps only the core and the tray icon; start with Windows, optionally straight to the tray.",
   "changelog040Item3": "TUN: the mips stack with a TCP congestion control choice (cubic, reno, bbr, bbr3).",
   "routaPreset": "RoutaMi",
-  "routaStyle": "RoutaMi violet"
+  "routaStyle": "RoutaMi violet",
+  "navActivity": "Activity"
 }
