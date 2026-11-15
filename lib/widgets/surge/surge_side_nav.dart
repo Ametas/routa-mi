@@ -65,28 +65,33 @@ class SurgeNavRail extends StatelessWidget {
             ),
           ),
         ),
-        child: SafeArea(
-          right: false,
-          child: Column(
-            children: [
-              const SizedBox(height: SurgeSpace.l),
-              ?leading,
-              const SizedBox(height: SurgeSpace.m),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      for (var index = 0; index < items.length; index++)
-                        _RailItem(
-                          item: items[index],
-                          selected: index == currentIndex,
-                          onTap: () => onTap(index),
-                        ),
-                    ],
+        // The shell puts the menu beside the page, outside any Scaffold:
+        // without a Material its text falls back to the debug style.
+        child: Material(
+          type: MaterialType.transparency,
+          child: SafeArea(
+            right: false,
+            child: Column(
+              children: [
+                const SizedBox(height: SurgeSpace.l),
+                ?leading,
+                const SizedBox(height: SurgeSpace.m),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        for (var index = 0; index < items.length; index++)
+                          _RailItem(
+                            item: items[index],
+                            selected: index == currentIndex,
+                            onTap: () => onTap(index),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -188,47 +193,54 @@ class SurgeSideMenu extends StatelessWidget {
             ),
           ),
         ),
-        child: SafeArea(
-          right: false,
-          child: Padding(
-            padding: const EdgeInsets.all(SurgeSpace.m),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ?header,
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        for (var index = 0; index < items.length; index++) ...[
-                          if (items[index].group case final group?)
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                SurgeSpace.m,
-                                SurgeSpace.m,
-                                SurgeSpace.m,
-                                SurgeSpace.xs,
-                              ),
-                              child: Text(
-                                group,
-                                style: context.typography.supporting.copyWith(
-                                  color: surge.textSecondary,
+        child: Material(
+          type: MaterialType.transparency,
+          child: SafeArea(
+            right: false,
+            child: Padding(
+              padding: const EdgeInsets.all(SurgeSpace.m),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ?header,
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (
+                            var index = 0;
+                            index < items.length;
+                            index++
+                          ) ...[
+                            if (items[index].group case final group?)
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  SurgeSpace.m,
+                                  SurgeSpace.m,
+                                  SurgeSpace.m,
+                                  SurgeSpace.xs,
+                                ),
+                                child: Text(
+                                  group,
+                                  style: context.typography.supporting.copyWith(
+                                    color: surge.textSecondary,
+                                  ),
                                 ),
                               ),
+                            _MenuItem(
+                              item: items[index],
+                              selected: index == currentIndex,
+                              onTap: () => onTap(index),
                             ),
-                          _MenuItem(
-                            item: items[index],
-                            selected: index == currentIndex,
-                            onTap: () => onTap(index),
-                          ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
-                ),
-                ?footer,
-              ],
+                  ?footer,
+                ],
+              ),
             ),
           ),
         ),
