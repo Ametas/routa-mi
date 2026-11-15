@@ -14,6 +14,9 @@ import (
 	"time"
 )
 
+// fakeSetupError is what setupConfig answers ("" is success).
+var fakeSetupError = ""
+
 // fakeCore speaks the core's IPC like core/server.go and core/handover.go.
 type fakeCore struct {
 	mu      sync.Mutex
@@ -83,6 +86,7 @@ func (c *fakeCore) handle(conn net.Conn, id, method string, data any) {
 		result = true
 	case "setupConfig":
 		c.state.Setup, _ = data.(string)
+		result = fakeSetupError
 	case "startListener":
 		c.state.Running = true
 		result = true
@@ -319,4 +323,16 @@ func TestLiteControlNeedsTheToken(t *testing.T) {
 	}
 	s.post("/exit", nil)
 	<-s.ended
+}
+
+func TestLiteRestartKeepsACoreWhoseProfileDoesNotApply(t *testing.T) {
+	fakeSetupError = "configuration file config.yaml is empty"
+	t.Cleanup(func() { fakeSetupError = "" })
+	s := startLite(t, false)
+	if resp, body := s.post("/restart", nil); resp.StatusCode != 200 {
+		t.Fatalf("restart: %s", body)
+	}
+	if got := s.plat.cores[0].calledMethods(); got != "initClash,setupConfig,getRestoreState" {
+		t.Fatalf("new core calls %s", got)
+	}
 }

@@ -14,8 +14,8 @@ import 'local_proxy_auth.dart';
 import 'path.dart';
 import 'preferences.dart';
 import 'print.dart';
-import 'system.dart';
 import 'tray.dart';
+import 'window.dart';
 
 /// The tray that holds the core in lite mode (`lite.json`, written by
 /// RoutaMiTray.exe, see core/tray).
@@ -237,7 +237,9 @@ class LiteMode {
     // The core and the system proxy stay with the tray: no handleExit.
     await preferences.saveConfig(container.read(configProvider));
     await tray?.destroy();
-    await system.exit();
+    // Not system.exit(): closing the window runs handleExit, which would
+    // stop the core through the helper under the tray.
+    window?.forceExit();
   }
 
   /// `RoutaMi.exe --lite` goes to the tray once it has started.

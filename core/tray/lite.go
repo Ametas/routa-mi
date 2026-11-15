@@ -223,7 +223,7 @@ func replay(link *coreLink, s restoreState) error {
 	}
 	if s.Engine == "xray" {
 		if err := link.callText("xraySetup", s.XraySetup, callTimeout); err != nil {
-			return err
+			log.Printf("%v", err)
 		}
 		if s.XraySelect != "" {
 			if err := link.callText("xraySelect", s.XraySelect, callTimeout); err != nil {
@@ -231,8 +231,10 @@ func replay(link *coreLink, s restoreState) error {
 			}
 		}
 	} else if s.Setup != "" {
+		// A profile that failed to apply failed for the old core too: the
+		// new one is in the same state, so the restart goes on.
 		if err := link.callText("setupConfig", s.Setup, time.Minute); err != nil {
-			return err
+			log.Printf("%v", err)
 		}
 		if s.Update != "" {
 			if err := link.callText("updateConfig", s.Update, callTimeout); err != nil {

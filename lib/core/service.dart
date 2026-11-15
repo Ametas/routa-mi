@@ -33,6 +33,9 @@ class CoreService extends CoreHandlerInterface {
   // the handover, not a crash.
   bool _handingOver = false;
 
+  // The core belongs to RoutaMiTray.exe now: never stop it from here.
+  bool _handedOver = false;
+
   bool get startedByHelper => _helper;
 
   factory CoreService() {
@@ -130,7 +133,11 @@ class CoreService extends CoreHandlerInterface {
       data: address,
       timeout: const Duration(seconds: 10),
     );
-    if (message != '') _handingOver = false;
+    if (message == '') {
+      _handedOver = true;
+    } else {
+      _handingOver = false;
+    }
     return message ?? 'the core did not answer';
   }
 
@@ -144,6 +151,7 @@ class CoreService extends CoreHandlerInterface {
   @override
   Future<bool> shutdown(bool isUser) async {
     _shutdownCompleter = Completer();
+    if (_handedOver) return true;
     await request.stopCoreByHelper();
     _transport.disconnected();
     _process?.kill();

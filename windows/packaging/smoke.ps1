@@ -137,6 +137,9 @@ Wait-Until 'RoutaMi.exe --lite went to the tray' 90 {
 }
 $litePid = Core-Pid
 if (-not $litePid) { Fail 'no core after RoutaMi.exe left for the tray' }
+# The app's exit must not take the core with it (the helper's /stop).
+Start-Sleep -Seconds 5
+if ((Core-Pid) -ne $litePid) { Fail "the core $litePid did not survive RoutaMi.exe leaving for the tray" }
 $status = Lite GET /status
 if (-not $status.connected) { Fail "tray status: $($status | ConvertTo-Json -Compress)" }
 # CI has no profile, so the app may not have started the proxy: the tray
