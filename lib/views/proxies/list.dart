@@ -526,6 +526,11 @@ class _ProxyGroupHeaderState extends State<ProxyGroupHeader> {
 
   String get icon => widget.group.icon;
 
+  // A group without its own icon shows the emoji its name starts with.
+  ProxyNameParts _nameParts(bool nameIcons) => nameIcons && icon.isEmpty
+      ? splitProxyNameIcon(groupName)
+      : ProxyNameParts(null, groupName);
+
   String get groupName => widget.group.name;
 
   String get groupType => widget.group.type.name;
@@ -543,6 +548,14 @@ class _ProxyGroupHeaderState extends State<ProxyGroupHeader> {
     widget.onChange(groupName);
   }
 
+  Widget _groupIcon(double size, String? emoji) {
+    if (emoji != null) return ProxyNameEmoji(emoji, size: size);
+    return IconTheme.merge(
+      data: IconThemeData(size: size),
+      child: CommonTargetIcon(src: icon),
+    );
+  }
+
   Widget _buildIcon() {
     return Consumer(
       builder: (_, ref, child) {
@@ -550,6 +563,21 @@ class _ProxyGroupHeaderState extends State<ProxyGroupHeader> {
         final iconStyle = ref.watch(
           proxiesStyleSettingProvider.select((state) => state.iconStyle),
         );
+        final emoji = _nameParts(
+          ref.watch(
+            proxiesStyleSettingProvider.select((state) => state.nameIcons),
+          ),
+        ).icon;
+        // The name's own emoji shows even when profile icons are off.
+        if (emoji != null && iconStyle == ProxiesIconStyle.none) {
+          return Padding(
+            padding: const EdgeInsets.only(right: SurgeSpace.m),
+            child: ProxyNameIconTile(
+              icon: emoji,
+              size: ProxyNameIconTile.headerSize,
+            ),
+          );
+        }
         return switch (iconStyle) {
           ProxiesIconStyle.standard => LayoutBuilder(
             builder: (_, constraints) {
@@ -569,10 +597,7 @@ class _ProxyGroupHeaderState extends State<ProxyGroupHeader> {
                       ),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: IconTheme.merge(
-                      data: IconThemeData(size: constraints.maxHeight - 12),
-                      child: CommonTargetIcon(src: icon),
-                    ),
+                    child: _groupIcon(constraints.maxHeight - 12, emoji),
                   ),
                 ),
               );
@@ -582,10 +607,7 @@ class _ProxyGroupHeaderState extends State<ProxyGroupHeader> {
             margin: const EdgeInsets.only(right: SurgeSpace.m),
             child: LayoutBuilder(
               builder: (_, constraints) {
-                return IconTheme.merge(
-                  data: IconThemeData(size: constraints.maxHeight - 8),
-                  child: CommonTargetIcon(src: icon),
-                );
+                return _groupIcon(constraints.maxHeight - 8, emoji);
               },
             ),
           ),
@@ -687,6 +709,13 @@ class _ProxyGroupHeaderState extends State<ProxyGroupHeader> {
                           final tooltipMessage = displayLabel.isNotEmpty
                               ? displayLabel
                               : groupName;
+                          final title = _nameParts(
+                            ref.watch(
+                              proxiesStyleSettingProvider.select(
+                                (state) => state.nameIcons,
+                              ),
+                            ),
+                          ).title;
                           return LongPressFullText(
                             message: tooltipMessage,
                             onLongPress: () {
@@ -704,7 +733,7 @@ class _ProxyGroupHeaderState extends State<ProxyGroupHeader> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       EmojiText(
-                                        groupName,
+                                        title,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: context

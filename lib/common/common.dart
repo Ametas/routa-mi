@@ -46,6 +46,7 @@ export 'perf_trace.dart';
 export 'picker.dart';
 export 'preferences.dart';
 export 'print.dart';
+export 'proxy_name_icon.dart';
 export 'profile_proxy_resolver.dart';
 export 'proxy.dart';
 export 'protocol.dart';

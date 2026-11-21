@@ -13,6 +13,7 @@ import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/database.dart';
 import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/theme/amoled_theme.dart';
 import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
@@ -49,7 +50,8 @@ Future<void> _loadFont(String family, List<String> files) async {
 // writes PNGs. Skipped unless SHOT_DIR is set:
 //
 //   SHOT_DIR=/tmp/shots flutter test test/tools/screenshots_test.dart
-// Light theme by default; SHOT_BRIGHTNESS=dark renders the dark one.
+// Light theme by default; SHOT_BRIGHTNESS=dark renders the dark one, and
+// SHOT_AMOLED=violet|cyan|lime|rose with it the AMOLED theme.
 //
 // Screens that need a running core may log errors but still render.
 const _heroGroups = [
@@ -65,34 +67,36 @@ const _heroGroups = [
   ),
 ];
 
+// Names as subscriptions write them: a symbol and a flag in front, which
+// the proxies page turns into the row's icon.
 const _proxyGroups = [
   Group(
     type: GroupType.Selector,
-    name: 'Proxy',
-    now: 'JP01',
+    name: '◈ Proxy',
+    now: '★ 🇩🇪 Emerald',
     all: [
-      Proxy(name: 'JP01', type: 'Vless'),
-      Proxy(name: 'HK01', type: 'Vless'),
-      Proxy(name: 'SG01', type: 'Trojan'),
-      Proxy(name: 'US01', type: 'Hysteria2'),
-      Proxy(name: 'DE01', type: 'Shadowsocks'),
-      Proxy(name: 'NL01', type: 'Vmess'),
+      Proxy(name: '★ 🇩🇪 Emerald', type: 'Vless'),
+      Proxy(name: '★ 🇫🇮 Legacy', type: 'Vless'),
+      Proxy(name: '★ 🇵🇱 Syrena', type: 'Trojan'),
+      Proxy(name: 'ϟ 🇳🇱 Delta', type: 'Hysteria2'),
+      Proxy(name: '🇪🇪 Toompea', type: 'Shadowsocks'),
+      Proxy(name: 'DIRECT', type: 'Direct'),
     ],
   ),
   Group(
     type: GroupType.URLTest,
-    name: 'Auto',
-    now: 'HK01',
+    name: 'ϟ Auto',
+    now: '★ 🇫🇮 Legacy',
     all: [
-      Proxy(name: 'HK01', type: 'Vless'),
-      Proxy(name: 'SG01', type: 'Trojan'),
+      Proxy(name: '★ 🇫🇮 Legacy', type: 'Vless'),
+      Proxy(name: '★ 🇵🇱 Syrena', type: 'Trojan'),
     ],
   ),
   Group(
     type: GroupType.Selector,
     name: 'Streaming',
-    now: 'US01',
-    all: [Proxy(name: 'US01', type: 'Hysteria2')],
+    now: 'ϟ 🇳🇱 Delta',
+    all: [Proxy(name: 'ϟ 🇳🇱 Delta', type: 'Hysteria2')],
   ),
 ];
 
@@ -311,7 +315,13 @@ void main() {
       final height = name == 'components' ? 3240.0 : 853.0;
       await tester.binding.setSurfaceSize(Size(384, height));
       tester.view.devicePixelRatio = 2.5;
-      final spec = StaticThemeSpec.resolve(StaticThemePreset.routa, brightness);
+      final amoled = Platform.environment['SHOT_AMOLED'];
+      final spec = amoled != null && brightness == Brightness.dark
+          ? AmoledTheme.spec(
+              StaticThemePreset.routa,
+              AmoledAccent.values.byName(amoled),
+            )
+          : StaticThemeSpec.resolve(StaticThemePreset.routa, brightness);
       // Devices fill a missing family with Roboto; the test engine draws
       // boxes instead, so name it explicitly.
       final textTheme = buildSlclashTextTheme().apply(fontFamily: 'Roboto');
@@ -348,7 +358,7 @@ void main() {
             currentGroupsStateProvider.overrideWithValue(
               const GroupsState(value: _proxyGroups),
             ),
-            unfoldSetProvider.overrideWithValue(const {'Proxy'}),
+            unfoldSetProvider.overrideWithValue(const {'◈ Proxy'}),
           ],
           if (name == 'profiles_active') ...[
             profilesProvider.overrideWithBuild(

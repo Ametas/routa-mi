@@ -165,6 +165,7 @@ abstract final class SurgeIcons {
   static const themeLight = Icons.light_mode_rounded;
   static const themeDark = Icons.dark_mode_rounded;
   static const language = Icons.language_rounded;
+  static const nameIcon = Icons.flag_rounded;
   static const keyboard = Icons.keyboard_rounded;
   static const computer = Icons.computer_rounded;
   static const memory = Icons.memory_rounded;

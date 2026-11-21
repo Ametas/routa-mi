@@ -740,6 +740,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "monthsAgo": m21,
     "more": MessageLookupByLibrary.simpleMessage("More"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
+    "nameIcons": MessageLookupByLibrary.simpleMessage("Icons from names"),
+    "nameIconsDesc": MessageLookupByLibrary.simpleMessage(
+      "A flag or symbol at the start of a node name becomes its icon",
+    ),
     "nameserver": MessageLookupByLibrary.simpleMessage("Nameserver"),
     "nameserverDesc": MessageLookupByLibrary.simpleMessage(
       "Resolve domain names",

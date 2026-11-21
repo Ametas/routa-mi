@@ -6063,6 +6063,26 @@ class AppLocalizations {
   String get amoledAccentRose {
     return Intl.message('Rose', name: 'amoledAccentRose', desc: '', args: []);
   }
+
+  /// `Icons from names`
+  String get nameIcons {
+    return Intl.message(
+      'Icons from names',
+      name: 'nameIcons',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A flag or symbol at the start of a node name becomes its icon`
+  String get nameIconsDesc {
+    return Intl.message(
+      'A flag or symbol at the start of a node name becomes its icon',
+      name: 'nameIconsDesc',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

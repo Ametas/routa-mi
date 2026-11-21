@@ -53,6 +53,15 @@ class ProxyCard extends StatelessWidget {
           visibleName: proxy.name,
           resolved: ref.watch(realSelectedProxyStateProvider(proxy.name)),
         );
+        final showIcon = ref.watch(
+          proxiesStyleSettingProvider.select((state) => state.nameIcons),
+        );
+        final nameParts = showIcon
+            ? splitProxyNameIcon(proxy.name)
+            : ProxyNameParts(null, proxy.name);
+        final textStart = showIcon
+            ? SurgeSpace.l + ProxyNameIconTile.rowSize + SurgeSpace.m
+            : SurgeSpace.xxxl;
         ProxyTrace.noteHotspotBuild('proxy_card');
         return LongPressFullText(
           message: fullName,
@@ -68,22 +77,30 @@ class ProxyCard extends StatelessWidget {
             },
             showBorder: true,
             showDivider: showDivider,
-            dividerInsets: const EdgeInsets.only(
-              left: SurgeSpace.xxxl,
+            dividerInsets: EdgeInsets.only(
+              left: textStart,
               right: SurgeSpace.l,
             ),
             dividerOpacity: 0.35,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                SurgeSpace.xxxl,
+              padding: EdgeInsets.fromLTRB(
+                showIcon ? SurgeSpace.l : SurgeSpace.xxxl,
                 SurgeSpace.s,
                 SurgeSpace.m,
                 SurgeSpace.s,
               ),
               child: Row(
                 children: [
+                  if (showIcon) ...[
+                    ProxyNameIconTile(icon: nameParts.icon),
+                    const SizedBox(width: SurgeSpace.m),
+                  ],
                   Expanded(
-                    child: _ProxyTextBlock(proxy: proxy, type: type),
+                    child: _ProxyTextBlock(
+                      proxy: proxy,
+                      title: nameParts.title,
+                      type: type,
+                    ),
                   ),
                   if (groupType.supportsFixedSelection) ...[
                     const SizedBox(width: SurgeSpace.s),
@@ -109,9 +126,14 @@ class ProxyCard extends StatelessWidget {
 }
 
 class _ProxyTextBlock extends ConsumerWidget {
-  const _ProxyTextBlock({required this.proxy, required this.type});
+  const _ProxyTextBlock({
+    required this.proxy,
+    required this.title,
+    required this.type,
+  });
 
   final Proxy proxy;
+  final String title;
   final ProxyCardType type;
 
   @override
@@ -125,7 +147,7 @@ class _ProxyTextBlock extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         EmojiText(
-          proxy.name,
+          title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: context.typography.compactRowTitle.copyWith(
