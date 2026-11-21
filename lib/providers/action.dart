@@ -29,6 +29,7 @@ import 'package:fl_clash/services/backup/backup_file_guard.dart';
 import 'package:fl_clash/services/backup/unified_backup_service.dart';
 import 'package:fl_clash/services/mihomo_config/source_config.dart';
 import 'package:fl_clash/services/mihomo_config/runtime_config_commit.dart';
+import 'package:fl_clash/services/mihomo_config/full_apply_gate.dart';
 import 'package:fl_clash/services/profile_source_mutation.dart';
 import 'package:fl_clash/services/providers/provider_readiness_service.dart';
 import 'package:fl_clash/services/unified_backup_export/exporter.dart';
@@ -876,6 +877,7 @@ UiStatsTimerEffect uiStatsTimerEffect({
 class SetupAction extends _$SetupAction {
   final RuntimeConfigCommitOwner _runtimeConfigCommitOwner =
       RuntimeConfigCommitOwner();
+  final FullApplyGate _fullApplies = FullApplyGate();
   static const _tickInterval = Duration(seconds: 1);
   static const _chartUpdateInterval = Duration(seconds: 2);
   static const _totalTrafficUpdateInterval = Duration(seconds: 5);
@@ -1415,13 +1417,15 @@ class SetupAction extends _$SetupAction {
       final policy = vpnStartPolicy(isInit: isInit);
       try {
         var started = true;
-        final outcome = await _applyProfileOutcome(
-          force: true,
-          silence: policy.silence,
-          preloadInvoke: () async {
-            if (!_lifecycle.isCurrent(intent)) return;
-            started = await _handleStart();
-          },
+        final outcome = await _fullApplies.run(
+          () => _applyProfileOutcome(
+            force: true,
+            silence: policy.silence,
+            preloadInvoke: () async {
+              if (!_lifecycle.isCurrent(intent)) return;
+              started = await _handleStart();
+            },
+          ),
         );
 
         if (!_lifecycle.isCurrent(intent) ||
@@ -1548,10 +1552,12 @@ class SetupAction extends _$SetupAction {
     bool force = false,
     FutureOr<void> Function()? preloadInvoke,
   }) async {
-    final outcome = await _applyProfileOutcome(
-      silence: silence,
-      force: force,
-      preloadInvoke: preloadInvoke,
+    final outcome = await _fullApplies.run(
+      () => _applyProfileOutcome(
+        silence: silence,
+        force: force,
+        preloadInvoke: preloadInvoke,
+      ),
     );
     return !outcome.isFailure;
   }
@@ -1611,6 +1617,18 @@ class SetupAction extends _$SetupAction {
   /// Settings reuse the profile commit gate. A candidate and its rollback
   /// never race another profile's write to the shared runtime file.
   Future<void> applySettingsSnapshot({
+    required Config candidate,
+    required SettingsApplyKind kind,
+    required bool Function() isLatest,
+  }) => _fullApplies.run(
+    () => _applySettingsSnapshot(
+      candidate: candidate,
+      kind: kind,
+      isLatest: isLatest,
+    ),
+  );
+
+  Future<void> _applySettingsSnapshot({
     required Config candidate,
     required SettingsApplyKind kind,
     required bool Function() isLatest,
@@ -1772,12 +1790,18 @@ class SetupAction extends _$SetupAction {
     bool silence = true,
     RuntimeConfigPostUpdateContext? inheritedContext,
   }) async {
+    if (inheritedContext == null) await _fullApplies.idle();
     final proxiesAction = ref.read(proxiesActionProvider.notifier);
     final runtimeIdentity = proxiesAction.captureRuntimeProfileIdentity();
     final patchConfig = ref
         .read(patchClashConfigProvider)
         .copyWith
-        .tun(enable: false);
+        .tun(
+          enable: displayApplyTun(
+            isStart: ref.read(isStartProvider),
+            runningTun: ref.read(realTunEnableProvider),
+          ),
+        );
     final outcome = await _setupConfig(
       force: true,
       silence: silence,
@@ -2053,7 +2077,9 @@ class SetupAction extends _$SetupAction {
         }
         realTunEnable = ref.read(realTunEnableProvider);
       } else {
-        realTunEnable = false;
+        // Display-only: never brings TUN up, keeps a running one.
+        realTunEnable =
+            patchConfig.tun.enable && ref.read(realTunEnableProvider);
       }
       final realPatchConfig = patchConfig.copyWith.tun(enable: realTunEnable);
       final savedRevision = settingsSavedEditRevision;
