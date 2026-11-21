@@ -26,8 +26,7 @@ class TUNButton extends StatelessWidget {
                 builder: (context) {
                   return AdaptiveSheetScaffold(
                     body: generateListView([
-                      if (system.isDesktop)
-                        const MihomoOnly(child: TUNItem()),
+                      if (system.isDesktop) const MihomoOnly(child: TUNItem()),
                       if (system.isMacOS) const AutoSetSystemDnsItem(),
                       const TunStackItem(),
                     ]),

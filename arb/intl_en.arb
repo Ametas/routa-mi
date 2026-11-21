@@ -738,5 +738,7 @@
   "amoledAccentLime": "Lime",
   "amoledAccentRose": "Rose",
   "nameIcons": "Icons from names",
-  "nameIconsDesc": "A flag or symbol at the start of a node name becomes its icon"
+  "nameIconsDesc": "A flag or symbol at the start of a node name becomes its icon",
+  "uptime": "Uptime",
+  "allNodesCount": "All {count} nodes"
 }

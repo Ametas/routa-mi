@@ -6083,6 +6083,21 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Uptime`
+  String get uptime {
+    return Intl.message('Uptime', name: 'uptime', desc: '', args: []);
+  }
+
+  /// `All {count} nodes`
+  String allNodesCount(Object count) {
+    return Intl.message(
+      'All $count nodes',
+      name: 'allNodesCount',
+      desc: '',
+      args: [count],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

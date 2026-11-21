@@ -228,12 +228,6 @@ class _SurgeDashboardHeroState extends ConsumerState<SurgeDashboardHero>
         transitionStart ||
         transitionStop ||
         connecting;
-    final dynamicColor = ref.watch(
-      themeSettingProvider.select((state) => state.dynamicColor),
-    );
-    final currentProfile = ref.watch(currentProfileProvider);
-    final profileLabel =
-        currentProfile?.realLabel.takeFirstValid([appName]) ?? appName;
     final statusLabel = isSmartPaused
         ? appLocalizations.smartStopped
         : isStart
@@ -286,21 +280,19 @@ class _SurgeDashboardHeroState extends ConsumerState<SurgeDashboardHero>
     });
 
     final layout = widget.layout;
-    final subscriptionSelector = _SubscriptionSelectorBar(
-      profileLabel: profileLabel,
-      currentProfileId: currentProfile?.id,
-      coreStatus: coreStatus,
-      isStart: isStart,
+    final status = _StatusPill(
+      active: isStart,
       isSmartPaused: isSmartPaused,
-      showConnecting: _showConnecting,
-      showFailure: _showFailure,
+      connecting: connecting,
+      failed: _showFailure,
+      label: statusLabel,
       layout: layout,
     );
-    final actionButton = _HeroActionButton(
-      layout: layout,
-      isStart: isStart,
-      isSmartPaused: isSmartPaused,
-      isSmartResuming: isSmartResuming,
+    final actionButton = _HeroStartRing(
+      size: layout.geometry(88),
+      fillProgress: _fillAnimation,
+      isSmartPaused: isSmartPaused || isSmartResuming || transitionPausing,
+      stopping: transitionStop,
       loading: buttonLoading,
       label: buttonLabel,
       sheenController: _sheenController,
@@ -314,284 +306,73 @@ class _SurgeDashboardHeroState extends ConsumerState<SurgeDashboardHero>
               }
             },
     );
-    final contentLayout = DashboardHeroLayoutCalculator.layoutFor(
-      responsiveLayout: layout,
-      availableOuterHeight: widget.allocatedHeight ?? layout.heroNaturalHeight,
-    );
-
-    return Container(
-      width: double.infinity,
-      constraints: widget.allocatedHeight == null
-          ? null
-          : BoxConstraints(minHeight: widget.allocatedHeight!),
-      padding: EdgeInsets.fromLTRB(
-        layout.cardHorizontalPadding,
-        layout.geometry(18),
-        layout.cardHorizontalPadding,
-        layout.geometry(18),
-      ),
-      decoration: BoxDecoration(
-        color: surge.card,
-        borderRadius: BorderRadius.circular(layout.cardRadius),
-        border: Border.all(
-          color: surge.separator,
-          width: surge.spacing.hairline,
+    final title = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          appLocalizations.outboundTraffic,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: context.typography.screenTitle.copyWith(
+            color: surge.textPrimary,
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (layout.requiresReflow)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                subscriptionSelector,
-                SizedBox(height: layout.geometry(8)),
-                Align(alignment: Alignment.centerRight, child: actionButton),
-              ],
-            )
-          else
-            Row(
-              children: [
-                Expanded(child: subscriptionSelector),
-                SizedBox(width: layout.geometry(12)),
-                actionButton,
-              ],
-            ),
-          SizedBox(height: contentLayout.topRowToModeGap),
-          AnimatedBuilder(
-            animation: _fillAnimation,
-            builder: (context, _) {
-              return _HeroModeCard(
-                fillProgress: _fillAnimation.value,
-                modeLabel: '${_modeLabel(mode)} Mode',
-                title: appLocalizations.outboundTraffic,
-                active: isStart,
-                isSmartPaused: isSmartPaused,
-                dynamicColor: dynamicColor,
-                connecting: connecting,
-                failed: _showFailure,
-                statusLabel: statusLabel,
-                height: contentLayout.modeCardHeight,
-                layout: layout,
-              );
-            },
+        Text(
+          '${_modeLabel(mode)} mode',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: context.typography.supporting.copyWith(
+            color: surge.textSecondary,
           ),
-          SizedBox(height: contentLayout.modeToSwitchGap),
-          _ModeSwitch(
-            value: mode,
-            onChanged: (value) => _handleChangeMode(value, ref),
-            layout: layout,
-          ),
-          SizedBox(height: contentLayout.switchToSelectorGap),
-          _HeroProxySelectorBar(layout: layout),
-        ],
-      ),
+        ),
+      ],
     );
-  }
-}
 
-class _HeroModeCard extends StatelessWidget {
-  const _HeroModeCard({
-    required this.fillProgress,
-    required this.title,
-    required this.modeLabel,
-    required this.active,
-    required this.isSmartPaused,
-    required this.dynamicColor,
-    required this.connecting,
-    required this.failed,
-    required this.statusLabel,
-    required this.height,
-    required this.layout,
-  });
-
-  final double fillProgress;
-  final String title;
-  final String modeLabel;
-  final bool active;
-  final bool isSmartPaused;
-  final bool dynamicColor;
-  final bool connecting;
-  final bool failed;
-  final String statusLabel;
-  final double height;
-  final DashboardResponsiveLayout layout;
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(layout.geometry(24)),
-      child: _HeroModeCardSurface(
-        title: title,
-        modeLabel: modeLabel,
-        active: active,
-        isSmartPaused: isSmartPaused,
-        dynamicColor: dynamicColor,
-        connecting: connecting,
-        failed: failed,
-        statusLabel: statusLabel,
-        fillProgress: fillProgress.clamp(0.0, 1.0),
-        height: height,
-        layout: layout,
-      ),
-    );
-  }
-}
-
-class _HeroModeCardSurface extends StatelessWidget {
-  const _HeroModeCardSurface({
-    required this.title,
-    required this.modeLabel,
-    required this.active,
-    required this.isSmartPaused,
-    required this.dynamicColor,
-    required this.connecting,
-    required this.failed,
-    required this.statusLabel,
-    required this.fillProgress,
-    required this.height,
-    required this.layout,
-  });
-
-  final String title;
-  final String modeLabel;
-  final bool active;
-  final bool isSmartPaused;
-  final bool dynamicColor;
-  final bool connecting;
-  final bool failed;
-  final String statusLabel;
-  final double fillProgress;
-  final double height;
-  final DashboardResponsiveLayout layout;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final progress = fillProgress.clamp(0.0, 1.0);
-    final useDynamicSurface = heroUsesDynamicSurfaceTreatment(
-      dynamicColor: dynamicColor,
-      isSmartPaused: isSmartPaused,
-    );
-    final activeFill = isSmartPaused
-        ? surge.semantic.paused
-        : surge.semantic.dashboardDynamicActive;
-    const foregroundColor = SurgePalette.onFill;
-    final secondaryAlpha = lerpDouble(
-      0.82,
-      useDynamicSurface ? 0.92 : 0.82,
-      progress,
-    );
-    final secondaryColor = foregroundColor.withValues(alpha: secondaryAlpha);
-    final onBlue = progress > 0.5;
-
-    return HeroActiveFill(
-      activeFill: activeFill,
-      builder: (context, animatedActiveFill, child) {
-        final fillColor = Color.lerp(
-          surge.semantic.dashboardInactive,
-          animatedActiveFill,
-          progress,
-        )!;
-        return Container(
-          width: double.infinity,
-          constraints: BoxConstraints(minHeight: height),
-          height: layout.requiresReflow ? null : height,
-          padding: EdgeInsets.symmetric(
-            horizontal: layout.geometry(18),
-            vertical: layout.geometry(10),
-          ),
+    // Design 3.1 (the "RoutaMi AMOLED" artifact): the route card with the
+    // running time and the start ring, then the three mode buttons.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          padding: EdgeInsets.all(layout.geometry(18)),
           decoration: BoxDecoration(
-            color: fillColor,
-            gradient: !useDynamicSurface && progress > 0.001
-                ? LinearGradient(
-                    colors: [fillColor, SurgePalette.shade(fillColor, 0.16)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  )
-                : null,
+            color: surge.card,
+            borderRadius: BorderRadius.circular(layout.cardRadius),
+            border: Border.all(
+              color: surge.separator,
+              width: surge.spacing.hairline,
+            ),
           ),
-          child: child,
-        );
-      },
-      child: Builder(
-        builder: (context) {
-          final routeIcon = Container(
-            width: layout.geometry(38),
-            height: layout.geometry(38),
-            decoration: BoxDecoration(
-              color: SurgePalette.onFill.withValues(alpha: SurgeAlpha.a16),
-              borderRadius: BorderRadius.circular(layout.geometry(16)),
-            ),
-            child: Icon(
-              SurgeIcons.outboundMode,
-              color: SurgePalette.onFill,
-              size: layout.geometry(21),
-            ),
-          );
-          final labels = Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.typography.cardTitle.copyWith(
-                  color: foregroundColor,
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: title),
+                  SizedBox(width: layout.geometry(12)),
+                  status,
+                ],
               ),
-              SizedBox(height: layout.geometry(4)),
-              Text(
-                modeLabel,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.typography.supporting.copyWith(
-                  color: secondaryColor,
-                ),
+              SizedBox(height: layout.geometry(18)),
+              Row(
+                children: [
+                  Expanded(child: _HeroUptime(running: isStart)),
+                  SizedBox(width: layout.geometry(16)),
+                  actionButton,
+                ],
               ),
             ],
-          );
-          final status = _StatusPill(
-            active: active,
-            isSmartPaused: isSmartPaused,
-            connecting: connecting,
-            failed: failed,
-            label: statusLabel,
-            dynamicColor: useDynamicSurface,
-            onBlue: onBlue,
-            layout: layout,
-          );
-          if (layout.requiresReflow) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    routeIcon,
-                    SizedBox(width: layout.geometry(12)),
-                    Expanded(child: labels),
-                  ],
-                ),
-                SizedBox(height: layout.geometry(8)),
-                Align(alignment: Alignment.centerRight, child: status),
-              ],
-            );
-          }
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              routeIcon,
-              SizedBox(width: layout.geometry(12)),
-              Expanded(child: labels),
-              SizedBox(width: layout.geometry(10)),
-              status,
-            ],
-          );
-        },
-      ),
+          ),
+        ),
+        SizedBox(height: layout.geometry(16)),
+        _ModeSwitch(
+          value: mode,
+          onChanged: (value) => _handleChangeMode(value, ref),
+          layout: layout,
+        ),
+      ],
     );
   }
 }
@@ -694,141 +475,206 @@ class HeroActiveFillState extends State<HeroActiveFill>
   }
 }
 
-class _HeroActionButton extends StatelessWidget {
-  const _HeroActionButton({
-    required this.isStart,
+/// The start button of design 3.1: a ring in the theme's start colour that
+/// fills while the proxy runs ([fillProgress] follows the old mode card's
+/// fill) and spins an arc while starting or stopping.
+class _HeroStartRing extends StatelessWidget {
+  const _HeroStartRing({
+    required this.size,
+    required this.fillProgress,
     required this.isSmartPaused,
-    required this.isSmartResuming,
+    required this.stopping,
     required this.loading,
     required this.label,
     required this.sheenController,
     required this.onPressed,
-    required this.layout,
   });
 
-  final bool isStart;
+  final double size;
+  final Animation<double> fillProgress;
   final bool isSmartPaused;
-  final bool isSmartResuming;
+  final bool stopping;
   final bool loading;
   final String label;
   final AnimationController sheenController;
   final VoidCallback? onPressed;
-  final DashboardResponsiveLayout layout;
 
   @override
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
-    final Color baseColor;
-    if (isSmartPaused ||
-        isSmartResuming ||
-        label == context.appLocalizations.pausing) {
-      baseColor = surge.semantic.state.heroPause;
-    } else if ((isStart && !loading) ||
-        label == context.appLocalizations.stopping) {
-      baseColor = surge.semantic.state.heroStop;
-    } else {
-      baseColor = surge.semantic.state.heroStart;
-    }
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [baseColor, SurgePalette.shade(baseColor, 0.16)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(layout.geometry(18)),
-        boxShadow: SurgeShadows.glow(baseColor, scale: layout.geometryScale),
-      ),
-      child: SurgePressable(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(layout.geometry(18)),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: layout.geometry(74),
-            minHeight: layout.geometry(28),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: layout.geometry(12),
-              vertical: layout.geometry(4),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Shimmer layer — only visible when loading
-                if (loading)
-                  Positioned.fill(
-                    child: _ActionButtonSheen(controller: sheenController),
-                  ),
-                // Text label
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      label,
-                      style: context.typography.controlLabel.copyWith(
-                        color: surge.semantic.state.onHeroAction,
-                      ),
-                    ),
-                    // Animated dots during loading
-                    if (loading) ...[
-                      const SizedBox(width: SurgeSpace.xxs),
-                      _LoadingDots(controller: sheenController),
-                    ],
-                  ],
+    final base = isSmartPaused
+        ? surge.semantic.state.heroPause
+        : stopping
+        ? surge.semantic.state.heroStop
+        : surge.semantic.state.heroStart;
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
+      child: HeroActiveFill(
+        activeFill: base,
+        builder: (context, color, child) => AnimatedBuilder(
+          animation: fillProgress,
+          builder: (context, _) {
+            final progress = fillProgress.value.clamp(0.0, 1.0);
+            final fill = Color.lerp(surge.card, color, progress)!;
+            final foreground = Color.lerp(
+              color,
+              surge.semantic.state.onHeroAction,
+              progress,
+            )!;
+            return SizedBox.square(
+              dimension: size,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: fill,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: color, width: 2),
+                  boxShadow: progress > 0
+                      ? SurgeShadows.glow(color, scale: progress)
+                      : null,
                 ),
-              ],
-            ),
-          ),
+                child: SurgePressable(
+                  onTap: onPressed,
+                  borderRadius: BorderRadius.circular(size / 2),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      if (loading)
+                        Positioned.fill(
+                          child: Padding(
+                            padding: const EdgeInsets.all(SurgeSpace.xxs),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: foreground,
+                            ),
+                          ),
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: SurgeSpace.s,
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                label,
+                                maxLines: 1,
+                                style: context.typography.controlLabel.copyWith(
+                                  color: foreground,
+                                ),
+                              ),
+                              if (loading) ...[
+                                const SizedBox(height: SurgeSpace.xxs),
+                                _LoadingDots(
+                                  controller: sheenController,
+                                  color: foreground,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         ),
+        child: const SizedBox.shrink(),
       ),
     );
   }
 }
 
-/// Sliding sheen gradient that sweeps across the button during loading.
-class _ActionButtonSheen extends StatelessWidget {
-  const _ActionButtonSheen({required this.controller});
+/// The running time, ticking every second from the session's start.
+class _HeroUptime extends ConsumerStatefulWidget {
+  const _HeroUptime({required this.running});
 
-  final AnimationController controller;
+  final bool running;
+
+  @override
+  ConsumerState<_HeroUptime> createState() => _HeroUptimeState();
+}
+
+class _HeroUptimeState extends ConsumerState<_HeroUptime> {
+  Timer? _ticker;
+
+  @override
+  void initState() {
+    super.initState();
+    _sync();
+  }
+
+  @override
+  void didUpdateWidget(covariant _HeroUptime oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.running != widget.running) _sync();
+  }
+
+  void _sync() {
+    _ticker?.cancel();
+    _ticker = widget.running
+        ? Timer.periodic(const Duration(seconds: 1), (_) {
+            if (mounted) setState(() {});
+          })
+        : null;
+  }
+
+  @override
+  void dispose() {
+    _ticker?.cancel();
+    super.dispose();
+  }
+
+  int? _elapsed() {
+    if (!widget.running) return null;
+    final start = ref.read(setupActionProvider.notifier).startTime;
+    if (start == null) return ref.read(runTimeProvider);
+    return DateTime.now().difference(start).inMilliseconds;
+  }
 
   @override
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(surge.radii.card),
-      child: AnimatedBuilder(
-        animation: controller,
-        builder: (context, child) {
-          return FractionalTranslation(
-            translation: Offset(-1.4 + controller.value * 2.8, 0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                width: 52,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      SurgePalette.highlight.withValues(alpha: SurgeAlpha.none),
-                      SurgePalette.highlight.withValues(alpha: SurgeAlpha.a16),
-                      SurgePalette.highlight.withValues(alpha: SurgeAlpha.none),
-                    ],
-                  ),
-                ),
-              ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.appLocalizations.uptime.toUpperCase(),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: context.typography.badgeLabel.copyWith(
+            color: surge.textSecondary,
+          ),
+        ),
+        const SizedBox(height: SurgeSpace.xs),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            utils.getTimeText(_elapsed()),
+            maxLines: 1,
+            style: context.typography.dashboardUptime.copyWith(
+              color: widget.running ? surge.textPrimary : surge.textSecondary,
             ),
-          );
-        },
-      ),
+          ),
+        ),
+      ],
     );
   }
 }
 
 /// Three subtle dots that pulse during loading.
 class _LoadingDots extends StatelessWidget {
-  const _LoadingDots({required this.controller});
+  const _LoadingDots({required this.controller, required this.color});
 
   final AnimationController controller;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -839,9 +685,9 @@ class _LoadingDots extends StatelessWidget {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _Dot(opacity: _dotOpacity(t, 0)),
-            _Dot(opacity: _dotOpacity(t, 1)),
-            _Dot(opacity: _dotOpacity(t, 2)),
+            _Dot(color: color, opacity: _dotOpacity(t, 0)),
+            _Dot(color: color, opacity: _dotOpacity(t, 1)),
+            _Dot(color: color, opacity: _dotOpacity(t, 2)),
           ],
         );
       },
@@ -855,8 +701,9 @@ class _LoadingDots extends StatelessWidget {
 }
 
 class _Dot extends StatelessWidget {
-  const _Dot({required this.opacity});
+  const _Dot({required this.color, required this.opacity});
 
+  final Color color;
   final double opacity;
 
   @override
@@ -866,80 +713,63 @@ class _Dot extends StatelessWidget {
       height: 3,
       margin: const EdgeInsets.symmetric(horizontal: 1.5),
       decoration: BoxDecoration(
-        color: SurgePalette.onFill.withValues(alpha: opacity.clamp(0.0, 1.0)),
+        color: color.withValues(alpha: opacity.clamp(0.0, 1.0)),
         shape: BoxShape.circle,
       ),
     );
   }
 }
 
-class _SubscriptionSelectorBar extends ConsumerWidget {
-  const _SubscriptionSelectorBar({
-    required this.profileLabel,
-    required this.currentProfileId,
-    required this.coreStatus,
-    required this.isStart,
-    required this.isSmartPaused,
-    required this.showConnecting,
-    required this.showFailure,
-    required this.layout,
-  });
-
-  final String profileLabel;
-  final int? currentProfileId;
-  final CoreStatus coreStatus;
-  final bool isStart;
-  final bool isSmartPaused;
-  final bool showConnecting;
-  final bool showFailure;
-  final DashboardResponsiveLayout layout;
-
-  Color _statusColor(SurgeTheme surge) {
-    if (showFailure) return surge.red;
-    if (isSmartPaused) return surge.orange;
-    if (coreStatus == CoreStatus.connecting || showConnecting || isStart) {
-      return surge.semantic.connected;
-    }
-    return surge.textSecondary.withValues(alpha: SurgeAlpha.a48);
-  }
+/// The current profile as a chip beside the brand; opens the profile list.
+class DashboardProfileChip extends ConsumerWidget {
+  const DashboardProfileChip({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final surge = SurgeTheme.of(context);
     final profiles = ref.watch(profilesProvider);
-    final statusColor = _statusColor(surge);
-
+    final currentProfile = ref.watch(currentProfileProvider);
+    final label =
+        currentProfile?.realLabel.takeFirstValid([appName]) ?? appName;
     return SurgePressable(
       onTap: () => _showSubscriptionSelectorSheet(
         context,
         ref,
         profiles,
-        currentProfileId,
+        currentProfile?.id,
       ),
-      behavior: HitTestBehavior.opaque,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flexible(
-            child: Text(
-              profileLabel,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: context.typography.screenTitle.copyWith(
-                color: surge.textPrimary,
+      borderRadius: BorderRadius.circular(surge.radii.button),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: SurgeSpace.m,
+          vertical: SurgeSpace.xs + SurgeSpace.xxs,
+        ),
+        decoration: BoxDecoration(
+          color: surge.card,
+          borderRadius: BorderRadius.circular(surge.radii.button),
+          border: Border.all(color: surge.separator),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: context.typography.technical.copyWith(
+                  color: surge.textSecondary,
+                ),
               ),
             ),
-          ),
-          SizedBox(width: layout.geometry(4)),
-          AnimatedContainer(
-            duration: SurgeMotion.reveal,
-            child: Icon(
+            const SizedBox(width: SurgeSpace.xs),
+            Icon(
               SurgeIcons.expand,
-              size: layout.geometry(18),
-              color: statusColor,
+              size: SurgeIconSize.compact,
+              color: surge.textSecondary,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1047,6 +877,7 @@ class _SubscriptionSelectorBar extends ConsumerWidget {
   }
 }
 
+/// Connected, paused, failed or idle, on the hero card's own surface.
 class _StatusPill extends StatelessWidget {
   const _StatusPill({
     required this.active,
@@ -1054,8 +885,6 @@ class _StatusPill extends StatelessWidget {
     required this.connecting,
     required this.failed,
     required this.label,
-    required this.dynamicColor,
-    required this.onBlue,
     required this.layout,
   });
 
@@ -1064,29 +893,31 @@ class _StatusPill extends StatelessWidget {
   final bool connecting;
   final bool failed;
   final String label;
-  final bool dynamicColor;
-  final bool onBlue;
   final DashboardResponsiveLayout layout;
 
   @override
   Widget build(BuildContext context) {
-    final pillAlpha = onBlue && dynamicColor ? SurgeAlpha.a24 : SurgeAlpha.a16;
-    final background = SurgePalette.onFill.withValues(alpha: pillAlpha);
-    final borderColor = onBlue
-        ? SurgePalette.onFill.withValues(
-            alpha: dynamicColor ? SurgeAlpha.a24 : SurgeAlpha.a16,
-          )
-        : SurgePalette.onFill.withValues(alpha: SurgeAlpha.a16);
-    const textColor = SurgePalette.onFill;
-    return Container(
+    final surge = SurgeTheme.of(context);
+    final tone = failed
+        ? surge.red
+        : isSmartPaused
+        ? surge.orange
+        : active || connecting
+        ? surge.semantic.connected
+        : surge.textSecondary;
+    final lit = failed || isSmartPaused || active || connecting;
+    return AnimatedContainer(
+      duration: SurgeMotion.reveal,
       padding: EdgeInsets.symmetric(
-        horizontal: layout.geometry(12),
-        vertical: layout.geometry(9),
+        horizontal: layout.geometry(10),
+        vertical: layout.geometry(6),
       ),
       decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(layout.geometry(20)),
-        border: Border.all(color: borderColor),
+        color: lit ? tone.withValues(alpha: SurgeAlpha.a12) : null,
+        borderRadius: BorderRadius.circular(surge.radii.button),
+        border: Border.all(
+          color: lit ? tone.withValues(alpha: SurgeAlpha.a38) : surge.separator,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1096,7 +927,6 @@ class _StatusPill extends StatelessWidget {
             isSmartPaused: isSmartPaused,
             connecting: connecting,
             failed: failed,
-            onBlue: onBlue,
             size: layout.geometry(8),
           ),
           SizedBox(width: layout.geometry(7)),
@@ -1104,7 +934,7 @@ class _StatusPill extends StatelessWidget {
             label,
             maxLines: 1,
             softWrap: false,
-            style: context.typography.badgeLabel.copyWith(color: textColor),
+            style: context.typography.badgeLabel.copyWith(color: tone),
           ),
         ],
       ),
@@ -1118,7 +948,6 @@ class _PillStatusLight extends StatefulWidget {
     required this.isSmartPaused,
     required this.connecting,
     required this.failed,
-    required this.onBlue,
     required this.size,
   });
 
@@ -1126,7 +955,6 @@ class _PillStatusLight extends StatefulWidget {
   final bool isSmartPaused;
   final bool connecting;
   final bool failed;
-  final bool onBlue;
   final double size;
 
   @override
@@ -1180,7 +1008,7 @@ class _PillStatusLightState extends State<_PillStatusLight>
     if (widget.connecting || widget.active) {
       return surge.semantic.statusLightActive;
     }
-    return SurgePalette.onFill.withValues(alpha: SurgeAlpha.a72);
+    return surge.textSecondary;
   }
 
   @override
@@ -1216,6 +1044,8 @@ class _PillStatusLightState extends State<_PillStatusLight>
   }
 }
 
+/// Rule, direct, global as three separate pills; the chosen one is filled
+/// with the accent.
 class _ModeSwitch extends StatelessWidget {
   const _ModeSwitch({
     required this.value,
@@ -1229,205 +1059,216 @@ class _ModeSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SurgeSegmentedControl<Mode>(
-      value: value,
-      onChanged: onChanged,
-      items: [
-        SurgeSegmentedItem(
-          value: Mode.rule,
-          label: context.appLocalizations.rule,
-        ),
-        SurgeSegmentedItem(
-          value: Mode.direct,
-          label: context.appLocalizations.direct,
-        ),
-        SurgeSegmentedItem(
-          value: Mode.global,
-          label: context.appLocalizations.global,
-        ),
-      ],
-      height: layout.geometry(34),
-      padding: EdgeInsets.all(layout.geometry(3)),
+    final l10n = context.appLocalizations;
+    final items = [
+      (Mode.rule, l10n.rule),
+      (Mode.direct, l10n.direct),
+      (Mode.global, l10n.global),
+    ];
+    return SizedBox(
+      height: layout.geometry(40),
+      child: Row(
+        children: [
+          for (final (index, (mode, label)) in items.indexed) ...[
+            if (index > 0) SizedBox(width: layout.geometry(6)),
+            Expanded(
+              child: _ModePill(
+                label: label,
+                selected: mode == value,
+                onTap: () => onChanged(mode),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
 
-class _HeroProxySelectorBar extends ConsumerWidget {
-  const _HeroProxySelectorBar({required this.layout});
+class _ModePill extends StatelessWidget {
+  const _ModePill({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
 
-  final DashboardResponsiveLayout layout;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final groups = ref.watch(currentGroupsStateProvider).value;
-    final currentGroupName = ref.watch(
-      currentProfileProvider.select((state) => state?.currentGroupName ?? ''),
-    );
-    final selectedGroupName =
-        currentGroupName.isNotEmpty &&
-            groups.any((g) => g.name == currentGroupName)
-        ? currentGroupName
-        : (groups.isNotEmpty ? groups.first.name : '');
-
-    final selectedProxyName = selectedGroupName.isNotEmpty
-        ? ref.watch(selectedProxyNameProvider(selectedGroupName))
-        : null;
-
-    return SurgeDualSelectBar(
-      firstLabel: selectedGroupName.isEmpty ? '-' : selectedGroupName,
-      secondLabel: selectedProxyName == null || selectedProxyName.isEmpty
-          ? '-'
-          : selectedProxyName,
-      onFirstTap: () =>
-          _showGroupSelectorSheet(context, ref, groups, selectedGroupName),
-      onSecondTap: selectedGroupName.isNotEmpty
-          ? () => _showNodeSelectorSheet(
-              context,
-              ref,
-              selectedGroupName,
-              selectedProxyName ?? '',
-            )
-          : null,
-      height: layout.geometry(34),
-      padding: EdgeInsets.symmetric(horizontal: layout.geometry(14)),
-      radius: layout.geometry(22),
-      itemRadius: layout.geometry(18),
-      dividerHeight: layout.geometry(16),
-      dividerMargin: layout.geometry(10),
-      iconSize: layout.geometry(16),
-      labelGap: layout.geometry(2),
-      itemVerticalInset: layout.geometry(3),
-      labelStyle: context.typography.selectorLabel,
-    );
-  }
-
-  void _showGroupSelectorSheet(
-    BuildContext context,
-    WidgetRef ref,
-    List<Group> groups,
-    String selectedGroupName,
-  ) {
-    showSheet(
-      context: context,
-      props: const SheetProps(isScrollControlled: true),
-      builder: (sheetContext) {
-        final surge = SurgeTheme.of(sheetContext);
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.65,
-          child: AdaptiveSheetScaffold(
-            title: sheetContext.appLocalizations.proxyGroup,
-            appBarActions: const [],
-            body: ListView.builder(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SurgeSpace.xl,
-                vertical: SurgeSpace.m,
-              ),
-              itemCount: groups.length,
-              itemBuilder: (context, index) {
-                final group = groups[index];
-                final isSelected = group.name == selectedGroupName;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: SurgeSpace.s),
-                  child: SurgeSelectableRow(
-                    selected: isSelected,
-                    onTap: () {
-                      proxy_common.updateCurrentGroupName(group.name);
-                      Navigator.of(context).pop();
-                    },
-                    presentation: SurgeSelectionPresentation.menu,
-                    showBorder: true,
-                    radius: surge.radii.menuRow,
-                    selectedSurfaceColor: surge.selectedFill,
-                    unselectedSurfaceColor: surge.fill,
-                    selectedBorderColor: surge.primary.withValues(
-                      alpha: SurgeAlpha.a48,
-                    ),
-                    unselectedBorderColor: surge.separator,
-                    selectedBorderWidth: 1,
-                    unselectedBorderWidth: surge.spacing.hairline,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: SurgeSpace.m,
-                        vertical: SurgeSpace.m,
-                      ),
-                      child: Row(
-                        children: [
-                          if (isSelected) ...[
-                            Container(
-                              width: 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                color: surge.semantic.connected,
-                                shape: BoxShape.circle,
-                              ),
-                              margin: const EdgeInsets.only(
-                                right: SurgeSpace.s,
-                              ),
-                            ),
-                          ],
-                          Expanded(
-                            child: Text(
-                              group.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: context.typography.sheetRowTitle.copyWith(
-                                color: surge.textPrimary,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            group.type.name,
-                            style: context.typography.sheetLabel.copyWith(
-                              color: surge.textSecondary,
-                            ),
-                          ),
-                          if (isSelected) ...[
-                            const SizedBox(width: SurgeSpace.s),
-                            Icon(
-                              SurgeIcons.success,
-                              size: SurgeIconSize.compact,
-                              color: surge.primary,
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
+  Widget build(BuildContext context) {
+    final surge = SurgeTheme.of(context);
+    final radius = BorderRadius.circular(surge.radii.list);
+    return Semantics(
+      button: true,
+      selected: selected,
+      inMutuallyExclusiveGroup: true,
+      child: SurgePressable(
+        onTap: onTap,
+        scaleFeedback: false,
+        borderRadius: radius,
+        child: AnimatedContainer(
+          duration: SurgeMotion.state,
+          curve: SurgeMotion.stateCurve,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: selected ? surge.primary : surge.fill,
+            borderRadius: radius,
+            border: Border.all(
+              color: selected ? surge.primary : surge.separator,
+              width: surge.spacing.hairline,
             ),
           ),
-        );
-      },
-    );
-  }
-
-  void _showNodeSelectorSheet(
-    BuildContext context,
-    WidgetRef ref,
-    String groupName,
-    String currentProxyName,
-  ) {
-    final groups = ref.read(groupsProvider);
-    final matchingGroups = groups.where((g) => g.name == groupName);
-    final group = matchingGroups.isNotEmpty
-        ? matchingGroups.first
-        : groups.first;
-    showSheet(
-      context: context,
-      props: const SheetProps(isScrollControlled: true),
-      builder: (sheetContext) => SizedBox(
-        height: MediaQuery.of(context).size.height * 0.65,
-        child: AdaptiveSheetScaffold(
-          title: sheetContext.appLocalizations.nodes,
-          body: _NodeSelectionSheet(
-            group: group,
-            currentProxyName: currentProxyName,
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style:
+                (selected
+                        ? context.typography.selectedModeTabLabel
+                        : context.typography.modeTabLabel)
+                    .copyWith(
+                      color: selected ? surge.onPrimary : surge.textSecondary,
+                    ),
           ),
         ),
       ),
     );
   }
+}
+
+/// The proxy group the dashboard shows: the profile's current group, or the
+/// first one.
+String dashboardGroupName(List<Group> groups, String currentGroupName) {
+  if (currentGroupName.isNotEmpty &&
+      groups.any((group) => group.name == currentGroupName)) {
+    return currentGroupName;
+  }
+  return groups.isNotEmpty ? groups.first.name : '';
+}
+
+void showDashboardGroupSheet(
+  BuildContext context,
+  List<Group> groups,
+  String selectedGroupName,
+) {
+  showSheet(
+    context: context,
+    props: const SheetProps(isScrollControlled: true),
+    builder: (sheetContext) {
+      final surge = SurgeTheme.of(sheetContext);
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.65,
+        child: AdaptiveSheetScaffold(
+          title: sheetContext.appLocalizations.proxyGroup,
+          appBarActions: const [],
+          body: ListView.builder(
+            padding: const EdgeInsets.symmetric(
+              horizontal: SurgeSpace.xl,
+              vertical: SurgeSpace.m,
+            ),
+            itemCount: groups.length,
+            itemBuilder: (context, index) {
+              final group = groups[index];
+              final isSelected = group.name == selectedGroupName;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: SurgeSpace.s),
+                child: SurgeSelectableRow(
+                  selected: isSelected,
+                  onTap: () {
+                    proxy_common.updateCurrentGroupName(group.name);
+                    Navigator.of(context).pop();
+                  },
+                  presentation: SurgeSelectionPresentation.menu,
+                  showBorder: true,
+                  radius: surge.radii.menuRow,
+                  selectedSurfaceColor: surge.selectedFill,
+                  unselectedSurfaceColor: surge.fill,
+                  selectedBorderColor: surge.primary.withValues(
+                    alpha: SurgeAlpha.a48,
+                  ),
+                  unselectedBorderColor: surge.separator,
+                  selectedBorderWidth: 1,
+                  unselectedBorderWidth: surge.spacing.hairline,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SurgeSpace.m,
+                      vertical: SurgeSpace.m,
+                    ),
+                    child: Row(
+                      children: [
+                        if (isSelected) ...[
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: surge.semantic.connected,
+                              shape: BoxShape.circle,
+                            ),
+                            margin: const EdgeInsets.only(right: SurgeSpace.s),
+                          ),
+                        ],
+                        Expanded(
+                          child: Text(
+                            group.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.typography.sheetRowTitle.copyWith(
+                              color: surge.textPrimary,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          group.type.name,
+                          style: context.typography.sheetLabel.copyWith(
+                            color: surge.textSecondary,
+                          ),
+                        ),
+                        if (isSelected) ...[
+                          const SizedBox(width: SurgeSpace.s),
+                          Icon(
+                            SurgeIcons.success,
+                            size: SurgeIconSize.compact,
+                            color: surge.primary,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void showDashboardNodeSheet(
+  BuildContext context,
+  WidgetRef ref,
+  String groupName,
+  String currentProxyName,
+) {
+  final groups = ref.read(groupsProvider);
+  final matchingGroups = groups.where((g) => g.name == groupName);
+  final group = matchingGroups.isNotEmpty ? matchingGroups.first : groups.first;
+  showSheet(
+    context: context,
+    props: const SheetProps(isScrollControlled: true),
+    builder: (sheetContext) => SizedBox(
+      height: MediaQuery.of(context).size.height * 0.65,
+      child: AdaptiveSheetScaffold(
+        title: sheetContext.appLocalizations.nodes,
+        body: _NodeSelectionSheet(
+          group: group,
+          currentProxyName: currentProxyName,
+        ),
+      ),
+    ),
+  );
 }
 
 class _NodeSelectionSheet extends ConsumerStatefulWidget {

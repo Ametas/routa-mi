@@ -20,76 +20,78 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(version, date) =>
+  static String m0(count) => "All ${count} nodes";
+
+  static String m1(version, date) =>
       "Mihomo Core ${version} · Released ${date}";
 
-  static String m1(count) => "${count}d ago";
-
-  static String m2(label) =>
-      "Are you sure you want to delete the selected ${label}?";
+  static String m2(count) => "${count}d ago";
 
   static String m3(label) =>
+      "Are you sure you want to delete the selected ${label}?";
+
+  static String m4(label) =>
       "Are you sure you want to delete the current ${label}?";
 
-  static String m4(label) => "${label} details";
+  static String m5(label) => "${label} details";
 
-  static String m5(percent) => "Downloading APK · ${percent}%";
+  static String m6(percent) => "Downloading APK · ${percent}%";
 
-  static String m6(label) => "${label} cannot be empty";
+  static String m7(label) => "${label} cannot be empty";
 
-  static String m7(label) => "Current ${label} already exists";
+  static String m8(label) => "Current ${label} already exists";
 
-  static String m8(variant) => "Follow system Material You · ${variant}";
+  static String m9(variant) => "Follow system Material You · ${variant}";
 
-  static String m9(count) => " · green streak ${count}";
+  static String m10(count) => " · green streak ${count}";
 
-  static String m10(count, rate, delay, streak) =>
+  static String m11(count, rate, delay, streak) =>
       "${count} checks · ${rate}%${delay}${streak}";
 
-  static String m11(count) => "${count}h ago";
+  static String m12(count) => "${count}h ago";
 
-  static String m12(target) => "${target} is an invalid policy";
+  static String m13(target) => "${target} is an invalid policy";
 
-  static String m13(proxyName) => "${proxyName} is an invalid proxy";
+  static String m14(proxyName) => "${proxyName} is an invalid proxy";
 
-  static String m14(providerName) =>
+  static String m15(providerName) =>
       "${providerName} is an invalid proxy provider";
 
-  static String m15(subRule) => "${subRule} is an invalid SUB_RULE";
+  static String m16(subRule) => "${subRule} is an invalid SUB_RULE";
 
-  static String m16(time) => "Last ${time}";
+  static String m17(time) => "Last ${time}";
 
-  static String m17(error) => "Lite mode could not start: ${error}";
+  static String m18(error) => "Lite mode could not start: ${error}";
 
-  static String m18(appName) =>
+  static String m19(appName) =>
       "1. Open Settings > Privacy & Security\n2. Choose Location Services\n3. Enable ${appName}\n\nReturn to app after setup.";
 
-  static String m19(count) => "${count}m ago";
+  static String m20(count) => "${count}m ago";
 
-  static String m20(mode) => "${mode} mode";
+  static String m21(mode) => "${mode} mode";
 
-  static String m21(count) => "${count}mo ago";
+  static String m22(count) => "${count}mo ago";
 
-  static String m22(filter) => "No ${filter} results";
+  static String m23(filter) => "No ${filter} results";
 
-  static String m23(label) => "No ${label} yet";
+  static String m24(label) => "No ${label} yet";
 
-  static String m24(label) => "${label} must be a number";
+  static String m25(label) => "${label} must be a number";
 
-  static String m25(label) => "${label} must be between 1024 and 49151";
+  static String m26(label) => "${label} must be between 1024 and 49151";
 
-  static String m26(name) => "Restore ${name}";
+  static String m27(name) => "Restore ${name}";
 
-  static String m27(count) => "${count} items have been selected";
+  static String m28(count) => "${count} items have been selected";
 
-  static String m28(region) => "Unlocked (${region})";
+  static String m29(region) => "Unlocked (${region})";
 
-  static String m29(label) => "${label} must be a url";
+  static String m30(label) => "${label} must be a url";
 
-  static String m30(error) =>
+  static String m31(error) =>
       "TUN stays off: the helper service did not start the core (${error}). Reinstall RoutaMi to repair it.";
 
-  static String m31(count) => "${count}y ago";
+  static String m32(count) => "${count}y ago";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -150,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "allGreenLowLatency": MessageLookupByLibrary.simpleMessage(
       "Healthy & fast",
     ),
+    "allNodesCount": m0,
     "allowBypass": MessageLookupByLibrary.simpleMessage("Allow bypass"),
     "allowBypassDesc": MessageLookupByLibrary.simpleMessage(
       "Let selected apps bypass VPN",
@@ -404,7 +407,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "copyLink": MessageLookupByLibrary.simpleMessage("Copy link"),
     "copySuccess": MessageLookupByLibrary.simpleMessage("Copy success"),
     "core": MessageLookupByLibrary.simpleMessage("Core"),
-    "coreReleaseInfo": m0,
+    "coreReleaseInfo": m1,
     "coreStatus": MessageLookupByLibrary.simpleMessage("Core status"),
     "country": MessageLookupByLibrary.simpleMessage("Country"),
     "crashTest": MessageLookupByLibrary.simpleMessage("Crash test"),
@@ -429,7 +432,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "dataChangedSave": MessageLookupByLibrary.simpleMessage(
       "Data changed. Save?",
     ),
-    "daysAgo": m1,
+    "daysAgo": m2,
     "defaultNameserver": MessageLookupByLibrary.simpleMessage(
       "Default nameserver",
     ),
@@ -440,8 +443,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "delay": MessageLookupByLibrary.simpleMessage("Delay"),
     "delayTest": MessageLookupByLibrary.simpleMessage("Delay Test"),
     "delete": MessageLookupByLibrary.simpleMessage("Delete"),
-    "deleteMultipTip": m2,
-    "deleteTip": m3,
+    "deleteMultipTip": m3,
+    "deleteTip": m4,
     "desc": MessageLookupByLibrary.simpleMessage(
       "Multi-platform proxy client based on ClashMeta. Simple, open-source, ad-free.",
     ),
@@ -452,7 +455,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "destinationIPASN": MessageLookupByLibrary.simpleMessage(
       "Destination IPASN",
     ),
-    "details": m4,
+    "details": m5,
     "detectionTip": MessageLookupByLibrary.simpleMessage(
       "Third-party API, for reference only",
     ),
@@ -481,7 +484,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "download": MessageLookupByLibrary.simpleMessage("Download"),
     "downloadUpdate": MessageLookupByLibrary.simpleMessage("Download update"),
     "downloadingApk": MessageLookupByLibrary.simpleMessage("Downloading APK"),
-    "downloadingApkProgress": m5,
+    "downloadingApkProgress": m6,
     "dynamicColor": MessageLookupByLibrary.simpleMessage("Dynamic color"),
     "edit": MessageLookupByLibrary.simpleMessage("Edit"),
     "editGlobalRules": MessageLookupByLibrary.simpleMessage(
@@ -492,7 +495,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "editProxyGroup": MessageLookupByLibrary.simpleMessage("Edit proxy group"),
     "editRule": MessageLookupByLibrary.simpleMessage("Edit rule"),
     "editSsid": MessageLookupByLibrary.simpleMessage("Edit SSID"),
-    "emptyTip": m6,
+    "emptyTip": m7,
     "en": MessageLookupByLibrary.simpleMessage("English"),
     "entries": MessageLookupByLibrary.simpleMessage(" entries"),
     "errorDetails": MessageLookupByLibrary.simpleMessage("Error details"),
@@ -511,7 +514,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Auto-switch when connected to excluded SSID.",
     ),
     "excludeType": MessageLookupByLibrary.simpleMessage("Exclude type"),
-    "existsTip": m7,
+    "existsTip": m8,
     "exit": MessageLookupByLibrary.simpleMessage("Exit"),
     "expand": MessageLookupByLibrary.simpleMessage("Expand"),
     "expandCurrentProfileNodes": MessageLookupByLibrary.simpleMessage(
@@ -553,7 +556,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "findProcessModeDesc": MessageLookupByLibrary.simpleMessage(
       "May reduce performance when enabled",
     ),
-    "followMaterialYou": m8,
+    "followMaterialYou": m9,
     "fontFamily": MessageLookupByLibrary.simpleMessage("FontFamily"),
     "forceRestartCoreTip": MessageLookupByLibrary.simpleMessage(
       "Force restart core?",
@@ -574,10 +577,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Go to configure script",
     ),
     "gptUnlock": MessageLookupByLibrary.simpleMessage("GPT access"),
-    "greenStreak": m9,
+    "greenStreak": m10,
     "hasCacheChange": MessageLookupByLibrary.simpleMessage("Cache changes?"),
     "health": MessageLookupByLibrary.simpleMessage("Health"),
-    "healthHistorySummary": m10,
+    "healthHistorySummary": m11,
     "healthMonitoring": MessageLookupByLibrary.simpleMessage("Health monitor"),
     "hide": MessageLookupByLibrary.simpleMessage("Hide"),
     "hideFromList": MessageLookupByLibrary.simpleMessage("Hide from list"),
@@ -591,7 +594,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "hotkeyManagementDesc": MessageLookupByLibrary.simpleMessage(
       "Use keyboard to control applications",
     ),
-    "hoursAgo": m11,
+    "hoursAgo": m12,
     "icon": MessageLookupByLibrary.simpleMessage("Icon"),
     "iconRecords": MessageLookupByLibrary.simpleMessage("Icon records"),
     "iconStyle": MessageLookupByLibrary.simpleMessage("Icon style"),
@@ -640,10 +643,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidBackupFile": MessageLookupByLibrary.simpleMessage(
       "Invalid backup file",
     ),
-    "invalidPolicy": m12,
-    "invalidProxy": m13,
-    "invalidProxyProvider": m14,
-    "invalidSubRule": m15,
+    "invalidPolicy": m13,
+    "invalidProxy": m14,
+    "invalidProxyProvider": m15,
+    "invalidSubRule": m16,
     "ipcidr": MessageLookupByLibrary.simpleMessage("Ipcidr"),
     "ipv6Desc": MessageLookupByLibrary.simpleMessage(
       "Receive IPv6 traffic when enabled",
@@ -657,13 +660,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "key": MessageLookupByLibrary.simpleMessage("Key"),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
-    "lastCheckedAt": m16,
+    "lastCheckedAt": m17,
     "layout": MessageLookupByLibrary.simpleMessage("Layout"),
     "light": MessageLookupByLibrary.simpleMessage("Light"),
     "list": MessageLookupByLibrary.simpleMessage("List"),
     "listen": MessageLookupByLibrary.simpleMessage("Listen"),
     "liteMode": MessageLookupByLibrary.simpleMessage("Lite mode"),
-    "liteModeFailed": m17,
+    "liteModeFailed": m18,
     "loadTest": MessageLookupByLibrary.simpleMessage("Load test"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "local": MessageLookupByLibrary.simpleMessage("Local"),
@@ -690,7 +693,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "locationPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Wi-Fi name requires location permission.",
     ),
-    "locationPermissionGuide": m18,
+    "locationPermissionGuide": m19,
     "locationPermissionRequired": MessageLookupByLibrary.simpleMessage(
       "Location Permission Required",
     ),
@@ -731,13 +734,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "minimizeOnExitDesc": MessageLookupByLibrary.simpleMessage(
       "Modify the default system exit event",
     ),
-    "minutesAgo": m19,
+    "minutesAgo": m20,
     "mixedPort": MessageLookupByLibrary.simpleMessage("Mixed Port"),
     "mode": MessageLookupByLibrary.simpleMessage("Mode"),
-    "modeDescription": m20,
+    "modeDescription": m21,
     "monochrome": MessageLookupByLibrary.simpleMessage("Mono"),
     "monochromeScheme": MessageLookupByLibrary.simpleMessage("Monochrome"),
-    "monthsAgo": m21,
+    "monthsAgo": m22,
     "more": MessageLookupByLibrary.simpleMessage("More"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
     "nameIcons": MessageLookupByLibrary.simpleMessage("Icons from names"),
@@ -784,7 +787,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "noCache": MessageLookupByLibrary.simpleMessage("No cache"),
     "noData": MessageLookupByLibrary.simpleMessage("No data"),
-    "noFilteredResults": m22,
+    "noFilteredResults": m23,
     "noHistory": MessageLookupByLibrary.simpleMessage("No history"),
     "noHotKey": MessageLookupByLibrary.simpleMessage("No HotKey"),
     "noInfo": MessageLookupByLibrary.simpleMessage("No info"),
@@ -819,8 +822,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "nullProfileDesc": MessageLookupByLibrary.simpleMessage(
       "No profiles yet. Add one to get started.",
     ),
-    "nullTip": m23,
-    "numberTip": m24,
+    "nullTip": m24,
+    "numberTip": m25,
     "onDemand": MessageLookupByLibrary.simpleMessage("On Demand"),
     "onDemandDesc": MessageLookupByLibrary.simpleMessage(
       "Configure running state for scenarios",
@@ -874,7 +877,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "portConflictTip": MessageLookupByLibrary.simpleMessage(
       "Please enter a different port",
     ),
-    "portTip": m25,
+    "portTip": m26,
     "possiblyRoutedToChina": MessageLookupByLibrary.simpleMessage(
       "Possibly routed to China",
     ),
@@ -1081,7 +1084,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "restoreFromWebDAVDesc": MessageLookupByLibrary.simpleMessage(
       "Restore via WebDAV",
     ),
-    "restoreNamedBackup": m26,
+    "restoreNamedBackup": m27,
     "restoreOnlyConfig": MessageLookupByLibrary.simpleMessage(
       "Restore config files only",
     ),
@@ -1248,7 +1251,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "selectTestItem": MessageLookupByLibrary.simpleMessage("Select check"),
     "selected": MessageLookupByLibrary.simpleMessage("Selected"),
-    "selectedCountTitle": m27,
+    "selectedCountTitle": m28,
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
     "show": MessageLookupByLibrary.simpleMessage("Show"),
     "shrink": MessageLookupByLibrary.simpleMessage("Shrink"),
@@ -1368,17 +1371,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "unlocked": MessageLookupByLibrary.simpleMessage("Unlocked"),
     "unlockedRegions": MessageLookupByLibrary.simpleMessage("Unlocked"),
-    "unlockedWithRegion": m28,
+    "unlockedWithRegion": m29,
     "unnamed": MessageLookupByLibrary.simpleMessage("Unnamed"),
     "update": MessageLookupByLibrary.simpleMessage("Update"),
     "updateFrequency": MessageLookupByLibrary.simpleMessage("Update frequency"),
     "upload": MessageLookupByLibrary.simpleMessage("Upload"),
     "upstreamProject": MessageLookupByLibrary.simpleMessage("Upstream project"),
+    "uptime": MessageLookupByLibrary.simpleMessage("Uptime"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage(
       "Obtain profile through URL",
     ),
-    "urlTip": m29,
+    "urlTip": m30,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "value": MessageLookupByLibrary.simpleMessage("Value"),
@@ -1400,11 +1404,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "WebDAV configuration",
     ),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("Whitelist mode"),
-    "windowsTunHelperFailed": m30,
+    "windowsTunHelperFailed": m31,
     "windowsTunUnavailable": MessageLookupByLibrary.simpleMessage(
       "TUN mode needs RoutaMi installed in Program Files and administrator approval for its helper service.",
     ),
-    "yearsAgo": m31,
+    "yearsAgo": m32,
     "youtubeRoutedToChina": MessageLookupByLibrary.simpleMessage(
       "YouTube via China",
     ),

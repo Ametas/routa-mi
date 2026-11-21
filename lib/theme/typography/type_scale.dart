@@ -296,6 +296,14 @@ abstract final class SlclashTypeScale {
     fontWeight: FontWeight.w700,
     letterSpacing: _letterSpacing,
   );
+  static const dashboardUptime = TextStyle(
+    fontFamily: SlclashFontFamilies.jetBrainsMono,
+    fontSize: 28,
+    height: 1.2,
+    fontWeight: FontWeight.w700,
+    letterSpacing: _letterSpacing,
+    fontFeatures: [FontFeature.tabularFigures()],
+  );
   static const dashboardIpValue = TextStyle(
     fontSize: 13,
     height: 1.2857,

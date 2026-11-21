@@ -176,6 +176,7 @@ SurgeTypography _withFamily(SurgeTypography t, String family) => t.copyWith(
   modeTabLabel: t.modeTabLabel.copyWith(fontFamily: family),
   selectedModeTabLabel: t.selectedModeTabLabel.copyWith(fontFamily: family),
   dashboardMetric: t.dashboardMetric.copyWith(fontFamily: family),
+  dashboardUptime: t.dashboardUptime.copyWith(fontFamily: family),
   dashboardIpValue: t.dashboardIpValue.copyWith(fontFamily: family),
   dashboardLatencyValue: t.dashboardLatencyValue.copyWith(fontFamily: family),
   dashboardDetectionValue: t.dashboardDetectionValue.copyWith(
@@ -353,6 +354,10 @@ void main() {
               const GroupsState(value: _heroGroups),
             ),
           ],
+          if (name == 'dashboard')
+            currentGroupsStateProvider.overrideWithValue(
+              const GroupsState(value: _proxyGroups),
+            ),
           if (name == 'proxies') ...[
             groupsProvider.overrideWithBuild((_, _) => _proxyGroups),
             currentGroupsStateProvider.overrideWithValue(
