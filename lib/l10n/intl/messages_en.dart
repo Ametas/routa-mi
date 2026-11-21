@@ -20,65 +20,65 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(count) => "All ${count} nodes";
-
-  static String m1(version, date) =>
+  static String m0(version, date) =>
       "Mihomo Core ${version} · Released ${date}";
 
-  static String m2(count) => "${count}d ago";
+  static String m1(count) => "${count}d ago";
 
-  static String m3(label) =>
+  static String m2(label) =>
       "Are you sure you want to delete the selected ${label}?";
 
-  static String m4(label) =>
+  static String m3(label) =>
       "Are you sure you want to delete the current ${label}?";
 
-  static String m5(label) => "${label} details";
+  static String m4(label) => "${label} details";
 
-  static String m6(percent) => "Downloading APK · ${percent}%";
+  static String m5(percent) => "Downloading APK · ${percent}%";
 
-  static String m7(label) => "${label} cannot be empty";
+  static String m6(label) => "${label} cannot be empty";
 
-  static String m8(label) => "Current ${label} already exists";
+  static String m7(label) => "Current ${label} already exists";
 
-  static String m9(variant) => "Follow system Material You · ${variant}";
+  static String m8(variant) => "Follow system Material You · ${variant}";
 
-  static String m10(count) => " · green streak ${count}";
+  static String m9(count) => " · green streak ${count}";
 
-  static String m11(count, rate, delay, streak) =>
+  static String m10(count, rate, delay, streak) =>
       "${count} checks · ${rate}%${delay}${streak}";
 
-  static String m12(count) => "${count}h ago";
+  static String m11(count) => "${count}h ago";
 
-  static String m13(target) => "${target} is an invalid policy";
+  static String m12(target) => "${target} is an invalid policy";
 
-  static String m14(proxyName) => "${proxyName} is an invalid proxy";
+  static String m13(proxyName) => "${proxyName} is an invalid proxy";
 
-  static String m15(providerName) =>
+  static String m14(providerName) =>
       "${providerName} is an invalid proxy provider";
 
-  static String m16(subRule) => "${subRule} is an invalid SUB_RULE";
+  static String m15(subRule) => "${subRule} is an invalid SUB_RULE";
 
-  static String m17(time) => "Last ${time}";
+  static String m16(time) => "Last ${time}";
 
-  static String m18(error) => "Lite mode could not start: ${error}";
+  static String m17(error) => "Lite mode could not start: ${error}";
 
-  static String m19(appName) =>
+  static String m18(appName) =>
       "1. Open Settings > Privacy & Security\n2. Choose Location Services\n3. Enable ${appName}\n\nReturn to app after setup.";
 
-  static String m20(count) => "${count}m ago";
+  static String m19(count) => "${count}m ago";
 
-  static String m21(mode) => "${mode} mode";
+  static String m20(mode) => "${mode} mode";
 
-  static String m22(count) => "${count}mo ago";
+  static String m21(count) => "${count}mo ago";
 
-  static String m23(filter) => "No ${filter} results";
+  static String m22(filter) => "No ${filter} results";
 
-  static String m24(label) => "No ${label} yet";
+  static String m23(label) => "No ${label} yet";
 
-  static String m25(label) => "${label} must be a number";
+  static String m24(label) => "${label} must be a number";
 
-  static String m26(label) => "${label} must be between 1024 and 49151";
+  static String m25(label) => "${label} must be between 1024 and 49151";
+
+  static String m26(count) => "${count} groups · tap one to show it here";
 
   static String m27(name) => "Restore ${name}";
 
@@ -152,7 +152,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "allGreenLowLatency": MessageLookupByLibrary.simpleMessage(
       "Healthy & fast",
     ),
-    "allNodesCount": m0,
     "allowBypass": MessageLookupByLibrary.simpleMessage("Allow bypass"),
     "allowBypassDesc": MessageLookupByLibrary.simpleMessage(
       "Let selected apps bypass VPN",
@@ -348,6 +347,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "clearData": MessageLookupByLibrary.simpleMessage("Clear Data"),
     "clipboardExport": MessageLookupByLibrary.simpleMessage("Export clipboard"),
     "clipboardImport": MessageLookupByLibrary.simpleMessage("Clipboard import"),
+    "close": MessageLookupByLibrary.simpleMessage("Close"),
     "collapse": MessageLookupByLibrary.simpleMessage("Collapse"),
     "color": MessageLookupByLibrary.simpleMessage("Color"),
     "colorSchemes": MessageLookupByLibrary.simpleMessage("Color schemes"),
@@ -407,7 +407,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "copyLink": MessageLookupByLibrary.simpleMessage("Copy link"),
     "copySuccess": MessageLookupByLibrary.simpleMessage("Copy success"),
     "core": MessageLookupByLibrary.simpleMessage("Core"),
-    "coreReleaseInfo": m1,
+    "coreReleaseInfo": m0,
     "coreStatus": MessageLookupByLibrary.simpleMessage("Core status"),
     "country": MessageLookupByLibrary.simpleMessage("Country"),
     "crashTest": MessageLookupByLibrary.simpleMessage("Crash test"),
@@ -432,7 +432,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "dataChangedSave": MessageLookupByLibrary.simpleMessage(
       "Data changed. Save?",
     ),
-    "daysAgo": m2,
+    "daysAgo": m1,
     "defaultNameserver": MessageLookupByLibrary.simpleMessage(
       "Default nameserver",
     ),
@@ -443,8 +443,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "delay": MessageLookupByLibrary.simpleMessage("Delay"),
     "delayTest": MessageLookupByLibrary.simpleMessage("Delay Test"),
     "delete": MessageLookupByLibrary.simpleMessage("Delete"),
-    "deleteMultipTip": m3,
-    "deleteTip": m4,
+    "deleteMultipTip": m2,
+    "deleteTip": m3,
     "desc": MessageLookupByLibrary.simpleMessage(
       "Multi-platform proxy client based on ClashMeta. Simple, open-source, ad-free.",
     ),
@@ -455,7 +455,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "destinationIPASN": MessageLookupByLibrary.simpleMessage(
       "Destination IPASN",
     ),
-    "details": m5,
+    "details": m4,
     "detectionTip": MessageLookupByLibrary.simpleMessage(
       "Third-party API, for reference only",
     ),
@@ -484,7 +484,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "download": MessageLookupByLibrary.simpleMessage("Download"),
     "downloadUpdate": MessageLookupByLibrary.simpleMessage("Download update"),
     "downloadingApk": MessageLookupByLibrary.simpleMessage("Downloading APK"),
-    "downloadingApkProgress": m6,
+    "downloadingApkProgress": m5,
     "dynamicColor": MessageLookupByLibrary.simpleMessage("Dynamic color"),
     "edit": MessageLookupByLibrary.simpleMessage("Edit"),
     "editGlobalRules": MessageLookupByLibrary.simpleMessage(
@@ -495,7 +495,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "editProxyGroup": MessageLookupByLibrary.simpleMessage("Edit proxy group"),
     "editRule": MessageLookupByLibrary.simpleMessage("Edit rule"),
     "editSsid": MessageLookupByLibrary.simpleMessage("Edit SSID"),
-    "emptyTip": m7,
+    "emptyTip": m6,
     "en": MessageLookupByLibrary.simpleMessage("English"),
     "entries": MessageLookupByLibrary.simpleMessage(" entries"),
     "errorDetails": MessageLookupByLibrary.simpleMessage("Error details"),
@@ -514,7 +514,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Auto-switch when connected to excluded SSID.",
     ),
     "excludeType": MessageLookupByLibrary.simpleMessage("Exclude type"),
-    "existsTip": m8,
+    "existsTip": m7,
     "exit": MessageLookupByLibrary.simpleMessage("Exit"),
     "expand": MessageLookupByLibrary.simpleMessage("Expand"),
     "expandCurrentProfileNodes": MessageLookupByLibrary.simpleMessage(
@@ -556,7 +556,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "findProcessModeDesc": MessageLookupByLibrary.simpleMessage(
       "May reduce performance when enabled",
     ),
-    "followMaterialYou": m9,
+    "followMaterialYou": m8,
     "fontFamily": MessageLookupByLibrary.simpleMessage("FontFamily"),
     "forceRestartCoreTip": MessageLookupByLibrary.simpleMessage(
       "Force restart core?",
@@ -577,10 +577,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Go to configure script",
     ),
     "gptUnlock": MessageLookupByLibrary.simpleMessage("GPT access"),
-    "greenStreak": m10,
+    "greenStreak": m9,
     "hasCacheChange": MessageLookupByLibrary.simpleMessage("Cache changes?"),
     "health": MessageLookupByLibrary.simpleMessage("Health"),
-    "healthHistorySummary": m11,
+    "healthHistorySummary": m10,
     "healthMonitoring": MessageLookupByLibrary.simpleMessage("Health monitor"),
     "hide": MessageLookupByLibrary.simpleMessage("Hide"),
     "hideFromList": MessageLookupByLibrary.simpleMessage("Hide from list"),
@@ -594,7 +594,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "hotkeyManagementDesc": MessageLookupByLibrary.simpleMessage(
       "Use keyboard to control applications",
     ),
-    "hoursAgo": m12,
+    "hoursAgo": m11,
     "icon": MessageLookupByLibrary.simpleMessage("Icon"),
     "iconRecords": MessageLookupByLibrary.simpleMessage("Icon records"),
     "iconStyle": MessageLookupByLibrary.simpleMessage("Icon style"),
@@ -643,10 +643,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidBackupFile": MessageLookupByLibrary.simpleMessage(
       "Invalid backup file",
     ),
-    "invalidPolicy": m13,
-    "invalidProxy": m14,
-    "invalidProxyProvider": m15,
-    "invalidSubRule": m16,
+    "invalidPolicy": m12,
+    "invalidProxy": m13,
+    "invalidProxyProvider": m14,
+    "invalidSubRule": m15,
     "ipcidr": MessageLookupByLibrary.simpleMessage("Ipcidr"),
     "ipv6Desc": MessageLookupByLibrary.simpleMessage(
       "Receive IPv6 traffic when enabled",
@@ -660,13 +660,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "key": MessageLookupByLibrary.simpleMessage("Key"),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
-    "lastCheckedAt": m17,
+    "lastCheckedAt": m16,
     "layout": MessageLookupByLibrary.simpleMessage("Layout"),
     "light": MessageLookupByLibrary.simpleMessage("Light"),
     "list": MessageLookupByLibrary.simpleMessage("List"),
     "listen": MessageLookupByLibrary.simpleMessage("Listen"),
     "liteMode": MessageLookupByLibrary.simpleMessage("Lite mode"),
-    "liteModeFailed": m18,
+    "liteModeFailed": m17,
     "loadTest": MessageLookupByLibrary.simpleMessage("Load test"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "local": MessageLookupByLibrary.simpleMessage("Local"),
@@ -693,7 +693,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "locationPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Wi-Fi name requires location permission.",
     ),
-    "locationPermissionGuide": m19,
+    "locationPermissionGuide": m18,
     "locationPermissionRequired": MessageLookupByLibrary.simpleMessage(
       "Location Permission Required",
     ),
@@ -734,13 +734,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "minimizeOnExitDesc": MessageLookupByLibrary.simpleMessage(
       "Modify the default system exit event",
     ),
-    "minutesAgo": m20,
+    "minutesAgo": m19,
     "mixedPort": MessageLookupByLibrary.simpleMessage("Mixed Port"),
     "mode": MessageLookupByLibrary.simpleMessage("Mode"),
-    "modeDescription": m21,
+    "modeDescription": m20,
     "monochrome": MessageLookupByLibrary.simpleMessage("Mono"),
     "monochromeScheme": MessageLookupByLibrary.simpleMessage("Monochrome"),
-    "monthsAgo": m22,
+    "monthsAgo": m21,
     "more": MessageLookupByLibrary.simpleMessage("More"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
     "nameIcons": MessageLookupByLibrary.simpleMessage("Icons from names"),
@@ -787,7 +787,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "noCache": MessageLookupByLibrary.simpleMessage("No cache"),
     "noData": MessageLookupByLibrary.simpleMessage("No data"),
-    "noFilteredResults": m23,
+    "noFilteredResults": m22,
     "noHistory": MessageLookupByLibrary.simpleMessage("No history"),
     "noHotKey": MessageLookupByLibrary.simpleMessage("No HotKey"),
     "noInfo": MessageLookupByLibrary.simpleMessage("No info"),
@@ -822,8 +822,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "nullProfileDesc": MessageLookupByLibrary.simpleMessage(
       "No profiles yet. Add one to get started.",
     ),
-    "nullTip": m24,
-    "numberTip": m25,
+    "nullTip": m23,
+    "numberTip": m24,
     "onDemand": MessageLookupByLibrary.simpleMessage("On Demand"),
     "onDemandDesc": MessageLookupByLibrary.simpleMessage(
       "Configure running state for scenarios",
@@ -877,7 +877,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "portConflictTip": MessageLookupByLibrary.simpleMessage(
       "Please enter a different port",
     ),
-    "portTip": m26,
+    "portTip": m25,
     "possiblyRoutedToChina": MessageLookupByLibrary.simpleMessage(
       "Possibly routed to China",
     ),
@@ -898,6 +898,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileCoreDesc": MessageLookupByLibrary.simpleMessage(
       "The server picks the subscription format by the core. A JSON subscription always runs on Xray.",
     ),
+    "profileGroups": MessageLookupByLibrary.simpleMessage("Profile groups"),
+    "profileGroupsHint": m26,
     "profileHasUpdate": MessageLookupByLibrary.simpleMessage(
       "Profile modified. Disable auto update?",
     ),

@@ -6089,14 +6089,29 @@ class AppLocalizations {
     return Intl.message('Uptime', name: 'uptime', desc: '', args: []);
   }
 
-  /// `All {count} nodes`
-  String allNodesCount(Object count) {
+  /// `Profile groups`
+  String get profileGroups {
     return Intl.message(
-      'All $count nodes',
-      name: 'allNodesCount',
+      'Profile groups',
+      name: 'profileGroups',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} groups · tap one to show it here`
+  String profileGroupsHint(Object count) {
+    return Intl.message(
+      '$count groups · tap one to show it here',
+      name: 'profileGroupsHint',
       desc: '',
       args: [count],
     );
+  }
+
+  /// `Close`
+  String get close {
+    return Intl.message('Close', name: 'close', desc: '', args: []);
   }
 }
 

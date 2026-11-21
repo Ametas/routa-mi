@@ -740,5 +740,7 @@
   "nameIcons": "Icons from names",
   "nameIconsDesc": "A flag or symbol at the start of a node name becomes its icon",
   "uptime": "Uptime",
-  "allNodesCount": "All {count} nodes"
+  "profileGroups": "Profile groups",
+  "profileGroupsHint": "{count} groups · tap one to show it here",
+  "close": "Close"
 }
