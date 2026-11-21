@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:fl_clash/common/icons.dart';
-import 'package:fl_clash/providers/action.dart';
+import 'package:fl_clash/common/picker.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/activate_box.dart';
 import 'package:fl_clash/widgets/surge/surge_theme_extension.dart';
@@ -151,9 +151,16 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
               ),
               padding: const EdgeInsets.all(SurgeSpace.l),
               iconSize: SurgeIconSize.hero,
-              onPressed: globalState.container
-                  .read(profilesActionProvider.notifier)
-                  .addProfileFormQrCode,
+              // The address goes back to whoever opened the scanner (the
+              // add sheet shows it before adding).
+              onPressed: () async {
+                final url = await globalState.safeRun(
+                  picker.pickerConfigQRCode,
+                );
+                if (url != null && context.mounted) {
+                  Navigator.pop<String>(context, url);
+                }
+              },
               icon: const Icon(SurgeIcons.camera),
             ),
           ),

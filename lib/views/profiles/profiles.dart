@@ -5,14 +5,14 @@ import 'dart:math' as math;
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/enum/enum.dart';
-import 'package:fl_clash/enum/profile_core.dart';
 import 'package:fl_clash/models/models.dart';
-import 'package:fl_clash/pages/scan.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/theme/typography/type_scale.dart';
 import 'package:fl_clash/views/profiles/overwrite/overwrite.dart';
 import 'package:fl_clash/views/profiles/profile_core_widgets.dart';
+import 'package:fl_clash/views/profiles/profile_select.dart';
+import 'package:fl_clash/views/profiles/profiles_chrome.dart';
 import 'package:fl_clash/widgets/mihomo_only.dart';
 import 'package:fl_clash/views/proxies/common.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -83,40 +83,34 @@ class _ProfilesViewState extends State<ProfilesView> {
     _isUpdating = false;
   }
 
-  List<SlAppBarAction> _buildActions(List<Profile> profiles) {
+  List<PopupMenuItemData> _menuItems(List<Profile> profiles) {
     return [
-      SlAppBarOverflowAction(
-        tooltip: context.appLocalizations.more,
-        popup: CommonPopupMenu(
-          items: [
-            if (profiles.isNotEmpty)
-              PopupMenuItemData(
-                icon: SurgeIcons.sync,
-                label: context.appLocalizations.sync,
-                onPressed: () {
-                  _updateProfiles(profiles);
-                },
-              ),
-            PopupMenuItemData(
-              icon: SurgeIcons.tune,
-              label: context.appLocalizations.settings,
-              onPressed: () {
-                showSheet(
-                  context: context,
-                  props: const SheetProps(isScrollControlled: true),
-                  builder: (_) {
-                    return AdaptiveSheetScaffold(
-                      body: ProfilesManageSheet(profiles: profiles),
-                      title: context.appLocalizations.profileManagement,
-                      appBarActions: const [],
-                    );
-                  },
+      if (profiles.isNotEmpty)
+        PopupMenuItemData(
+          icon: SurgeIcons.sync,
+          label: context.appLocalizations.sync,
+          onPressed: () {
+            _updateProfiles(profiles);
+          },
+        ),
+      if (profiles.length > 1)
+        PopupMenuItemData(
+          icon: SurgeIcons.sort,
+          label: context.appLocalizations.profileSort,
+          onPressed: () {
+            showSheet(
+              context: context,
+              props: const SheetProps(isScrollControlled: true),
+              builder: (_) {
+                return AdaptiveSheetScaffold(
+                  body: ProfilesManageSheet(profiles: profiles),
+                  title: context.appLocalizations.profileSort,
+                  appBarActions: const [],
                 );
               },
-            ),
-          ],
+            );
+          },
         ),
-      ),
     ];
   }
 
@@ -124,94 +118,74 @@ class _ProfilesViewState extends State<ProfilesView> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, _) {
-        final appLocalizations = context.appLocalizations;
         final surge = SurgeTheme.of(context);
         final isLoading = ref.watch(loadingProvider(LoadingTag.profiles));
         final state = ref.watch(profilesStateProvider);
         final currentProfile = state.profiles.getProfile(
           state.currentProfileId,
         );
-        return CommonScaffold(
-          backgroundColor: surge.background,
-          isLoading: isLoading,
-          title: context.appLocalizations.profiles,
-          appBarActions: _buildActions(state.profiles),
-          titleVariant: SlAppBarTitleVariant.root,
-          body: state.profiles.isEmpty
-              ? NullStatus(
-                  label: appLocalizations.nullProfileDesc,
-                  illustration: const ProfileEmptyIllustration(),
-                )
-              : Align(
-                  alignment: Alignment.topCenter,
-                  child: SingleChildScrollView(
-                    key: profilesStoreKey,
-                    padding: EdgeInsets.only(
-                      left: SurgeSpace.l,
-                      right: SurgeSpace.l,
-                      top: SurgeSpace.m,
-                      bottom: SurgeBottomNavLayout.mainPageBottomPadding(
-                        context,
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (currentProfile != null)
-                          _CurrentProfileSummary(
-                            profile: currentProfile,
+        final body = state.profiles.isEmpty
+            ? const ProfilesEmptyState()
+            : Align(
+                alignment: Alignment.topCenter,
+                child: SingleChildScrollView(
+                  key: profilesStoreKey,
+                  padding: EdgeInsets.only(
+                    left: SurgeSpace.l,
+                    right: SurgeSpace.l,
+                    top: SurgeSpace.m,
+                    bottom: SurgeBottomNavLayout.mainPageBottomPadding(context),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (currentProfile != null)
+                        _CurrentProfileSummary(
+                          profile: currentProfile,
+                          profiles: state.profiles,
+                          expanded: _isCurrentExpanded,
+                          onExpandChanged: () {
+                            setState(() {
+                              _isCurrentExpanded = !_isCurrentExpanded;
+                            });
+                          },
+                        ),
+                      const SizedBox(height: SurgeSpace.l),
+                      SurgeSection(
+                        title: context.appLocalizations.subscriptions,
+                        margin: const EdgeInsets.only(bottom: SurgeSpace.l),
+                        children: [
+                          _ProfileListContainer(
                             profiles: state.profiles,
-                            expanded: _isCurrentExpanded,
-                            onExpandChanged: () {
-                              setState(() {
-                                _isCurrentExpanded = !_isCurrentExpanded;
-                              });
+                            currentProfileId: state.currentProfileId,
+                            onSelect: (profileId) {
+                              if (profileId != null) {
+                                selectProfile(ref, profileId);
+                              }
                             },
                           ),
-                        const SizedBox(height: SurgeSpace.l),
-                        SurgeSection(
-                          title: context.appLocalizations.subscriptions,
-                          margin: const EdgeInsets.only(bottom: SurgeSpace.l),
-                          children: [
-                            _ProfileListContainer(
-                              profiles: state.profiles,
-                              currentProfileId: state.currentProfileId,
-                              onSelect: (profileId) {
-                                if (profileId == null ||
-                                    profileId == state.currentProfileId) {
-                                  return;
-                                }
-                                ref.read(providersProvider.notifier).clear();
-                                ref.read(groupsProvider.notifier).value =
-                                    const [];
-                                ref
-                                    .read(groupsOwnerProfileIdProvider.notifier)
-                                    .set(null);
-                                ref
-                                    .read(proxiesActionProvider.notifier)
-                                    .beginRuntimeProfileTransition(profileId);
-                                ref
-                                        .read(currentProfileIdProvider.notifier)
-                                        .value =
-                                    profileId;
-                                unawaited(() async {
-                                  await ref
-                                      .read(proxiesActionProvider.notifier)
-                                      .hydrateProxyGroupsSnapshot();
-                                  await ref
-                                      .read(proxiesActionProvider.notifier)
-                                      .ensureCurrentProfileReady(
-                                        forceApply: true,
-                                      );
-                                }());
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
+              );
+        // No app bar: the page opens with its own title row (design 3.1).
+        return Scaffold(
+          backgroundColor: surge.background,
+          body: SafeArea(
+            bottom: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ProfilesTopBar(
+                  menuItems: _menuItems(state.profiles),
+                  isLoading: isLoading,
+                ),
+                Expanded(child: body),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -302,67 +276,6 @@ class _ProfilesManageSheetState extends State<ProfilesManageSheet> {
     }
   }
 
-  Future<void> _handleAddProfileFormFile() async {
-    await globalState.container
-        .read(profilesActionProvider.notifier)
-        .addProfileFormFile();
-  }
-
-  Future<void> _handleAddProfileFormURL(
-    String url, {
-    String? label,
-    bool autoUpdate = true,
-    Duration autoUpdateDuration = defaultUpdateDuration,
-    ProfileCore core = ProfileCore.mihomo,
-  }) async {
-    await globalState.container
-        .read(profilesActionProvider.notifier)
-        .addProfileFormURL(
-          url,
-          label: label,
-          autoUpdate: autoUpdate,
-          autoUpdateDuration: autoUpdateDuration,
-          core: core,
-        );
-  }
-
-  Future<void> _toScan() async {
-    if (system.isDesktop) {
-      await globalState.container
-          .read(profilesActionProvider.notifier)
-          .addProfileFormQrCode();
-      return;
-    }
-    final url = await BaseNavigator.push(context, const ScanPage());
-    if (url != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _handleAddProfileFormURL(url);
-      });
-    }
-  }
-
-  Future<void> _toAddUrl() async {
-    final result = await showSheet<_AddUrlProfileResult>(
-      context: context,
-      props: const SheetProps(isScrollControlled: true),
-      builder: (_) {
-        return const FractionallySizedBox(
-          heightFactor: 0.75,
-          child: _AddUrlProfileSheet(),
-        );
-      },
-    );
-    if (result != null) {
-      await _handleAddProfileFormURL(
-        result.url,
-        label: result.label,
-        autoUpdate: result.autoUpdate,
-        autoUpdateDuration: result.autoUpdateDuration,
-        core: result.core,
-      );
-    }
-  }
-
   void _handleReorder(int oldIndex, int newIndex) {
     setState(() {
       reorderProfileList(_profiles, oldIndex, newIndex);
@@ -384,32 +297,6 @@ class _ProfilesManageSheetState extends State<ProfilesManageSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SurgeSection(
-            title: appLocalizations.addProfileTitle,
-            margin: const EdgeInsets.only(bottom: SurgeSpace.l),
-            children: [
-              SurgeListTile(
-                title: appLocalizations.qrcode,
-                subtitle: appLocalizations.qrcodeDesc,
-                showChevron: true,
-                onTap: _toScan,
-              ),
-              SurgeListTile(
-                title: appLocalizations.file,
-                subtitle: appLocalizations.fileDesc,
-                showChevron: true,
-                onTap: _handleAddProfileFormFile,
-              ),
-              SurgeListTile(
-                title: appLocalizations.url,
-                subtitle: appLocalizations.urlDesc,
-                showChevron: true,
-                showDivider: false,
-                onTap: _toAddUrl,
-              ),
-            ],
-          ),
-          SurgeSection(
-            title: appLocalizations.profileSort,
             subtitle: '${_profiles.length}',
             margin: EdgeInsets.zero,
             children: [
@@ -450,182 +337,6 @@ class _ProfilesManageSheetState extends State<ProfilesManageSheet> {
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _AddUrlProfileResult {
-  const _AddUrlProfileResult({
-    required this.url,
-    required this.autoUpdate,
-    required this.autoUpdateDuration,
-    required this.core,
-    this.label,
-  });
-
-  final String url;
-  final String? label;
-  final bool autoUpdate;
-  final Duration autoUpdateDuration;
-  final ProfileCore core;
-}
-
-class _AddUrlProfileSheet extends StatefulWidget {
-  const _AddUrlProfileSheet();
-
-  @override
-  State<_AddUrlProfileSheet> createState() => _AddUrlProfileSheetState();
-}
-
-class _AddUrlProfileSheetState extends State<_AddUrlProfileSheet> {
-  final _formKey = GlobalKey<FormState>();
-  final _labelController = TextEditingController();
-  final _urlController = TextEditingController();
-  final _autoUpdateDurationController = TextEditingController(
-    text: defaultUpdateDuration.inMinutes.toString(),
-  );
-  bool _autoUpdate = false;
-  ProfileCore _core = ProfileCore.mihomo;
-
-  void _handleSubmit() {
-    if (_formKey.currentState?.validate() == false) return;
-    Navigator.of(context).pop(
-      _AddUrlProfileResult(
-        url: _urlController.text.trim(),
-        label: _labelController.text.trim(),
-        autoUpdate: _autoUpdate,
-        autoUpdateDuration: Duration(
-          minutes: int.parse(_autoUpdateDurationController.text),
-        ),
-        core: _core,
-      ),
-    );
-  }
-
-  void _setAutoUpdate(bool value) {
-    if (_autoUpdate == value) return;
-    setState(() {
-      _autoUpdate = value;
-    });
-  }
-
-  @override
-  void dispose() {
-    _labelController.dispose();
-    _urlController.dispose();
-    _autoUpdateDurationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocalizations = context.appLocalizations;
-    return AdaptiveSheetScaffold(
-      title: appLocalizations.importFromURL,
-      appBarActions: [
-        SlAppBarIconAction(
-          icon: SurgeIcons.confirm,
-          tooltip: appLocalizations.confirm,
-          onPressed: _handleSubmit,
-        ),
-      ],
-      body: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUnfocus,
-        child: ListView(
-          padding: EdgeInsets.fromLTRB(
-            SurgeSpace.xl,
-            SurgeSpace.m,
-            SurgeSpace.xl,
-            SurgeSpace.xl + MediaQuery.paddingOf(context).bottom,
-          ),
-          children: [
-            SurgeField(
-              label: appLocalizations.name,
-              child: TextFormField(
-                textInputAction: TextInputAction.next,
-                controller: _labelController,
-                decoration: surgeInputDecoration(
-                  context,
-                  hintText: appLocalizations.optional,
-                ),
-              ),
-            ),
-            const SizedBox(height: SurgeSpace.l),
-            SurgeField(
-              label: appLocalizations.url,
-              child: TextFormField(
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.url,
-                controller: _urlController,
-                decoration: surgeInputDecoration(
-                  context,
-                  hintText: appLocalizations.url,
-                ),
-                onFieldSubmitted: (_) {
-                  _handleSubmit();
-                },
-                validator: (value) {
-                  final url = value?.trim();
-                  if (url == null || url.isEmpty) {
-                    return appLocalizations.emptyTip('').trim();
-                  }
-                  if (!url.isUrl) {
-                    return appLocalizations.urlTip('').trim();
-                  }
-                  return null;
-                },
-              ),
-            ),
-            const SizedBox(height: SurgeSpace.l),
-            ProfileCoreField(
-              value: _core,
-              onChanged: (core) => setState(() => _core = core),
-            ),
-            const SizedBox(height: SurgeSpace.xl),
-            SurgeToggleFieldRow(
-              label: appLocalizations.autoUpdate,
-              value: _autoUpdate,
-              onChanged: _setAutoUpdate,
-            ),
-            SurgeAnimatedReveal(
-              visible: _autoUpdate,
-              child: Padding(
-                padding: const EdgeInsets.only(top: SurgeSpace.l),
-                child: SurgeField(
-                  label: appLocalizations.autoUpdateInterval,
-                  child: TextFormField(
-                    textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.number,
-                    controller: _autoUpdateDurationController,
-                    decoration: surgeInputDecoration(
-                      context,
-                      hintText: appLocalizations.autoUpdateInterval,
-                    ),
-                    onFieldSubmitted: (_) {
-                      _handleSubmit();
-                    },
-                    validator: (value) {
-                      if (!_autoUpdate) return null;
-                      if (value == null || value.isEmpty) {
-                        return appLocalizations
-                            .profileAutoUpdateIntervalNullValidationDesc;
-                      }
-                      try {
-                        int.parse(value);
-                      } catch (_) {
-                        return appLocalizations
-                            .profileAutoUpdateIntervalInvalidValidationDesc;
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

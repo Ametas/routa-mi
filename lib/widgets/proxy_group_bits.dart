@@ -192,6 +192,7 @@ class ProxyRoundAction extends StatelessWidget {
     required this.onPressed,
     this.active = false,
     this.busy = false,
+    this.accent = false,
   });
 
   final IconData icon;
@@ -200,10 +201,17 @@ class ProxyRoundAction extends StatelessWidget {
   final bool active;
   final bool busy;
 
+  /// Outlines the page's main action (add) in the accent colour.
+  final bool accent;
+
   @override
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
-    final color = active ? surge.onPrimary : surge.textSecondary;
+    final color = active
+        ? surge.onPrimary
+        : accent
+        ? surge.primary
+        : surge.textSecondary;
     return Tooltip(
       message: tooltip,
       child: Semantics(
@@ -223,7 +231,7 @@ class ProxyRoundAction extends StatelessWidget {
               shape: BoxShape.circle,
               color: active ? surge.primary : null,
               border: Border.all(
-                color: active ? surge.primary : surge.separator,
+                color: active || accent ? surge.primary : surge.separator,
               ),
             ),
             child: busy
