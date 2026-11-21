@@ -20,6 +20,7 @@ import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/views/config/dns.dart';
 import 'package:fl_clash/views/config/network.dart';
 import 'package:fl_clash/views/profiles/media_check.dart';
+import 'package:fl_clash/views/dashboard/widgets/home_group_panel.dart';
 import 'package:fl_clash/views/proxies/setting.dart';
 import 'package:fl_clash/views/theme.dart';
 import 'package:fl_clash/views/views.dart';
@@ -271,6 +272,13 @@ void main() {
     'profiles_active': () => const ProfilesView(),
     'proxies': () => const ProxiesView(),
     'hero_node_sheet': () => const DashboardView(),
+    // The home screen's full-screen list of the profile's groups, settled.
+    'home_groups': () => Builder(
+      builder: (context) => HomeGroupsRoute(
+        groups: _proxyGroups,
+        shown: _proxyGroups.first.name,
+      ).buildPage(context, kAlwaysCompleteAnimation, kAlwaysDismissedAnimation),
+    ),
     'proxies_setting': () => const Scaffold(body: ProxiesSetting()),
     'resources_auto_update': () => const ResourcesView(),
     'media_check': () => ProfileMediaCheckView(
@@ -354,7 +362,7 @@ void main() {
               const GroupsState(value: _heroGroups),
             ),
           ],
-          if (name == 'dashboard')
+          if (name == 'dashboard' || name == 'home_groups')
             currentGroupsStateProvider.overrideWithValue(
               const GroupsState(value: _proxyGroups),
             ),

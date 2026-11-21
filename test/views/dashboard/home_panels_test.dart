@@ -1,8 +1,9 @@
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/views/dashboard/widgets/home_group_panel.dart';
 import 'package:fl_clash/views/dashboard/widgets/home_panels.dart';
-import 'package:fl_clash/widgets/proxy_name_icon.dart';
+import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -22,40 +23,66 @@ const _group = Group(
   ],
 );
 
+const _manual = Group(
+  type: GroupType.Selector,
+  name: 'Manual',
+  now: '🇩🇪 Emerald',
+  all: [
+    Proxy(name: '🇩🇪 Emerald', type: 'Vless'),
+    Proxy(name: 'DIRECT', type: 'Direct'),
+  ],
+);
+
 void main() {
-  testWidgets('the group panel lists five nodes and links to all of them', (
+  Widget host() => catalogApp(
+    brightness: Brightness.dark,
+    textScale: 1,
+    overrides: [
+      profilesProvider.overrideWithBuild((_, _) => const []),
+      currentGroupsStateProvider.overrideWithValue(
+        const GroupsState(value: [_group, _manual]),
+      ),
+      selectedProxyNameProvider(_group.name).overrideWithValue('🇫🇮 Legacy'),
+      selectedProxyNameProvider(_manual.name).overrideWithValue('🇩🇪 Emerald'),
+    ],
+    child: const SingleChildScrollView(child: HomeGroupPanel()),
+  );
+
+  testWidgets('the group panel keeps the profile order of a selector', (
     tester,
   ) async {
-    await tester.pumpWidget(
-      catalogApp(
-        brightness: Brightness.dark,
-        textScale: 1,
-        overrides: [
-          profilesProvider.overrideWithBuild((_, _) => const []),
-          currentGroupsStateProvider.overrideWithValue(
-            const GroupsState(value: [_group]),
-          ),
-          selectedProxyNameProvider(
-            _group.name,
-          ).overrideWithValue('🇫🇮 Legacy'),
-        ],
-        child: const SingleChildScrollView(child: HomeGroupPanel()),
-      ),
-    );
+    await tester.pumpWidget(host());
     await tester.pump();
 
-    // The title loses its symbol to the icon rule; the type sits on the right.
+    // The title loses its symbol to the icon rule; the type is a chip.
     expect(find.text('Auto', findRichText: true), findsOneWidget);
     expect(find.text('URLTEST'), findsOneWidget);
-    expect(find.byType(ProxyNameIconTile), findsNWidgets(5));
-    expect(find.text('All 6 nodes'), findsOneWidget);
-    // The selected node comes first.
-    final first = tester.getTopLeft(find.text('Legacy', findRichText: true)).dy;
-    final second = tester
-        .getTopLeft(find.text('Emerald', findRichText: true))
-        .dy;
-    expect(first, lessThan(second));
-    expect(find.text('DIRECT', findRichText: true), findsNothing);
+    // Every member, in profile order: the choice is not moved up.
+    final emerald = tester.getTopLeft(find.text('Emerald', findRichText: true));
+    // The header shows the choice too; the member row comes last.
+    final legacy = tester.getTopLeft(
+      find.text('Legacy', findRichText: true).last,
+    );
+    expect(emerald.dy, lessThan(legacy.dy));
+    expect(find.text('DIRECT', findRichText: true), findsOneWidget);
+    // The choice carries the check.
+    expect(find.byIcon(SurgeIcons.confirm), findsOneWidget);
+  });
+
+  testWidgets('the header opens every group full screen and closes again', (
+    tester,
+  ) async {
+    await tester.pumpWidget(host());
+    await tester.pump();
+
+    await tester.tap(find.bySemanticsLabel('Profile groups'));
+    await tester.pumpAndSettle();
+    expect(find.text('2 groups · tap one to show it here'), findsOneWidget);
+    expect(find.text('Manual', findRichText: true), findsOneWidget);
+
+    await tester.tap(find.byIcon(SurgeIcons.expand).last);
+    await tester.pumpAndSettle();
+    expect(find.text('2 groups · tap one to show it here'), findsNothing);
   });
 
   testWidgets('the brand bar leaves the brand to the desktop side menu', (

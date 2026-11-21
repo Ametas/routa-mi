@@ -2,6 +2,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/views/dashboard/dashboard_layout.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/views/dashboard/widgets/home_group_panel.dart';
 import 'package:fl_clash/views/dashboard/widgets/home_panels.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
