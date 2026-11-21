@@ -1,5 +1,6 @@
 export '../common/icons.dart';
 export 'activate_box.dart';
+export 'proxy_group_bits.dart';
 export 'proxy_name_icon.dart';
 export 'app_bar/sl_app_bar.dart';
 export 'app_bar/sl_app_bar_action.dart';

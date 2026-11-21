@@ -76,6 +76,7 @@ const _proxyGroups = [
     name: '◈ Proxy',
     now: '★ 🇩🇪 Emerald',
     all: [
+      Proxy(name: 'ϟ Auto', type: 'URLTest'),
       Proxy(name: '★ 🇩🇪 Emerald', type: 'Vless'),
       Proxy(name: '★ 🇫🇮 Legacy', type: 'Vless'),
       Proxy(name: '★ 🇵🇱 Syrena', type: 'Trojan'),
@@ -87,7 +88,8 @@ const _proxyGroups = [
   Group(
     type: GroupType.URLTest,
     name: 'ϟ Auto',
-    now: '★ 🇫🇮 Legacy',
+    now: '★ 🇵🇱 Syrena',
+    fixed: '★ 🇵🇱 Syrena',
     all: [
       Proxy(name: '★ 🇫🇮 Legacy', type: 'Vless'),
       Proxy(name: '★ 🇵🇱 Syrena', type: 'Trojan'),
@@ -322,7 +324,10 @@ void main() {
     testWidgets('shot $name', skip: skip != null, (tester) async {
       SharedPreferences.setMockInitialValues({});
       final height = name == 'components' ? 3240.0 : 853.0;
-      await tester.binding.setSurfaceSize(Size(384, height));
+      // SHOT_WIDTH renders a wider (desktop) window.
+      final width =
+          double.tryParse(Platform.environment['SHOT_WIDTH'] ?? '') ?? 384;
+      await tester.binding.setSurfaceSize(Size(width, height));
       tester.view.devicePixelRatio = 2.5;
       final amoled = Platform.environment['SHOT_AMOLED'];
       final spec = amoled != null && brightness == Brightness.dark
@@ -337,7 +342,7 @@ void main() {
       final key = GlobalKey();
       final container = ProviderContainer(
         overrides: [
-          viewSizeProvider.overrideWithBuild((_, _) => Size(384, height)),
+          viewSizeProvider.overrideWithBuild((_, _) => Size(width, height)),
           if (name == 'config_xray') ...[
             profilesProvider.overrideWithBuild(
               (_, _) => const [
@@ -371,7 +376,7 @@ void main() {
             currentGroupsStateProvider.overrideWithValue(
               const GroupsState(value: _proxyGroups),
             ),
-            unfoldSetProvider.overrideWithValue(const {'◈ Proxy'}),
+            unfoldSetProvider.overrideWithValue(const {'◈ Proxy', 'ϟ Auto'}),
           ],
           if (name == 'profiles_active') ...[
             profilesProvider.overrideWithBuild(

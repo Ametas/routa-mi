@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ProxiesSetting extends ConsumerWidget {
   const ProxiesSetting({super.key});
 
-  String _sortLabel(BuildContext context, ProxiesSortType type) {
+  static String sortLabel(BuildContext context, ProxiesSortType type) {
     final appLocalizations = context.appLocalizations;
     return switch (type) {
       ProxiesSortType.none => appLocalizations.defaultText,
@@ -18,7 +18,7 @@ class ProxiesSetting extends ConsumerWidget {
     };
   }
 
-  IconData _sortIcon(ProxiesSortType type) {
+  static IconData sortIcon(ProxiesSortType type) {
     return switch (type) {
       ProxiesSortType.none => SurgeIcons.sort,
       ProxiesSortType.delay => SurgeIcons.networkPing,
@@ -91,8 +91,8 @@ class ProxiesSetting extends ConsumerWidget {
           children: [
             for (final item in sortTypes)
               option(
-                icon: _sortIcon(item),
-                label: _sortLabel(context, item),
+                icon: sortIcon(item),
+                label: sortLabel(context, item),
                 selected: state.sortType == item,
                 last: item == sortTypes.last,
                 onTap: () {

@@ -184,48 +184,47 @@ void main() {
     );
   });
 
-  testWidgets(
-    'a remounted later label can replay after a targeted collapse',
-    (tester) async {
-      final coordinator = ProxyLabelPlaybackCoordinator()..setPageActive(true);
-      addTearDown(coordinator.dispose);
+  testWidgets('a remounted later label can replay after a targeted collapse', (
+    tester,
+  ) async {
+    final coordinator = ProxyLabelPlaybackCoordinator()..setPageActive(true);
+    addTearDown(coordinator.dispose);
 
-      await tester.pumpWidget(
-        _app(
-          child: _label(
-            coordinator,
-            text: 'Hong Kong premium streaming node number one',
-            replayToken: false,
-            ownerKey: 'first',
-          ),
+    await tester.pumpWidget(
+      _app(
+        child: _label(
+          coordinator,
+          text: 'Hong Kong premium streaming node number one',
+          replayToken: false,
+          ownerKey: 'first',
         ),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 801));
-      await tester.pump();
-      await _finishPlayback(tester);
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 801));
+    await tester.pump();
+    await _finishPlayback(tester);
 
-      coordinator.requestReplayFor('later');
-      await tester.pumpWidget(
-        _app(
-          child: _label(
-            coordinator,
-            text: 'Singapore premium streaming node number two',
-            replayToken: false,
-            ownerKey: 'later',
-          ),
+    coordinator.requestReplayFor('later');
+    await tester.pumpWidget(
+      _app(
+        child: _label(
+          coordinator,
+          text: 'Singapore premium streaming node number two',
+          replayToken: false,
+          ownerKey: 'later',
         ),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 801));
-      await tester.pump();
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 801));
+    await tester.pump();
 
-      expect(
-        find.byKey(const ValueKey('scrolling-proxy-label-active')),
-        findsOneWidget,
-      );
-    },
-  );
+    expect(
+      find.byKey(const ValueKey('scrolling-proxy-label-active')),
+      findsOneWidget,
+    );
+  });
 
   testWidgets('lowest list order wins even if a later label builds first', (
     tester,

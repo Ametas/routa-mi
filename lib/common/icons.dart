@@ -91,6 +91,7 @@ abstract final class SurgeIcons {
   static const more = Icons.more_horiz_rounded;
   static const moreVertical = Icons.more_vert_rounded;
   static const confirm = Icons.check_rounded;
+  static const pin = Icons.push_pin_rounded;
   static const selectAll = Icons.select_all_rounded;
   static const deselect = Icons.deselect_rounded;
   static const save = Icons.save_rounded;

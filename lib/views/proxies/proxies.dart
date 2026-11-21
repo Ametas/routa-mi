@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'setting.dart';
+import 'top_bar.dart';
 
 final _profileHasExternalProvidersProvider = FutureProvider.autoDispose
     .family<bool, int>((ref, profileId) async {
@@ -53,41 +54,33 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
     );
   }
 
-  List<SlAppBarAction> _buildActions(BuildContext context) {
+  List<PopupMenuItemData> _menuItems(BuildContext context) {
     final appLocalizations = context.appLocalizations;
-    final hasProviders = _hasProviders();
     return [
-      SlAppBarOverflowAction(
-        tooltip: appLocalizations.more,
-        popup: CommonPopupMenu(
-          items: [
-            if (hasProviders)
-              PopupMenuItemData(
-                icon: SurgeIcons.providerDownload,
-                label: appLocalizations.providers,
-                onPressed: () {
-                  unawaited(_handleProvidersPressed(context));
-                },
-              ),
-            PopupMenuItemData(
-              icon: SurgeIcons.tune,
-              label: appLocalizations.settings,
-              onPressed: () {
-                showSheet(
-                  context: context,
-                  props: const SheetProps(isScrollControlled: true),
-                  builder: (_) {
-                    return AdaptiveSheetScaffold(
-                      body: const ProxiesSetting(),
-                      title: appLocalizations.settings,
-                      appBarActions: const [],
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+      if (_hasProviders())
+        PopupMenuItemData(
+          icon: SurgeIcons.providerDownload,
+          label: appLocalizations.providers,
+          onPressed: () {
+            unawaited(_handleProvidersPressed(context));
+          },
         ),
+      PopupMenuItemData(
+        icon: SurgeIcons.tune,
+        label: appLocalizations.settings,
+        onPressed: () {
+          showSheet(
+            context: context,
+            props: const SheetProps(isScrollControlled: true),
+            builder: (_) {
+              return AdaptiveSheetScaffold(
+                body: const ProxiesSetting(),
+                title: appLocalizations.settings,
+                appBarActions: const [],
+              );
+            },
+          );
+        },
       ),
     ];
   }
@@ -153,14 +146,26 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
     ProxyTrace.noteHotspotBuild('proxies_view');
     final surge = SurgeTheme.of(context);
     final isLoading = ref.watch(loadingProvider(LoadingTag.proxies));
-    return CommonScaffold(
-      isLoading: isLoading,
+    // No app bar: the page opens with its own title row (design 3.1).
+    return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBarActions: _buildActions(context),
-      title: context.appLocalizations.proxies,
-      titleVariant: SlAppBarTitleVariant.root,
       backgroundColor: surge.background,
-      body: ColoredBox(color: surge.background, child: const ProxiesListView()),
+      body: SafeArea(
+        bottom: false,
+        child: ColoredBox(
+          color: surge.background,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ProxiesTopBar(
+                menuItems: _menuItems(context),
+                isLoading: isLoading,
+              ),
+              const Expanded(child: ProxiesListView()),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

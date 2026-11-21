@@ -4914,6 +4914,46 @@ class AppLocalizations {
     );
   }
 
+  /// `Test open groups`
+  String get testOpenGroups {
+    return Intl.message(
+      'Test open groups',
+      name: 'testOpenGroups',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search nodes`
+  String get searchNodes {
+    return Intl.message(
+      'Search nodes',
+      name: 'searchNodes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pinned manually`
+  String get pinnedManually {
+    return Intl.message(
+      'Pinned manually',
+      name: 'pinnedManually',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Return to auto`
+  String get returnToAuto {
+    return Intl.message(
+      'Return to auto',
+      name: 'returnToAuto',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Collapse`
   String get collapse {
     return Intl.message('Collapse', name: 'collapse', desc: '', args: []);
