@@ -43,6 +43,7 @@ class SurgeTypography extends ThemeExtension<SurgeTypography> {
     required this.modeTabLabel,
     required this.selectedModeTabLabel,
     required this.dashboardMetric,
+    required this.dashboardUptime,
     required this.dashboardIpValue,
     required this.dashboardLatencyValue,
     required this.dashboardDetectionValue,
@@ -105,6 +106,7 @@ class SurgeTypography extends ThemeExtension<SurgeTypography> {
       modeTabLabel: SlclashTypeScale.modeTabLabel,
       selectedModeTabLabel: SlclashTypeScale.selectedModeTabLabel,
       dashboardMetric: SlclashTypeScale.dashboardMetric,
+      dashboardUptime: SlclashTypeScale.dashboardUptime,
       dashboardIpValue: SlclashTypeScale.dashboardIpValue,
       dashboardLatencyValue: SlclashTypeScale.dashboardLatencyValue,
       dashboardDetectionValue: SlclashTypeScale.dashboardDetectionValue,
@@ -158,6 +160,9 @@ class SurgeTypography extends ThemeExtension<SurgeTypography> {
   final TextStyle modeTabLabel;
   final TextStyle selectedModeTabLabel;
   final TextStyle dashboardMetric;
+
+  /// The running time in the dashboard hero, in the monospaced face.
+  final TextStyle dashboardUptime;
   final TextStyle dashboardIpValue;
   final TextStyle dashboardLatencyValue;
   final TextStyle dashboardDetectionValue;
@@ -211,6 +216,7 @@ class SurgeTypography extends ThemeExtension<SurgeTypography> {
     TextStyle? modeTabLabel,
     TextStyle? selectedModeTabLabel,
     TextStyle? dashboardMetric,
+    TextStyle? dashboardUptime,
     TextStyle? dashboardIpValue,
     TextStyle? dashboardLatencyValue,
     TextStyle? dashboardDetectionValue,
@@ -266,6 +272,7 @@ class SurgeTypography extends ThemeExtension<SurgeTypography> {
       modeTabLabel: modeTabLabel ?? this.modeTabLabel,
       selectedModeTabLabel: selectedModeTabLabel ?? this.selectedModeTabLabel,
       dashboardMetric: dashboardMetric ?? this.dashboardMetric,
+      dashboardUptime: dashboardUptime ?? this.dashboardUptime,
       dashboardIpValue: dashboardIpValue ?? this.dashboardIpValue,
       dashboardLatencyValue:
           dashboardLatencyValue ?? this.dashboardLatencyValue,
@@ -399,6 +406,11 @@ class SurgeTypography extends ThemeExtension<SurgeTypography> {
       dashboardMetric: TextStyle.lerp(
         dashboardMetric,
         other.dashboardMetric,
+        t,
+      )!,
+      dashboardUptime: TextStyle.lerp(
+        dashboardUptime,
+        other.dashboardUptime,
         t,
       )!,
       dashboardIpValue: TextStyle.lerp(

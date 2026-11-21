@@ -84,6 +84,13 @@ void main() {
       ),
       (SlclashTypeScale.techLabel, 13, 1.3846, FontWeight.w500, null),
       (SlclashTypeScale.dashboardMetric, 14, 1.2857, FontWeight.w700, null),
+      (
+        SlclashTypeScale.dashboardUptime,
+        28,
+        1.2,
+        FontWeight.w700,
+        SlclashFontFamilies.jetBrainsMono,
+      ),
       (SlclashTypeScale.dashboardIpValue, 13, 1.2857, FontWeight.w600, null),
       (
         SlclashTypeScale.dashboardLatencyValue,
@@ -103,7 +110,7 @@ void main() {
       ),
     ];
 
-    expect(cases, hasLength(51));
+    expect(cases, hasLength(52));
     for (final (style, size, height, weight, family) in cases) {
       expect(style.fontSize, size);
       if (height == null) {
