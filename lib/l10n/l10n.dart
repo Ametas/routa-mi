@@ -6203,6 +6203,316 @@ class AppLocalizations {
   String get settingsData {
     return Intl.message('Data', name: 'settingsData', desc: '', args: []);
   }
+
+  /// `New profile`
+  String get newProfile {
+    return Intl.message('New profile', name: 'newProfile', desc: '', args: []);
+  }
+
+  /// `Subscription link`
+  String get subscriptionLink {
+    return Intl.message(
+      'Subscription link',
+      name: 'subscriptionLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A https:// subscription address or a clash://install-config link`
+  String get linkHint {
+    return Intl.message(
+      'A https:// subscription address or a clash://install-config link',
+      name: 'linkHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription · {host}`
+  String linkSubscription(Object host) {
+    return Intl.message(
+      'Subscription · $host',
+      name: 'linkSubscription',
+      desc: '',
+      args: [host],
+    );
+  }
+
+  /// `clash:// link · subscription {host}`
+  String linkClash(Object host) {
+    return Intl.message(
+      'clash:// link · subscription $host',
+      name: 'linkClash',
+      desc: '',
+      args: [host],
+    );
+  }
+
+  /// `not encrypted (http)`
+  String get linkPlainHttp {
+    return Intl.message(
+      'not encrypted (http)',
+      name: 'linkPlainHttp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is a link to one node, not a subscription. Paste the https:// subscription address.`
+  String get linkNode {
+    return Intl.message(
+      'This is a link to one node, not a subscription. Paste the https:// subscription address.',
+      name: 'linkNode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is not a link. A subscription address starts with https://`
+  String get linkInvalid {
+    return Intl.message(
+      'This is not a link. A subscription address starts with https://',
+      name: 'linkInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This clash:// link has no subscription address.`
+  String get linkClashNoUrl {
+    return Intl.message(
+      'This clash:// link has no subscription address.',
+      name: 'linkClashNoUrl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For Clash/mihomo subscriptions: rules, groups, TUN.`
+  String get coreMihomoHint {
+    return Intl.message(
+      'For Clash/mihomo subscriptions: rules, groups, TUN.',
+      name: 'coreMihomoHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For Xray subscriptions. Some mihomo settings don't apply to this profile.`
+  String get coreXrayHint {
+    return Intl.message(
+      'For Xray subscriptions. Some mihomo settings don\'t apply to this profile.',
+      name: 'coreXrayHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Every {interval}`
+  String updateEvery(Object interval) {
+    return Intl.message(
+      'Every $interval',
+      name: 'updateEvery',
+      desc: '',
+      args: [interval],
+    );
+  }
+
+  /// `Manually only`
+  String get updateManually {
+    return Intl.message(
+      'Manually only',
+      name: 'updateManually',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} h`
+  String hoursShort(Object count) {
+    return Intl.message(
+      '$count h',
+      name: 'hoursShort',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} days`
+  String daysShort(Object count) {
+    return Intl.message(
+      '$count days',
+      name: 'daysShort',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Point the camera at the subscription QR code`
+  String get qrCameraHint {
+    return Intl.message(
+      'Point the camera at the subscription QR code',
+      name: 'qrCameraHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan with camera`
+  String get scanWithCamera {
+    return Intl.message(
+      'Scan with camera',
+      name: 'scanWithCamera',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `From image`
+  String get qrFromImage {
+    return Intl.message('From image', name: 'qrFromImage', desc: '', args: []);
+  }
+
+  /// `The address found goes into the Link tab, so you see it before adding.`
+  String get qrToLinkHint {
+    return Intl.message(
+      'The address found goes into the Link tab, so you see it before adding.',
+      name: 'qrToLinkHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a profile file`
+  String get chooseProfileFile {
+    return Intl.message(
+      'Choose a profile file',
+      name: 'chooseProfileFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `.yaml or .yml`
+  String get profileFileTypes {
+    return Intl.message(
+      '.yaml or .yml',
+      name: 'profileFileTypes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A profile from a file doesn't update itself. Add it by link to get changes.`
+  String get fileNoUpdates {
+    return Intl.message(
+      'A profile from a file doesn\'t update itself. Add it by link to get changes.',
+      name: 'fileNoUpdates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading profile…`
+  String get loadingProfile {
+    return Intl.message(
+      'Loading profile…',
+      name: 'loadingProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Couldn't load the profile`
+  String get profileLoadFailed {
+    return Intl.message(
+      'Couldn\'t load the profile',
+      name: 'profileLoadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile added`
+  String get profileAdded {
+    return Intl.message(
+      'Profile added',
+      name: 'profileAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `“{name}” is in the list`
+  String profileAddedTitle(Object name) {
+    return Intl.message(
+      '“$name” is in the list',
+      name: 'profileAddedTitle',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `It's your first profile, so it's current now.`
+  String get firstProfileIsCurrent {
+    return Intl.message(
+      'It\'s your first profile, so it\'s current now.',
+      name: 'firstProfileIsCurrent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The previous profile stays current for now.`
+  String get previousProfileStays {
+    return Intl.message(
+      'The previous profile stays current for now.',
+      name: 'previousProfileStays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Make current`
+  String get makeCurrent {
+    return Intl.message(
+      'Make current',
+      name: 'makeCurrent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Done`
+  String get done {
+    return Intl.message('Done', name: 'done', desc: '', args: []);
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message('Retry', name: 'retry', desc: '', args: []);
+  }
+
+  /// `No profiles yet`
+  String get noProfilesTitle {
+    return Intl.message(
+      'No profiles yet',
+      name: 'noProfilesTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a subscription from your provider: by link, QR code or file.`
+  String get noProfilesHint {
+    return Intl.message(
+      'Add a subscription from your provider: by link, QR code or file.',
+      name: 'noProfilesHint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

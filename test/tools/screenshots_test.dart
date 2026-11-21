@@ -273,6 +273,7 @@ void main() {
     'dashboard': () => const DashboardView(),
     'profiles': () => const ProfilesView(),
     'profiles_active': () => const ProfilesView(),
+    'profile_add': () => const ProfilesView(),
     'proxies': () => const ProxiesView(),
     'hero_node_sheet': () => const DashboardView(),
     // The home screen's full-screen list of the profile's groups, settled.
@@ -379,7 +380,7 @@ void main() {
             ),
             unfoldSetProvider.overrideWithValue(const {'◈ Proxy', 'ϟ Auto'}),
           ],
-          if (name == 'profiles_active') ...[
+          if (name == 'profiles_active' || name == 'profile_add') ...[
             profilesProvider.overrideWithBuild(
               (_, _) => const [
                 Profile(
@@ -461,6 +462,19 @@ void main() {
         final bar = tester.getRect(find.byType(SurgeDualSelectBar));
         await tester.tapAt(Offset(bar.left + bar.width * 0.75, bar.center.dy));
         for (var i = 0; i < 6; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+      }
+      if (name == 'profile_add') {
+        await tester.tap(find.byKey(const ValueKey('profiles-add')));
+        for (var i = 0; i < 4; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+        await tester.enterText(
+          find.byKey(const ValueKey('add-profile-url')),
+          'clash://install-config?url=https%3A%2F%2Fvpn.example.net%2Fclash%2Fhome&name=Family',
+        );
+        for (var i = 0; i < 4; i++) {
           await tester.pump(const Duration(milliseconds: 100));
         }
       }

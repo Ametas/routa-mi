@@ -35,3 +35,4 @@ export 'side_sheet.dart';
 export 'subscription_info_view.dart';
 export 'text.dart';
 export 'theme.dart';
+export 'outline_pill_button.dart';

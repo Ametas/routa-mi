@@ -29,9 +29,9 @@ void main() {
       Profile(id: 1, label: 'Home', autoUpdateDuration: Duration.zero),
       Profile(id: 2, label: 'Work', autoUpdateDuration: Duration.zero),
     ]);
-    expect(find.byType(SurgeSection), findsNWidgets(2));
-    // Three add options plus one row per profile.
-    expect(find.byType(SurgeListTile), findsNWidgets(5));
+    // Adding moved to the "New profile" sheet; this one only sorts.
+    expect(find.byType(SurgeSection), findsOneWidget);
+    expect(find.byType(SurgeListTile), findsNWidgets(2));
     expect(find.text('Home'), findsOneWidget);
     expect(find.byType(ReorderableDragStartListener), findsNWidgets(2));
   });

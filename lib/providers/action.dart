@@ -3993,6 +3993,10 @@ class ProfilesAction extends _$ProfilesAction {
         operation: operation,
       );
 
+  /// For the add-profile sheet, which shows a failure in its own form.
+  Future<T> withSourceCore<T>(Future<T> Function() operation) =>
+      _withSourceCore(operation);
+
   Future<String> _validateSource(String path) =>
       _withSourceCore(() => coreController.validateProfileSource(path));
   @override
