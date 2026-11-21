@@ -103,18 +103,20 @@ class _HomeGroupPanelState extends ConsumerState<HomeGroupPanel> {
                 padding: const EdgeInsets.all(SurgeSpace.m + SurgeSpace.xxs),
                 child: Row(
                   children: [
-                    _GroupTile(group: group, nameIcons: nameIcons),
+                    ProxyGroupIconTile(group: group, nameIcons: nameIcons),
                     const SizedBox(width: SurgeSpace.m),
                     Expanded(
-                      child: _NameAndChoice(
-                        title: _title(group.name, nameIcons),
+                      child: ProxyNameAndChoice(
+                        title: proxyTitle(group.name, nameIcons),
                         type: group.type.name,
-                        choice: _title(selected, nameIcons),
+                        automatic: proxyGroupIsAutomatic(group),
+                        pinned: proxyGroupPinned(group) != null,
+                        choice: proxyTitle(selected, nameIcons),
                         titleStyle: context.typography.cardTitle,
                       ),
                     ),
                     const SizedBox(width: SurgeSpace.s),
-                    _OpenToggle(open: _sheetOpen),
+                    ProxyGroupOpenToggle(open: _sheetOpen),
                   ],
                 ),
               ),
@@ -147,184 +149,6 @@ class _HomeGroupPanelState extends ConsumerState<HomeGroupPanel> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-String _title(String name, bool nameIcons) =>
-    nameIcons ? splitProxyNameIcon(name).title : name;
-
-/// The group's own icon from the profile, else the emoji its name starts
-/// with.
-class _GroupTile extends StatelessWidget {
-  const _GroupTile({
-    required this.group,
-    required this.nameIcons,
-    this.selected = false,
-  });
-
-  final Group group;
-  final bool nameIcons;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    final Widget tile = group.icon.isNotEmpty
-        ? Container(
-            width: HomePanelLayout.nodeIcon,
-            height: HomePanelLayout.nodeIcon,
-            padding: const EdgeInsets.all(SurgeSpace.xs + SurgeSpace.xxs),
-            decoration: BoxDecoration(
-              color: surge.textSecondary.withValues(alpha: SurgeAlpha.a08),
-              borderRadius: BorderRadius.circular(surge.radii.input),
-            ),
-            child: IconTheme.merge(
-              data: IconThemeData(
-                size: SurgeIconSize.compact,
-                color: surge.primary,
-              ),
-              child: CommonTargetIcon(src: group.icon),
-            ),
-          )
-        : ProxyNameIconTile(
-            icon: nameIcons ? splitProxyNameIcon(group.name).icon : null,
-            size: HomePanelLayout.nodeIcon,
-          );
-    return _SelectionRing(selected: selected, child: tile);
-  }
-}
-
-class _SelectionRing extends StatelessWidget {
-  const _SelectionRing({required this.selected, required this.child});
-
-  final bool selected;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return AnimatedContainer(
-      duration: SurgeMotion.state,
-      decoration: BoxDecoration(
-        color: selected
-            ? surge.primary.withValues(alpha: SurgeAlpha.a16)
-            : null,
-        borderRadius: BorderRadius.circular(surge.radii.input),
-        border: Border.all(
-          color: selected ? surge.primary : Colors.transparent,
-          width: 1.5,
-        ),
-      ),
-      child: child,
-    );
-  }
-}
-
-/// A group's name over its type and what it has chosen.
-class _NameAndChoice extends StatelessWidget {
-  const _NameAndChoice({
-    required this.title,
-    required this.type,
-    required this.choice,
-    required this.titleStyle,
-    this.titleColor,
-  });
-
-  final String title;
-  final String type;
-  final String choice;
-  final TextStyle titleStyle;
-  final Color? titleColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        EmojiText(
-          title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: titleStyle.copyWith(color: titleColor ?? surge.textPrimary),
-        ),
-        const SizedBox(height: SurgeSpace.xxs),
-        Row(
-          children: [
-            _TypeChip(type),
-            const SizedBox(width: SurgeSpace.xs + SurgeSpace.xxs),
-            Flexible(
-              child: EmojiText(
-                choice,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.typography.proxyCardSubtitle.copyWith(
-                  color: surge.textSecondary,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _TypeChip extends StatelessWidget {
-  const _TypeChip(this.type);
-
-  final String type;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: SurgeSpace.xs),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(surge.radii.compact),
-        border: Border.all(color: surge.separator),
-      ),
-      child: Text(
-        type.toUpperCase(),
-        maxLines: 1,
-        style: context.typography.chartLabel.copyWith(
-          color: surge.textSecondary,
-        ),
-      ),
-    );
-  }
-}
-
-/// The round arrow that says the header opens; filled while it is open.
-class _OpenToggle extends StatelessWidget {
-  const _OpenToggle({required this.open});
-
-  final bool open;
-
-  @override
-  Widget build(BuildContext context) {
-    final surge = SurgeTheme.of(context);
-    return AnimatedRotation(
-      turns: open ? 0.5 : 0,
-      duration: SurgeMotion.container,
-      curve: SurgeMotion.stateCurve,
-      child: AnimatedContainer(
-        duration: SurgeMotion.container,
-        width: HomeGroupPanel.toggleSize,
-        height: HomeGroupPanel.toggleSize,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: open ? surge.primary : null,
-          border: Border.all(color: open ? surge.primary : surge.separator),
-        ),
-        child: Icon(
-          SurgeIcons.expand,
-          size: SurgeIconSize.compact,
-          color: open ? surge.onPrimary : surge.textSecondary,
-        ),
       ),
     );
   }
@@ -386,22 +210,26 @@ class _MemberRow extends ConsumerWidget {
         child: Row(
           children: [
             if (inner != null)
-              _GroupTile(group: inner, nameIcons: nameIcons, selected: selected)
-            else
-              _SelectionRing(
+              ProxyGroupIconTile(
+                group: inner,
+                nameIcons: nameIcons,
                 selected: selected,
-                child: ProxyNameIconTile(
-                  icon: nameIcons ? splitProxyNameIcon(proxy.name).icon : null,
-                  size: HomePanelLayout.nodeIcon,
-                ),
+              )
+            else
+              ProxyNodeTile(
+                name: proxy.name,
+                nameIcons: nameIcons,
+                selected: selected,
               ),
             const SizedBox(width: SurgeSpace.m),
             Expanded(
               child: inner != null
-                  ? _NameAndChoice(
-                      title: _title(proxy.name, nameIcons),
+                  ? ProxyNameAndChoice(
+                      title: proxyTitle(proxy.name, nameIcons),
                       type: inner.type.name,
-                      choice: _title(innerChoice, nameIcons),
+                      automatic: proxyGroupIsAutomatic(inner),
+                      pinned: proxyGroupPinned(inner) != null,
+                      choice: proxyTitle(innerChoice, nameIcons),
                       titleStyle: selected
                           ? context.typography.selectedRowTitle
                           : context.typography.compactRowTitle,
@@ -411,7 +239,7 @@ class _MemberRow extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         EmojiText(
-                          _title(proxy.name, nameIcons),
+                          proxyTitle(proxy.name, nameIcons),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style:
@@ -438,12 +266,10 @@ class _MemberRow extends ConsumerWidget {
                 size: SurgeIconSize.regular,
                 color: surge.primary,
               )
-            else if (delay != null)
-              Text(
-                delay < 0 ? context.appLocalizations.timeout : '$delay ms',
-                style: context.typography.technical.copyWith(
-                  color: surge.latencyColor(delay) ?? surge.textSecondary,
-                ),
+            else if (inner == null)
+              ProxyDelayText(
+                delay: delay,
+                onTap: () => proxy_common.proxyDelayTest(proxy, group.testUrl),
               ),
           ],
         ),
@@ -608,7 +434,7 @@ class _HomeGroupsSheetState extends ConsumerState<_HomeGroupsSheet> {
                     label: l10n.close,
                     child: SurgePressable(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const _OpenToggle(open: true),
+                      child: const ProxyGroupOpenToggle(open: true),
                     ),
                   ),
                 ],
@@ -706,13 +532,19 @@ class _GroupRow extends ConsumerWidget {
           ),
           child: Row(
             children: [
-              _GroupTile(group: group, nameIcons: nameIcons, selected: picked),
+              ProxyGroupIconTile(
+                group: group,
+                nameIcons: nameIcons,
+                selected: picked,
+              ),
               const SizedBox(width: SurgeSpace.m),
               Expanded(
-                child: _NameAndChoice(
-                  title: _title(group.name, nameIcons),
+                child: ProxyNameAndChoice(
+                  title: proxyTitle(group.name, nameIcons),
                   type: group.type.name,
-                  choice: _title(choice, nameIcons),
+                  automatic: proxyGroupIsAutomatic(group),
+                  pinned: proxyGroupPinned(group) != null,
+                  choice: proxyTitle(choice, nameIcons),
                   titleStyle: picked
                       ? context.typography.selectedRowTitle
                       : context.typography.compactRowTitle,

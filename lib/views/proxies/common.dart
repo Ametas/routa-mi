@@ -1,33 +1,11 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/core/core.dart';
-import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum ProxyListRowPosition { single, first, middle, last }
-
-double getProxyTileHeight() {
-  final measure = globalState.measure;
-  return 26 + measure.bodyMediumHeight + measure.bodySmallHeight + 3;
-}
-
-double get listHeaderHeight {
-  final measure = globalState.measure;
-  return 34 + measure.titleMediumHeight + 4 + measure.bodyMediumHeight + 2;
-}
-
-double getItemHeight(ProxyCardType proxyCardType) {
-  final measure = globalState.measure;
-  final baseHeight =
-      20 + measure.bodyMediumHeight + measure.bodySmallHeight + 4;
-  return switch (proxyCardType) {
-    ProxyCardType.expand => baseHeight + measure.labelSmallHeight + 8,
-    ProxyCardType.shrink => baseHeight + 4,
-    ProxyCardType.min => baseHeight,
-  };
-}
 
 List<Group> getCurrentGroups() {
   return globalState.container.read(currentGroupsStateProvider).value;
@@ -219,17 +197,4 @@ String proxyFullDisplayName({
     return '$visibleName: ${resolved.proxyName}';
   }
   return visibleName;
-}
-
-double getScrollToSelectedOffset({
-  required String groupName,
-  required List<Proxy> proxies,
-}) {
-  final ref = globalState.container;
-  final selectedProxyName = ref.read(selectedProxyNameProvider(groupName));
-  final findSelectedIndex = proxies.indexWhere(
-    (proxy) => proxy.name == selectedProxyName,
-  );
-  final selectedIndex = findSelectedIndex != -1 ? findSelectedIndex : 0;
-  return (selectedIndex * getProxyTileHeight()) - 40;
 }
