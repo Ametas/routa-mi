@@ -319,6 +319,9 @@ _ThemeProps _$ThemePropsFromJson(Map<String, dynamic> json) => _ThemeProps(
       defaultDynamicSchemeVariant,
   dynamicColor: json['dynamicColor'] as bool? ?? true,
   pureBlack: json['pureBlack'] as bool? ?? false,
+  amoledAccent:
+      $enumDecodeNullable(_$AmoledAccentEnumMap, json['amoledAccent']) ??
+      AmoledAccent.violet,
   textScale: json['textScale'] == null
       ? const TextScale()
       : TextScale.fromJson(json['textScale'] as Map<String, dynamic>),
@@ -332,6 +335,7 @@ Map<String, dynamic> _$ThemePropsToJson(_ThemeProps instance) =>
       'schemeVariant': _$DynamicSchemeVariantEnumMap[instance.schemeVariant]!,
       'dynamicColor': instance.dynamicColor,
       'pureBlack': instance.pureBlack,
+      'amoledAccent': _$AmoledAccentEnumMap[instance.amoledAccent]!,
       'textScale': instance.textScale,
     };
 
@@ -351,6 +355,13 @@ const _$DynamicSchemeVariantEnumMap = {
   DynamicSchemeVariant.content: 'content',
   DynamicSchemeVariant.rainbow: 'rainbow',
   DynamicSchemeVariant.fruitSalad: 'fruitSalad',
+};
+
+const _$AmoledAccentEnumMap = {
+  AmoledAccent.violet: 'violet',
+  AmoledAccent.cyan: 'cyan',
+  AmoledAccent.lime: 'lime',
+  AmoledAccent.rose: 'rose',
 };
 
 _Config _$ConfigFromJson(Map<String, dynamic> json) => _Config(

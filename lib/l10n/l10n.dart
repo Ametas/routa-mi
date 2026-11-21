@@ -6023,6 +6023,46 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `AMOLED`
+  String get amoledMode {
+    return Intl.message('AMOLED', name: 'amoledMode', desc: '', args: []);
+  }
+
+  /// `True black in dark mode: OLED pixels stay off`
+  String get amoledModeDesc {
+    return Intl.message(
+      'True black in dark mode: OLED pixels stay off',
+      name: 'amoledModeDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Violet`
+  String get amoledAccentViolet {
+    return Intl.message(
+      'Violet',
+      name: 'amoledAccentViolet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cyan`
+  String get amoledAccentCyan {
+    return Intl.message('Cyan', name: 'amoledAccentCyan', desc: '', args: []);
+  }
+
+  /// `Lime`
+  String get amoledAccentLime {
+    return Intl.message('Lime', name: 'amoledAccentLime', desc: '', args: []);
+  }
+
+  /// `Rose`
+  String get amoledAccentRose {
+    return Intl.message('Rose', name: 'amoledAccentRose', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

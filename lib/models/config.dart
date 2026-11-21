@@ -271,6 +271,7 @@ abstract class ThemeProps with _$ThemeProps {
     @Default(defaultDynamicSchemeVariant) DynamicSchemeVariant schemeVariant,
     @Default(true) bool dynamicColor,
     @Default(false) bool pureBlack,
+    @Default(AmoledAccent.violet) AmoledAccent amoledAccent,
     @Default(TextScale()) TextScale textScale,
   }) = _ThemeProps;
 
