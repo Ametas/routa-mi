@@ -730,5 +730,11 @@
   "changelog050Item4": "The app is English only.",
   "changelog051Item1": "Windows: TUN switched on in a running app now reaches the core, and other settings changes no longer turn it off.",
   "changelog051Item2": "Windows: when the helper service cannot start the core, TUN stays off and the reason is shown.",
-  "changelog051Item3": "Windows: side menu labels use the app's text style again."
+  "changelog051Item3": "Windows: side menu labels use the app's text style again.",
+  "amoledMode": "AMOLED",
+  "amoledModeDesc": "True black in dark mode: OLED pixels stay off",
+  "amoledAccentViolet": "Violet",
+  "amoledAccentCyan": "Cyan",
+  "amoledAccentLime": "Lime",
+  "amoledAccentRose": "Rose"
 }

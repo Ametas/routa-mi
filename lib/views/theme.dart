@@ -7,6 +7,7 @@ import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/theme/app_color_source.dart';
 import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/views/theme_accent.dart';
+import 'package:fl_clash/views/theme_amoled.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,7 @@ class ThemeView extends StatelessWidget {
               children: [
                 _ThemeModeItem(),
                 _DynamicColorItem(),
+                ThemeAmoledItem(),
                 _TextScaleFactorItem(),
               ],
             ),

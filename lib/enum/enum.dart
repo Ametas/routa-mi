@@ -134,6 +134,9 @@ enum ProxiesSortType { none, delay, name }
 
 enum TunStack { gvisor, system, mixed, mips }
 
+/// The one bright accent of the AMOLED dark theme.
+enum AmoledAccent { violet, cyan, lime, rose }
+
 enum AccessControlMode { acceptSelected, rejectSelected }
 
 enum AccessSortType { none, name, time }

@@ -161,6 +161,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "allowUnknownAppInstall": MessageLookupByLibrary.simpleMessage(
       "Allow RoutaMi to install unknown apps, then tap Install.",
     ),
+    "amoledAccentCyan": MessageLookupByLibrary.simpleMessage("Cyan"),
+    "amoledAccentLime": MessageLookupByLibrary.simpleMessage("Lime"),
+    "amoledAccentRose": MessageLookupByLibrary.simpleMessage("Rose"),
+    "amoledAccentViolet": MessageLookupByLibrary.simpleMessage("Violet"),
+    "amoledMode": MessageLookupByLibrary.simpleMessage("AMOLED"),
+    "amoledModeDesc": MessageLookupByLibrary.simpleMessage(
+      "True black in dark mode: OLED pixels stay off",
+    ),
     "apkInstallAfterDownload": MessageLookupByLibrary.simpleMessage(
       "System installer will open after download.",
     ),

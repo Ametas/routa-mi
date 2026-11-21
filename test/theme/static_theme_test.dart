@@ -488,9 +488,12 @@ void main() {
     // (see AppColorSource in lib/theme/app_color_source.dart).
     expect(
       applicationSource,
-      contains('AppColorSource.preset => StaticThemeSpec.resolve('),
+      contains('AppColorSource.preset => themeProps.staticSpec('),
     );
-    expect(applicationSource, contains('StaticThemeSpec.resolve'));
+    // staticSpec picks AMOLED or resolves the preset, never seeding either.
+    final amoledSource = File('lib/theme/amoled_theme.dart').readAsStringSync();
+    expect(amoledSource, contains('StaticThemeSpec.resolve'));
+    expect(amoledSource, isNot(contains('ColorScheme.fromSeed')));
     expect(
       applicationSource,
       isNot(contains('DynamicSchemeVariant.monochrome')),

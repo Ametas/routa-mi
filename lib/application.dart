@@ -12,8 +12,8 @@ import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/plugins/phase4_perf.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/theme/amoled_theme.dart';
 import 'package:fl_clash/theme/app_color_source.dart';
-import 'package:fl_clash/theme/static_theme.dart';
 import 'package:fl_clash/theme/surge_theme_data.dart';
 import 'package:fl_clash/theme/typography/text_theme.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -50,10 +50,7 @@ class ApplicationState extends ConsumerState<Application> {
     required ThemeProps themeProps,
   }) {
     return switch (themeProps.colorSource) {
-      AppColorSource.preset => StaticThemeSpec.resolve(
-        themeProps.staticPreset,
-        brightness,
-      ).colorScheme,
+      AppColorSource.preset => themeProps.staticSpec(brightness).colorScheme,
       AppColorSource.accent => accentColorScheme(
         themeProps.primaryColor!,
         brightness,
@@ -72,7 +69,7 @@ class ApplicationState extends ConsumerState<Application> {
     if (themeProps.colorSource != AppColorSource.preset) {
       return SurgeTheme.fromColorScheme(colorScheme);
     }
-    final spec = StaticThemeSpec.resolve(themeProps.staticPreset, brightness);
+    final spec = themeProps.staticSpec(brightness);
     return SurgeTheme.fromColors(
       spec.colors,
       stateColors: spec.stateColors,
