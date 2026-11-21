@@ -1,8 +1,8 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/config.dart';
-import 'package:fl_clash/widgets/setting.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
+import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -78,6 +78,10 @@ class ProxiesSetting extends ConsumerWidget {
       );
     }
 
+    void setNameIcons(bool value) => ref
+        .read(proxiesStyleSettingProvider.notifier)
+        .update((state) => state.copyWith(nameIcons: value));
+
     const sortTypes = ProxiesSortType.values;
     const iconStyles = ProxiesIconStyle.values;
     return SurgeSectionList(
@@ -118,6 +122,25 @@ class ProxiesSetting extends ConsumerWidget {
                   });
                 },
               ),
+          ],
+        ),
+        SurgeSection(
+          children: [
+            SurgeSettingOption(
+              leading: SurgeIconTile(
+                icon: SurgeIcons.nameIcon,
+                color: state.nameIcons ? surge.primary : surge.textSecondary,
+              ),
+              title: appLocalizations.nameIcons,
+              subtitle: appLocalizations.nameIconsDesc,
+              selected: state.nameIcons,
+              showDivider: false,
+              trailing: SurgeSwitch(
+                value: state.nameIcons,
+                onChanged: setNameIcons,
+              ),
+              onTap: () => setNameIcons(!state.nameIcons),
+            ),
           ],
         ),
       ],

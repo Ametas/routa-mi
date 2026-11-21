@@ -65,34 +65,36 @@ const _heroGroups = [
   ),
 ];
 
+// Names as subscriptions write them: a symbol and a flag in front, which
+// the proxies page turns into the row's icon.
 const _proxyGroups = [
   Group(
     type: GroupType.Selector,
-    name: 'Proxy',
-    now: 'JP01',
+    name: '◈ Proxy',
+    now: '★ 🇩🇪 Emerald',
     all: [
-      Proxy(name: 'JP01', type: 'Vless'),
-      Proxy(name: 'HK01', type: 'Vless'),
-      Proxy(name: 'SG01', type: 'Trojan'),
-      Proxy(name: 'US01', type: 'Hysteria2'),
-      Proxy(name: 'DE01', type: 'Shadowsocks'),
-      Proxy(name: 'NL01', type: 'Vmess'),
+      Proxy(name: '★ 🇩🇪 Emerald', type: 'Vless'),
+      Proxy(name: '★ 🇫🇮 Legacy', type: 'Vless'),
+      Proxy(name: '★ 🇵🇱 Syrena', type: 'Trojan'),
+      Proxy(name: 'ϟ 🇳🇱 Delta', type: 'Hysteria2'),
+      Proxy(name: '🇪🇪 Toompea', type: 'Shadowsocks'),
+      Proxy(name: 'DIRECT', type: 'Direct'),
     ],
   ),
   Group(
     type: GroupType.URLTest,
-    name: 'Auto',
-    now: 'HK01',
+    name: 'ϟ Auto',
+    now: '★ 🇫🇮 Legacy',
     all: [
-      Proxy(name: 'HK01', type: 'Vless'),
-      Proxy(name: 'SG01', type: 'Trojan'),
+      Proxy(name: '★ 🇫🇮 Legacy', type: 'Vless'),
+      Proxy(name: '★ 🇵🇱 Syrena', type: 'Trojan'),
     ],
   ),
   Group(
     type: GroupType.Selector,
     name: 'Streaming',
-    now: 'US01',
-    all: [Proxy(name: 'US01', type: 'Hysteria2')],
+    now: 'ϟ 🇳🇱 Delta',
+    all: [Proxy(name: 'ϟ 🇳🇱 Delta', type: 'Hysteria2')],
   ),
 ];
 
@@ -348,7 +350,7 @@ void main() {
             currentGroupsStateProvider.overrideWithValue(
               const GroupsState(value: _proxyGroups),
             ),
-            unfoldSetProvider.overrideWithValue(const {'Proxy'}),
+            unfoldSetProvider.overrideWithValue(const {'◈ Proxy'}),
           ],
           if (name == 'profiles_active') ...[
             profilesProvider.overrideWithBuild(

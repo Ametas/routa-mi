@@ -26,17 +26,19 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.byType(SurgeSection), findsNWidgets(2));
+    expect(find.byType(SurgeSection), findsNWidgets(3));
     expect(
       find.byType(SurgeSettingOption),
       findsNWidgets(
-        ProxiesSortType.values.length + ProxiesIconStyle.values.length,
+        // Sort, icon style, then the name icons switch.
+        ProxiesSortType.values.length + ProxiesIconStyle.values.length + 1,
       ),
     );
     final selected = tester
         .widgetList<SurgeSettingOption>(find.byType(SurgeSettingOption))
         .where((option) => option.selected);
-    expect(selected, hasLength(2), reason: 'one choice per section');
+    // One choice per section, and name icons are on by default.
+    expect(selected, hasLength(3));
     // The last option of each section has no divider below it.
     final options = tester
         .widgetList<SurgeSettingOption>(find.byType(SurgeSettingOption))
