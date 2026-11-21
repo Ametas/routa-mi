@@ -153,14 +153,29 @@ func (l *coreLink) call(method string, data any, timeout time.Duration) (json.Ra
 	if err != nil {
 		return nil, err
 	}
-	select {
-	case result := <-ch:
+	return awaitResult(method, ch, l.closed, timeout)
+}
+
+// awaitResult waits for the answer to one call. A core may answer and hang
+// up at once (handover): the reader delivers the answer before it marks the
+// link closed, so an answer already waiting wins over the hang-up.
+func awaitResult(method string, ch <-chan coreResult, closed <-chan struct{}, timeout time.Duration) (json.RawMessage, error) {
+	answer := func(result coreResult) (json.RawMessage, error) {
 		if result.Code != 0 {
 			return nil, fmt.Errorf("%s: %s", method, result.Data)
 		}
 		return result.Data, nil
-	case <-l.closed:
-		return nil, errCoreGone
+	}
+	select {
+	case result := <-ch:
+		return answer(result)
+	case <-closed:
+		select {
+		case result := <-ch:
+			return answer(result)
+		default:
+			return nil, errCoreGone
+		}
 	case <-time.After(timeout):
 		return nil, fmt.Errorf("%s: no answer in %s", method, timeout)
 	}
