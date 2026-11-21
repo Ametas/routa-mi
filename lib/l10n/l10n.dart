@@ -6153,6 +6153,56 @@ class AppLocalizations {
   String get close {
     return Intl.message('Close', name: 'close', desc: '', args: []);
   }
+
+  /// `Accent`
+  String get accent {
+    return Intl.message('Accent', name: 'accent', desc: '', args: []);
+  }
+
+  /// `The accent applies to the AMOLED theme`
+  String get accentAmoledOnly {
+    return Intl.message(
+      'The accent applies to the AMOLED theme',
+      name: 'accentAmoledOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All settings`
+  String get allSettings {
+    return Intl.message(
+      'All settings',
+      name: 'allSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Interface`
+  String get settingsInterface {
+    return Intl.message(
+      'Interface',
+      name: 'settingsInterface',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connection`
+  String get settingsConnection {
+    return Intl.message(
+      'Connection',
+      name: 'settingsConnection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data`
+  String get settingsData {
+    return Intl.message('Data', name: 'settingsData', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

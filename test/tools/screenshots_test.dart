@@ -228,6 +228,7 @@ void main() {
   final views = <String, Widget Function()>{
     'theme': () => const ThemeView(),
     'tools': () => const ToolsView(),
+    'tools_unfold': () => const ToolsView(),
     'about': () => const AboutView(),
     'application_setting': () => const ApplicationSettingView(),
     'developer': () => const DeveloperView(),
@@ -460,6 +461,16 @@ void main() {
         final bar = tester.getRect(find.byType(SurgeDualSelectBar));
         await tester.tapAt(Offset(bar.left + bar.width * 0.75, bar.center.dy));
         for (var i = 0; i < 6; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+      }
+      if (name == 'tools_unfold') {
+        await tester.tap(find.text('Basic settings'));
+        for (var i = 0; i < 6; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+        await tester.tap(find.text('Mixed Port'));
+        for (var i = 0; i < 4; i++) {
           await tester.pump(const Duration(milliseconds: 100));
         }
       }

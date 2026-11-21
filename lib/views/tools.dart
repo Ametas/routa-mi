@@ -22,6 +22,8 @@ import 'package:fl_clash/providers/settings_apply.dart';
 import 'package:fl_clash/services/settings/settings_contract.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/widgets/mihomo_only.dart';
+import 'package:fl_clash/views/settings/settings_options.dart';
+import 'package:fl_clash/views/settings/settings_tile.dart';
 
 class ToolsView extends ConsumerStatefulWidget {
   const ToolsView({super.key});
@@ -32,13 +34,13 @@ class ToolsView extends ConsumerStatefulWidget {
 
 class _ToolViewState extends ConsumerState<ToolsView> {
   Widget _buildNavigationMenuItem(NavigationItem navigationItem) {
-    final tile = _SurgeOpenTile(
-      leading: navigationItem.icon,
+    final tile = SettingsPageEntry(
+      icon: navigationItem.icon,
       title: Intl.message(navigationItem.label.name),
       subtitle: navigationItem.description != null
           ? Intl.message(navigationItem.description!)
           : null,
-      child: navigationItem.builder(context),
+      page: navigationItem.builder,
     );
     // Xray has no connection tracker to list.
     return switch (navigationItem.label) {
@@ -47,39 +49,80 @@ class _ToolViewState extends ConsumerState<ToolsView> {
     };
   }
 
-  List<Widget> _buildNavigationMenu(List<NavigationItem> navigationItems) {
-    return [
-      for (var index = 0; index < navigationItems.length; index++)
-        _SurgeTilePosition(
-          isLast: index == navigationItems.length - 1,
-          child: _buildNavigationMenuItem(navigationItems[index]),
-        ),
-    ];
-  }
+  void _open(WidgetBuilder page) => showExtend(context, builder: page);
 
-  Widget _getSettingList(bool enableDeveloperMode) {
-    final items = [
-      const _ThemeItem(),
-      const _NetworkItem(),
-      const MihomoOnly(child: _DnsItem()),
-      const _BackupItem(),
-      if (system.isDesktop) const _HotkeyItem(),
-      const _ConfigItem(),
-      const _AdvancedConfigItem(),
-      const _SettingItem(),
-      if (enableDeveloperMode) const _DeveloperItem(),
-      const _InfoItem(),
-    ];
-    return SurgeSection(
-      title: context.appLocalizations.settings,
-      children: [
-        for (var index = 0; index < items.length; index++)
-          _SurgeTilePosition(
-            isLast: index == items.length - 1,
-            child: items[index],
+  /// Settings grouped as in design 3.1: the most used ones unfold in place,
+  /// the rest open their page.
+  List<Widget> _settingGroups(bool enableDeveloperMode) {
+    final l10n = context.appLocalizations;
+    return [
+      SettingsGroup(
+        label: l10n.settingsInterface,
+        children: [
+          SettingsUnfoldEntry(
+            icon: const Icon(SurgeIcons.style),
+            title: l10n.theme,
+            fallbackSubtitle: l10n.themeDesc,
+            options: (context, ref) => themeOptions(
+              context,
+              ref,
+              openPage: () => _open((_) => const ThemeView()),
+            ),
           ),
-      ],
-    );
+          SettingsUnfoldEntry(
+            icon: const Icon(SurgeIcons.settings),
+            title: l10n.application,
+            fallbackSubtitle: l10n.applicationDesc,
+            options: (context, ref) => applicationOptions(
+              context,
+              ref,
+              openPage: () => _open((_) => const ApplicationSettingView()),
+            ),
+          ),
+          if (system.isDesktop) const _HotkeyItem(),
+        ],
+      ),
+      SettingsGroup(
+        label: l10n.settingsConnection,
+        children: [
+          SettingsUnfoldEntry(
+            icon: const Icon(SurgeIcons.edit),
+            title: l10n.basicConfig,
+            fallbackSubtitle: l10n.basicConfigDesc,
+            options: (context, ref) => basicConfigOptions(
+              context,
+              ref,
+              openPage: () => _open((_) => const ConfigView()),
+            ),
+          ),
+          SettingsUnfoldEntry(
+            icon: const Icon(SurgeIcons.vpnKey),
+            title: l10n.network,
+            fallbackSubtitle: l10n.networkDesc,
+            options: (context, ref) => networkOptions(
+              context,
+              ref,
+              openPage: () => _open(
+                (_) => CommonScaffold(
+                  title: l10n.network,
+                  body: const NetworkListView(),
+                ),
+              ),
+            ),
+          ),
+          const MihomoOnly(child: _DnsItem()),
+          const _AdvancedConfigItem(),
+        ],
+      ),
+      SettingsGroup(
+        label: l10n.settingsData,
+        children: [
+          const _BackupItem(),
+          if (enableDeveloperMode) const _DeveloperItem(),
+          const _InfoItem(),
+        ],
+      ),
+    ];
   }
 
   @override
@@ -96,13 +139,16 @@ class _ToolViewState extends ConsumerState<ToolsView> {
           if (state.navigationItems.isEmpty) {
             return Container();
           }
-          return SurgeSection(
-            title: context.appLocalizations.more,
-            children: _buildNavigationMenu(state.navigationItems),
+          return SettingsGroup(
+            label: context.appLocalizations.more,
+            children: [
+              for (final item in state.navigationItems)
+                _buildNavigationMenuItem(item),
+            ],
           );
         },
       ),
-      _getSettingList(vm2.b),
+      ..._settingGroups(vm2.b),
     ];
     final surge = SurgeTheme.of(context);
     return CommonScaffold(
@@ -114,93 +160,13 @@ class _ToolViewState extends ConsumerState<ToolsView> {
         key: toolsStoreKey,
         itemCount: items.length,
         itemBuilder: (_, index) => items[index],
-        padding: EdgeInsets.only(
-          top: SurgeSpace.m,
-          bottom: SurgeBottomNavLayout.mainPageBottomPadding(context),
+        padding: EdgeInsets.fromLTRB(
+          SurgeSpace.l,
+          SurgeSpace.xs,
+          SurgeSpace.l,
+          SurgeBottomNavLayout.mainPageBottomPadding(context),
         ),
       ),
-    );
-  }
-}
-
-class _SurgeTilePosition extends StatelessWidget {
-  const _SurgeTilePosition({required this.child, required this.isLast});
-
-  final Widget child;
-  final bool isLast;
-
-  @override
-  Widget build(BuildContext context) {
-    return _SurgeTileDividerProvider(showDivider: !isLast, child: child);
-  }
-}
-
-class _SurgeTileDividerProvider extends InheritedWidget {
-  const _SurgeTileDividerProvider({
-    required this.showDivider,
-    required super.child,
-  });
-
-  final bool showDivider;
-
-  static bool of(BuildContext context) {
-    return context
-            .dependOnInheritedWidgetOfExactType<_SurgeTileDividerProvider>()
-            ?.showDivider ??
-        true;
-  }
-
-  @override
-  bool updateShouldNotify(_SurgeTileDividerProvider oldWidget) {
-    return showDivider != oldWidget.showDivider;
-  }
-}
-
-class _SurgeOpenTile extends StatelessWidget {
-  const _SurgeOpenTile({
-    required this.leading,
-    required this.title,
-    required this.child,
-    this.subtitle,
-  });
-
-  final Widget leading;
-  final String title;
-  final String? subtitle;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return SurgeListTile(
-      leading: leading,
-      title: title,
-      subtitle: subtitle,
-      showChevron: true,
-      showDivider: _SurgeTileDividerProvider.of(context),
-      titleTextStyle: context.typography.toolTileTitle,
-      subtitleTextStyle: context.typography.toolTileSubtitle,
-      onTap: () {
-        showExtend(
-          context,
-          builder: (_) {
-            return child;
-          },
-        );
-      },
-    );
-  }
-}
-
-class _ThemeItem extends StatelessWidget {
-  const _ThemeItem();
-
-  @override
-  Widget build(BuildContext context) {
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.style),
-      title: context.appLocalizations.theme,
-      subtitle: context.appLocalizations.themeDesc,
-      child: const ThemeView(),
     );
   }
 }
@@ -210,11 +176,11 @@ class _BackupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.cloudSync),
+    return SettingsPageEntry(
+      icon: const Icon(SurgeIcons.cloudSync),
       title: context.appLocalizations.backupAndRestore,
       subtitle: context.appLocalizations.backupAndRestoreDesc,
-      child: const BackupAndRestore(),
+      page: (_) => const BackupAndRestore(),
     );
   }
 }
@@ -224,29 +190,11 @@ class _HotkeyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.keyboard),
+    return SettingsPageEntry(
+      icon: const Icon(SurgeIcons.keyboard),
       title: context.appLocalizations.hotkeyManagement,
       subtitle: context.appLocalizations.hotkeyManagementDesc,
-      child: const HotKeyView(),
-    );
-  }
-}
-
-class _NetworkItem extends StatelessWidget {
-  const _NetworkItem();
-
-  @override
-  Widget build(BuildContext context) {
-    final appLocalizations = context.appLocalizations;
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.vpnKey),
-      title: appLocalizations.network,
-      subtitle: appLocalizations.networkDesc,
-      child: CommonScaffold(
-        title: appLocalizations.network,
-        body: const NetworkListView(),
-      ),
+      page: (_) => const HotKeyView(),
     );
   }
 }
@@ -257,11 +205,11 @@ class _DnsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.dns),
+    return SettingsPageEntry(
+      icon: const Icon(SurgeIcons.dns),
       title: 'DNS',
       subtitle: appLocalizations.dnsDesc,
-      child: CommonScaffold(
+      page: (_) => CommonScaffold(
         title: 'DNS',
         appBarActions: [
           SlAppBarIconAction(
@@ -269,9 +217,14 @@ class _DnsItem extends StatelessWidget {
             tooltip: appLocalizations.reset,
             onPressed: () async {
               final container = ProviderScope.containerOf(context);
-              final source = container.read(dnsSettingsSourceProvider).asData?.value;
+              final source = container
+                  .read(dnsSettingsSourceProvider)
+                  .asData
+                  ?.value;
               if (source == null || source == DnsSettingsSource.subscription) {
-                globalState.showNotifier('APP DNS is not active; resolve the source or enable override first.');
+                globalState.showNotifier(
+                  'APP DNS is not active; resolve the source or enable override first.',
+                );
                 return;
               }
               final res = await globalState.showMessage(
@@ -291,44 +244,16 @@ class _DnsItem extends StatelessWidget {
   }
 }
 
-class _ConfigItem extends StatelessWidget {
-  const _ConfigItem();
-
-  @override
-  Widget build(BuildContext context) {
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.edit),
-      title: context.appLocalizations.basicConfig,
-      subtitle: context.appLocalizations.basicConfigDesc,
-      child: const ConfigView(),
-    );
-  }
-}
-
 class _AdvancedConfigItem extends StatelessWidget {
   const _AdvancedConfigItem();
 
   @override
   Widget build(BuildContext context) {
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.build),
+    return SettingsPageEntry(
+      icon: const Icon(SurgeIcons.build),
       title: context.appLocalizations.advancedConfig,
       subtitle: context.appLocalizations.advancedConfigDesc,
-      child: const AdvancedConfigView(),
-    );
-  }
-}
-
-class _SettingItem extends StatelessWidget {
-  const _SettingItem();
-
-  @override
-  Widget build(BuildContext context) {
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.settings),
-      title: context.appLocalizations.application,
-      subtitle: context.appLocalizations.applicationDesc,
-      child: const ApplicationSettingView(),
+      page: (_) => const AdvancedConfigView(),
     );
   }
 }
@@ -338,11 +263,11 @@ class _InfoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.info),
+    return SettingsPageEntry(
+      icon: const Icon(SurgeIcons.info),
       title: context.appLocalizations.about,
       subtitle: context.appLocalizations.versionAndProjectLinks,
-      child: const AboutView(),
+      page: (_) => const AboutView(),
     );
   }
 }
@@ -352,10 +277,10 @@ class _DeveloperItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _SurgeOpenTile(
-      leading: const Icon(SurgeIcons.developer),
+    return SettingsPageEntry(
+      icon: const Icon(SurgeIcons.developer),
       title: context.appLocalizations.developerMode,
-      child: const DeveloperView(),
+      page: (_) => const DeveloperView(),
     );
   }
 }

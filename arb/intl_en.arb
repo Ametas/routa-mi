@@ -746,5 +746,11 @@
   "uptime": "Uptime",
   "profileGroups": "Profile groups",
   "profileGroupsHint": "{count} groups · tap one to show it here",
-  "close": "Close"
+  "close": "Close",
+  "accent": "Accent",
+  "accentAmoledOnly": "The accent applies to the AMOLED theme",
+  "allSettings": "All settings",
+  "settingsInterface": "Interface",
+  "settingsConnection": "Connection",
+  "settingsData": "Data"
 }

@@ -99,6 +99,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "aboutDescription": MessageLookupByLibrary.simpleMessage(
       "RoutaMi: Android proxy client built on FlClash and the Mihomo core.",
     ),
+    "accent": MessageLookupByLibrary.simpleMessage("Accent"),
+    "accentAmoledOnly": MessageLookupByLibrary.simpleMessage(
+      "The accent applies to the AMOLED theme",
+    ),
     "accessControl": MessageLookupByLibrary.simpleMessage("Access control"),
     "accessControlAllowDesc": MessageLookupByLibrary.simpleMessage(
       "Allow selected apps only",
@@ -152,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "allGreenLowLatency": MessageLookupByLibrary.simpleMessage(
       "Healthy & fast",
     ),
+    "allSettings": MessageLookupByLibrary.simpleMessage("All settings"),
     "allowBypass": MessageLookupByLibrary.simpleMessage("Allow bypass"),
     "allowBypassDesc": MessageLookupByLibrary.simpleMessage(
       "Let selected apps bypass VPN",
@@ -1258,6 +1263,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "selected": MessageLookupByLibrary.simpleMessage("Selected"),
     "selectedCountTitle": m28,
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
+    "settingsConnection": MessageLookupByLibrary.simpleMessage("Connection"),
+    "settingsData": MessageLookupByLibrary.simpleMessage("Data"),
+    "settingsInterface": MessageLookupByLibrary.simpleMessage("Interface"),
     "show": MessageLookupByLibrary.simpleMessage("Show"),
     "shrink": MessageLookupByLibrary.simpleMessage("Shrink"),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("Start in background"),
