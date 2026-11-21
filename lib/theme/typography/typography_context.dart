@@ -11,11 +11,4 @@ extension SlclashTypographyContext on BuildContext {
     );
     return typography!;
   }
-
-  TextStyle resolveBoldText(TextStyle style) {
-    if (MediaQuery.boldTextOf(this)) {
-      return style.merge(const TextStyle(fontWeight: FontWeight.bold));
-    }
-    return style;
-  }
 }

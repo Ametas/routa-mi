@@ -15,12 +15,6 @@ List<Group> getGroups() {
   return globalState.container.read(groupsProvider);
 }
 
-String? getCurrentGroupName() {
-  return globalState.container.read(
-    currentProfileProvider.select((state) => state?.currentGroupName),
-  );
-}
-
 void updateCurrentGroupName(String groupName) {
   globalState.container
       .read(proxiesActionProvider.notifier)

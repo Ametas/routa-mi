@@ -9,7 +9,6 @@ class ProxyNameIconTile extends StatelessWidget {
   const ProxyNameIconTile({super.key, required this.icon, this.size = rowSize});
 
   static const double rowSize = 36;
-  static const double headerSize = 40;
 
   // The emoji fills a little over half of the tile.
   static const double _emojiScale = 0.56;

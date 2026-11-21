@@ -36,7 +36,6 @@ class ProfilesView extends StatefulWidget {
 }
 
 class _ProfilesViewState extends State<ProfilesView> {
-  Function? applyConfigDebounce;
   bool _isUpdating = false;
   bool _isCurrentExpanded = false;
 

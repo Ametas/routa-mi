@@ -174,16 +174,6 @@ class AppLocalizations {
     return Intl.message('Download', name: 'download', desc: '', args: []);
   }
 
-  /// `No profiles yet. Add one to get started.`
-  String get nullProfileDesc {
-    return Intl.message(
-      'No profiles yet. Add one to get started.',
-      name: 'nullProfileDesc',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Settings`
   String get settings {
     return Intl.message('Settings', name: 'settings', desc: '', args: []);
@@ -469,44 +459,14 @@ class AppLocalizations {
     return Intl.message('QR code', name: 'qrcode', desc: '', args: []);
   }
 
-  /// `Scan QR code to obtain profile`
-  String get qrcodeDesc {
-    return Intl.message(
-      'Scan QR code to obtain profile',
-      name: 'qrcodeDesc',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `URL`
   String get url {
     return Intl.message('URL', name: 'url', desc: '', args: []);
   }
 
-  /// `Obtain profile through URL`
-  String get urlDesc {
-    return Intl.message(
-      'Obtain profile through URL',
-      name: 'urlDesc',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `File`
   String get file {
     return Intl.message('File', name: 'file', desc: '', args: []);
-  }
-
-  /// `Directly upload profile`
-  String get fileDesc {
-    return Intl.message(
-      'Directly upload profile',
-      name: 'fileDesc',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Name`
@@ -607,16 +567,6 @@ class AppLocalizations {
   /// `Dark`
   String get dark {
     return Intl.message('Dark', name: 'dark', desc: '', args: []);
-  }
-
-  /// `Import from URL`
-  String get importFromURL {
-    return Intl.message(
-      'Import from URL',
-      name: 'importFromURL',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Submit`
@@ -4894,16 +4844,6 @@ class AppLocalizations {
     );
   }
 
-  /// `Locate current node`
-  String get locateCurrentNode {
-    return Intl.message(
-      'Locate current node',
-      name: 'locateCurrentNode',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Test latency`
   String get testLatency {
     return Intl.message(
@@ -4959,16 +4899,6 @@ class AppLocalizations {
     return Intl.message('Collapse', name: 'collapse', desc: '', args: []);
   }
 
-  /// `Profile management`
-  String get profileManagement {
-    return Intl.message(
-      'Profile management',
-      name: 'profileManagement',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Media check`
   String get mediaCheck {
     return Intl.message('Media check', name: 'mediaCheck', desc: '', args: []);
@@ -4989,16 +4919,6 @@ class AppLocalizations {
     return Intl.message(
       'Manual check · Cached results',
       name: 'mediaCheckDesc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Add profile`
-  String get addProfileTitle {
-    return Intl.message(
-      'Add profile',
-      name: 'addProfileTitle',
       desc: '',
       args: [],
     );
@@ -6299,10 +6219,10 @@ class AppLocalizations {
     );
   }
 
-  /// `For Xray subscriptions. Some mihomo settings don't apply to this profile.`
+  /// `For Xray subscriptions; a JSON subscription always runs on Xray. Some mihomo settings don't apply to this profile.`
   String get coreXrayHint {
     return Intl.message(
-      'For Xray subscriptions. Some mihomo settings don\'t apply to this profile.',
+      'For Xray subscriptions; a JSON subscription always runs on Xray. Some mihomo settings don\'t apply to this profile.',
       name: 'coreXrayHint',
       desc: '',
       args: [],

@@ -4233,26 +4233,6 @@ class ProfilesAction extends _$ProfilesAction {
     }
   }
 
-  Future<void> addProfileFormFile() async {
-    final platformFile = await globalState.safeRun(picker.pickerFile);
-    final bytes = platformFile?.bytes;
-    if (bytes == null) return;
-    globalState.navigatorKey.currentState?.popUntil((route) => route.isFirst);
-    ref.read(currentPageLabelProvider.notifier).toProfiles();
-    final profile = await globalState.loadingRun(
-      tag: LoadingTag.profiles,
-      () async {
-        return _withSourceCore(
-          () => Profile.normal(label: platformFile?.name).saveFile(bytes),
-        );
-      },
-      title: currentAppLocalizations.addProfile,
-    );
-    if (profile != null) {
-      putProfile(profile);
-    }
-  }
-
   Future<void> addProfileFormURL(
     String url, {
     String? label,
@@ -4293,12 +4273,6 @@ class ProfilesAction extends _$ProfilesAction {
     if (profile.id == ref.read(currentProfileIdProvider)) {
       ref.read(setupActionProvider.notifier).applyProfileDebounce();
     }
-  }
-
-  Future<void> addProfileFormQrCode() async {
-    final url = await globalState.safeRun(picker.pickerConfigQRCode);
-    if (url == null) return;
-    addProfileFormURL(url);
   }
 
   void reorder(List<Profile> profiles) {

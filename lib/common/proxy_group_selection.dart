@@ -47,17 +47,6 @@ bool shouldRollbackOptimisticIntent({
   return currentIntent == failedIntent;
 }
 
-bool groupShowsFixedMark({
-  required GroupType type,
-  required String? fixed,
-  required String proxyName,
-}) {
-  return type.supportsFixedSelection &&
-      fixed != null &&
-      fixed.isNotEmpty &&
-      fixed == proxyName;
-}
-
 String? selectedNameForGroup(Group group, {required String? selectedMapValue, String? cachedComputedNow}) {
   if (group.type == GroupType.LoadBalance) {
     return group.realNow.isEmpty ? null : group.realNow;

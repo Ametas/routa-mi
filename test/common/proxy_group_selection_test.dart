@@ -275,25 +275,6 @@ void main() {
     });
   });
 
-  test('fixed mark only when Core fixed equals member', () {
-    expect(
-      groupShowsFixedMark(type: GroupType.URLTest, fixed: 'A', proxyName: 'A'),
-      isTrue,
-    );
-    expect(
-      groupShowsFixedMark(type: GroupType.URLTest, fixed: '', proxyName: 'A'),
-      isFalse,
-    );
-    expect(
-      groupShowsFixedMark(
-        type: GroupType.LoadBalance,
-        fixed: null,
-        proxyName: 'A',
-      ),
-      isFalse,
-    );
-  });
-
   test('same now with changed fixed is not equal', () {
     const auto = Group(
       name: 'auto',

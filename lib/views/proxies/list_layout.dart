@@ -80,8 +80,6 @@ class ProxyListLayout {
 
   bool hasNotice(int groupIndex) => _notices[groupIndex];
 
-  int rowsOf(int groupIndex) => _rows[groupIndex];
-
   /// Whether the row ends its group's card.
   bool isLastOfGroup(int groupIndex, int proxyIndex) {
     final rows = _rows[groupIndex];

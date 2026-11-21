@@ -606,15 +606,8 @@ void main() {
       final dashboardCard = File(
         'lib/views/dashboard/widgets/surge_dashboard_card.dart',
       ).readAsStringSync();
-      final overviewCard = File(
-        'lib/views/dashboard/widgets/network_overview_card.dart',
-      ).readAsStringSync();
       expect(dashboardCard, contains('color: iconColor ?? surge.primary'));
       expect(dashboardCard, contains('size: SurgeIconSize.compact'));
-      expect(
-        overviewCard,
-        contains('color: isStart ? surge.primary : surge.inactive'),
-      );
       final networkDetection = File(
         'lib/views/dashboard/widgets/network_detection.dart',
       ).readAsStringSync();

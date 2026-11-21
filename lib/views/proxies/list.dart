@@ -19,8 +19,6 @@ import 'list_layout.dart';
 import 'list_metrics.dart';
 import 'scrolling_label.dart';
 
-typedef GroupNameProxiesMap = Map<String, List<Proxy>>;
-
 class ProxiesListView extends StatefulWidget {
   const ProxiesListView({super.key});
 

@@ -175,11 +175,6 @@ void main() {
           .toPage(PageLabel.proxies);
       expect(container.read(currentPageLabelProvider), PageLabel.proxies);
     });
-
-    test('toProfiles changes page', () {
-      container.read(currentPageLabelProvider.notifier).toProfiles();
-      expect(container.read(currentPageLabelProvider), PageLabel.profiles);
-    });
   });
 
   group('SortNum provider', () {

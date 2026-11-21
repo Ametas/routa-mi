@@ -9,6 +9,7 @@ import 'package:fl_clash/enum/profile_core.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/pages/scan.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/views/profiles/profile_core_widgets.dart';
 import 'package:fl_clash/views/profiles/profile_select.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
@@ -684,19 +685,12 @@ class _AddProfileSheetState extends ConsumerState<AddProfileSheet> {
         ),
       ),
       const SizedBox(height: SurgeSpace.l),
-      SurgeField(
-        label: l10n.core,
+      ProfileCoreField(
+        value: _core,
+        onChanged: (core) => setState(() => _core = core),
         helperText: _core == ProfileCore.mihomo
             ? l10n.coreMihomoHint
             : l10n.coreXrayHint,
-        child: SurgeSegmentedControl<ProfileCore>(
-          value: _core,
-          onChanged: (core) => setState(() => _core = core),
-          items: [
-            for (final core in ProfileCore.values)
-              SurgeSegmentedItem(value: core, label: core.label),
-          ],
-        ),
       ),
       if (autoUpdate) ...[
         const SizedBox(height: SurgeSpace.l),

@@ -280,10 +280,6 @@ class CurrentPageLabel extends _$CurrentPageLabel
   void toPage(PageLabel pageLabel) {
     value = pageLabel;
   }
-
-  void toProfiles() {
-    toPage(PageLabel.profiles);
-  }
 }
 
 @Riverpod(keepAlive: true)

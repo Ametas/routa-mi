@@ -88,7 +88,6 @@ class SurgeMotion {
   // Looping ambient animations: periods, not transitions.
   static const heroFill = Duration(milliseconds: 1500);
   static const heroSheen = Duration(milliseconds: 1400);
-  static const latencyFlow = Duration(milliseconds: 1300);
   static const loadingSpin = Duration(seconds: 3);
   static const loadingDots = Duration(seconds: 1);
 
