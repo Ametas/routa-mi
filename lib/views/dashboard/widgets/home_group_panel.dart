@@ -20,7 +20,6 @@ class HomeGroupPanel extends ConsumerStatefulWidget {
 
   /// The member list scrolls inside the panel beyond this height.
   static const double membersMaxHeight = 300;
-  static const double toggleSize = 30;
 
   @override
   ConsumerState<HomeGroupPanel> createState() => _HomeGroupPanelState();

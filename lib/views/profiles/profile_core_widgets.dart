@@ -52,17 +52,21 @@ class ProfileCoreField extends StatelessWidget {
     super.key,
     required this.value,
     required this.onChanged,
+    this.helperText,
   });
 
   final ProfileCore value;
   final ValueChanged<ProfileCore> onChanged;
+
+  /// Replaces the general note, e.g. with one about the chosen core.
+  final String? helperText;
 
   @override
   Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
     return SurgeField(
       label: appLocalizations.core,
-      helperText: appLocalizations.profileCoreDesc,
+      helperText: helperText ?? appLocalizations.profileCoreDesc,
       child: SurgeSegmentedControl<ProfileCore>(
         value: value,
         onChanged: onChanged,

@@ -18,14 +18,6 @@ void main() {
         SurgePalette.scrim,
       );
     });
-
-    test('shade darkens towards the scrim', () {
-      const base = Color(0xFF34C759);
-      expect(SurgePalette.shade(base, 0), base);
-      expect(SurgePalette.shade(base, 1), SurgePalette.scrim);
-      final shaded = SurgePalette.shade(base, 0.16);
-      expect(shaded.computeLuminance(), lessThan(base.computeLuminance()));
-    });
   });
 
   group('latencyColor', () {

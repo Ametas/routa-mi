@@ -138,7 +138,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "add": MessageLookupByLibrary.simpleMessage("Add"),
     "addNetwork": MessageLookupByLibrary.simpleMessage("Add Network"),
     "addProfile": MessageLookupByLibrary.simpleMessage("Add Profile"),
-    "addProfileTitle": MessageLookupByLibrary.simpleMessage("Add profile"),
     "addProxies": MessageLookupByLibrary.simpleMessage("Add proxies"),
     "addProxyGroup": MessageLookupByLibrary.simpleMessage("Add proxy group"),
     "addProxyProviders": MessageLookupByLibrary.simpleMessage(
@@ -433,7 +432,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "coreReleaseInfo": m0,
     "coreStatus": MessageLookupByLibrary.simpleMessage("Core status"),
     "coreXrayHint": MessageLookupByLibrary.simpleMessage(
-      "For Xray subscriptions. Some mihomo settings don\'t apply to this profile.",
+      "For Xray subscriptions; a JSON subscription always runs on Xray. Some mihomo settings don\'t apply to this profile.",
     ),
     "country": MessageLookupByLibrary.simpleMessage("Country"),
     "crashTest": MessageLookupByLibrary.simpleMessage("Crash test"),
@@ -576,7 +575,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "fidelityScheme": MessageLookupByLibrary.simpleMessage("Fidelity"),
     "file": MessageLookupByLibrary.simpleMessage("File"),
-    "fileDesc": MessageLookupByLibrary.simpleMessage("Directly upload profile"),
     "fileIsUpdate": MessageLookupByLibrary.simpleMessage(
       "File modified. Save changes?",
     ),
@@ -639,7 +637,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "import": MessageLookupByLibrary.simpleMessage("Import"),
     "importFile": MessageLookupByLibrary.simpleMessage("Import from file"),
-    "importFromURL": MessageLookupByLibrary.simpleMessage("Import from URL"),
     "importUrl": MessageLookupByLibrary.simpleMessage("Import from URL"),
     "inbound": MessageLookupByLibrary.simpleMessage("Inbound"),
     "includeAllProxies": MessageLookupByLibrary.simpleMessage(
@@ -733,9 +730,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "localVlessLinkDesc": MessageLookupByLibrary.simpleMessage(
       "vless:// link for a client on this device",
-    ),
-    "locateCurrentNode": MessageLookupByLibrary.simpleMessage(
-      "Locate current node",
     ),
     "locationPermission": MessageLookupByLibrary.simpleMessage(
       "Location Permission",
@@ -878,9 +872,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "notSelectedTip": MessageLookupByLibrary.simpleMessage(
       "The current proxy group cannot be selected.",
     ),
-    "nullProfileDesc": MessageLookupByLibrary.simpleMessage(
-      "No profiles yet. Add one to get started.",
-    ),
     "nullTip": m27,
     "numberTip": m28,
     "onDemand": MessageLookupByLibrary.simpleMessage("On Demand"),
@@ -972,9 +963,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileLoadFailed": MessageLookupByLibrary.simpleMessage(
       "Couldn\'t load the profile",
     ),
-    "profileManagement": MessageLookupByLibrary.simpleMessage(
-      "Profile management",
-    ),
     "profileNameNullValidationDesc": MessageLookupByLibrary.simpleMessage(
       "Enter profile name",
     ),
@@ -1056,9 +1044,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "The address found goes into the Link tab, so you see it before adding.",
     ),
     "qrcode": MessageLookupByLibrary.simpleMessage("QR code"),
-    "qrcodeDesc": MessageLookupByLibrary.simpleMessage(
-      "Scan QR code to obtain profile",
-    ),
     "quickFill": MessageLookupByLibrary.simpleMessage("Quick fill"),
     "rainbowScheme": MessageLookupByLibrary.simpleMessage("Rainbow"),
     "reading": MessageLookupByLibrary.simpleMessage("Reading"),
@@ -1470,9 +1455,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "upstreamProject": MessageLookupByLibrary.simpleMessage("Upstream project"),
     "uptime": MessageLookupByLibrary.simpleMessage("Uptime"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
-    "urlDesc": MessageLookupByLibrary.simpleMessage(
-      "Obtain profile through URL",
-    ),
     "urlTip": m36,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),

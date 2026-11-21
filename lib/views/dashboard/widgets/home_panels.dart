@@ -15,7 +15,6 @@ abstract final class HomePanelLayout {
   static const double brandMark = 28;
   static const double panelRadius = 22;
   static const double sparkHeight = 56;
-  static const double nodeIcon = 30;
 }
 
 BoxDecoration _panelDecoration(SurgeTheme surge) => BoxDecoration(

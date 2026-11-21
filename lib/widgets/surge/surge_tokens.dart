@@ -376,8 +376,7 @@ class SurgeSemanticColors {
       disconnected: colors.textSecondary,
       paused: const Color(0xFFDC851B),
       error: colors.red,
-      dashboardDynamicActive:
-          dashboard?.active ?? const Color(0xFFA06B3B),
+      dashboardDynamicActive: dashboard?.active ?? const Color(0xFFA06B3B),
       dashboardActiveGreen:
           dashboard?.activeSecondary ?? const Color(0xFF5BA66A),
       dashboardInactive: dashboard?.inactive ?? const Color(0xFF858681),
@@ -926,10 +925,6 @@ abstract final class SurgePalette {
 
   /// Gloss and sheen highlights.
   static const Color highlight = Color(0xFFFFFFFF);
-
-  /// Darkens [color] towards [scrim] by [amount] (gradient ends, tracks).
-  static Color shade(Color color, double amount) =>
-      Color.lerp(color, scrim, amount)!;
 
   /// [onFill] or [scrim], whichever reads on [color].
   static Color contentOn(Color color) =>

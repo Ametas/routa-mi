@@ -38,11 +38,8 @@ class DashboardView extends ConsumerWidget {
             color: pageBackground,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final viewportSize = MediaQuery.sizeOf(context);
                 final layout = DashboardResponsiveLayout.fromViewport(
                   viewportWidth: constraints.maxWidth,
-                  viewportHeight: viewportSize.height,
-                  textScaler: MediaQuery.textScalerOf(context),
                 );
                 return SingleChildScrollView(
                   padding: EdgeInsets.fromLTRB(
