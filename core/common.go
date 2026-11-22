@@ -135,6 +135,7 @@ func stopListeners() {
 	listener.ReCreateShadowSocks("", tunnel.Tunnel)
 	listener.ReCreateVmess("", tunnel.Tunnel)
 	listener.ReCreateTuic(LC.TuicServer{}, tunnel.Tunnel)
+	log.Infoln("[APP] stop: closing the TUN")
 	listener.Cleanup()
 }
 

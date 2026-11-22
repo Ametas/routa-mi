@@ -165,14 +165,23 @@ class CoreService extends CoreHandlerInterface {
   Future<bool> shutdown(bool isUser) async {
     _shutdownCompleter = Completer();
     if (_handedOver) return true;
+    // The helper answers once its core has exited.
     await request.stopCoreByHelper();
     _transport.disconnected();
-    _process?.kill();
+    final process = _process;
     _process = null;
+    process?.kill();
+    await process?.exitCode.timeout(
+      const Duration(seconds: 5),
+      onTimeout: () => -1,
+    );
     for (final completer in _callbackCompleterMap.values) {
       completer.safeCompleter(null);
     }
     _callbackCompleterMap.clear();
+    // The connection was dropped here, so its close event finds no socket
+    // to report and onDisconnect never runs: the core is gone already.
+    if (!_shutdownCompleter.isCompleted) _shutdownCompleter.complete(true);
     return isUser ? _shutdownCompleter.future : true;
   }
 
