@@ -363,6 +363,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog060Item5": MessageLookupByLibrary.simpleMessage(
       "TUN stays on when a subscription is applied while the app starts, and the Windows tray no longer misses the core\'s last answer.",
     ),
+    "changelog061Item1": MessageLookupByLibrary.simpleMessage(
+      "Windows: Stop always stops the proxy. As in Clash Verge, the core is restarted without its listeners instead of closing TUN in place, which could hang; the tray in lite mode does the same.",
+    ),
+    "changelog061Item2": MessageLookupByLibrary.simpleMessage(
+      "Windows: in a wide window the list of groups on Home drops down under the panel header instead of covering the screen.",
+    ),
+    "changelog061Item3": MessageLookupByLibrary.simpleMessage(
+      "Windows: restarting the core no longer waits forever.",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage(
       "Check your network and try again.",
     ),

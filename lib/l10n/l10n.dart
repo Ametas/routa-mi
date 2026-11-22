@@ -5954,6 +5954,36 @@ class AppLocalizations {
     );
   }
 
+  /// `Windows: Stop always stops the proxy. As in Clash Verge, the core is restarted without its listeners instead of closing TUN in place, which could hang; the tray in lite mode does the same.`
+  String get changelog061Item1 {
+    return Intl.message(
+      'Windows: Stop always stops the proxy. As in Clash Verge, the core is restarted without its listeners instead of closing TUN in place, which could hang; the tray in lite mode does the same.',
+      name: 'changelog061Item1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Windows: in a wide window the list of groups on Home drops down under the panel header instead of covering the screen.`
+  String get changelog061Item2 {
+    return Intl.message(
+      'Windows: in a wide window the list of groups on Home drops down under the panel header instead of covering the screen.',
+      name: 'changelog061Item2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Windows: restarting the core no longer waits forever.`
+  String get changelog061Item3 {
+    return Intl.message(
+      'Windows: restarting the core no longer waits forever.',
+      name: 'changelog061Item3',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `AMOLED dark theme with four accents, and a new Home: the route card, modes, network speed and the shown group's nodes.`
   String get changelog060Item1 {
     return Intl.message(
