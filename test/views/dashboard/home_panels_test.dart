@@ -34,7 +34,7 @@ const _manual = Group(
 );
 
 void main() {
-  Widget host() => catalogApp(
+  Widget host({bool expand = false}) => catalogApp(
     brightness: Brightness.dark,
     textScale: 1,
     overrides: [
@@ -45,7 +45,9 @@ void main() {
       selectedProxyNameProvider(_group.name).overrideWithValue('🇫🇮 Legacy'),
       selectedProxyNameProvider(_manual.name).overrideWithValue('🇩🇪 Emerald'),
     ],
-    child: const SingleChildScrollView(child: HomeGroupPanel()),
+    child: expand
+        ? const SizedBox(height: 600, child: HomeGroupPanel(expand: true))
+        : const SingleChildScrollView(child: HomeGroupPanel()),
   );
 
   testWidgets('the group panel keeps the profile order of a selector', (
@@ -83,6 +85,28 @@ void main() {
     await tester.tap(find.byIcon(SurgeIcons.expand).last);
     await tester.pumpAndSettle();
     expect(find.text('2 groups · tap one to show it here'), findsNothing);
+  });
+
+  testWidgets('the desktop panel drops its groups below the header', (
+    tester,
+  ) async {
+    await tester.pumpWidget(host(expand: true));
+    await tester.pump();
+    final header = tester.getRect(find.bySemanticsLabel('Profile groups'));
+
+    await tester.tap(find.bySemanticsLabel('Profile groups'));
+    await tester.pumpAndSettle();
+    // Not the full-screen sheet: no title, the list hangs under the header.
+    expect(find.text('2 groups · tap one to show it here'), findsNothing);
+    final manual = tester.getRect(find.text('Manual', findRichText: true));
+    expect(manual.top, greaterThan(header.bottom));
+    expect(manual.left, greaterThan(header.left));
+    expect(manual.right, lessThan(header.right));
+
+    // A tap beside the list closes it.
+    await tester.tapAt(Offset(header.center.dx, 590));
+    await tester.pumpAndSettle();
+    expect(find.text('Manual', findRichText: true), findsNothing);
   });
 
   testWidgets('the brand bar leaves the brand to the desktop side menu', (

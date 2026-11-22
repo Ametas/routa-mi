@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/views/dashboard/widgets/home_groups_popover.dart';
 import 'package:fl_clash/views/dashboard/widgets/home_panels.dart';
 import 'package:fl_clash/views/dashboard/widgets/surge_dashboard_hero.dart';
 import 'package:fl_clash/views/proxies/common.dart' as proxy_common;
@@ -32,6 +33,7 @@ class HomeGroupPanel extends ConsumerStatefulWidget {
 class _HomeGroupPanelState extends ConsumerState<HomeGroupPanel> {
   final _scroll = ScrollController();
   final _selectedKey = GlobalKey();
+  final _headerKey = GlobalKey();
   bool _sheetOpen = false;
   String? _revealedGroup;
 
@@ -52,12 +54,54 @@ class _HomeGroupPanelState extends ConsumerState<HomeGroupPanel> {
     });
   }
 
+  /// The panel's width and the header's height, in [navigator]'s
+  /// coordinates: where the desktop list of groups drops from.
+  Rect? _anchor(NavigatorState navigator) {
+    final panel = context.findRenderObject();
+    final header = _headerKey.currentContext?.findRenderObject();
+    final overlay = navigator.context.findRenderObject();
+    if (panel is! RenderBox || header is! RenderBox || overlay == null) {
+      return null;
+    }
+    final left = panel.localToGlobal(Offset.zero, ancestor: overlay);
+    final top = header.localToGlobal(Offset.zero, ancestor: overlay);
+    return Rect.fromLTWH(left.dx, top.dy, panel.size.width, header.size.height);
+  }
+
   Future<void> _openGroups(List<Group> groups, String shown) async {
     setState(() => _sheetOpen = true);
-    final picked = await Navigator.of(
-      context,
-      rootNavigator: true,
-    ).push(HomeGroupsRoute(groups: groups, shown: shown));
+    final navigator = Navigator.of(context, rootNavigator: true);
+    // The desktop panel drops its groups from the header (design artifact
+    // "RoutaMi for Windows"); a phone opens them full screen.
+    final anchor = widget.expand ? _anchor(navigator) : null;
+    final picked = await navigator.push(
+      anchor != null
+          ? HomeGroupsPopoverRoute(
+              anchor: anchor,
+              groups: groups,
+              shown: shown,
+              rowBuilder:
+                  (
+                    context,
+                    group, {
+                    required picked,
+                    required showDivider,
+                    required onTap,
+                  }) => _GroupRow(
+                    group: group,
+                    picked: picked,
+                    showDivider: showDivider,
+                    nameIcons: ref.read(
+                      proxiesStyleSettingProvider.select(
+                        (state) => state.nameIcons,
+                      ),
+                    ),
+                    onTap: onTap,
+                    chevron: false,
+                  ),
+            )
+          : HomeGroupsRoute(groups: groups, shown: shown),
+    );
     if (!mounted) return;
     setState(() => _sheetOpen = false);
     if (picked != null && picked != shown) {
@@ -103,6 +147,7 @@ class _HomeGroupPanelState extends ConsumerState<HomeGroupPanel> {
               onTap: () => _openGroups(groups, group.name),
               scaleFeedback: false,
               child: Padding(
+                key: _headerKey,
                 padding: const EdgeInsets.all(SurgeSpace.m + SurgeSpace.xxs),
                 child: Row(
                   children: [
@@ -509,6 +554,7 @@ class _GroupRow extends ConsumerWidget {
     required this.showDivider,
     required this.nameIcons,
     required this.onTap,
+    this.chevron = true,
   });
 
   final Group group;
@@ -516,6 +562,9 @@ class _GroupRow extends ConsumerWidget {
   final bool showDivider;
   final bool nameIcons;
   final VoidCallback onTap;
+
+  /// Other groups point on with a chevron; a dropdown leaves them bare.
+  final bool chevron;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -563,10 +612,16 @@ class _GroupRow extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: SurgeSpace.s),
-              Icon(
-                picked ? SurgeIcons.confirm : SurgeIcons.chevronRight,
-                size: SurgeIconSize.compact,
-                color: picked ? surge.primary : surge.textSecondary,
+              AnimatedOpacity(
+                duration: SurgeMotion.state,
+                opacity: picked || chevron ? 1 : 0,
+                child: Icon(
+                  picked || !chevron
+                      ? SurgeIcons.confirm
+                      : SurgeIcons.chevronRight,
+                  size: SurgeIconSize.compact,
+                  color: picked ? surge.primary : surge.textSecondary,
+                ),
               ),
             ],
           ),
