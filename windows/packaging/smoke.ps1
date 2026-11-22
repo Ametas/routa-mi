@@ -130,15 +130,18 @@ while (Get-Process RoutaMiCore -ErrorAction SilentlyContinue) {
 # Lite mode: RoutaMi.exe --lite starts, hands the core to RoutaMiTray.exe and
 # exits; the tray restarts the core through the helper; RoutaMi.exe takes the
 # core back without starting a new one.
+function Show-Logs {
+  Get-Process RoutaMi* -ErrorAction SilentlyContinue | Format-Table Id, ProcessName | Out-String | Write-Host
+  foreach ($log in $appLog, $appErr, (Get-ChildItem $env:APPDATA -Recurse -Filter lite.log -ErrorAction SilentlyContinue | Select-Object -First 1).FullName, (Join-Path $env:ProgramData 'RoutaMi\helper.log')) {
+    Write-Host "--- $log"
+    Get-Content $log -Tail 80 -ErrorAction SilentlyContinue | Write-Host
+  }
+}
 function Wait-Until($what, $seconds, [scriptblock] $condition) {
   $deadline = (Get-Date).AddSeconds($seconds)
   while (-not (& $condition)) {
     if ((Get-Date) -gt $deadline) {
-      Get-Process RoutaMi* -ErrorAction SilentlyContinue | Format-Table Id, ProcessName | Out-String | Write-Host
-      foreach ($log in $appLog, $appErr, (Get-ChildItem $env:APPDATA -Recurse -Filter lite.log -ErrorAction SilentlyContinue | Select-Object -First 1).FullName, (Join-Path $env:ProgramData 'RoutaMi\helper.log')) {
-        Write-Host "--- $log"
-        Get-Content $log -Tail 80 -ErrorAction SilentlyContinue | Write-Host
-      }
+      Show-Logs
       Fail "timed out: $what"
     }
     Start-Sleep -Milliseconds 500
@@ -159,7 +162,11 @@ Wait-Until 'RoutaMi.exe --lite went to the tray' 90 {
   $app.HasExited -and (Get-Process RoutaMiTray -ErrorAction SilentlyContinue) -and (Lite-State)
 }
 $litePid = Core-Pid
-if (-not $litePid) { Fail 'no core after RoutaMi.exe left for the tray' }
+if (-not $litePid) {
+  Write-Host "RoutaMi.exe exit code: $($app.ExitCode)"
+  Show-Logs
+  Fail 'no core after RoutaMi.exe left for the tray'
+}
 # The app's exit must not take the core with it (the helper's /stop).
 Start-Sleep -Seconds 5
 if ((Core-Pid) -ne $litePid) { Fail "the core $litePid did not survive RoutaMi.exe leaving for the tray" }
