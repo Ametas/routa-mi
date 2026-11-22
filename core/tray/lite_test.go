@@ -234,8 +234,21 @@ func TestLiteTogglesTheCoreAndTheSystemProxy(t *testing.T) {
 	if resp, body := s.post("/toggle", nil); resp.StatusCode != 200 {
 		t.Fatalf("toggle: %s", body)
 	}
-	if got := s.core.calledMethods(); got != "handover,getRestoreState,stopListener,startListener" {
-		t.Fatalf("core calls %s", got)
+	// Stop ends the core instead of closing its TUN in place; a fresh
+	// core without listeners takes over and starts on the next toggle.
+	select {
+	case <-s.core.stopped:
+	case <-time.After(5 * time.Second):
+		t.Fatal("stop kept the old core")
+	}
+	if got := s.core.calledMethods(); got != "handover,getRestoreState,getRestoreState" {
+		t.Fatalf("old core calls %s", got)
+	}
+	if len(s.plat.cores) != 1 {
+		t.Fatalf("%d cores started", len(s.plat.cores))
+	}
+	if got := s.plat.cores[0].calledMethods(); got != "initClash,setupConfig,getRestoreState,startListener" {
+		t.Fatalf("new core calls %s", got)
 	}
 	// The app had set the proxy; the tray turns it off and on again.
 	if got := fmt.Sprint(s.plat.proxyCalls()); got != "[false true]" {

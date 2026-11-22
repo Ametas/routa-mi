@@ -152,7 +152,11 @@ func (t *liteTray) applyProxy() {
 	t.proxyOn = want
 }
 
-// toggle starts or stops the listeners; a gone core is restarted.
+// toggle starts the listeners, or stops the proxy the way the app does on
+// Windows (and Clash Verge): the core process ends, taking its TUN adapter
+// and routes with it, and a fresh core without listeners replaces it.
+// Closing the TUN inside a running core could hang. A gone core is
+// restarted.
 func (t *liteTray) toggle() error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
@@ -160,17 +164,20 @@ func (t *liteTray) toggle() error {
 		t.restore.Running = true
 		return t.restartLocked()
 	}
-	method := "startListener"
 	if t.running {
-		method = "stopListener"
+		t.running = false
+		t.applyProxy()
+		t.plat.updateUI(false)
+		stopped := false
+		return t.replaceCoreLocked(&stopped)
 	}
-	if _, err := t.link.call(method, nil, callTimeout); err != nil {
+	if _, err := t.link.call("startListener", nil, callTimeout); err != nil {
 		return err
 	}
-	t.running = !t.running
-	t.restore.Running = t.running
+	t.running = true
+	t.restore.Running = true
 	t.applyProxy()
-	t.plat.updateUI(t.running)
+	t.plat.updateUI(true)
 	return nil
 }
 
@@ -181,13 +188,20 @@ func (t *liteTray) restart() error {
 }
 
 // restartLocked replaces the core process with a new one in the same state.
-func (t *liteTray) restartLocked() error {
+func (t *liteTray) restartLocked() error { return t.replaceCoreLocked(nil) }
+
+// replaceCoreLocked replaces the core process with a new one in its state;
+// running, when set, says whether the new one starts its listeners.
+func (t *liteTray) replaceCoreLocked(running *bool) error {
 	if t.link != nil && t.link.alive() {
 		raw, err := t.link.call("getRestoreState", nil, 3*time.Second)
 		var fresh restoreState
 		if err == nil && json.Unmarshal(raw, &fresh) == nil {
 			t.restore = fresh
 		}
+	}
+	if running != nil {
+		t.restore.Running = *running
 	}
 	t.stopCoreLocked()
 	if t.restore.Init == "" {
