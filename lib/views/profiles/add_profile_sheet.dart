@@ -87,6 +87,23 @@ class AddProfileRoute extends PageRoute<void> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
+    if (AddProfileSheet.asDialog(MediaQuery.sizeOf(context).width)) {
+      final curved = CurvedAnimation(
+        parent: animation,
+        curve: SurgeMotion.enterCurve,
+        reverseCurve: SurgeMotion.exitCurve,
+      );
+      return FadeTransition(
+        opacity: curved,
+        child: ScaleTransition(
+          scale: Tween(
+            begin: AddProfileSheet.dialogStartScale,
+            end: 1.0,
+          ).animate(curved),
+          child: child,
+        ),
+      );
+    }
     return SlideTransition(
       position: Tween(begin: const Offset(0, 1), end: Offset.zero).animate(
         CurvedAnimation(
@@ -113,6 +130,14 @@ class AddProfileSheet extends ConsumerStatefulWidget {
   static const double maxHeightFactor = 0.9;
   static const double grabWidth = 40;
   static const double grabHeight = 4;
+
+  /// Windows at least this wide show the sheet as a centred dialog.
+  static const double dialogMinWindowWidth = 900;
+  static const double dialogWidth = 520;
+  static const double dialogStartScale = 0.96;
+
+  static bool asDialog(double windowWidth) =>
+      windowWidth >= dialogMinWindowWidth;
 
   final AddProfileMethod method;
   final String? url;
@@ -272,12 +297,16 @@ class _AddProfileSheetState extends ConsumerState<AddProfileSheet> {
     final l10n = context.appLocalizations;
     final media = MediaQuery.of(context);
     final done = _phase == _Phase.done;
+    // A wide window gets a centred dialog (design artifact "RoutaMi for
+    // Windows"); phones keep the sheet.
+    final dialog = AddProfileSheet.asDialog(media.size.width);
     return Padding(
       padding: EdgeInsets.only(bottom: media.viewInsets.bottom),
       child: Align(
-        alignment: Alignment.bottomCenter,
+        alignment: dialog ? Alignment.center : Alignment.bottomCenter,
         child: ConstrainedBox(
           constraints: BoxConstraints(
+            maxWidth: dialog ? AddProfileSheet.dialogWidth : double.infinity,
             maxHeight:
                 (media.size.height - media.viewInsets.bottom) *
                 AddProfileSheet.maxHeightFactor,
@@ -285,9 +314,11 @@ class _AddProfileSheetState extends ConsumerState<AddProfileSheet> {
           child: Material(
             color: surge.elevatedCard,
             shape: RoundedRectangleBorder(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(AddProfileSheet.radius),
-              ),
+              borderRadius: dialog
+                  ? BorderRadius.circular(AddProfileSheet.radius)
+                  : const BorderRadius.vertical(
+                      top: Radius.circular(AddProfileSheet.radius),
+                    ),
               side: BorderSide(color: surge.separator),
             ),
             clipBehavior: Clip.antiAlias,
@@ -297,17 +328,23 @@ class _AddProfileSheetState extends ConsumerState<AddProfileSheet> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: SurgeSpace.s + SurgeSpace.xxs),
-                  Center(
-                    child: Container(
-                      width: AddProfileSheet.grabWidth,
-                      height: AddProfileSheet.grabHeight,
-                      decoration: BoxDecoration(
-                        color: surge.separator,
-                        borderRadius: BorderRadius.circular(surge.radii.button),
+                  if (dialog)
+                    const SizedBox(height: SurgeSpace.m)
+                  else ...[
+                    const SizedBox(height: SurgeSpace.s + SurgeSpace.xxs),
+                    Center(
+                      child: Container(
+                        width: AddProfileSheet.grabWidth,
+                        height: AddProfileSheet.grabHeight,
+                        decoration: BoxDecoration(
+                          color: surge.separator,
+                          borderRadius: BorderRadius.circular(
+                            surge.radii.button,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                   Padding(
                     padding: const EdgeInsets.fromLTRB(
                       SurgeSpace.xl,

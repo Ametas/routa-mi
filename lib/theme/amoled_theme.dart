@@ -68,7 +68,6 @@ abstract final class AmoledTheme {
         heroStart: color,
         heroPause: const Color(0xFFFF9F0A),
         heroStop: const Color(0xFFFF453A),
-        onHeroAction: black,
       ),
       dashboard: SurgeDashboardTones(
         inactive: const Color(0xFF2F2942),

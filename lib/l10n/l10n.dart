@@ -5954,6 +5954,56 @@ class AppLocalizations {
     );
   }
 
+  /// `AMOLED dark theme with four accents, and a new Home: the route card, modes, network speed and the shown group's nodes.`
+  String get changelog060Item1 {
+    return Intl.message(
+      'AMOLED dark theme with four accents, and a new Home: the route card, modes, network speed and the shown group\'s nodes.',
+      name: 'changelog060Item1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home shows the external IP and its country, checked again when you start, stop, switch mode or pick a node. While the proxy runs, an orb turns inside the start ring.`
+  String get changelog060Item2 {
+    return Intl.message(
+      'Home shows the external IP and its country, checked again when you start, stop, switch mode or pick a node. While the proxy runs, an orb turns inside the start ring.',
+      name: 'changelog060Item2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Windows: in a wide window Home has two columns, Profiles and Settings show a list beside the details, and a new profile is added in a dialog.`
+  String get changelog060Item3 {
+    return Intl.message(
+      'Windows: in a wide window Home has two columns, Profiles and Settings show a list beside the details, and a new profile is added in a dialog.',
+      name: 'changelog060Item3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy groups as cards with node icons from the flag or symbol in their names; settings unfold in place; a profile is added from one sheet by link, QR code or file.`
+  String get changelog060Item4 {
+    return Intl.message(
+      'Proxy groups as cards with node icons from the flag or symbol in their names; settings unfold in place; a profile is added from one sheet by link, QR code or file.',
+      name: 'changelog060Item4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TUN stays on when a subscription is applied while the app starts, and the Windows tray no longer misses the core's last answer.`
+  String get changelog060Item5 {
+    return Intl.message(
+      'TUN stays on when a subscription is applied while the app starts, and the Windows tray no longer misses the core\'s last answer.',
+      name: 'changelog060Item5',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Windows: TUN switched on in a running app now reaches the core, and other settings changes no longer turn it off.`
   String get changelog051Item1 {
     return Intl.message(
@@ -6429,6 +6479,31 @@ class AppLocalizations {
     return Intl.message(
       'Add a subscription from your provider: by link, QR code or file.',
       name: 'noProfilesHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `External IP`
+  String get externalIp {
+    return Intl.message('External IP', name: 'externalIp', desc: '', args: []);
+  }
+
+  /// `Not checked yet`
+  String get externalIpNotChecked {
+    return Intl.message(
+      'Not checked yet',
+      name: 'externalIpNotChecked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check the external IP again`
+  String get externalIpRecheck {
+    return Intl.message(
+      'Check the external IP again',
+      name: 'externalIpRecheck',
       desc: '',
       args: [],
     );

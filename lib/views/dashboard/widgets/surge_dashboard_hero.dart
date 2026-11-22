@@ -5,6 +5,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/views/dashboard/dashboard_layout.dart';
+import 'package:fl_clash/views/dashboard/widgets/hero_orb.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -191,6 +192,12 @@ class _SurgeDashboardHeroState extends ConsumerState<SurgeDashboardHero>
       patchClashConfigProvider.select((state) => state.mode),
     );
     final coreStatus = ref.watch(coreStatusProvider);
+    // The orb turns only while someone can see it.
+    final orbVisible =
+        ref.watch(appForegroundProvider) &&
+        ref.watch(
+          currentPageLabelProvider.select((l) => l == PageLabel.dashboard),
+        );
     final connecting = heroConnectingPulseActive(
       isSmartStopped: isSmartStopped,
       coreStatus: coreStatus,
@@ -285,6 +292,7 @@ class _SurgeDashboardHeroState extends ConsumerState<SurgeDashboardHero>
       stopping: transitionStop,
       loading: buttonLoading,
       label: buttonLabel,
+      animateOrb: orbVisible,
       sheenController: _sheenController,
       onPressed: buttonLoading
           ? null
@@ -476,6 +484,7 @@ class _HeroStartRing extends StatelessWidget {
     required this.stopping,
     required this.loading,
     required this.label,
+    required this.animateOrb,
     required this.sheenController,
     required this.onPressed,
   });
@@ -486,6 +495,7 @@ class _HeroStartRing extends StatelessWidget {
   final bool stopping;
   final bool loading;
   final String label;
+  final bool animateOrb;
   final AnimationController sheenController;
   final VoidCallback? onPressed;
 
@@ -507,17 +517,21 @@ class _HeroStartRing extends StatelessWidget {
           animation: fillProgress,
           builder: (context, _) {
             final progress = fillProgress.value.clamp(0.0, 1.0);
-            final fill = Color.lerp(surge.card, color, progress)!;
-            final foreground = Color.lerp(
-              color,
-              surge.semantic.state.onHeroAction,
-              progress,
-            )!;
+            // A running ring shows the orb on the card instead of a fill;
+            // the label turns to the body colour over it.
+            final foreground = Color.lerp(color, surge.textPrimary, progress)!;
+            final halo = [
+              for (final blur in const [3.0, 8.0, 14.0])
+                Shadow(
+                  color: surge.card.withValues(alpha: progress),
+                  blurRadius: blur,
+                ),
+            ];
             return SizedBox.square(
               dimension: size,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: fill,
+                  color: surge.card,
                   shape: BoxShape.circle,
                   border: Border.all(color: color, width: 2),
                   boxShadow: progress > 0
@@ -530,6 +544,15 @@ class _HeroStartRing extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
+                      Positioned.fill(
+                        child: ClipOval(
+                          child: HeroOrb(
+                            color: color,
+                            opacity: progress,
+                            animate: animateOrb,
+                          ),
+                        ),
+                      ),
                       if (loading)
                         Positioned.fill(
                           child: Padding(
@@ -554,6 +577,7 @@ class _HeroStartRing extends StatelessWidget {
                                 maxLines: 1,
                                 style: context.typography.controlLabel.copyWith(
                                   color: foreground,
+                                  shadows: progress > 0 ? halo : null,
                                 ),
                               ),
                               if (loading) ...[

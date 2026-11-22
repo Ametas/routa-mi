@@ -65,9 +65,6 @@ void main() {
         final state = spec.stateColors;
         _expectContrast(colors.onPrimary, colors.primary, 4.5);
         _expectContrast(state.onToggleActive, state.toggleActive, 4.5);
-        for (final fill in [state.heroStart, state.heroPause, state.heroStop]) {
-          _expectContrast(state.onHeroAction, fill, 4.5);
-        }
       });
 
       test('the dashboard hero keeps its white text', () {

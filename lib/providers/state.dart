@@ -435,13 +435,9 @@ String proxyDesc(Ref ref, Proxy proxy) {
 VM3<bool, int, bool> checkIp(Ref ref) {
   final isInit = ref.watch(initProvider);
   final checkIpNum = ref.watch(checkIpNumProvider);
-  final containsDetection = ref.watch(
-    dashboardStateProvider.select(
-      (state) =>
-          state.dashboardWidgets.contains(DashboardWidget.networkDetection),
-    ),
-  );
-  return VM3(isInit, checkIpNum, containsDetection);
+  // Home always shows the external IP (HomeIpCard), whatever the legacy
+  // dashboard grid kept.
+  return VM3(isInit, checkIpNum, true);
 }
 
 @riverpod

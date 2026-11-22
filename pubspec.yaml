@@ -94,6 +94,8 @@ flutter:
     - assets/images/avatar/
     - assets/images/empty/
     - assets/images/icon/
+  shaders:
+    - shaders/hero_orb.frag
   fonts:
     - family: JetBrainsMono
       fonts:

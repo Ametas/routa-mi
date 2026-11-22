@@ -601,7 +601,8 @@ void main() {
       expect(dashboard, contains('semantic.state.heroStart'));
       expect(dashboard, contains('semantic.state.heroPause'));
       expect(dashboard, contains('semantic.state.heroStop'));
-      expect(dashboard, contains('semantic.state.onHeroAction'));
+      // A running ring shows the orb behind its label, not a fill.
+      expect(dashboard, contains('HeroOrb('));
 
       final dashboardCard = File(
         'lib/views/dashboard/widgets/surge_dashboard_card.dart',

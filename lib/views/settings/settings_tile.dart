@@ -1,3 +1,4 @@
+import 'package:fl_clash/views/settings/settings_pane.dart';
 import 'package:fl_clash/widgets/settings_unfold.dart';
 import 'package:fl_clash/widgets/sheet.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -23,6 +24,7 @@ class SettingsTile extends StatelessWidget {
     this.subtitle,
     this.onTap,
     this.open,
+    this.selected = false,
   });
 
   final Widget icon;
@@ -31,10 +33,15 @@ class SettingsTile extends StatelessWidget {
   final VoidCallback? onTap;
   final Animation<double>? open;
 
+  /// The section a wide settings screen shows beside the list: tinted, its
+  /// tile ringed.
+  final bool selected;
+
   @override
   Widget build(BuildContext context) {
     final surge = SurgeTheme.of(context);
-    final open = this.open ?? kAlwaysDismissedAnimation;
+    final turn = this.open ?? kAlwaysDismissedAnimation;
+    final open = selected ? kAlwaysCompleteAnimation : turn;
     final row = Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: SurgeSpace.m + SurgeSpace.xxs,
@@ -98,7 +105,7 @@ class SettingsTile extends StatelessWidget {
           ),
           const SizedBox(width: SurgeSpace.s),
           RotationTransition(
-            turns: Tween<double>(begin: 0, end: 0.25).animate(open),
+            turns: Tween<double>(begin: 0, end: 0.25).animate(turn),
             child: Icon(
               SurgeIcons.chevronRight,
               size: SurgeIconSize.regular,
@@ -108,10 +115,18 @@ class SettingsTile extends StatelessWidget {
         ],
       ),
     );
-    if (onTap == null) return row;
+    final tinted = AnimatedContainer(
+      duration: SurgeMotion.state,
+      color: selected
+          ? surge.primary.withValues(alpha: SurgeAlpha.a08)
+          : surge.primary.withValues(alpha: SurgeAlpha.none),
+      child: row,
+    );
+    if (onTap == null) return tinted;
     return Semantics(
       button: true,
-      child: SurgePressable(onTap: onTap, scaleFeedback: false, child: row),
+      selected: selected,
+      child: SurgePressable(onTap: onTap, scaleFeedback: false, child: tinted),
     );
   }
 }
@@ -191,11 +206,15 @@ class SettingsPageEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pane = SettingsPaneScope.maybeOf(context);
     return SettingsTile(
       icon: icon,
       title: title,
       subtitle: subtitle,
-      onTap: () => showExtend(context, builder: page),
+      selected: pane?.selected == title,
+      onTap: pane != null
+          ? () => pane.onSelect(SettingsPaneSection(title: title, page: page))
+          : () => showExtend(context, builder: page),
     );
   }
 }
@@ -209,12 +228,17 @@ class SettingsUnfoldEntry extends ConsumerWidget {
     required this.title,
     required this.options,
     this.fallbackSubtitle,
+    this.page,
   });
 
   final Widget icon;
   final String title;
   final String? fallbackSubtitle;
   final UnfoldOptionsBuilder options;
+
+  /// The section's full page; a wide settings screen shows it in its pane
+  /// instead of unfolding the options.
+  final WidgetBuilder? page;
 
   String _summary(BuildContext context, WidgetRef ref) {
     final summary = unfoldSummary(options(context, ref));
@@ -224,6 +248,18 @@ class SettingsUnfoldEntry extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final subtitle = _summary(context, ref);
+    final pane = SettingsPaneScope.maybeOf(context);
+    final page = this.page;
+    if (pane != null && page != null) {
+      return SettingsTile(
+        icon: icon,
+        title: title,
+        subtitle: subtitle,
+        selected: pane.selected == title,
+        onTap: () =>
+            pane.onSelect(SettingsPaneSection(title: title, page: page)),
+      );
+    }
     return Builder(
       builder: (rowContext) => SettingsTile(
         icon: icon,

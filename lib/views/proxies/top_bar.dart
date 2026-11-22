@@ -2,6 +2,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/views/desktop_layout.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,9 @@ class ProxiesTopBar extends ConsumerStatefulWidget {
 
   /// Shown under the sort options.
   final List<PopupMenuItemData> menuItems;
+
+  static const double desktopSearchWidth = 260;
+  static const double desktopSortWidth = 300;
   final bool isLoading;
 
   @override
@@ -93,13 +97,116 @@ class _ProxiesTopBarState extends ConsumerState<ProxiesTopBar> {
         .update((state) => state.copyWith(sortType: type));
   }
 
-  @override
-  Widget build(BuildContext context) {
+  /// A wide window (design artifact "RoutaMi for Windows"): the search
+  /// field stays open, sorting is a segmented switch and the providers and
+  /// settings sit behind one menu button.
+  Widget _desktop(BuildContext context, ProxiesSortType sortType) {
     final surge = SurgeTheme.of(context);
     final l10n = context.appLocalizations;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        SurgeSpace.l,
+        SurgeSpace.m,
+        SurgeSpace.l,
+        SurgeSpace.xs,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.proxies,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.typography.rootAppBarTitle.copyWith(
+                    color: surge.textPrimary,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: ProxiesTopBar.desktopSearchWidth,
+                child: TextField(
+                  controller: _query,
+                  onChanged: _setQuery,
+                  textInputAction: TextInputAction.search,
+                  decoration: surgeInputDecoration(
+                    context,
+                    hintText: l10n.searchNodes,
+                    prefixIcon: const Icon(
+                      SurgeIcons.search,
+                      size: SurgeIconSize.inline,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: SurgeSpace.m),
+              SizedBox(
+                width: ProxiesTopBar.desktopSortWidth,
+                child: SurgeSegmentedControl<ProxiesSortType>(
+                  value: sortType,
+                  onChanged: _setSort,
+                  items: [
+                    for (final type in ProxiesSortType.values)
+                      SurgeSegmentedItem(
+                        value: type,
+                        label: ProxiesSetting.sortLabel(context, type),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: SurgeSpace.m),
+              ProxyRoundAction(
+                icon: SurgeIcons.flashOn,
+                tooltip: l10n.testOpenGroups,
+                busy: _testing,
+                onPressed: _testOpenGroups,
+              ),
+              if (widget.menuItems.isNotEmpty) ...[
+                const SizedBox(width: SurgeSpace.s),
+                CommonPopupBox(
+                  popup: CommonPopupMenu(items: widget.menuItems),
+                  targetBuilder: (open) => ProxyRoundAction(
+                    icon: SurgeIcons.tune,
+                    tooltip: l10n.settings,
+                    onPressed: () => open(
+                      offset: const Offset(
+                        ProxyGroupBits.action,
+                        ProxyGroupBits.action + SurgeSpace.xs,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          if (widget.isLoading)
+            const Padding(
+              padding: EdgeInsets.only(top: SurgeSpace.s),
+              child: LinearProgressIndicator(),
+            ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final sortType = ref.watch(
       proxiesStyleSettingProvider.select((state) => state.sortType),
     );
+    return LayoutBuilder(
+      builder: (context, constraints) =>
+          DesktopLayout.twoPane(constraints.maxWidth)
+          ? _desktop(context, sortType)
+          : _phone(context, sortType),
+    );
+  }
+
+  Widget _phone(BuildContext context, ProxiesSortType sortType) {
+    final surge = SurgeTheme.of(context);
+    final l10n = context.appLocalizations;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         SurgeSpace.l,

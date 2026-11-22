@@ -13,6 +13,7 @@ import 'package:fl_clash/views/profiles/overwrite/overwrite.dart';
 import 'package:fl_clash/views/profiles/profile_core_widgets.dart';
 import 'package:fl_clash/views/profiles/profile_select.dart';
 import 'package:fl_clash/views/profiles/profiles_chrome.dart';
+import 'package:fl_clash/views/desktop_layout.dart';
 import 'package:fl_clash/widgets/mihomo_only.dart';
 import 'package:fl_clash/views/proxies/common.dart';
 import 'package:fl_clash/widgets/surge/surge.dart';
@@ -123,51 +124,86 @@ class _ProfilesViewState extends State<ProfilesView> {
         final currentProfile = state.profiles.getProfile(
           state.currentProfileId,
         );
+        final currentCard = currentProfile == null
+            ? null
+            : _CurrentProfileSummary(
+                profile: currentProfile,
+                profiles: state.profiles,
+                expanded: _isCurrentExpanded,
+                onExpandChanged: () {
+                  setState(() {
+                    _isCurrentExpanded = !_isCurrentExpanded;
+                  });
+                },
+              );
+        final list = SurgeSection(
+          title: context.appLocalizations.subscriptions,
+          margin: const EdgeInsets.only(bottom: SurgeSpace.l),
+          children: [
+            _ProfileListContainer(
+              profiles: state.profiles,
+              currentProfileId: state.currentProfileId,
+              onSelect: (profileId) {
+                if (profileId != null) {
+                  selectProfile(ref, profileId);
+                }
+              },
+            ),
+          ],
+        );
+        final padding = EdgeInsets.only(
+          left: SurgeSpace.l,
+          right: SurgeSpace.l,
+          top: SurgeSpace.m,
+          bottom: SurgeBottomNavLayout.mainPageBottomPadding(context),
+        );
         final body = state.profiles.isEmpty
             ? const ProfilesEmptyState()
-            : Align(
-                alignment: Alignment.topCenter,
-                child: SingleChildScrollView(
-                  key: profilesStoreKey,
-                  padding: EdgeInsets.only(
-                    left: SurgeSpace.l,
-                    right: SurgeSpace.l,
-                    top: SurgeSpace.m,
-                    bottom: SurgeBottomNavLayout.mainPageBottomPadding(context),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (currentProfile != null)
-                        _CurrentProfileSummary(
-                          profile: currentProfile,
-                          profiles: state.profiles,
-                          expanded: _isCurrentExpanded,
-                          onExpandChanged: () {
-                            setState(() {
-                              _isCurrentExpanded = !_isCurrentExpanded;
-                            });
-                          },
-                        ),
-                      const SizedBox(height: SurgeSpace.l),
-                      SurgeSection(
-                        title: context.appLocalizations.subscriptions,
-                        margin: const EdgeInsets.only(bottom: SurgeSpace.l),
+            : LayoutBuilder(
+                builder: (context, constraints) {
+                  // A wide window (design artifact "RoutaMi for Windows"):
+                  // the subscriptions on the left, the current profile's
+                  // details beside them.
+                  if (DesktopLayout.twoPane(constraints.maxWidth)) {
+                    return Padding(
+                      padding: padding.copyWith(bottom: 0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _ProfileListContainer(
-                            profiles: state.profiles,
-                            currentProfileId: state.currentProfileId,
-                            onSelect: (profileId) {
-                              if (profileId != null) {
-                                selectProfile(ref, profileId);
-                              }
-                            },
+                          SizedBox(
+                            width: DesktopLayout.listPaneWidth,
+                            child: SingleChildScrollView(
+                              key: profilesStoreKey,
+                              child: list,
+                            ),
+                          ),
+                          const SizedBox(width: DesktopLayout.paneGap),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              padding: EdgeInsets.only(bottom: padding.bottom),
+                              child: currentCard ?? const SizedBox.shrink(),
+                            ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
+                    );
+                  }
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: SingleChildScrollView(
+                      key: profilesStoreKey,
+                      padding: padding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ?currentCard,
+                          const SizedBox(height: SurgeSpace.l),
+                          list,
+                        ],
+                      ),
+                    ),
+                  );
+                },
               );
         // No app bar: the page opens with its own title row (design 3.1).
         return Scaffold(

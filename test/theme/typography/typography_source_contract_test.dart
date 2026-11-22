@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 const _twemojiFiles = {
   'lib/widgets/text.dart',
+  'lib/views/dashboard/widgets/home_ip_card.dart',
   'lib/views/dashboard/widgets/network_detection.dart',
   'lib/views/dashboard/widgets/network_overview_card.dart',
 };

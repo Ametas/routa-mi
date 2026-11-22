@@ -145,6 +145,7 @@ abstract final class SurgeIcons {
   static const rule = Icons.rule_rounded;
   static const network = Icons.public_rounded;
   static const networkCheck = Icons.network_check_rounded;
+  static const externalIp = Icons.shield_outlined;
   static const networkPing = Icons.network_ping_rounded;
   static const speed = Icons.speed_rounded;
   static const traffic = Icons.data_saver_off_rounded;
