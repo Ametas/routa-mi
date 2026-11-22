@@ -30,6 +30,7 @@ import 'package:fl_clash/services/backup/unified_backup_service.dart';
 import 'package:fl_clash/services/mihomo_config/source_config.dart';
 import 'package:fl_clash/services/mihomo_config/runtime_config_commit.dart';
 import 'package:fl_clash/services/mihomo_config/full_apply_gate.dart';
+import 'package:fl_clash/services/core/stop_fallback.dart';
 import 'package:fl_clash/services/profile_source_mutation.dart';
 import 'package:fl_clash/services/providers/provider_readiness_service.dart';
 import 'package:fl_clash/services/unified_backup_export/exporter.dart';
@@ -1191,6 +1192,25 @@ class SetupAction extends _$SetupAction {
   }
 
   Future<bool> handleStop() async {
+    if (stopByReplacingCore(isWindows: system.isWindows)) {
+      startTime = null;
+      reconcileUiStatsTimerIfNeeded();
+      ref.read(runTimeProvider.notifier).value = null;
+      // The old core is gone with its listeners and TUN whether or not the
+      // new one comes up, so the proxy is stopped either way.
+      final restarted = await ref
+          .read(coreActionProvider.notifier)
+          .restartCore();
+      StartupTrace.mark(
+        'vpn_listener_stop',
+        extras: {
+          'success': true,
+          'source': 'core_replaced',
+          'restarted': restarted,
+        },
+      );
+      return true;
+    }
     final stopped = await coreController.stopListener();
     StartupTrace.mark(
       'vpn_listener_stop',

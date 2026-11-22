@@ -84,13 +84,20 @@ func handleStartListener() bool {
 	return true
 }
 
+// handleStopListener logs each step, so a stop that never answers shows in
+// the log where it got stuck.
 func handleStopListener() bool {
+	started := time.Now()
+	log.Infoln("[APP] stop: waiting for the run lock")
 	runLock.Lock()
 	defer runLock.Unlock()
+	log.Infoln("[APP] stop: run lock taken after %s", time.Since(started))
 	isRunning = false
 	stopListeners()
+	log.Infoln("[APP] stop: listeners closed after %s", time.Since(started))
 	closeConnections()
 	resolver.ResetConnection()
+	log.Infoln("[APP] stop: done after %s", time.Since(started))
 	return true
 }
 

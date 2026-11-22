@@ -1,3 +1,4 @@
+import 'package:fl_clash/services/core/stop_fallback.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -450,7 +451,11 @@ abstract class CoreHandlerInterface with CoreInterface {
 
   @override
   Future<bool> stopCoreListenerOnly() async {
-    return await _invoke<bool>(method: ActionMethod.stopListener) ?? false;
+    return await _invoke<bool>(
+          method: ActionMethod.stopListener,
+          timeout: coreStopConfirmTimeout,
+        ) ??
+        false;
   }
 
   @override
