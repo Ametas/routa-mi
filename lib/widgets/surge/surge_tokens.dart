@@ -314,7 +314,6 @@ class SurgeStateColors {
     required this.heroStart,
     required this.heroPause,
     required this.heroStop,
-    required this.onHeroAction,
   });
 
   final Color toggleActive;
@@ -322,7 +321,6 @@ class SurgeStateColors {
   final Color heroStart;
   final Color heroPause;
   final Color heroStop;
-  final Color onHeroAction;
 
   /// The active-profile status intentionally shares the mainline start green.
   Color get profileActive => heroStart;
@@ -338,7 +336,6 @@ class SurgeStateColors {
       heroStart: Color.lerp(a.heroStart, b.heroStart, t)!,
       heroPause: Color.lerp(a.heroPause, b.heroPause, t)!,
       heroStop: Color.lerp(a.heroStop, b.heroStop, t)!,
-      onHeroAction: Color.lerp(a.onHeroAction, b.onHeroAction, t)!,
     );
   }
 }
@@ -397,7 +394,6 @@ class SurgeSemanticColors {
             heroStart: colors.green,
             heroPause: colors.orange,
             heroStop: colors.red,
-            onHeroAction: Colors.white,
           ),
     );
   }

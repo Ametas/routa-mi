@@ -23,7 +23,9 @@ import 'package:fl_clash/services/settings/settings_contract.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/widgets/mihomo_only.dart';
 import 'package:fl_clash/views/settings/settings_options.dart';
+import 'package:fl_clash/views/settings/settings_pane.dart';
 import 'package:fl_clash/views/settings/settings_tile.dart';
+import 'package:fl_clash/views/desktop_layout.dart';
 
 class ToolsView extends ConsumerStatefulWidget {
   const ToolsView({super.key});
@@ -51,6 +53,11 @@ class _ToolViewState extends ConsumerState<ToolsView> {
 
   void _open(WidgetBuilder page) => showExtend(context, builder: page);
 
+  Widget _networkPage(BuildContext context) => CommonScaffold(
+    title: context.appLocalizations.network,
+    body: const NetworkListView(),
+  );
+
   /// Settings grouped as in design 3.1: the most used ones unfold in place,
   /// the rest open their page.
   List<Widget> _settingGroups(bool enableDeveloperMode) {
@@ -63,6 +70,7 @@ class _ToolViewState extends ConsumerState<ToolsView> {
             icon: const Icon(SurgeIcons.style),
             title: l10n.theme,
             fallbackSubtitle: l10n.themeDesc,
+            page: (_) => const ThemeView(),
             options: (context, ref) => themeOptions(
               context,
               ref,
@@ -73,6 +81,7 @@ class _ToolViewState extends ConsumerState<ToolsView> {
             icon: const Icon(SurgeIcons.settings),
             title: l10n.application,
             fallbackSubtitle: l10n.applicationDesc,
+            page: (_) => const ApplicationSettingView(),
             options: (context, ref) => applicationOptions(
               context,
               ref,
@@ -89,6 +98,7 @@ class _ToolViewState extends ConsumerState<ToolsView> {
             icon: const Icon(SurgeIcons.edit),
             title: l10n.basicConfig,
             fallbackSubtitle: l10n.basicConfigDesc,
+            page: (_) => const ConfigView(),
             options: (context, ref) => basicConfigOptions(
               context,
               ref,
@@ -99,15 +109,11 @@ class _ToolViewState extends ConsumerState<ToolsView> {
             icon: const Icon(SurgeIcons.vpnKey),
             title: l10n.network,
             fallbackSubtitle: l10n.networkDesc,
+            page: _networkPage,
             options: (context, ref) => networkOptions(
               context,
               ref,
-              openPage: () => _open(
-                (_) => CommonScaffold(
-                  title: l10n.network,
-                  body: const NetworkListView(),
-                ),
-              ),
+              openPage: () => _open(_networkPage),
             ),
           ),
           const MihomoOnly(child: _DnsItem()),
@@ -151,21 +157,45 @@ class _ToolViewState extends ConsumerState<ToolsView> {
       ..._settingGroups(vm2.b),
     ];
     final surge = SurgeTheme.of(context);
+    final bottom = SurgeBottomNavLayout.mainPageBottomPadding(context);
     return CommonScaffold(
       backgroundColor: surge.background,
       title: context.appLocalizations.tools,
       appBarActions: const [],
       titleVariant: SlAppBarTitleVariant.root,
-      body: ListView.builder(
-        key: toolsStoreKey,
-        itemCount: items.length,
-        itemBuilder: (_, index) => items[index],
-        padding: EdgeInsets.fromLTRB(
-          SurgeSpace.l,
-          SurgeSpace.xs,
-          SurgeSpace.l,
-          SurgeBottomNavLayout.mainPageBottomPadding(context),
-        ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final twoPane = DesktopLayout.twoPane(constraints.maxWidth);
+          final list = ListView.builder(
+            key: toolsStoreKey,
+            itemCount: items.length,
+            itemBuilder: (_, index) => items[index],
+            padding: twoPane
+                ? EdgeInsets.only(top: SurgeSpace.xs, bottom: bottom)
+                : EdgeInsets.fromLTRB(
+                    SurgeSpace.l,
+                    SurgeSpace.xs,
+                    SurgeSpace.l,
+                    bottom,
+                  ),
+          );
+          if (!twoPane) return list;
+          // A wide window (design artifact "RoutaMi for Windows"): the
+          // sections on the left, the selected one's page beside them.
+          return SettingsTwoPane(
+            initial: SettingsPaneSection(
+              title: context.appLocalizations.theme,
+              page: (_) => const ThemeView(),
+            ),
+            padding: EdgeInsets.fromLTRB(
+              SurgeSpace.l,
+              SurgeSpace.none,
+              SurgeSpace.l,
+              bottom + SurgeSpace.l,
+            ),
+            list: list,
+          );
+        },
       ),
     );
   }

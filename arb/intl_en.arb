@@ -724,6 +724,11 @@
   "changelog050Item2": "Windows: a side menu in wide windows and a navigation rail in medium ones; the window opens larger.",
   "changelog050Item3": "Delay tests run 10 at a time with a 10 s limit, so nodes no longer show Timeout while the core is busy.",
   "changelog050Item4": "The app is English only.",
+  "changelog060Item1": "AMOLED dark theme with four accents, and a new Home: the route card, modes, network speed and the shown group's nodes.",
+  "changelog060Item2": "Home shows the external IP and its country, checked again when you start, stop, switch mode or pick a node. While the proxy runs, an orb turns inside the start ring.",
+  "changelog060Item3": "Windows: in a wide window Home has two columns, Profiles and Settings show a list beside the details, and a new profile is added in a dialog.",
+  "changelog060Item4": "Proxy groups as cards with node icons from the flag or symbol in their names; settings unfold in place; a profile is added from one sheet by link, QR code or file.",
+  "changelog060Item5": "TUN stays on when a subscription is applied while the app starts, and the Windows tray no longer misses the core's last answer.",
   "changelog051Item1": "Windows: TUN switched on in a running app now reaches the core, and other settings changes no longer turn it off.",
   "changelog051Item2": "Windows: when the helper service cannot start the core, TUN stays off and the reason is shown.",
   "changelog051Item3": "Windows: side menu labels use the app's text style again.",
@@ -777,5 +782,8 @@
   "done": "Done",
   "retry": "Retry",
   "noProfilesTitle": "No profiles yet",
-  "noProfilesHint": "Add a subscription from your provider: by link, QR code or file."
+  "noProfilesHint": "Add a subscription from your provider: by link, QR code or file.",
+  "externalIp": "External IP",
+  "externalIpNotChecked": "Not checked yet",
+  "externalIpRecheck": "Check the external IP again"
 }

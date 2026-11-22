@@ -132,7 +132,6 @@ class StaticThemeSpec {
       heroStart: Color(0xFF6D28D9),
       heroPause: Color(0xFFFF9500),
       heroStop: Color(0xFFBA1A1A),
-      onHeroAction: Color(0xFFFFFFFF),
     ),
     dashboard: _routaDashboard,
   );
@@ -167,7 +166,6 @@ class StaticThemeSpec {
       heroStart: Color(0xFF7C3AED),
       heroPause: Color(0xFFFF9F0A),
       heroStop: Color(0xFFFF453A),
-      onHeroAction: Color(0xFFFFFFFF),
     ),
     dashboard: _routaDashboard,
   );
@@ -202,7 +200,6 @@ class StaticThemeSpec {
       heroStart: Color(0xFF34C759),
       heroPause: Color(0xFFFF9500),
       heroStop: Color(0xFFBA1A1A),
-      onHeroAction: Color(0xFFFFFFFF),
     ),
   );
 
@@ -236,7 +233,6 @@ class StaticThemeSpec {
       heroStart: Color(0xFF30D158),
       heroPause: Color(0xFFFF9F0A),
       heroStop: Color(0xFFFF453A),
-      onHeroAction: Color(0xFFFFFFFF),
     ),
   );
 
@@ -270,7 +266,6 @@ class StaticThemeSpec {
       heroStart: Color(0xFF34C759),
       heroPause: Color(0xFFFF9500),
       heroStop: Color(0xFFBA1A1A),
-      onHeroAction: Color(0xFFFFFFFF),
     ),
   );
 
@@ -304,7 +299,6 @@ class StaticThemeSpec {
       heroStart: Color(0xFF30D158),
       heroPause: Color(0xFFFF9F0A),
       heroStop: Color(0xFFFF453A),
-      onHeroAction: Color(0xFFFFFFFF),
     ),
   );
 }

@@ -348,6 +348,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "changelog051Item3": MessageLookupByLibrary.simpleMessage(
       "Windows: side menu labels use the app\'s text style again.",
     ),
+    "changelog060Item1": MessageLookupByLibrary.simpleMessage(
+      "AMOLED dark theme with four accents, and a new Home: the route card, modes, network speed and the shown group\'s nodes.",
+    ),
+    "changelog060Item2": MessageLookupByLibrary.simpleMessage(
+      "Home shows the external IP and its country, checked again when you start, stop, switch mode or pick a node. While the proxy runs, an orb turns inside the start ring.",
+    ),
+    "changelog060Item3": MessageLookupByLibrary.simpleMessage(
+      "Windows: in a wide window Home has two columns, Profiles and Settings show a list beside the details, and a new profile is added in a dialog.",
+    ),
+    "changelog060Item4": MessageLookupByLibrary.simpleMessage(
+      "Proxy groups as cards with node icons from the flag or symbol in their names; settings unfold in place; a profile is added from one sheet by link, QR code or file.",
+    ),
+    "changelog060Item5": MessageLookupByLibrary.simpleMessage(
+      "TUN stays on when a subscription is applied while the app starts, and the Windows tray no longer misses the core\'s last answer.",
+    ),
     "checkNetworkAndRetry": MessageLookupByLibrary.simpleMessage(
       "Check your network and try again.",
     ),
@@ -560,6 +575,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Control Clash kernel on port 9090",
     ),
     "externalFetch": MessageLookupByLibrary.simpleMessage("External fetch"),
+    "externalIp": MessageLookupByLibrary.simpleMessage("External IP"),
+    "externalIpNotChecked": MessageLookupByLibrary.simpleMessage(
+      "Not checked yet",
+    ),
+    "externalIpRecheck": MessageLookupByLibrary.simpleMessage(
+      "Check the external IP again",
+    ),
     "externalLink": MessageLookupByLibrary.simpleMessage("External link"),
     "factoryReset": MessageLookupByLibrary.simpleMessage("Factory Reset"),
     "factoryResetDesc": MessageLookupByLibrary.simpleMessage(

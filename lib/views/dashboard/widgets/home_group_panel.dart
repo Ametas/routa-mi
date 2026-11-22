@@ -16,7 +16,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// the shown group's members in profile order, the selected one in view;
 /// the header opens every group of the profile full screen.
 class HomeGroupPanel extends ConsumerStatefulWidget {
-  const HomeGroupPanel({super.key});
+  const HomeGroupPanel({super.key, this.expand = false});
+
+  /// Fills the height it is given (the desktop home's right column); the
+  /// members scroll inside. Otherwise the list stops at [membersMaxHeight].
+  final bool expand;
 
   /// The member list scrolls inside the panel beyond this height.
   static const double membersMaxHeight = 300;
@@ -122,10 +126,8 @@ class _HomeGroupPanelState extends ConsumerState<HomeGroupPanel> {
             ),
           ),
           Divider(height: surge.spacing.hairline, color: surge.separator),
-          ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxHeight: HomeGroupPanel.membersMaxHeight,
-            ),
+          _membersBox(
+            expand: widget.expand,
             child: ListView(
               controller: _scroll,
               shrinkWrap: true,
@@ -149,6 +151,16 @@ class _HomeGroupPanelState extends ConsumerState<HomeGroupPanel> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _membersBox({required bool expand, required Widget child}) {
+    if (expand) return Expanded(child: child);
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxHeight: HomeGroupPanel.membersMaxHeight,
+      ),
+      child: child,
     );
   }
 }
